@@ -1,2 +1,4 @@
 django
 simplejson
+pylint
+pylint-django
