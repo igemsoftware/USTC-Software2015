@@ -1,3 +1,4 @@
 django
 simplejson
 pylint-django
+coverage
