@@ -8,7 +8,7 @@ def aplusb(request, a, b):
         b=int(b)
     except ValueError:
         return http.HttpResponseForbidden()
-    if a==1 and b==2:
+    #if a==1 and b==2:
         #return http.HttpResponseForbidden()
-        return http.HttpResponse(simplejson.dumps({'answer': "I don't know"}), content_type="application/json")
+        #return http.HttpResponse(simplejson.dumps({'answer': "I don't know"}), content_type="application/json")
     return http.HttpResponse(simplejson.dumps({'answer': a+b}), content_type="application/json")
