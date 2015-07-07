@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>USTC-Software 2015</title>
+    <!-- URL: https://jquery.com/download/ -->
+    <script src="jquery-2.1.4.min.js" type="text/javascript"></script>
+    <!-- Browser Support: https://jquery.com/browser-support/ -->
+    <!-- URL: https://github.com/GoodBoyDigital/pixi.js -->
+    <script src="pixi-3.0.7.min.js" type="text/javascript"></script>
+    <!-- Browser Support: https://github.com/GoodBoyDigital/pixi.js/wiki/FAQs -->
+    <!-- 添加JS库注意浏览器支持同jQuery 2.x -->
+    <style type="text/css">
+        @import url(//fonts.googleapis.com/css?family=Lora|Open+Sans|Inconsolata);
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        html, body, nav, canvas, nav p, nav ul, nav ul li {
+            margin: 0;
+        }
+        nav {
+            font: 32px/40px 'Open Sans',Sans-Serif;
+            height: 60px;
+            background-color: gray;
+            text-align: center;
+        }
+        nav p, nav ul li {
+            float: left;
+            list-style: none;
+            padding: 10px 20px;
+        }
+    </style>
+    <script type="text/javascript">
+        render = function(renderer) {
+            if(!renderer)
+                return;
+            var stage = new PIXI.Container();
+            // Test Code Below
+            var texture = PIXI.Texture.fromImage("https://pixijs.github.io/examples/_assets/basics/bunny.png");
+            onDragStart = function(event) {
+                this.data = event.data;
+                this.alpha = 0.5;
+                this.dragging = true;
+            };
+            onDragEnd = function() {
+                this.alpha = 1;
+                this.dragging = false;
+                this.data = null;
+            };
+            onDragMove = function() {
+                if(this.dragging) {
+                    var newPosition = this.data.getLocalPosition(this.parent);
+                    this.position.x = newPosition.x;
+                    this.position.y = newPosition.y;
+                }
+            };
+            createBunny = function(x, y) {
+                var bunny = new PIXI.Sprite(texture);
+                bunny.interactive = true;
+                bunny.buttonMode = true;
+                bunny.anchor.set(0.5);
+                bunny.scale.set(3);
+                bunny.on('mousedown', onDragStart)
+                     .on('touchstart', onDragStart)
+                     .on('mouseup', onDragEnd)
+                     .on('mouseupoutside', onDragEnd)
+                     .on('touchend', onDragEnd)
+                     .on('touchendoutside', onDragEnd)
+                     .on('mousemove', onDragMove)
+                     .on('touchmove', onDragMove);
+                bunny.position.x = x;
+                bunny.position.y = y;
+                stage.addChild(bunny);
+            };
+            for(var i = 0; i < 10; i++)
+                createBunny(Math.floor(Math.random() * renderer.width), Math.floor(Math.random() * renderer.height));
+            animate = function() {
+                requestAnimationFrame(animate);
+                renderer.render(stage);
+            };
+            requestAnimationFrame(animate);
+            // Test Code Above
+        };
+    </script>
+</head>
+<body onload='render(PIXI.autoDetectRenderer($("body").width(), $("body").height() - $("nav").height(), {view : document.getElementById("canvas"), antialias : true, backgroundColor : 0xabcdef}))'>
+    <nav>
+        <p>AppName</p>
+        <ul>
+            <li>Home</li>
+            <li>Test1</li>
+            <li>Test2</li>
+        </ul>
+    </nav>
+    <canvas id="canvas">Your browser does not support canvas, please consider to use <a href="https://www.google.com/chrome/">latest Chrome</a>.</canvas>
+</body>
+</html>
