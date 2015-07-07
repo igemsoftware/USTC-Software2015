@@ -20,15 +20,23 @@
             margin: 0;
         }
         nav {
-            font: 32px/40px 'Open Sans',Sans-Serif;
+            font: 24px/40px 'Open Sans',Sans-Serif;
             height: 60px;
-            background-color: gray;
+            background-color: #222;
             text-align: center;
         }
         nav p, nav ul li {
             float: left;
             list-style: none;
             padding: 10px 20px;
+            cursor: pointer;
+            color: #999;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        nav p:hover, nav ul li:hover {
+            color: #fff;
         }
     </style>
     <script type="text/javascript">
