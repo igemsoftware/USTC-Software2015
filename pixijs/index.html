@@ -99,7 +99,18 @@
             graphics.endFill();
             graphics.interactive = true;
             graphics.buttonMode = true;
-            graphics.on('mousedown', function() {alert("+");});
+            var list = new PIXI.Graphics();
+            list.beginFill(0xff700b, 1);
+            list.drawRect(renderer.width - 120, 110, 100, renderer.height - 130);
+            list.endFill();
+            var added = false;
+            graphics.on('mousedown', function() {
+                    if(added)
+                        stage.removeChild(list);
+                    else
+                        stage.addChild(list);
+                    added = !added;
+                });
             stage.addChild(graphics);
             var prev = new Date;
             var fps;
