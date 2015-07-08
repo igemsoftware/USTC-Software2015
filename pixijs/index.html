@@ -38,6 +38,9 @@
         nav p:hover, nav ul li:hover {
             color: #fff;
         }
+        #fps {
+            float: right;
+        }
     </style>
     <script type="text/javascript">
         render = function(renderer) {
@@ -83,12 +86,18 @@
             };
             for(var i = 0; i < 10; i++)
                 createBunny(Math.floor(Math.random() * renderer.width), Math.floor(Math.random() * renderer.height));
+            var prev = new Date;
+            var fps;
             animate = function() {
                 requestAnimationFrame(animate);
                 renderer.render(stage);
+                now = new Date;
+                fps = Math.floor(1000 / (now - prev));
+                prev = now;
             };
             requestAnimationFrame(animate);
             // Test Code Above
+            window.setInterval(function() {$("#fps").html("FPS: " + fps)}, 500);
         };
     </script>
 </head>
@@ -100,6 +109,7 @@
             <li>Test1</li>
             <li>Test2</li>
         </ul>
+        <p id="fps">&nbsp;</p>
     </nav>
     <canvas id="canvas">Your browser does not support canvas, please consider to use <a href="https://www.google.com/chrome/">latest Chrome</a>.</canvas>
 </body>
