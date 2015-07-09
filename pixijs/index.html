@@ -45,7 +45,7 @@
         }
     </style>
     <script type="text/javascript">
-        render = function() {
+        $(function() {
             renderer = PIXI.autoDetectRenderer($("body").width(), $("body").height() - $("nav").height(), {view : document.getElementById("canvas"), antialias : true, backgroundColor : 0xabcdef});
             if(!renderer)
                 return;
@@ -124,10 +124,10 @@
             };
             requestAnimationFrame(animate);
             setInterval(function() {$("#fps").html("FPS: " + fps);}, 1000);
-        };
+        });
     </script>
 </head>
-<body onload='render()'>
+<body>
     <nav>
         <p>AppName</p>
         <ul>
