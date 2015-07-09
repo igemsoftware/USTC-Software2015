@@ -45,7 +45,8 @@
         }
     </style>
     <script type="text/javascript">
-        render = function(renderer) {
+        render = function() {
+            renderer = PIXI.autoDetectRenderer($("body").width(), $("body").height() - $("nav").height(), {view : document.getElementById("canvas"), antialias : true, backgroundColor : 0xabcdef});
             if(!renderer)
                 return;
             var stage = new PIXI.Container();
@@ -126,7 +127,7 @@
         };
     </script>
 </head>
-<body onload='render(PIXI.autoDetectRenderer($("body").width(), $("body").height() - $("nav").height(), {view : document.getElementById("canvas"), antialias : true, backgroundColor : 0xabcdef}))'>
+<body onload='render()'>
     <nav>
         <p>AppName</p>
         <ul>
