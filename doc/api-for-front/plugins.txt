@@ -1,4 +1,4 @@
 1.dna 质粒环和dna
-2.stimulator 模拟
+2.simulator 模拟
 3.matrix 高级模拟
 4.parachange 反向工程
