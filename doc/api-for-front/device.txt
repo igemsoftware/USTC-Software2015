@@ -5,10 +5,16 @@ device: [
     id: int
     name: string
     icon: string svg(xml)
-    type: int
+    type: {
+        type: null
+        function: ''
+        chassis:
+        standard:
+        contributor:
+    }
     parts:
     {
-        id:[d1, d2, d3, d4, d5],
+        id:[d1, d2,...],
         options:
         [
         {d1:"string", d2:"string", ...}, ...
@@ -16,10 +22,10 @@ device: [
         ]
     }
     input:{
-        id:[p100, p200],
-        options:[{p100:xx, p200:xxx}] ... ],
+        id:[p100, p200,...],
+        options:[{p100:xx, p200:xxx...}] ... ],
     }
-    output:[p5]
+    output:[p5...]
     map:[    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna
         {id:e1, id1:, id2:, type}
         ......
@@ -30,7 +36,10 @@ device: [
         {}
     
     ]
-    
+    posloc:
+    [
+        {from:d1, to:d2},...
+    ]   
 },
 ],
 }

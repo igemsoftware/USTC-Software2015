@@ -1,0 +1,56 @@
+//描述一个电路
+method:POST
+url: /system/
+{
+    node:[
+        {
+        nodeid: int //在整个电路图中唯一 代表这个结点
+        id: int    //id为null表示用户自建device   device在系统中的编号
+        icon:
+        name: string
+        type: {
+            type: null
+            function: ''
+            chassis:
+            standard:
+            contributor:
+        }
+        parts:
+        {
+            id:[d1, d2,...],
+            option: {d1:"string", d2:"string", ...}
+    }
+    input:{
+        id:[p100, p200,...],
+        option:{p100:xx, p200:xxx...}
+    }
+    output:[p5...]
+    map:[    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna
+        {id:e1, id1:, id2:, type}
+        ......
+        
+        {id:e1, id1:d1, id2:p1, type:trans},
+        {id:e2, id1:p1, id2:d4, type:inh},
+        {id:e3, id1:p100, id2:e2, type:inh},
+        {}
+    
+    ],
+    posloc:
+    [
+        {from:d1, to:d2, id:"BBA_dslhfsldk"}, ...
+
+    ]
+    
+    },.....
+    ],
+    arc:[
+        {nodeid_from: nodeid_to, nodeport_from, nodeport_to}........
+    ]
+}
+
+
+{
+    status:true
+    (if status==false)error_msg:"...."
+    (if status==true) id:int,
+}
