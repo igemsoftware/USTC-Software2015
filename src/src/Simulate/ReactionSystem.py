@@ -25,6 +25,12 @@ class ReactionSystem(object):
         self.SpeciesName=numpy.array(speciesname)
         self.SpeciesNameInverse={self.SpeciesName[NameTemp]:NameTemp
             for NameTemp in range(len(self.SpeciesName))}
+
+    def AllSpeciesName(self,namestring):
+        self.SetSpeciesName(self.SpeciesName.tolist().append(namestring))
+    
+    def DelSpeciesName(self,namestring):
+        self.SetSpeciesName(self.SpeciesName.tolist().remove(namestring))
     
     def SetReactions(self,reactions):
         self.Reactions=numpy.array(reactions)
@@ -38,6 +44,12 @@ class ReactionSystem(object):
         self.ProductData=map(lambda Temp1:scipy.stats.itemfreq(Temp1),
             (map(lambda Temp1:map(lambda Temp2
             :self.SpeciesNameInverse[Temp2],Temp1),self.Product)))
+
+    def AddReaction(self,reaction):
+        self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().append(reaction))
+
+    def DelReaction(self,reaction):
+        self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().remove(reaction))
     
     def __init__(self,reactions,speciesname):
         self.SetSpeciesName(speciesname)
