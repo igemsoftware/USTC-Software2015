@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
 '''
-Data Structure
-System=[Reactions,SpeciesName,Initial]
-Reactions=[[[Reactant..],[Product..],JLYConstance]..]
+The package about the reaction system and simulations
+Data Structure:
+System:[Reactions,SpeciesName]
+Reactions:[[[Reactant,...],[Product,...],JLYConstance,...]
+Simulation Structure:[[Initial,...],StopTime]
 eg:ReactionSystem.ReactionSystem([[["a"],["b"],1],[["b"],["c"],1]],["a","b","c"]).ShowSimulate([1000,0,0],10)
 '''
 
@@ -12,27 +14,73 @@ __author__="Trumpet"
 import numpy,scipy,scipy.misc,scipy.stats,pylab
 
 class ReactionSystem(object):
+    '''
+    Parameters:
+    '''
     
     @property
     def SpeciesNumber(self):
+        '''
+        Show the number of the species in this reaction system
+        Parameters:
+            none
+        Returns:
+            int:the number of the species
+        '''
         return len(self.SpeciesName)
     
     @property
     def ReactionNumber(self):
+        '''
+        Show the number of the reactions in this system
+        Parameters:
+            none
+        Returns:
+            int:the number of the reactions
+        '''
         return len(self.Reactions)
     
     def SetSpeciesName(self,speciesname):
+        '''
+        Set all the species and their name in this system
+        Parameters:
+            list:the list of the names of species
+        Returns
+            none
+        '''
         self.SpeciesName=numpy.array(speciesname)
         self.SpeciesNameInverse={self.SpeciesName[NameTemp]:NameTemp
             for NameTemp in range(len(self.SpeciesName))}
 
-    def AllSpeciesName(self,namestring):
+    def AddSpeciesName(self,namestring):
+        '''
+        Add one species into the system
+        Parameters:
+            the name of the species to be added
+        Returns:
+            none
+        '''
         self.SetSpeciesName(self.SpeciesName.tolist().append(namestring))
     
     def DelSpeciesName(self,namestring):
+        '''
+        Delele one species from the system
+        Parameters:
+            the name of the species to be deleted
+        Returns:
+            none
+        '''
         self.SetSpeciesName(self.SpeciesName.tolist().remove(namestring))
     
     def SetReactions(self,reactions):
+        '''
+        Set all the reactions in this system
+        Parameters:
+            list:the list of the reactions
+                the format of one reaction is a list : [[Reactant,...],[Product,...],JLYConstance]
+        Returns:
+            none
+        '''
         self.Reactions=numpy.array(reactions)
         self.Reactant,self.Product,self.JLYConstace=self.Reactions.transpose()
         self.Reactant=numpy.array(self.Reactant)
@@ -46,13 +94,32 @@ class ReactionSystem(object):
             :self.SpeciesNameInverse[Temp2],Temp1),self.Product)))
 
     def AddReaction(self,reaction):
+        '''
+        Add one reaction into this system
+        Parameters:
+            list:the data of the reaction to be added
+                looking for help(SetReactions) to find the format of this list 
+        '''
         self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().append(reaction))
 
     def DelReaction(self,reaction):
+        '''
+        Delete one reaction into this system
+        Parameters:
+            list:the data of the reaction to be deleted
+                looking for help(SetReactions) to find the format of this list 
+        '''
         self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().remove(reaction))
     
     @property
     def ShowSpecies(self):
+        '''
+        Print the names of all the species in this system
+        Parameters:
+            none
+        Returns:
+            none
+        '''
         PrintTemp=""
         for SingleSpecies in self.SpeciesName:
             PrintTemp+=SingleSpecies+" "
@@ -60,6 +127,13 @@ class ReactionSystem(object):
 
     @property
     def ShowReaction(self):
+        '''
+        Print the data of all the reactions the  in this system
+        Parameters:
+            none
+        Returns:
+            none
+        '''
         print "Reactant\t\tProduct\t\tJLYConstance"
         for SingleReaction in self.Reactions:
             PrintTemp=""
@@ -72,10 +146,28 @@ class ReactionSystem(object):
             print PrintTemp
     
     def __init__(self,reactions,speciesname):
+        '''
+        Init this system
+        Parameters:
+            list:the data of the reactions in this system
+                looking for help(SetReactions) to find the format of this list
+            list:the name of all the species in this system
+        Returns
+            none
+        '''
         self.SetSpeciesName(speciesname)
         self.SetReactions(reactions)
     
     def Simulate(self,Initial,StopTime):
+        '''
+        Simulate after given species initial number and stoptime
+        Parameters:
+            list:the number of the species at t=0
+            real:the time to stop the simualtion
+        Returns:
+            list:the record of the simulation
+                the format of the list is : [[time,[species current number,...]],...]
+        '''
         def Intensity(SingleReactant,Current):
             return numpy.array(map(lambda SpeciesTemp:
                 scipy.misc.comb(Current[SpeciesTemp[0]],
@@ -106,10 +198,25 @@ class ReactionSystem(object):
         return self.Record
     
     def ShowRecord(self):
+        '''
+        Show the graph of the record simulated
+        Parameters:
+            none
+        Returns:
+            none
+        '''
         for Species in range(self.SpeciesNumber):
             pylab.plot(map(lambda x:x[0],self.Record),map(lambda x:x[1][Species],self.Record))
         pylab.show()
     
     def ShowSimulate(self,Initial,StopTime):
+        '''
+        Simulate and show the graph
+        Parameters:
+            list:the number of the species at t=0
+            real:the time to stop the simualtion
+        Returns:
+            none
+        '''
         self.Simulate(Initial,StopTime)
         self.ShowRecord()
