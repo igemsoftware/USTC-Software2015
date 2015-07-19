@@ -1,45 +1,39 @@
-一个json，是个数组
+//一个json，是个数组
+[
 {
-device: [
-{
-    id: int
-    name: string
-    icon: string svg(xml)
-    type: {
-        type: null
-        function: ''
-        chassis:
-        standard:
-        contributor:
-    }
-    parts:
-    {
-        id:[d1, d2,...],
-        options:
+    "id": int,
+    "name": "string",
+    "icon": "data:image/svg+xml;...",
+    "type": {
+        "type": null,
+        "function": "string",
+        "chassis": "string",
+        "standard": "string",
+        "contributor": "string"
+    },
+    "parts": {
+        "id":["d1", "d2", ...],
+        "options":
         [
-        {d1:"string", d2:"string", ...}, ...
+        {"d1":"string", "d2":"string", ...},
           .....
         ]
-    }
-    input:{
-        id:[p100, p200,...],
-        options:[{p100:xx, p200:xxx...}] ... ],
-    }
-    output:[p5...]
-    map:[    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna
-        {id:e1, id1:, id2:, type}
-        ......
-        
-        {id:e1, id1:d1, id2:p1, type:trans},
-        {id:e2, id1:p1, id2:d4, type:inh},
-        {id:e3, id1:p100, id2:e2, type:inh},
-        {}
-    
+    },
+    "input": {
+        "id":["p100", "p200", ...],
+        "options":[{"p100":"xxx", "p200":"xxx", ...}, ...]
+    },
+    "output": ["p5", ...],
+    "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna
+        {"id":"e1", "id1":"d1", "id2":"p1", "type":"trans"},
+        {"id":"e2", "id1":"p1", "id2":"d4", "type":"inh"},
+        {"id":"e3", "id1":"p100", "id2":"e2", "type":"inh"},
+        ...
+    ],
+    "posloc": [
+        {"from":"d1", "to":"d2"},
+        ...
     ]
-    posloc:
-    [
-        {from:d1, to:d2},...
-    ]   
 },
-],
-}
+...
+]
