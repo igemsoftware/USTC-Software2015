@@ -51,6 +51,26 @@ class ReactionSystem(object):
     def DelReaction(self,reaction):
         self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().remove(reaction))
     
+    @property
+    def ShowSpecies(self):
+        PrintTemp=""
+        for SingleSpecies in self.SpeciesName:
+            PrintTemp+=SingleSpecies+" "
+        print PrintTemp
+
+    @property
+    def ShowReaction(self):
+        print "Reactant\t\tProduct\t\tJLYConstance"
+        for SingleReaction in self.Reactions:
+            PrintTemp=""
+            for Reactant in SingleReaction[0]:
+                PrintTemp+=Reactant+" "
+            PrintTemp+="\t\t"
+            for Product in SingleReaction[1]:
+                PrintTemp+=Product+" "
+            PrintTemp+="\t\t"+str(SingleReaction[2])
+            print PrintTemp
+    
     def __init__(self,reactions,speciesname):
         self.SetSpeciesName(speciesname)
         self.SetReactions(reactions)
