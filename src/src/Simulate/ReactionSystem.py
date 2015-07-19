@@ -4,18 +4,18 @@
 Data Structure
 System=[Reactions,SpeciesName,Initial]
 Reactions=[[[Reactant..],[Product..],JLYConstance]..]
-eg:ReactionSystem.ReactionSystem([[["a"],["b"],1]],["a","b"]).Simulate([1000,0],1)
+eg:ReactionSystem.ReactionSystem([[["a"],["b"],1],[["b"],["c"],1]],["a","b","c"]).ShowSimulate([1000,0,0],10)
 '''
 
 __author__="Trumpet"
 
-import numpy,scipy,scipy.misc,scipy.stats
+import numpy,scipy,scipy.misc,scipy.stats,pylab
 
 class ReactionSystem(object):
     
     @property
     def SpeciesNumber(self):
-        return len(self.Species)
+        return len(self.SpeciesName)
     
     @property
     def ReactionNumber(self):
@@ -86,7 +86,7 @@ class ReactionSystem(object):
                 ,Current),Reactant)
         Current=numpy.array(Initial)
         Time=0
-        Record=[[Time,Current.tolist()]]
+        self.Record=[[Time,Current.tolist()]]
         reactionnumber=self.ReactionNumber
         while Time<StopTime:
             Intensities=IntensityList(self.ReactantData,Current)
@@ -102,5 +102,14 @@ class ReactionSystem(object):
             for SpeciesTemp in self.ProductData[NextReaction]:
                 Current[SpeciesTemp[0]]+=SpeciesTemp[1]
             Time=Time+DeltaTime
-            Record.append([Time+0,Current.tolist()])
-        return Record
+            self.Record.append([Time+0,Current.tolist()])
+        return self.Record
+    
+    def ShowRecord(self):
+        for Species in range(self.SpeciesNumber):
+            pylab.plot(map(lambda x:x[0],self.Record),map(lambda x:x[1][Species],self.Record))
+        pylab.show()
+    
+    def ShowSimulate(self,Initial,StopTime):
+        self.Simulate(Initial,StopTime)
+        self.ShowRecord()
