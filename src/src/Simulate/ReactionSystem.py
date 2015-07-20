@@ -6,7 +6,6 @@ Data Structure:
 System:[Reactions,SpeciesName]
 Reactions:[[[Reactant,...],[Product,...],JLYConstance,...]
 Simulation Structure:[[Initial,...],StopTime]
-eg:ReactionSystem.ReactionSystem([[["a"],["b"],1],[["b"],["c"],1]],["a","b","c"]).ShowSimulate([1000,0,0],10)
 '''
 
 __author__="Trumpet"
