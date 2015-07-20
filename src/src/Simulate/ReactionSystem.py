@@ -60,7 +60,9 @@ class ReactionSystem(object):
         Returns:
             none
         '''
-        self.SetSpeciesName(self.SpeciesName.tolist().append(namestring))
+        SpeciesTemp=self.SpeciesName.tolist()
+        SpeciesTemp.append(namestring)
+        self.SetSpeciesName(SpeciesTemp)
     
     def DelSpeciesName(self,namestring):
         '''
@@ -70,7 +72,9 @@ class ReactionSystem(object):
         Returns:
             none
         '''
-        self.SetSpeciesName(self.SpeciesName.tolist().remove(namestring))
+        SpeciesTemp=self.SpeciesName.tolist()
+        SpeciesTemp.remove(namestring)
+        self.SetSpeciesName(SpeciesTemp)
     
     def SetReactions(self,reactions):
         '''
@@ -82,10 +86,10 @@ class ReactionSystem(object):
             none
         '''
         self.Reactions=numpy.array(reactions)
-        self.Reactant,self.Product,self.JLYConstace=self.Reactions.transpose()
+        self.Reactant,self.Product,self.JLYConstance=self.Reactions.transpose()
         self.Reactant=numpy.array(self.Reactant)
         self.Product=numpy.array(self.Product)
-        self.JLYConstace=numpy.array(self.JLYConstace)
+        self.JLYConstance=numpy.array(self.JLYConstance)
         self.ReactantData=map(lambda Temp1:scipy.stats.itemfreq(Temp1),
             (map(lambda Temp1:map(lambda Temp2
             :self.SpeciesNameInverse[Temp2],Temp1),self.Reactant)))
@@ -100,7 +104,9 @@ class ReactionSystem(object):
             list:the data of the reaction to be added
                 looking for help(SetReactions) to find the format of this list 
         '''
-        self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().append(reaction))
+        ReactionTemp=numpy.array([self.Reactant,self.Product,self.JLYConstance]).transpose().tolist()
+        ReactionTemp.append(reaction)
+        self.SetReactions(ReactionTemp)
 
     def DelReaction(self,reaction):
         '''
@@ -109,7 +115,9 @@ class ReactionSystem(object):
             list:the data of the reaction to be deleted
                 looking for help(SetReactions) to find the format of this list 
         '''
-        self.SetReaction(numpy.array([Reactant,Product,JLYConstance]).tolist().remove(reaction))
+        ReactionTemp=numpy.array([self.Reactant,self.Product,self.JLYConstance]).transpose().tolist()
+        ReactionTemp.remove(reaction)
+        self.SetReactions(ReactionTemp)
     
     @property
     def ShowSpecies(self):
@@ -182,7 +190,7 @@ class ReactionSystem(object):
         reactionnumber=self.ReactionNumber
         while Time<StopTime:
             Intensities=IntensityList(self.ReactantData,Current)
-            Possibility=Intensities*self.JLYConstace
+            Possibility=Intensities*self.JLYConstance
             PossibilitySum=Possibility.sum()
             if PossibilitySum==0:break
             DeltaTime=-numpy.log(numpy.random.random())/PossibilitySum
