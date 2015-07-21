@@ -351,12 +351,13 @@
 					};
 				};
 				
-				animate();
+				//animate();
                 
-				function animate() {
- 				   renderer.render(stage);
- 				   requestAnimationFrame( animate );
-				};
+				//function animate() {
+ 				//   renderer.render(stage);
+ 				//   requestAnimationFrame( animate );
+				//};
+                return stage;
 				
 			};//绘制函数
 			
@@ -434,5 +435,5 @@
   			    ]   
             }];//测试用devices
 			
-			DevicesModule.Draw(Devices, 0, renderer);
+			return DevicesModule.Draw(Devices, 0, renderer);
 		};

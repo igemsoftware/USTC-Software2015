@@ -11,7 +11,7 @@
     <style type="text/css">
         html, body {
             height: 100%;
-            overflow: auto;
+            overflow: hidden;
         }
         html, body, nav, canvas, nav p, nav ul, nav ul li {
             margin: 0;
@@ -121,7 +121,9 @@
             setInterval(function() {$("#fps").html("FPS: " + fps);}, 1000);
 
             device=$.ajax("plugins/device.js");
-            $("#device").on("click", function(){eval(device.responseText);main(renderer);});
+            home_stage = stage;
+            $("#device").on("click", function(){eval(device.responseText);stage=main(renderer);});
+            $("#home").on("click", function(){stage = home_stage;});
         });
     </script>
 </head>
@@ -129,7 +131,7 @@
     <nav>
         <p>AppName</p>
         <ul>
-            <li>Home</li>
+            <li id="home">Home</li>
             <li id="device">Device</li>
             <li>Test2</li>
         </ul>
