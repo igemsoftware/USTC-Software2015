@@ -122,7 +122,7 @@
 
             device=$.ajax("plugins/device.js");
             home_stage = stage;
-            $("#device").on("click", function(){eval(device.responseText);stage=main(renderer);});
+            $("#device").on("click", function(){eval(device.responseText);stage=device(renderer);});
             $("#home").on("click", function(){stage = home_stage;});
         });
     </script>

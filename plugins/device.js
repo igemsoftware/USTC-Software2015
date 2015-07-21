@@ -1,6 +1,6 @@
             var DevicesModule = function(){};
             DevicesModule.GetDevice = function(devices){};
-            DevicesModule.Draw = function(devices, n, renderer){
+            DevicesModule.Draw = function(devices, n){
 				var linesNum = devices[n].lines.length;//主线数
 				
 				var partsNum = 0;//主线上总结点数
@@ -198,9 +198,6 @@
 				    stageH = $("body").height();
 				if(stageW < $("body").width())
 				    stageW = $("body").width();
-                //renderer = PIXI.autoDetectRenderer(stageW, stageH, f);
-                //if(!renderer)
-                //    return;
                 var stage = new PIXI.Container();
                 
                 var texture = PIXI.Texture.fromImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAAoCAIAAAC95rUiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB8SURBVGhD7dExAcAgEMDAb42xIr6iuuCBDHdLBORZ+xtue0+5yoYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGwJmfrGzAaMiHjaeAAAAAElFTkSuQmCC");
@@ -351,12 +348,6 @@
 					};
 				};
 				
-				//animate();
-                
-				//function animate() {
- 				//   renderer.render(stage);
- 				//   requestAnimationFrame( animate );
-				//};
                 return stage;
 				
 			};//绘制函数
@@ -383,7 +374,7 @@
 
 
 
-	    main = function(renderer) {
+	    device = function() {
 			var Devices = 
 			[{
 			    'id': 0,
@@ -435,5 +426,5 @@
   			    ]   
             }];//测试用devices
 			
-			return DevicesModule.Draw(Devices, 0, renderer);
+			return DevicesModule.Draw(Devices, 0);
 		};
