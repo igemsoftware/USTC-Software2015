@@ -1,23 +1,23 @@
             var DevicesModule = function(){};
             DevicesModule.GetDevice = function(devices){};
-            DevicesModule.Draw = function(devices, n, f){
-				var linesNum = devices[n].lines.length;//Ö÷ÏßÊý
+            DevicesModule.Draw = function(devices, n, renderer){
+				var linesNum = devices[n].lines.length;//ä¸»çº¿æ•°
 				
-				var partsNum = 0;//Ö÷ÏßÉÏ×Ü½áµãÊý
+				var partsNum = 0;//ä¸»çº¿ä¸Šæ€»ç»“ç‚¹æ•°
 				var partToline = new Array();
 				for(i = 0; i < linesNum; i++){
 					for(j = 0; j < devices[n].lines[i].id.length; j++)
 					    partToline[partsNum + j] = i;
 				    partsNum = partsNum + devices[n].lines[i].id.length;
-				};//¼ÆËã×Ü½áµãÊý
+				};//è®¡ç®—æ€»ç»“ç‚¹æ•°
 				
-				var i, j, k, l, Num, s;//±¸ÓÃ±äÁ¿
+				var i, j, k, l, Num, s;//å¤‡ç”¨å˜é‡
 				
-				var isDNA = new Array();//ÓÃÓÚÖ¸Ê¾µÚiÌõÖ÷ÏßµÄµÚj¸ö½ÚµãÊÇ·ñÊÇDNA
-				isDNA[0] = [false, true, true, false, false];//²âÊÔÓÃÊý¾Ý
-				isDNA[1] = [false, false];//²âÊÔÓÃÊý¾Ý
+				var isDNA = new Array();//ç”¨äºŽæŒ‡ç¤ºç¬¬iæ¡ä¸»çº¿çš„ç¬¬jä¸ªèŠ‚ç‚¹æ˜¯å¦æ˜¯DNA
+				isDNA[0] = [false, true, true, false, false];//æµ‹è¯•ç”¨æ•°æ®
+				isDNA[1] = [false, false];//æµ‹è¯•ç”¨æ•°æ®
 				
-				var isLine = new Array();//ÓÃÓÚÖ¸Ê¾ÊÇ·ñÓÐÖ§Ïß´ÓµÚi¸ö½ÚµãÁ¬½Óµ½µÚj¸ö½Úµã
+				var isLine = new Array();//ç”¨äºŽæŒ‡ç¤ºæ˜¯å¦æœ‰æ”¯çº¿ä»Žç¬¬iä¸ªèŠ‚ç‚¹è¿žæŽ¥åˆ°ç¬¬jä¸ªèŠ‚ç‚¹
 				var lineType = new Array();
 				for(i = 0; i < partsNum; i++){
 				    isLine[i] = new Array();
@@ -62,9 +62,9 @@
 					};
 					Num = Num + devices[n].lines[i].length;
 					
-				};//¼ÆËãisLine
+				};//è®¡ç®—isLine
 				
-				var pHeight = new Array(partsNum);//µ°°×ÖÊ½ÚµãµÄÏà¶Ô¸ß¶È,0±íÊ¾¸ÃÖ÷Ïß½Úµã²»Éú³Éµ°°×ÖÊ
+				var pHeight = new Array(partsNum);//è›‹ç™½è´¨èŠ‚ç‚¹çš„ç›¸å¯¹é«˜åº¦,0è¡¨ç¤ºè¯¥ä¸»çº¿èŠ‚ç‚¹ä¸ç”Ÿæˆè›‹ç™½è´¨
 				for(i = 0; i < partsNum; i++)
 				    pHeight[i] = 0;
 				for(Num = 1; Num < partsNum; Num++){
@@ -154,7 +154,7 @@
 							};
 						};
 					};
-				};//¼ÆËãpHeight
+				};//è®¡ç®—pHeight
 				var heightest = 0, lowest = 0;
 				for(i = 0; i < partsNum; i++){
 					if(pHeight[i] > heightest) heightest = pHeight[i];
@@ -164,12 +164,12 @@
 				var node = new Array();
 			    for(i = 0; i < partsNum; i++){
 					node[i] = function(){};
-    				node[i].upIndegree = 0;//ÉÏÈë¶È
-					node[i].upOutdegree = 0;//ÉÏ³ö¶È
-					node[i].downIndegree = 0;//ÏÂÈë¶È
-					node[i].downOutdegree = 0;//ÏÂ³ö¶È
-					node[i].upLine = 0;//ÉÏ²¿ÒÑÁ¬ÏßÊý
-					node[i].downLine = 0;//ÏÂ²¿ÒÑÁ¬ÏßÊý
+    				node[i].upIndegree = 0;//ä¸Šå…¥åº¦
+					node[i].upOutdegree = 0;//ä¸Šå‡ºåº¦
+					node[i].downIndegree = 0;//ä¸‹å…¥åº¦
+					node[i].downOutdegree = 0;//ä¸‹å‡ºåº¦
+					node[i].upLine = 0;//ä¸Šéƒ¨å·²è¿žçº¿æ•°
+					node[i].downLine = 0;//ä¸‹éƒ¨å·²è¿žçº¿æ•°
 	    			for(j = 0; j < partsNum; j++){
 		    			if(partToline[i] == partToline[j]){
 			    			if(isLine[i][j])
@@ -185,7 +185,7 @@
     				};
 	    		};
 				
-				//////////////////////////////////////////////////Êý¾Ý´¦Àí
+				//////////////////////////////////////////////////æ•°æ®å¤„ç†
 				
 				
 				
@@ -198,12 +198,12 @@
 				    stageH = $("body").height();
 				if(stageW < $("body").width())
 				    stageW = $("body").width();
-				renderer = PIXI.autoDetectRenderer(stageW, stageH, f);
-                if(!renderer)
-                    return;
+                //renderer = PIXI.autoDetectRenderer(stageW, stageH, f);
+                //if(!renderer)
+                //    return;
                 var stage = new PIXI.Container();
                 
-                var texture = PIXI.Texture.fromImage("test.png");
+                var texture = PIXI.Texture.fromImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAAoCAIAAAC95rUiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB8SURBVGhD7dExAcAgEMDAb42xIr6iuuCBDHdLBORZ+xtue0+5yoYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGwJmfrGzAaMiHjaeAAAAAElFTkSuQmCC");
 				
 				var parts = new Array();
 				var graphics = new PIXI.Graphics();
@@ -221,7 +221,7 @@
 					graphics.moveTo((Num + i + 1) * nodeDis, stageH / 2.0);
 					graphics.lineTo((Num + i + 1) * nodeDis - 11, stageH / 2.0 - 8);
 					graphics.lineTo((Num + i + 1) * nodeDis - 11, stageH / 2.0 + 8);
-				};//Ö÷ÏßÉÏµÄpart
+				};//ä¸»çº¿ä¸Šçš„part
 				
 				
 				graphics.lineStyle(6, 0xff3300, 1);
@@ -283,7 +283,7 @@
 							
 						};
 					};
-				};//»æÖÆÓÐ¹Øµ°°×ÖÊ½ÚµãµÄÖ§Â·
+				};//ç»˜åˆ¶æœ‰å…³è›‹ç™½è´¨èŠ‚ç‚¹çš„æ”¯è·¯
 				
 				for(i = 0; i < devices[n].map.length; i++){
 					if(devices[n].map[i].l2 == -4){
@@ -358,9 +358,81 @@
  				   requestAnimationFrame( animate );
 				};
 				
-			};//»æÖÆº¯Êý
+			};//ç»˜åˆ¶å‡½æ•°
 			
 			
 			
 			
             DevicesModule.OnDoubleClick = function(){};
+
+
+
+
+
+
+//Test Below
+
+
+
+
+
+
+
+
+
+
+
+	    main = function(renderer) {
+			var Devices = 
+			[{
+			    'id': 0,
+   			    'name': 'test',
+  			    'icon':  null,
+				
+  			    'type': 
+				{
+   			        'type': null,
+   			        'function': '',
+    			    'chassis':'',
+  			        'standard':'',
+  			        'contributor':''
+  			    },
+				
+  			    'lines':
+  			    [
+				    {
+   			            'id':['d1', 'd2', 'd3', 'd4', 'd5'],
+   			            'options':[]
+  			        },
+					{
+   			            'id':['d1', 'd2'],
+   			            'options':[]
+  			        },
+				],
+				
+  			    'input':
+				{
+   			        'id':['p100', 'p200'],
+   			        'options':[]
+   			    },
+  			    'output':['p5', 'p6'],
+			  
+  			    'map':
+                [    //æ‰€æœ‰çš„idä¸ºä¸€ä¸ªå­—ç¬¦åŠ ä¸€ä¸ªæ— ç¬¦å·æ•°   pä»£è¡¨è›‹ç™½è´¨ eä»£è¡¨ååº” dä»£è¡¨dna
+    			    {id:'e1', id1:'d2', l1:0, id2:'p2', l2:0, type:'trans'},
+     			    {id:'e2', id1:'p2', id2:'d4', type:'inh', l1:0, l2:0},
+     			    {id:'e3', id1:'p100', id2:'e2', type:'inh', l1:-2, l2:-4},
+    			    {id:'e4', id1:'d3', id2:'p3', type:'trans', l1:0, l2:0},
+					{id:'e5', id1:'p3', id2:'d1', type:'inh', l1:0, l2:1},
+					{id:'e6', id1:'p200', id2:'e5', type:'inh', l1:-2, l2:-4}
+					
+  			    ],
+				
+   			    'posloc':
+  			    [
+  			        {from:'d1', to:'d2'}
+  			    ]   
+            }];//æµ‹è¯•ç”¨devices
+			
+			DevicesModule.Draw(Devices, 0, renderer);
+		};
