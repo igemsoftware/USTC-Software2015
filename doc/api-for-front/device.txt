@@ -3,7 +3,10 @@
 {
     "id": int,
     "name": "string",
-    "icon": "data:image/svg+xml;...",
+    "icon": {
+        "text": "≥1",
+        "inverter": false
+    },
     "type": {
         "type": null,
         "function": "string",
@@ -12,7 +15,7 @@
         "contributor": "string"
     },
     "parts": {
-        "id":["d1", "d2", ...],
+        "id":[["d1", "d2", ...], ["d6, "d7", ...], ...],
         "options":
         [
         {"d1":"string", "d2":"string", ...},
