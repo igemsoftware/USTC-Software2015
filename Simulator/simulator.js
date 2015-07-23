@@ -6,12 +6,12 @@ Simulator.Draw = function(_nodes, style){
 	var nodes = function(){};
 	nodes.t = _nodes.t;
 	nodes.c = new Array();
-	nodes.name = new Array();
+	nodes.names = new Array();
 	var i = 0;
 	for(var o in _nodes){
 		if(o != "t"){
 			nodes.c[i] = _nodes[o];
-			nodes.name[i] = o;
+			nodes.names[i] = o;
 			i++;
 		};
 	};
@@ -128,7 +128,7 @@ Simulator.Draw = function(_nodes, style){
 		
 		graphics.moveTo(ox + xAxis + 80, oy - yAxis + 100 + i * 70);
 		graphics.lineTo(ox + xAxis + 220, oy - yAxis + 100 + i * 70);
-		var Text = new PIXI.Text(nodes.name[i], {fill: "#" + _color.toString(16)});
+		var Text = new PIXI.Text(nodes.names[i], {fill: "#" + _color.toString(16)});
 		Text.position.x = ox + xAxis + 240;
 		Text.position.y = oy - yAxis + 82 + i * 70;
 		this.stage.addChild(Text);////////////////////////画线的名字的指示标
