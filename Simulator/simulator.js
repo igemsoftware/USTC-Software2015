@@ -2,20 +2,32 @@
 	    this.stage = null;
 	};
 Simulator.GetNodes = function(){};
-Simulator.Draw = function(nodes, style){
+Simulator.Draw = function(_nodes, style){
+	var nodes = function(){};
+	nodes.t = _nodes.t;
+	nodes.c = new Array();
+	nodes.name = new Array();
+	var i = 0;
+	for(var o in _nodes){
+		if(o != "t"){
+			nodes.c[i] = _nodes[o];
+			nodes.name[i] = o;
+			i++;
+		};
+	};
 	var xAxis = 1100, yAxis = 600;
 	var ox = 350, oy = 800;
 	renderer = PIXI.autoDetectRenderer(1920, 1080, style);
     if(!renderer)
         return;
 	this.stage = new PIXI.Container();
-	///////////////////////////////////
+	///////////////////////////////////一些数据的准备
 	graphics = new PIXI.Graphics();
 	graphics.lineStyle(2, 0x000000, 1);
 	graphics.moveTo(ox, oy);
 	graphics.lineTo(ox + xAxis, oy);
 	graphics.moveTo(ox, oy + 1);
-	graphics.lineTo(ox, oy - yAxis);
+	graphics.lineTo(ox, oy - yAxis);/////////绘制坐标主轴
 	
 	
 	var maxY = 0;
@@ -91,9 +103,9 @@ Simulator.Draw = function(nodes, style){
 			this.stage.addChild(Text);
 		};
 		i++;
-	};
+	};//////////////////////////////////绘制坐标轴的标度
 	
-	//////////////////////////////////绘制坐标轴
+	
 	var _color, gray = 0, red, green, blue;
 	for(var i = 0; i < nodes.c.length; i++){
 		gray = 255;
@@ -112,14 +124,14 @@ Simulator.Draw = function(nodes, style){
 		oy - (yAxis - 100) * nodes.c[i][j] / maxY);
 		    graphics.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[j], 
 		oy - (yAxis - 100) * nodes.c[i][j] / maxY);
-		};
+		};////////////////////////////画时变曲线
 		
 		graphics.moveTo(ox + xAxis + 80, oy - yAxis + 100 + i * 70);
 		graphics.lineTo(ox + xAxis + 220, oy - yAxis + 100 + i * 70);
 		var Text = new PIXI.Text(nodes.name[i], {fill: "#" + _color.toString(16)});
 		Text.position.x = ox + xAxis + 240;
 		Text.position.y = oy - yAxis + 82 + i * 70;
-		this.stage.addChild(Text);
+		this.stage.addChild(Text);////////////////////////画线的名字的指示标
 	};
 	
 	this.stage.addChild(graphics);
@@ -128,5 +140,5 @@ Simulator.Draw = function(nodes, style){
 	function animate() {
  				   renderer.render(that.stage);
  				   requestAnimationFrame( animate );
-	};
+	};///////////////刷新函数
 };
