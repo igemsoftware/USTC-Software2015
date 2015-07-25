@@ -84,15 +84,20 @@ class ReactionSystem(object):
         Returns:
             none
         '''
+        def itemfreq(Temp):
+            if len(Temp)==0:
+                return numpy.array([])
+            else:
+                return scipy.stats.itemfreq(Temp)
         self.Reactions=numpy.array(reactions)
         self.Reactant,self.Product,self.JLYConstance=self.Reactions.transpose()
         self.Reactant=numpy.array(self.Reactant)
         self.Product=numpy.array(self.Product)
         self.JLYConstance=numpy.array(self.JLYConstance)
-        self.ReactantData=map(lambda Temp1:scipy.stats.itemfreq(Temp1),
+        self.ReactantData=map(lambda Temp1:itemfreq(Temp1),
             (map(lambda Temp1:map(lambda Temp2
             :self.SpeciesNameInverse[Temp2],Temp1),self.Reactant)))
-        self.ProductData=map(lambda Temp1:scipy.stats.itemfreq(Temp1),
+        self.ProductData=map(lambda Temp1:itemfreq(Temp1),
             (map(lambda Temp1:map(lambda Temp2
             :self.SpeciesNameInverse[Temp2],Temp1),self.Product)))
 
@@ -204,7 +209,7 @@ class ReactionSystem(object):
             self.Record.append([Time+0,Current.tolist()])
         return self.Record
     
-    def ShowRecord(self):
+    def ShowRecord(self,List):
         '''
         Show the graph of the record simulated
         Parameters:
@@ -212,11 +217,12 @@ class ReactionSystem(object):
         Returns:
             none
         '''
-        for Species in range(self.SpeciesNumber):
+        List=map(lambda SingleSpecies:self.SpeciesNameInverse[SingleSpecies],List)
+        for Species in List:
             pylab.plot(map(lambda x:x[0],self.Record),map(lambda x:x[1][Species],self.Record))
         pylab.show()
     
-    def ShowSimulate(self,Initial,StopTime):
+    def ShowSimulate(self,Initial,StopTime,List):
         '''
         Simulate and show the graph
         Parameters:
@@ -226,4 +232,4 @@ class ReactionSystem(object):
             none
         '''
         self.Simulate(Initial,StopTime)
-        self.ShowRecord()
+        self.ShowRecord(List)
