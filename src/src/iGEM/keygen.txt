@@ -1,0 +1,38 @@
+zsy95_000@ZSY /d/UserFiles/Desktop/iGEM Platform (master)
+$ ssh-keygen -t rsa -C "zsy9509@mail.ustc.edu.cn"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/zsy95_000/.ssh/id_rsa):
+Created directory '/c/Users/zsy95_000/.ssh'.
+Enter passphrase (empty for no passphrase): zsy@igem
+Enter same passphrase again: zsy@igem
+Your identification has been saved in /c/Users/zsy95_000/.ssh/id_rsa.
+Your public key has been saved in /c/Users/zsy95_000/.ssh/id_rsa.pub.
+The key fingerprint is:
+45:fd:bc:ad:ce:5a:d2:94:b6:7c:d1:27:b2:45:82:51 zsy9509@mail.ustc.edu.cn
+The key's randomart image is:
++--[ RSA 2048]----+
+|          ooE    |
+|         . o.    |
+|          o .o.  |
+|         .   oo..|
+|        S   . *+o|
+|             O.o+|
+|            o =..|
+|             +.. |
+|            .oo  |
++-----------------+
+
+zsy95_000@ZSY /d/UserFiles/Desktop/iGEM Platform (master)
+$ ssh-agent -s
+SSH_AUTH_SOCK=/tmp/ssh-G6876dwSLSNX/agent.2716; export SSH_AUTH_SOCK;
+SSH_AGENT_PID=8452; export SSH_AGENT_PID;
+echo Agent pid 8452;
+
+zsy95_000@ZSY /d/UserFiles/Desktop/iGEM Platform (master)
+$ eval "$(ssh-agent -s)"
+Agent pid 5984
+
+zsy95_000@ZSY /d/UserFiles/Desktop/iGEM Platform (master)
+$ ssh-add ~/.ssh/id_rsa
+Enter passphrase for /c/Users/zsy95_000/.ssh/id_rsa:
+Identity added: /c/Users/zsy95_000/.ssh/id_rsa (/c/Users/zsy95_000/.ssh/id_rsa)
