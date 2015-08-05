@@ -15,7 +15,7 @@ PLUMB.init = function() {
         var plugin_name = PLUMB.plugins[i];
         var display_name = get_display_name(plugin_name);
         $('#plugins').append('<li id="' + plugin_name + '">' + display_name + '</li>');
-        eval('var callback = function(data) {PLUMB.' + plugin_name + ' = eval("new function() {" + data + "}");$("#' + plugin_name + '").on("click", function() {PLUMB.stage = PLUMB.' + plugin_name + '.stage});}');
+        eval('var callback = function(data) {PLUMB.' + plugin_name + ' = eval("new function() {" + data + "}");$("#' + plugin_name + '").on("click", function() {PLUMB.change_stage(PLUMB.' + plugin_name + ')});}');
         $.get('plugins/' + plugin_name + '.js', callback);
     };
     var prev_time = 0;
@@ -30,10 +30,22 @@ PLUMB.init = function() {
     render(animate);
     var next = function() {
         if(PLUMB.home)
-            PLUMB.stage = PLUMB.home.stage;
+            PLUMB.stage.addChild(PLUMB.home.stage);
         else
             setTimeout(next, 50);
     };
     setInterval(function() {$('#fps').html('FPS: ' + fps);}, 1000);
     setTimeout(next, 1);
+};
+PLUMB.get_current_plugin_stage = function() {
+    if(PLUMB.stage.children.length == 1)
+        return PLUMB.stage.children[0];
+    return null;
+}
+PLUMB.change_stage = function(plugin) {
+    var child_stage = PLUMB.get_current_plugin_stage();
+    if(!child_stage)
+        return;
+    PLUMB.stage.removeChild(child_stage);
+    PLUMB.stage.addChild(plugin.stage);
 };

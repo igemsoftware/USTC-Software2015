@@ -1,5 +1,7 @@
-this.stage=new PIXI.Container();
-this.Draw = function(devices, n){
+﻿this.stage = new PIXI.Container();
+this.stage.movable_stage = new PIXI.Container();
+
+this.draw = function(devices, n, w){
 	if(!devices[n]){
 		alert("Error!");
 		return;
@@ -202,7 +204,9 @@ this.Draw = function(devices, n){
 	if(stageW < $("body").width())
 	    stageW = $("body").width();
     
-    var texture = PIXI.Texture.fromImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAAoCAIAAAC95rUiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB8SURBVGhD7dExAcAgEMDAb42xIr6iuuCBDHdLBORZ+xtue0+5yoYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGxJsSLAhwYYEGwJmfrGzAaMiHjaeAAAAAElFTkSuQmCC");
+    
+    
+    var texture = PIXI.Texture.fromImage("test.png");
 	
 	var parts = new Array();
 	var BDEs = new Array();
@@ -346,19 +350,31 @@ this.Draw = function(devices, n){
 	};//绘制Input的支路
 	
 	
-	this.stage.addChild(graphics);
+	
+	
+	
+	
+	
+	
+	this.stage.movable_stage.addChild(graphics);
 	for(i = 0; i < partsNum; i++){
 		if(BDEs[i])
-		    this.stage.addChild(BDEs[i]);
-		this.stage.addChild(parts[i]);
+		    this.stage.movable_stage.addChild(BDEs[i]);
+		this.stage.movable_stage.addChild(parts[i]);
 		if(parts[i].protein){
-		    this.stage.addChild(parts[i].protein);
+		    this.stage.movable_stage.addChild(parts[i].protein);
 			if(parts[i].protein.Text){
-				this.stage.addChild(parts[i].protein.Text);
+				this.stage.movable_stage.addChild(parts[i].protein.Text);
 			};
 		};
 	};
 	
-};
-a=$.getJSON("/misc/devices.json");
-setTimeout(function(){PLUMB.device.Draw(a.responseJSON,0)},100);
+	var moveX = w / 2 - (partsNum + linesNum + 1) * 90 + 25;
+	if(moveX > 0)
+	    this.stage.movable_stage.position.x = moveX;
+	this.stage.addChild(this.stage.movable_stage);
+	return this.stage;
+	
+};//绘制函数
+
+
