@@ -1,0 +1,1011 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     33314,       1002]
+NotebookOptionsPosition[     32132,        962]
+NotebookOutlinePosition[     32466,        977]
+CellTagsIndexPosition[     32423,        974]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"maptoname", "[", "name_", "]"}], ":=", 
+   RowBox[{"Thread", "[", 
+    RowBox[{
+     RowBox[{"Range", "[", 
+      RowBox[{"Length", "[", "name", "]"}], "]"}], "\[Rule]", "name"}], 
+    "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"maptono", "[", "name_", "]"}], ":=", 
+   RowBox[{"Thread", "[", 
+    RowBox[{"name", "\[Rule]", 
+     RowBox[{"Range", "[", 
+      RowBox[{"Length", "[", "name", "]"}], "]"}]}], "]"}]}], ";"}]}], "Input",\
+
+ CellChangeTimes->{{3.646723639195188*^9, 3.646723673805587*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"intensity", "[", 
+    RowBox[{"sour_", ",", "cur_"}], "]"}], ":=", 
+   RowBox[{"Times", "@@", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"Binomial", "[", 
+         RowBox[{
+          RowBox[{"cur", "[", 
+           RowBox[{"[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], ",", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "]"}], ")"}], "&"}], "/@", 
+      "sour"}], ")"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"intensitylist", "[", 
+    RowBox[{"reactant_", ",", "cur_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"intensity", "[", 
+      RowBox[{"#", ",", "cur"}], "]"}], "&"}], "/@", "reactant"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{3.6467237976629553`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Simulate", "[", 
+    RowBox[{"system_", ",", "initial_", ",", "stoptime_", ",", "plotspec_"}], 
+    "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "reactnum", ",", "c", ",", "reaction", ",", "reactant", ",", "product", 
+       ",", "current", ",", "time", ",", "record", ",", "h", ",", "a", ",", 
+       "sum", ",", "tao", ",", "mu", ",", "asum", ",", "nosys", ",", "noini", 
+       ",", "toname", ",", "tono", ",", "name", ",", "plt"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"reactnum", "=", 
+       RowBox[{"Length", "[", "system", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"c", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], ")"}], "&"}], "/@", "system"}]}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"name", "=", 
+       RowBox[{"Union", "[", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ")"}], "&"}], "/@", "system"}], 
+          ",", "Infinity"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"toname", "=", 
+       RowBox[{"maptoname", "[", "name", "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"tono", "=", 
+       RowBox[{"maptono", "[", "name", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"nosys", "=", 
+       RowBox[{"system", "/.", "tono"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"noini", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "&"}], "/@", 
+        RowBox[{"SortBy", "[", 
+         RowBox[{
+          RowBox[{"initial", "/.", "tono"}], ",", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "&"}]}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"reaction", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], ")"}], "&"}], "/@", "nosys"}]}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"reactant", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"Counts", "[", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "]"}], "&"}], "/@", "reaction"}], 
+        "//", "Normal"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"product", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"Counts", "[", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], "]"}], "&"}], "/@", "reaction"}], 
+        "//", "Normal"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"current", "=", "noini"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"time", "=", "0."}], ";", "\[IndentingNewLine]", 
+      RowBox[{"record", "=", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"time", ",", "current"}], "}"}], "}"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"While", "[", 
+       RowBox[{
+        RowBox[{"time", "<", "stoptime"}], ",", 
+        RowBox[{
+         RowBox[{"h", "=", 
+          RowBox[{"intensitylist", "[", 
+           RowBox[{"reactant", ",", "current"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"h", "\[Equal]", 
+            RowBox[{"Table", "[", 
+             RowBox[{"0", ",", 
+              RowBox[{"{", "reactnum", "}"}]}], "]"}]}], ",", 
+           RowBox[{"Break", "[", "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"a", "=", 
+          RowBox[{"h", "*", "c"}]}], ";", 
+         RowBox[{"asum", "=", 
+          RowBox[{"Plus", "@@", "a"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"tao", "=", 
+          RowBox[{
+           RowBox[{"Log", "[", 
+            RowBox[{"1", "/", 
+             RowBox[{"Random", "[", "]"}]}], "]"}], "/", "asum"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"mu", "=", 
+          RowBox[{"RandomChoice", "[", 
+           RowBox[{"a", "\[Rule]", 
+            RowBox[{"Range", "[", "reactnum", "]"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"current", "[", 
+              RowBox[{"[", 
+               RowBox[{"#", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "-=", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "2", "]"}], "]"}]}], ")"}], "&"}], "/@", 
+          RowBox[{"(", 
+           RowBox[{"reactant", "[", 
+            RowBox[{"[", "mu", "]"}], "]"}], ")"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"current", "[", 
+              RowBox[{"[", 
+               RowBox[{"#", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "+=", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "2", "]"}], "]"}]}], ")"}], "&"}], "/@", 
+          RowBox[{"(", 
+           RowBox[{"product", "[", 
+            RowBox[{"[", "mu", "]"}], "]"}], ")"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"time", "=", 
+          RowBox[{"time", "+", "tao"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"AppendTo", "[", 
+          RowBox[{"record", ",", 
+           RowBox[{"{", 
+            RowBox[{"time", ",", "current"}], "}"}]}], "]"}], ";"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"record", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", 
+             RowBox[{"2", ",", 
+              RowBox[{"plotspec", "/.", "tono"}]}], "]"}], "]"}]}], "}"}], 
+         "&"}], "/@", "record"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"plt", "=", 
+       RowBox[{"ListPlot", "[", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"#", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{"#", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"2", ",", "i"}], "]"}], "]"}]}], "}"}], ")"}], 
+             "&"}], "/@", "record"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "1", ",", 
+             RowBox[{"Length", "[", "plotspec", "]"}]}], "}"}]}], "]"}], ",", 
+         
+         RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+         RowBox[{"InterpolationOrder", "\[Rule]", "1"}], ",", 
+         RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+         RowBox[{"PlotLegends", "\[Rule]", "plotspec"}], ",", 
+         RowBox[{"ImageSize", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"1024", ",", "768"}], "}"}]}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.646723680045*^9, 3.6467236962330627`*^9}, {
+  3.646723793759445*^9, 3.6467237998217983`*^9}, {3.64673535489046*^9, 
+  3.6467353639640913`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"DNA", "-", "mRNA", "-", 
+    RowBox[{"Protein", " ", "construction"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"DNAtoProtein", "[", 
+     RowBox[{"dna_", ",", 
+      RowBox[{"{", 
+       RowBox[{"c1_", ",", "c2_"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"d1_", ",", "d2_"}], "}"}]}], "]"}], ":=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", "dna", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"dna", ",", 
+            RowBox[{"dna", "<>", "\"\<::mRNA\>\""}]}], "}"}]}], "}"}], ",", 
+        "c1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"dna", "<>", "\"\<::mRNA\>\""}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"dna", "<>", "\"\<::Protein\>\""}], ",", 
+            RowBox[{"dna", "<>", "\"\<::mRNA\>\""}]}], "}"}]}], "}"}], ",", 
+        "c2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"dna", "<>", "\"\<::mRNA\>\""}], "}"}], ",", 
+          RowBox[{"{", "}"}]}], "}"}], ",", "d1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"dna", "<>", "\"\<::Protein\>\""}], "}"}], ",", 
+          RowBox[{"{", "}"}]}], "}"}], ",", "d2"}], "}"}]}], "}"}]}], 
+   ";"}]}]], "Input",
+ CellChangeTimes->{3.646723810795353*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DNAtoProtein", "[", 
+  RowBox[{"\"\<Lac1\>\"", ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "1"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.646810537395824*^9, 3.646810553109002*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"Lac1\"\>", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"Lac1\"\>", ",", "\<\"Lac1::mRNA\"\>"}], "}"}]}], "}"}], 
+     ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"Lac1::mRNA\"\>", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"Lac1::Protein\"\>", ",", "\<\"Lac1::mRNA\"\>"}], "}"}]}],
+       "}"}], ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"Lac1::mRNA\"\>", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "}"}], ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"Lac1::Protein\"\>", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "}"}], ",", "1"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.6468105535562687`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"negative", " ", "regulation", " ", "construction"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NegativeRegulate", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"reaction_", ",", "c_"}], "}"}], ",", "regulon_", ",", "r_"}], 
+     "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"temp", "=", 
+        RowBox[{"StringJoin", "@@", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"#", "<>", "\"\<*\>\""}], ")"}], "&"}], "/@", 
+           RowBox[{"(", 
+            RowBox[{"reaction", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ")"}]}], ")"}]}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"reaction", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{"{", "temp", "}"}]}], "}"}], ",", "c"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"temp", ",", "regulon"}], "}"}], ",", 
+            RowBox[{"Append", "[", 
+             RowBox[{
+              RowBox[{"reaction", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], ",", "regulon"}], "]"}]}], 
+           "}"}], ",", 
+          RowBox[{"r", "*", "c"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", "temp", "}"}], ",", 
+            RowBox[{"reaction", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", "c"}], "}"}]}], 
+       "}"}]}], "]"}]}], ";"}]}]], "Input",
+ CellChangeTimes->{{3.646723709111363*^9, 3.6467237155768642`*^9}, 
+   3.646723813317082*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NegativeRegulate", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<A\>\"", ",", "\"\<B\>\""}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<C\>\"", ",", "\"\<D\>\""}], "}"}]}], "}"}], ",", "1"}], 
+    "}"}], ",", "\"\<Reg\>\"", ",", "1"}], "]"}]], "Input",
+ CellChangeTimes->{{3.646810565429776*^9, 3.646810610462789*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\<\"A\"\>", ",", "\<\"B\"\>"}], "}"}], ",", 
+       RowBox[{"{", "\<\"A*B*\"\>", "}"}]}], "}"}], ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\<\"A*B*\"\>", ",", "\<\"Reg\"\>"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"A\"\>", ",", "\<\"B\"\>", ",", "\<\"Reg\"\>"}], "}"}]}], 
+      "}"}], ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"A*B*\"\>", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"C\"\>", ",", "\<\"D\"\>"}], "}"}]}], "}"}], ",", "1"}], 
+    "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.646810599987623*^9, 3.6468106108167686`*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"global", " ", "trans", " ", "and", " ", "decay", " ", "const"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Trans1", "=", "0.01"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Trans2", "=", "0.5"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Decay1", "=", "0.1"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Decay2", "=", "0.05"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Regulon", "=", "20"}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.646723718156703*^9, 3.646723723556435*^9}, {
+  3.646723816591107*^9, 3.646723819400399*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"not", " ", "gate", " ", "construction"}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NotGate", "[", 
+     RowBox[{"i_", ",", "o_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"dna", "=", 
+        RowBox[{
+         RowBox[{"StringCases", "[", 
+          RowBox[{"o", ",", 
+           RowBox[{
+            RowBox[{"x__", "~~", "\"\<::\>\""}], "\[Rule]", "x"}]}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}]}], "}"}], ",", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"DNAtoProtein", "[", 
+          RowBox[{"dna", ",", 
+           RowBox[{"{", 
+            RowBox[{"Trans1", ",", "Trans2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"Decay1", ",", "Decay2"}], "}"}]}], "]"}], "[", 
+         RowBox[{"[", 
+          RowBox[{"2", ";;"}], "]"}], "]"}], ",", 
+        RowBox[{"NegativeRegulate", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", "dna", "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"dna", ",", 
+                RowBox[{"dna", "<>", "\"\<::mRNA\>\""}]}], "}"}]}], "}"}], 
+            ",", "Trans1"}], "}"}], ",", "i", ",", "Regulon"}], "]"}]}], 
+       "]"}]}], "]"}]}], ";"}]}]], "Input",
+ CellChangeTimes->{{3.6467239985870037`*^9, 3.64672400582742*^9}, {
+  3.646812638998268*^9, 3.646812640216208*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NotGate", "[", 
+  RowBox[{"\"\<I::DNA\>\"", ",", "\"\<O::DNA\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.646810732924851*^9, 3.646810750847186*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"O::mRNA\"\>", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"O::Protein\"\>", ",", "\<\"O::mRNA\"\>"}], "}"}]}], 
+      "}"}], ",", "0.5`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"O::mRNA\"\>", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "}"}], ",", "0.1`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"O::Protein\"\>", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "}"}], ",", "0.05`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"O\"\>", "}"}], ",", 
+       RowBox[{"{", "\<\"O*\"\>", "}"}]}], "}"}], ",", "0.01`"}], "}"}], ",", 
+   
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\<\"O*\"\>", ",", "\<\"I::DNA\"\>"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"O\"\>", ",", "\<\"I::DNA\"\>"}], "}"}]}], "}"}], ",", 
+     "0.2`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "\<\"O*\"\>", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"O\"\>", ",", "\<\"O::mRNA\"\>"}], "}"}]}], "}"}], ",", 
+     "0.01`"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.646810751614959*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"not", " ", "gate"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"notgate", "=", 
+     RowBox[{"NotGate", "[", 
+      RowBox[{"\"\<lacI::Protein\>\"", ",", "\"\<gfp::Protein\>\""}], "]"}]}],
+     ";"}], "\n", 
+   RowBox[{
+    RowBox[{"notgateinit", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::Protein\>\"", ",", "100"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp::Protein\>\"", ",", "0"}], "}"}]}], "}"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.6467237435484056`*^9, {3.646724007924752*^9, 3.646724012709714*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"nor", " ", "gate", " ", "construction"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NorGate", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"i1_", ",", "i2_"}], "}"}], ",", "o_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"dna", "=", 
+        RowBox[{
+         RowBox[{"StringCases", "[", 
+          RowBox[{"o", ",", 
+           RowBox[{
+            RowBox[{"x__", "~~", "\"\<::\>\""}], "\[Rule]", "x"}]}], "]"}], 
+         "[", 
+         RowBox[{"[", "1", "]"}], "]"}]}], "}"}], ",", 
+      RowBox[{"Union", "[", 
+       RowBox[{"Join", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"DNAtoProtein", "[", 
+           RowBox[{"dna", ",", 
+            RowBox[{"{", 
+             RowBox[{"Trans1", ",", "Trans2"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Decay1", ",", "Decay2"}], "}"}]}], "]"}], "[", 
+          RowBox[{"[", 
+           RowBox[{"2", ";;"}], "]"}], "]"}], ",", 
+         RowBox[{"NegativeRegulate", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "dna", "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"dna", ",", 
+                 RowBox[{"dna", "<>", "\"\<::mRNA\>\""}]}], "}"}]}], "}"}], 
+             ",", "Trans1"}], "}"}], ",", "i1", ",", "Regulon"}], "]"}], ",", 
+         
+         RowBox[{"NegativeRegulate", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "dna", "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"dna", ",", 
+                 RowBox[{"dna", "<>", "\"\<::mRNA\>\""}]}], "}"}]}], "}"}], 
+             ",", "Trans1"}], "}"}], ",", "i2", ",", "Regulon"}], "]"}]}], 
+        "]"}], "]"}]}], "]"}]}], ";"}]}]], "Input",
+ CellChangeTimes->{
+  3.646723750327553*^9, {3.646724014131734*^9, 3.646724017354244*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"nor", " ", "gate"}], "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"norgate", "=", 
+     RowBox[{"NorGate", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::Protein\>\"", ",", "\"\<tetR::Protein\>\""}], 
+        "}"}], ",", "\"\<gfp::Protein\>\""}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"norgateinit", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"\"\<lacI::Protein\>\"", ",", "100"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<tetR::Protein\>\"", ",", "75"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<gfp\>\"", ",", "1000"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<gfp*\>\"", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<gfp::mRNA\>\"", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<gfp::Protein\>\"", ",", "0"}], "}"}]}], 
+     "}"}]}]}]}]], "Input",
+ CellChangeTimes->{
+  3.646723759876794*^9, {3.64672402033678*^9, 3.6467240233312407`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"and", " ", 
+    RowBox[{"gate", ":", 
+     RowBox[{
+     "from", " ", "3", " ", "not", " ", "gate", " ", "and", " ", "a", " ", 
+      "nor", " ", "gate"}]}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"AndGate", "[", 
+     RowBox[{"name_", ",", 
+      RowBox[{"{", 
+       RowBox[{"i1_", ",", "i2_"}], "}"}], ",", "o_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"temp1", "=", 
+         RowBox[{"name", "<>", "\"\<.temp1\>\""}]}], ",", 
+        RowBox[{"temp2", "=", 
+         RowBox[{"name", "<>", "\"\<.temp2\>\""}]}]}], "}"}], ",", 
+      RowBox[{"Union", "[", 
+       RowBox[{"Join", "[", 
+        RowBox[{
+         RowBox[{"NotGate", "[", 
+          RowBox[{"i1", ",", 
+           RowBox[{"temp1", "<>", "\"\<::Protein\>\""}]}], "]"}], ",", 
+         RowBox[{"NotGate", "[", 
+          RowBox[{"i2", ",", 
+           RowBox[{"temp2", "<>", "\"\<::Protein\>\""}]}], "]"}], ",", 
+         RowBox[{"NorGate", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"temp1", "<>", "\"\<::Protein\>\""}], ",", 
+             RowBox[{"temp2", "<>", "\"\<::Protein\>\""}]}], "}"}], ",", 
+           "o"}], "]"}]}], "]"}], "]"}]}], "]"}]}], ";"}]}]], "Input",
+ CellChangeTimes->{
+  3.64672376736675*^9, {3.6467240256260757`*^9, 3.646724030444475*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"and", " ", "gate"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"andgate", "=", 
+     RowBox[{"AndGate", "[", 
+      RowBox[{"\"\<this\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::Protein\>\"", ",", "\"\<tetR::Protein\>\""}], 
+        "}"}], ",", "\"\<gfp::Protein\>\""}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"andgateinit", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::Protein\>\"", ",", "100"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<tetR::Protein\>\"", ",", "100"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp1\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp2\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp1*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp2*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp1::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp2::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp1::Protein\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<this.temp2::Protein\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<gfp::Protein\>\"", ",", "0"}], "}"}]}], "}"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.646723774219584*^9, {3.646724032444704*^9, 3.64672403998735*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"three", " ", "not", " ", "gate"}], "*)"}], "\[IndentingNewLine]", 
+  
+  RowBox[{
+   RowBox[{
+    RowBox[{"vib", "=", 
+     RowBox[{"Join", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"DNAtoProtein", "[", 
+         RowBox[{"\"\<tetR\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{"Trans1", ",", "Trans2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Decay1", ",", "Decay2"}], "}"}]}], "]"}], "[", 
+        RowBox[{"[", 
+         RowBox[{"2", ";;"}], "]"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"DNAtoProtein", "[", 
+         RowBox[{"\"\<cI\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{"Trans1", ",", "Trans2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Decay1", ",", "Decay2"}], "}"}]}], "]"}], "[", 
+        RowBox[{"[", 
+         RowBox[{"2", ";;"}], "]"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"DNAtoProtein", "[", 
+         RowBox[{"\"\<lacI\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{"Trans1", ",", "Trans2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Decay1", ",", "Decay2"}], "}"}]}], "]"}], "[", 
+        RowBox[{"[", 
+         RowBox[{"2", ";;"}], "]"}], "]"}], ",", 
+       RowBox[{"NegativeRegulate", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "\"\<tetR\>\"", "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<tetR\>\"", ",", "\"\<tetR::mRNA\>\""}], "}"}]}], 
+            "}"}], ",", "Trans1"}], "}"}], ",", "\"\<lacI::Protein\>\"", ",", 
+         "Regulon"}], "]"}], ",", 
+       RowBox[{"NegativeRegulate", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "\"\<cI\>\"", "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<cI\>\"", ",", "\"\<cI::mRNA\>\""}], "}"}]}], "}"}],
+            ",", "Trans1"}], "}"}], ",", "\"\<tetR::Protein\>\"", ",", 
+         "Regulon"}], "]"}], ",", 
+       RowBox[{"NegativeRegulate", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "\"\<lacI\>\"", "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"\"\<lacI\>\"", ",", "\"\<lacI::mRNA\>\""}], "}"}]}], 
+            "}"}], ",", "Trans1"}], "}"}], ",", "\"\<cI::Protein\>\"", ",", 
+         "Regulon"}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"vibinit", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<tetR\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<tetR*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<tetR::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<tetR::Protein\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<cI\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<cI*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<cI::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<cI::Protein\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI\>\"", ",", "1000"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI*\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::Protein\>\"", ",", "0"}], "}"}]}], "}"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.6467237799404697`*^9, {3.646724041998659*^9, 3.646724049759013*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"DNA", " ", "to", " ", "mRNA", " ", "to", " ", "Protein"}], "*)"}],
+   "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"drp", "=", 
+    RowBox[{"DNAtoProtein", "[", 
+     RowBox[{"\"\<lacI\>\"", ",", 
+      RowBox[{"{", 
+       RowBox[{"0.01", ",", "0.5"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0.1", ",", "0.05"}], "}"}]}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"drpinit", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI\>\"", ",", "100"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::mRNA\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<lacI::Protein\>\"", ",", "0"}], "}"}]}], "}"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.646723783736095*^9, {3.646724051069068*^9, 3.646724054877842*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"negative", " ", "regulate"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"neg", "=", 
+     RowBox[{"NegativeRegulate", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", "\"\<A\>\"", "}"}], ",", 
+           RowBox[{"{", "\"\<B\>\"", "}"}]}], "}"}], ",", "0.1"}], "}"}], 
+       ",", "\"\<temp\>\"", ",", "2"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"neginit", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<A\>\"", ",", "500"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<B\>\"", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<temp\>\"", ",", "100"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<A*\>\"", ",", "0"}], "}"}]}], "}"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.646724056640622*^9, 3.6467240589403553`*^9}, {
+  3.6467353779531717`*^9, 3.646735380796977*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Simulate", "[", 
+  RowBox[{"andgate", ",", "andgateinit", ",", "300", ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<lacI::Protein\>\"", ",", "\"\<tetR::Protein\>\"", ",", 
+     "\"\<gfp::Protein\>\""}], "}"}]}], "]"}]], "Input"]
+},
+WindowSize->{1366, 694},
+WindowMargins->{{-7, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.0 for Linux x86 (64-bit) (June 27, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 561, 17, 55, "Input"],
+Cell[1122, 39, 857, 28, 55, "Input"],
+Cell[1982, 69, 7263, 191, 605, "Input"],
+Cell[9248, 262, 1612, 50, 99, "Input"],
+Cell[CellGroupData[{
+Cell[10885, 316, 273, 7, 32, "Input"],
+Cell[11161, 325, 960, 31, 32, "Output"]
+}, Open  ]],
+Cell[12136, 359, 1840, 55, 99, "Input"],
+Cell[CellGroupData[{
+Cell[14001, 418, 431, 12, 32, "Input"],
+Cell[14435, 432, 864, 27, 32, "Output"]
+}, Open  ]],
+Cell[15314, 462, 598, 17, 143, "Input"],
+Cell[15915, 481, 1500, 43, 99, "Input"],
+Cell[CellGroupData[{
+Cell[17440, 528, 175, 3, 32, "Input"],
+Cell[17618, 533, 1420, 47, 55, "Output"]
+}, Open  ]],
+Cell[19053, 583, 904, 26, 77, "Input"],
+Cell[19960, 611, 2057, 59, 121, "Input"],
+Cell[22020, 672, 1043, 30, 77, "Input"],
+Cell[23066, 704, 1429, 39, 77, "Input"],
+Cell[24498, 745, 1802, 46, 121, "Input"],
+Cell[26303, 793, 3698, 100, 187, "Input"],
+Cell[30004, 895, 850, 25, 77, "Input"],
+Cell[30857, 922, 1017, 30, 77, "Input"],
+Cell[31877, 954, 251, 6, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
