@@ -3,19 +3,19 @@
 from parts_system import parts_system
 import numpy
 
-class substance:
+class Substance:
     
     def __init__(self,subdata):
         name=subdata[0]
         constance=subdata[1]
-        self.name=name
+        self.Name=name
         self.DNA=name+'::DNA'
         self.RNA=name+'::RNA'
-        self.protein=name+'::Protein'
-        self.DNA_to_RNA=constance[0]
-        self.RNA_to_protein=constance[1]
-        self.RNA_die=constance[2]
-        self.protein_die=constance[3]
+        self.Protein=name+'::Protein'
+        self.DNAtoRNA=constance[0]
+        self.RNAtoProtein=constance[1]
+        self.RNADie=constance[2]
+        self.ProteinDie=constance[3]
         
     @property
     def GetSpecies(self):
