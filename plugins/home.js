@@ -31,7 +31,12 @@ this.draw = function(devices){
 
 		onDragStart_e = function(event) {
 			if(waitForDoubleClick){
-				alert();
+				var a=$.getJSON("/misc/devices.json");
+				var that = this;
+				setTimeout(function(){
+					    PLUMB.device.draw(a.responseJSON, that.Index);
+						PLUMB.change_stage(PLUMB.device);
+					}, 100);
 				return;
 			}else{
 				waitForDoubleClick = true;
@@ -99,27 +104,7 @@ this.draw = function(devices){
             }
         };
 		
-		/*onDragStart_d = function(event) {
-            this.data = event.data;
-            this.dragging = true;
-			var startPosition = this.data.getLocalPosition(this.parent);
-			this.startX = startPosition.x;
-			this.startY = startPosition.y;
-			that.stage.movable_stage.startX = that.stage.movable_stage.position.x;
-			that.stage.movable_stage.startY = that.stage.movable_stage.position.y;
-        };
-        onDragEnd_d = function() {
-            this.dragging = false;
-            this.data = null;
-        };
-        onDragMove_d = function(event) {
-            if(this.dragging) {
-                var newPosition = this.data.getLocalPosition(this.parent);
-                that.stage.movable_stage.position.x = newPosition.x - this.startX + that.stage.movable_stage.startX;
-                that.stage.movable_stage.position.y = newPosition.y - this.startY + that.stage.movable_stage.startY;
-            };
-			that.stage.movable_stage.inPosition = event.data.getLocalPosition(that.stage.movable_stage);
-        };*/
+		
 		
 	    
 		
@@ -148,18 +133,6 @@ this.draw = function(devices){
 		
 		
 		
-		/*var dragArea = new PIXI.Graphics();
-		dragArea.beginFill(0, 0);
-		dragArea.drawRect(0, 0, w, h);
-		dragArea.interactive = true;
-		dragArea.on('mousedown', onDragStart_d)
-                .on('touchstart', onDragStart_d)
-                .on('mouseup', onDragEnd_d)
-                .on('mouseupoutside', onDragEnd_d)
-                .on('touchend', onDragEnd_d)
-                .on('touchendoutside', onDragEnd_d)
-                .on('mousemove', onDragMove_d)
-                .on('touchmove', onDragMove_d);*/
 		
 	
 	
@@ -199,36 +172,9 @@ this.draw = function(devices){
                 added = !added;
             });
 			
-		/*that.backButton = new PIXI.Graphics();
-        that.backButton.beginFill(0x123456, 0.5);
-        that.backButton.drawCircle(w - 60, 50, 30);
-        that.backButton.endFill();
-        that.backButton.lineStyle(5, 0x00ff00, 1);
-        that.backButton.moveTo(w - 73, 50);
-        that.backButton.lineTo(w - 45, 50);
-        that.backButton.moveTo(w - 75, 52);
-        that.backButton.lineTo(w - 65, 42);
-		that.backButton.moveTo(w - 75, 48);
-        that.backButton.lineTo(w - 65, 58);
-        that.backButton.interactive = true;
-        that.backButton.buttonMode = true;
-		that.backButton.on('mousedown', function(){
-			that.stage.removeChild(that.backButton);
-			that.stage.removeChild(that.stage.movable_stage);
-			that.stage.movable_stage = that.backupStage;
-			that.stage.addChild(that.stage.movable_stage);
-			that.stage.addChild(that.plusobj);
-			if(added){
-				that.stage.addChild(that.list);
-				for(var i = 0; i < devices.length; i++){
-					that.stage.addChild(that._logicGates[i]);
-					that.stage.addChild(that.logicGates[i]);
-				};
-			};
-		});*/
 		
 		
-		//this.stage.addChild(dragArea);
+		
         this.stage.addChild(that.plusobj);
 		this.stage.addChild(this.stage.movable_stage);
 	    return this.stage;

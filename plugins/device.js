@@ -1,7 +1,8 @@
 ﻿this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
 
-this.draw = function(devices, n, w){
+this.draw = function(devices, n){
+	var w = PLUMB.width;
 	if(!devices[n]){
 		alert("Error!");
 		return;
@@ -206,7 +207,7 @@ this.draw = function(devices, n, w){
     
     
     
-    var texture = PIXI.Texture.fromImage("test.png");
+    var texture = PIXI.Texture.fromImage("/misc/test.png");
 	
 	var parts = new Array();
 	var BDEs = new Array();

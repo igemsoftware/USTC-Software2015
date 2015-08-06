@@ -1,4 +1,9 @@
 window.PLUMB = {'plugins' : ['home', 'device', 'simulator']};
+PLUMB.get_current_plugin_stage = function() {
+    if(PLUMB.stage.children.length == 2)
+        return PLUMB.stage.children[1];
+    return null;
+}
 PLUMB.init = function() {
     PLUMB.width = $('body').width();
     PLUMB.height = $('body').height() - $('nav').height();
@@ -36,12 +41,83 @@ PLUMB.init = function() {
     };
     setInterval(function() {$('#fps').html('FPS: ' + fps);}, 1000);
     setTimeout(next, 1);
+	
+	onDragStart_d = function(event) {
+		if(!PLUMB.get_current_plugin_stage())
+		    return;
+        this.data = event.data;
+        this.dragging = true;
+		var startPosition = this.data.getLocalPosition(this.parent);
+		this.startX = startPosition.x;
+		this.startY = startPosition.y;
+		PLUMB.get_current_plugin_stage().movable_stage.startX = PLUMB.get_current_plugin_stage().movable_stage.position.x;
+		PLUMB.get_current_plugin_stage().movable_stage.startY = PLUMB.get_current_plugin_stage().movable_stage.position.y;
+    };
+    onDragEnd_d = function() {
+        this.dragging = false;
+        this.data = null;
+    };
+    onDragMove_d = function(event) {
+		if(!PLUMB.get_current_plugin_stage())
+		    return;
+        if(this.dragging) {
+            var newPosition = this.data.getLocalPosition(this.parent);
+            PLUMB.get_current_plugin_stage().movable_stage.position.x = newPosition.x - this.startX + PLUMB.get_current_plugin_stage().movable_stage.startX;
+            PLUMB.get_current_plugin_stage().movable_stage.position.y = newPosition.y - this.startY + PLUMB.get_current_plugin_stage().movable_stage.startY;
+        };
+    	PLUMB.get_current_plugin_stage().movable_stage.inPosition = event.data.getLocalPosition(PLUMB.get_current_plugin_stage().movable_stage);
+    };
+	var dragArea = new PIXI.Graphics();
+		dragArea.beginFill(0, 0);
+		dragArea.drawRect(0, 0, 65536, 65536);
+		dragArea.interactive = true;
+		dragArea.on('mousedown', onDragStart_d)
+                .on('touchstart', onDragStart_d)
+                .on('mouseup', onDragEnd_d)
+                .on('mouseupoutside', onDragEnd_d)
+                .on('touchend', onDragEnd_d)
+                .on('touchendoutside', onDragEnd_d)
+                .on('mousemove', onDragMove_d)
+                .on('touchmove', onDragMove_d);
+	PLUMB.stage.addChild(dragArea);
+	
+    var scrollFunc=function(e){
+        var d = 0;
+        e = e || window.event;
+        
+        if(e.wheelDelta){//IE/Opera/Chrome
+            d = e.wheelDelta;
+        }else if(e.detail){//Firefox
+            d = e.detail;
+        };
+        var f = function(x){
+			if(Math.abs(PLUMB.get_current_plugin_stage().movable_stage.scale.x - x) > 0.001){
+				PLUMB.get_current_plugin_stage().movable_stage.position.x += (PLUMB.get_current_plugin_stage().movable_stage.scale.x - x) * 0.1 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.x;
+				PLUMB.get_current_plugin_stage().movable_stage.position.y += (PLUMB.get_current_plugin_stage().movable_stage.scale.y - x) * 0.1 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.y;
+				PLUMB.get_current_plugin_stage().movable_stage.scale.x -= (PLUMB.get_current_plugin_stage().movable_stage.scale.x - x) * 0.1;
+                PLUMB.get_current_plugin_stage().movable_stage.scale.y -= (PLUMB.get_current_plugin_stage().movable_stage.scale.y - x) * 0.1;
+		        requestAnimationFrame(f(x));
+		    };
+        };
+		if(d > 0){
+	        if(PLUMB.get_current_plugin_stage().movable_stage.scale.x > 3)
+	            return;
+		
+		    f(PLUMB.get_current_plugin_stage().movable_stage.scale.x + 0.05);
+		
+		}else{
+			if(PLUMB.get_current_plugin_stage().movable_stage.scale.x < 0.1)
+                return;
+	        f(PLUMB.get_current_plugin_stage().movable_stage.scale.x - 0.05);
+		}
+    }
+    /*注册事件*/
+    if(document.addEventListener){
+        document.addEventListener('DOMMouseScroll',scrollFunc,false);
+    }//W3C
+    window.onmousewheel=document.onmousewheel=scrollFunc;//IE/Opera/Chrome/Safari
 };
-PLUMB.get_current_plugin_stage = function() {
-    if(PLUMB.stage.children.length == 1)
-        return PLUMB.stage.children[0];
-    return null;
-}
+
 PLUMB.change_stage = function(plugin) {
     var child_stage = PLUMB.get_current_plugin_stage();
     if(!child_stage)

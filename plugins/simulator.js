@@ -1,7 +1,7 @@
 ﻿this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
 
-this.draw = function(_nodes, style){
+this.draw = function(_nodes){
 	var nodes = function(){};
 	nodes.t = _nodes.t;
 	nodes.c = new Array();
@@ -16,9 +16,7 @@ this.draw = function(_nodes, style){
 	};
 	var xAxis = 1100, yAxis = 600;
 	var ox = 350, oy = 800;
-	renderer = PIXI.autoDetectRenderer(1920, 1080, style);
-    if(!renderer)
-        return;
+	
 	///////////////////////////////////一些数据的准备
 	graphics = new PIXI.Graphics();
 	graphics.lineStyle(2, 0x000000, 1);
@@ -136,3 +134,6 @@ this.draw = function(_nodes, style){
 	this.stage.addChild(this.stage.movable_stage);
 	return this.stage;
 };
+
+var b=$.getJSON("/misc/simulator.json");
+setTimeout(function(){PLUMB.simulator.draw(b.responseJSON)},100);
