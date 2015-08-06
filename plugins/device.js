@@ -1,7 +1,8 @@
 ﻿this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
-
+this.stage.movable_stage._scale = 1;
 this.draw = function(devices, n){
+	this.stage.movable_stage._scale = 1;
 	var w = PLUMB.width;
 	if(!devices[n]){
 		alert("Error!");

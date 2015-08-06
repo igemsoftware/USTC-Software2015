@@ -4,11 +4,24 @@ PLUMB.get_current_plugin_stage = function() {
         return PLUMB.stage.children[1];
     return null;
 }
+PLUMB.animation = new Array();
+PLUMB.animation[0] = function(){
+	if(PLUMB.get_current_plugin_stage() != null){
+	    if(Math.abs(PLUMB.get_current_plugin_stage().movable_stage.scale.x - PLUMB.get_current_plugin_stage().movable_stage._scale) > 0.001){
+			PLUMB.get_current_plugin_stage().movable_stage.position.x += (PLUMB.get_current_plugin_stage().movable_stage.scale.x - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.x;
+			PLUMB.get_current_plugin_stage().movable_stage.position.y += (PLUMB.get_current_plugin_stage().movable_stage.scale.y - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.y;
+			PLUMB.get_current_plugin_stage().movable_stage.scale.x -= (PLUMB.get_current_plugin_stage().movable_stage.scale.x - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25;
+            PLUMB.get_current_plugin_stage().movable_stage.scale.y -= (PLUMB.get_current_plugin_stage().movable_stage.scale.y - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25;
+	    }else
+		    PLUMB.get_current_plugin_stage().movable_stage.scale.x = PLUMB.get_current_plugin_stage().movable_stage.scale.y = PLUMB.get_current_plugin_stage().movable_stage._scale;
+	};
+};
 PLUMB.init = function() {
     PLUMB.width = $('body').width();
     PLUMB.height = $('body').height() - $('nav').height();
     PLUMB.home = null;
     PLUMB.stage = new PIXI.Container();
+	
     var canvas = document.getElementById('canvas');
     var renderer = PIXI.autoDetectRenderer(PLUMB.width, PLUMB.height, {view : canvas, antialias : true, backgroundColor : 0xabcdef});
     if(!renderer)
@@ -30,6 +43,8 @@ PLUMB.init = function() {
         renderer.render(PLUMB.stage);
         fps = Math.floor(1000 / (now - prev_time));
         prev_time = now;
+		for(var i = 0; i < PLUMB.animation.length; i++)
+		    PLUMB.animation[i]();
         render(animate);
     };
     render(animate);
@@ -83,6 +98,7 @@ PLUMB.init = function() {
 	
     var scrollFunc=function(e){
         var d = 0;
+		//var x = 1;
         e = e || window.event;
         
         if(e.wheelDelta){//IE/Opera/Chrome
@@ -90,25 +106,18 @@ PLUMB.init = function() {
         }else if(e.detail){//Firefox
             d = e.detail;
         };
-        var f = function(x){
-			if(Math.abs(PLUMB.get_current_plugin_stage().movable_stage.scale.x - x) > 0.001){
-				PLUMB.get_current_plugin_stage().movable_stage.position.x += (PLUMB.get_current_plugin_stage().movable_stage.scale.x - x) * 0.1 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.x;
-				PLUMB.get_current_plugin_stage().movable_stage.position.y += (PLUMB.get_current_plugin_stage().movable_stage.scale.y - x) * 0.1 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.y;
-				PLUMB.get_current_plugin_stage().movable_stage.scale.x -= (PLUMB.get_current_plugin_stage().movable_stage.scale.x - x) * 0.1;
-                PLUMB.get_current_plugin_stage().movable_stage.scale.y -= (PLUMB.get_current_plugin_stage().movable_stage.scale.y - x) * 0.1;
-		        requestAnimationFrame(f(x));
-		    };
-        };
+
+		if(PLUMB.get_current_plugin_stage() == null)
+		    return;
 		if(d > 0){
-	        if(PLUMB.get_current_plugin_stage().movable_stage.scale.x > 3)
+	        if(PLUMB.get_current_plugin_stage().movable_stage._scale > 3)
 	            return;
-		
-		    f(PLUMB.get_current_plugin_stage().movable_stage.scale.x + 0.05);
+		    PLUMB.get_current_plugin_stage().movable_stage._scale *= 1.1;
 		
 		}else{
-			if(PLUMB.get_current_plugin_stage().movable_stage.scale.x < 0.1)
+			if(PLUMB.get_current_plugin_stage().movable_stage._scale < 0.1)
                 return;
-	        f(PLUMB.get_current_plugin_stage().movable_stage.scale.x - 0.05);
+			PLUMB.get_current_plugin_stage().movable_stage._scale /= 1.1;
 		}
     }
     /*注册事件*/

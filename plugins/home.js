@@ -1,6 +1,6 @@
 ﻿this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
-
+this.stage.movable_stage._scale = 1;
 this.DrawGate = function(icon){
 	    var graphics = new PIXI.Graphics();
 		switch(icon){
@@ -21,6 +21,7 @@ this.DrawGate = function(icon){
 		return graphics;
 	};
 this.draw = function(devices){
+	    this.stage.movable_stage._scale = 1;
         var w = PLUMB.width;
         var h = PLUMB.height;
 		var that = this;

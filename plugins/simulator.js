@@ -1,7 +1,8 @@
 ﻿this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
-
+this.stage.movable_stage._scale = 1;
 this.draw = function(_nodes){
+	this.stage.movable_stage._scale = 1;
 	var nodes = function(){};
 	nodes.t = _nodes.t;
 	nodes.c = new Array();
