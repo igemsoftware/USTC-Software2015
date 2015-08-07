@@ -157,7 +157,7 @@ PLUMB.prepare_navigation = function(){
 };
 PLUMB.init = function() {
     PLUMB.width = $('body').width();
-    PLUMB.height = $('body').height() - $('nav').height();
+    PLUMB.height = $('body').height();
     PLUMB.home = null;
     PLUMB.stage = new PIXI.Container();
 	
@@ -194,9 +194,15 @@ PLUMB.init = function() {
 		}else
             setTimeout(next, 50);
     };
-    setInterval(function() {$('#fps').html('FPS: ' + fps);}, 1000);
+    setInterval(function() {
+        var fps_obj = new PIXI.Text("FPS: " + fps);
+        fps_obj.x = 150;
+        fps_obj.y = 30;
+        PLUMB.stage.removeChild(PLUMB.stage.fps);
+        PLUMB.stage.fps = fps_obj;
+        PLUMB.stage.addChild(fps_obj);
+    }, 1000);
     setTimeout(next, 1);
-	
 	
 	onDragStart_d = function(event) {
 		if(!PLUMB.get_current_plugin_stage())

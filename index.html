@@ -7,37 +7,10 @@
     <script src="lib/pixi-3.0.7.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora%7cOpen+Sans%7cInconsolata" type="text/css">
     <style type="text/css">
-        html, body, nav, #title, #plugins, #plugins li, #fps, #canvas {
+        html, body, #canvas {
             margin: 0;
-        }
-        html, body {
             height: 100%;
             overflow: hidden;
-        }
-        nav {
-            font: 24px/40px 'Open Sans',Sans-Serif;
-            height: 60px;
-            background-color: #222;
-            text-align: center;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        #title, #plugins li, #fps {
-            float: left;
-            list-style: none;
-            padding: 10px 20px;
-            cursor: default;
-            color: #999;
-        }
-        #plugins li {
-            cursor: pointer;
-        }
-        #plugins li:hover {
-            color: #fff;
-        }
-        #fps {
-            float: right;
         }
     </style>
     <script src="script.js" type="text/javascript"></script>
@@ -46,11 +19,6 @@
     </script>
 </head>
 <body>
-    <nav>
-        <p id="title">PLUMB</p>
-        <ul id="plugins"></ul>
-        <p id="fps">&nbsp;</p>
-    </nav>
     <canvas id="canvas">Your browser doesn't support canvas, please consider to use <a href="https://www.google.com/chrome/">latest Chrome</a>.</canvas>
 </body>
 </html>
