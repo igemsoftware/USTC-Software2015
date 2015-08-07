@@ -15,8 +15,8 @@ this.draw = function(_nodes){
 			i++;
 		};
 	};
-	var xAxis = 1100, yAxis = 600;
-	var ox = 350, oy = 800;
+	var xAxis = 1100, yAxis = 600;//轴长
+	var ox = 350, oy = 800;//原点坐标
 	
 	///////////////////////////////////一些数据的准备
 	graphics = new PIXI.Graphics();
@@ -112,7 +112,8 @@ this.draw = function(_nodes){
 			blue = parseInt(Math.random() * 255);
 			gray = 0.3 * red + 0.6 * green + 0.1 * blue;
 		};
-		_color = red * 65536 + green * 256 + blue;
+		_color = red * 65536 + green * 256 + blue;//计算时变曲线的颜色
+		
 		graphics.lineStyle(2, _color, 1);
 		graphics.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[0], 
 		oy - (yAxis - 100) * nodes.c[i][0] / maxY);

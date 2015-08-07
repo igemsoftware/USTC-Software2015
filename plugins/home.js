@@ -20,6 +20,7 @@ this.DrawGate = function(icon){
 		}
 		return graphics;
 	};
+
 this.draw = function(devices){
 	    this.stage.movable_stage._scale = 1;
         var w = PLUMB.width;
@@ -30,14 +31,18 @@ this.draw = function(devices){
 		
 
 
-		onDragStart_e = function(event) {
+		that.onDragStart_e = function(event) {
 			if(waitForDoubleClick){
 				var a=$.getJSON("/misc/devices.json");
 				var that = this;
-				setTimeout(function(){
-					    PLUMB.device.draw(a.responseJSON, that.Index);
+				var next = function() {
+                    if(a.responseJSON){
+                        PLUMB.device.draw(a.responseJSON, that.Index);
 						PLUMB.change_stage(PLUMB.device);
-					}, 100);
+					}else
+                        setTimeout(next, 50);
+                };
+				setTimeout(next, 50);
 				return;
 			}else{
 				waitForDoubleClick = true;
@@ -49,12 +54,12 @@ this.draw = function(devices){
             this.alpha = 0.5;
             this.dragging = true;
         };
-        onDragEnd_e = function() {
+        that.onDragEnd_e = function() {
             this.alpha = 1;
             this.dragging = false;
             this.data = null;
         };
-        onDragMove_e = function() {
+        that.onDragMove_e = function() {
             if(this.dragging) {
                 var newPosition = this.data.getLocalPosition(this.parent);
                 this.position.x = newPosition.x - 75;
@@ -63,14 +68,14 @@ this.draw = function(devices){
         };
 			
 			
-	    onDragStart = function(event) {
+	    that.onDragStart = function(event) {
             this.data = event.data;
             this.alpha = 0.5;
             this.dragging = true;
 			this.startX = this.position.x;
 			this.startY = this.position.y;
         };
-        onDragEnd = function() {
+        that.onDragEnd = function() {
             this.alpha = 1;
             this.dragging = false;
             this.data = null;
@@ -81,14 +86,14 @@ this.draw = function(devices){
 				elements[elements.length - 1].interactive = true;
                 elements[elements.length - 1].buttonMode = true;
 				elements[elements.length - 1].Index = this.Index;
-				elements[elements.length - 1].on('mousedown', onDragStart_e)
-                    .on('touchstart', onDragStart_e)
-                    .on('mouseup', onDragEnd_e)
-                    .on('mouseupoutside', onDragEnd_e)
-                    .on('touchend', onDragEnd_e)
-                    .on('touchendoutside', onDragEnd_e)
-                    .on('mousemove', onDragMove_e)
-                    .on('touchmove', onDragMove_e);
+				elements[elements.length - 1].on('mousedown', that.onDragStart_e)
+                    .on('touchstart', that.onDragStart_e)
+                    .on('mouseup', that.onDragEnd_e)
+                    .on('mouseupoutside', that.onDragEnd_e)
+                    .on('touchend', that.onDragEnd_e)
+                    .on('touchendoutside', that.onDragEnd_e)
+                    .on('mousemove', that.onDragMove_e)
+                    .on('touchmove', that.onDragMove_e);
 				that.stage.movable_stage.addChild(elements[elements.length - 1]);
 			};
 			this.position.x = this.startX;
@@ -96,7 +101,7 @@ this.draw = function(devices){
 			
 			
         };
-        onDragMove = function() {
+        that.onDragMove = function() {
             if(this.dragging) {
                 var newPosition = this.data.getLocalPosition(this.parent);
                 this.position.x = newPosition.x - 75;
@@ -122,14 +127,14 @@ this.draw = function(devices){
 			that.logicGates[i].interactive = true;
             that.logicGates[i].buttonMode = true;
 			that.logicGates[i].Index = i;
-			that.logicGates[i].on('mousedown', onDragStart)
-                .on('touchstart', onDragStart)
-                .on('mouseup', onDragEnd)
-                .on('mouseupoutside', onDragEnd)
-                .on('touchend', onDragEnd)
-                .on('touchendoutside', onDragEnd)
-                .on('mousemove', onDragMove)
-                .on('touchmove', onDragMove);
+			that.logicGates[i].on('mousedown', that.onDragStart)
+                .on('touchstart', that.onDragStart)
+                .on('mouseup', that.onDragEnd)
+                .on('mouseupoutside', that.onDragEnd)
+                .on('touchend', that.onDragEnd)
+                .on('touchendoutside', that.onDragEnd)
+                .on('mousemove', that.onDragMove)
+                .on('touchmove', that.onDragMove);
 		};
 		
 		
@@ -175,9 +180,9 @@ this.draw = function(devices){
 			
 		
 		
-		
-        this.stage.addChild(that.plusobj);
 		this.stage.addChild(this.stage.movable_stage);
+        this.stage.addChild(that.plusobj);
+		
 	    return this.stage;
 	};
 var a=$.getJSON("/misc/devices.json");
