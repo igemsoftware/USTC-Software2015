@@ -1,4 +1,4 @@
-window.BioBLESS = {};
+window.BioBLESS = {"plugins" : ["home", "device", "simulator"]};
 BioBLESS.get_current_plugin_stage = function() {
     return BioBLESS.plugin_stage;
 }
@@ -158,7 +158,6 @@ BioBLESS.prepare_navigation = function(){
 BioBLESS.init = function() {
     BioBLESS.width = $('body').width();
     BioBLESS.height = $('body').height();
-    BioBLESS.home = null;
     BioBLESS.stage = new PIXI.Container();
 	
     var canvas = document.getElementById('canvas');
