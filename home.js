@@ -1,4 +1,5 @@
-﻿this.stage = new PIXI.Container();
+﻿BioBLESS.home = new function(){
+this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
 this.stage.movable_stage._scale = 1;
 this.DrawGate = function(icon){
@@ -23,8 +24,8 @@ this.DrawGate = function(icon){
 
 this.draw = function(devices){
 	    this.stage.movable_stage._scale = 1;
-        var w = PLUMB.width;
-        var h = PLUMB.height;
+        var w = BioBLESS.width;
+        var h = BioBLESS.height;
 		var that = this;
 		var elements = new Array();
 		var waitForDoubleClick = false;
@@ -37,8 +38,8 @@ this.draw = function(devices){
 				var that = this;
 				var next = function() {
                     if(a.responseJSON){
-                        PLUMB.device.draw(a.responseJSON, that.Index);
-						PLUMB.change_stage(PLUMB.device);
+                        BioBLESS.device.draw(a.responseJSON, that.Index);
+						BioBLESS.change_stage(BioBLESS.device);
 					}else
                         setTimeout(next, 50);
                 };
@@ -186,4 +187,5 @@ this.draw = function(devices){
 	    return this.stage;
 	};
 var a=$.getJSON("/misc/devices.json");
-setTimeout(function(){PLUMB.home.draw(a.responseJSON)},100);
+setTimeout(function(){BioBLESS.home.draw(a.responseJSON)},100);
+};

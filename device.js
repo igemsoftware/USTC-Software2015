@@ -1,4 +1,5 @@
-﻿this.stage = new PIXI.Container();
+﻿BioBLESS.device = new function() {
+this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
 this.stage.movable_stage._scale = 1;
 this.prepare = function(devices, n){
@@ -191,7 +192,7 @@ this.part_analysis = function(devices, n){
 };
 this.draw = function(devices, n){
 	this.stage.movable_stage._scale = 1;
-	var w = PLUMB.width;
+	var w = BioBLESS.width;
 	if(!devices[n]){
 		alert("Error!");
 		return;
@@ -376,4 +377,4 @@ this.draw = function(devices, n){
 	
 };//绘制函数
 
-
+};

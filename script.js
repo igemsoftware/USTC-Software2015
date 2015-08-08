@@ -1,128 +1,128 @@
-window.PLUMB = {'plugins' : ['home', 'device', 'simulator']};
-PLUMB.get_current_plugin_stage = function() {
-    return PLUMB.plugin_stage;
+window.BioBLESS = {};
+BioBLESS.get_current_plugin_stage = function() {
+    return BioBLESS.plugin_stage;
 }
-PLUMB.animation = new Array();
-PLUMB.animation[PLUMB.animation.length] = function(){
-	if(PLUMB.get_current_plugin_stage() != null){
-	    if(Math.abs(PLUMB.get_current_plugin_stage().movable_stage.scale.x - PLUMB.get_current_plugin_stage().movable_stage._scale) > 0.001){
-			if(PLUMB.get_current_plugin_stage().movable_stage.inPosition == null){
-				PLUMB.get_current_plugin_stage().movable_stage.inPosition = function(){};
-				PLUMB.get_current_plugin_stage().movable_stage.inPosition.x = PLUMB.width / 2;
-				PLUMB.get_current_plugin_stage().movable_stage.inPosition.y = PLUMB.height / 2;
+BioBLESS.animation = new Array();
+BioBLESS.animation[BioBLESS.animation.length] = function(){
+	if(BioBLESS.get_current_plugin_stage() != null){
+	    if(Math.abs(BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) > 0.001){
+			if(BioBLESS.get_current_plugin_stage().movable_stage.inPosition == null){
+				BioBLESS.get_current_plugin_stage().movable_stage.inPosition = function(){};
+				BioBLESS.get_current_plugin_stage().movable_stage.inPosition.x = BioBLESS.width / 2;
+				BioBLESS.get_current_plugin_stage().movable_stage.inPosition.y = BioBLESS.height / 2;
 			};
-			PLUMB.get_current_plugin_stage().movable_stage.position.x += (PLUMB.get_current_plugin_stage().movable_stage.scale.x - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.x;
-			PLUMB.get_current_plugin_stage().movable_stage.position.y += (PLUMB.get_current_plugin_stage().movable_stage.scale.y - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25 * PLUMB.get_current_plugin_stage().movable_stage.inPosition.y;
-			PLUMB.get_current_plugin_stage().movable_stage.scale.x -= (PLUMB.get_current_plugin_stage().movable_stage.scale.x - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25;
-            PLUMB.get_current_plugin_stage().movable_stage.scale.y -= (PLUMB.get_current_plugin_stage().movable_stage.scale.y - PLUMB.get_current_plugin_stage().movable_stage._scale) * 0.25;
+			BioBLESS.get_current_plugin_stage().movable_stage.position.x += (BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25 * BioBLESS.get_current_plugin_stage().movable_stage.inPosition.x;
+			BioBLESS.get_current_plugin_stage().movable_stage.position.y += (BioBLESS.get_current_plugin_stage().movable_stage.scale.y - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25 * BioBLESS.get_current_plugin_stage().movable_stage.inPosition.y;
+			BioBLESS.get_current_plugin_stage().movable_stage.scale.x -= (BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25;
+            BioBLESS.get_current_plugin_stage().movable_stage.scale.y -= (BioBLESS.get_current_plugin_stage().movable_stage.scale.y - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25;
 	    }else
-		    PLUMB.get_current_plugin_stage().movable_stage.scale.x = PLUMB.get_current_plugin_stage().movable_stage.scale.y = PLUMB.get_current_plugin_stage().movable_stage._scale;
+		    BioBLESS.get_current_plugin_stage().movable_stage.scale.x = BioBLESS.get_current_plugin_stage().movable_stage.scale.y = BioBLESS.get_current_plugin_stage().movable_stage._scale;
 	};
 };
-PLUMB.prepare_navigation = function(){
-	PLUMB.navigation = new PIXI.Container();
-	PLUMB.navigation.condition = 0;
-	PLUMB.navigation.h = 120 * PLUMB.plugins.length + 160;
-	PLUMB.navigation.w = 120;
+BioBLESS.prepare_navigation = function(){
+	BioBLESS.navigation = new PIXI.Container();
+	BioBLESS.navigation.condition = 0;
+	BioBLESS.navigation.h = 120 * BioBLESS.plugins.length + 160;
+	BioBLESS.navigation.w = 120;
 	var background = new PIXI.Graphics();
 	background.beginFill(0x000000, 1);
 	background.lineStyle(0);
 	background.drawRect(0, 0, this.navigation.w, this.navigation.h);
 	background.endFill();
 	background.lineStyle(3, 0xffffff, 1);
-	PLUMB.navigation.button = new Array();
-	for(var i = 1; i < PLUMB.plugins.length + 1; i++){
+	BioBLESS.navigation.button = new Array();
+	for(var i = 1; i < BioBLESS.plugins.length + 1; i++){
 		var j = i - 1;
-		PLUMB.navigation.button[j] = new PIXI.Graphics();
+		BioBLESS.navigation.button[j] = new PIXI.Graphics();
 		
-		PLUMB.navigation.button[j].lineStyle(3, 0xffffff, 1);
-		PLUMB.navigation.button[j].beginFill(0, 0);
-		PLUMB.navigation.button[j].drawCircle(60, 60 + i * 120, 50);
-		PLUMB.navigation.button[j].endFill();
-		PLUMB.navigation.button[j].title = new PIXI.Text(PLUMB.plugins[j], {fill: "#ffffff"});
-		PLUMB.navigation.button[j].title.anchor.x = 0.5;
-		PLUMB.navigation.button[j].title.anchor.y = 0.5;
-		if(PLUMB.plugins[j].length > 7){
-			PLUMB.navigation.button[j].title.scale.x *= 7 / PLUMB.plugins[j].length;
-			PLUMB.navigation.button[j].title.scale.y *= 7 / PLUMB.plugins[j].length;
+		BioBLESS.navigation.button[j].lineStyle(3, 0xffffff, 1);
+		BioBLESS.navigation.button[j].beginFill(0, 0);
+		BioBLESS.navigation.button[j].drawCircle(60, 60 + i * 120, 50);
+		BioBLESS.navigation.button[j].endFill();
+		BioBLESS.navigation.button[j].title = new PIXI.Text(BioBLESS.plugins[j], {fill: "#ffffff"});
+		BioBLESS.navigation.button[j].title.anchor.x = 0.5;
+		BioBLESS.navigation.button[j].title.anchor.y = 0.5;
+		if(BioBLESS.plugins[j].length > 7){
+			BioBLESS.navigation.button[j].title.scale.x *= 7 / BioBLESS.plugins[j].length;
+			BioBLESS.navigation.button[j].title.scale.y *= 7 / BioBLESS.plugins[j].length;
 		};
-		PLUMB.navigation.button[j].title.position.x = 60;
-		PLUMB.navigation.button[j].title.position.y = 60 + i * 120;
-		PLUMB.navigation.button[j].t = PLUMB.plugins[j];
-		PLUMB.navigation.button[j].on('mousedown', function(){
-			    PLUMB.change_stage(PLUMB[this.t]);
+		BioBLESS.navigation.button[j].title.position.x = 60;
+		BioBLESS.navigation.button[j].title.position.y = 60 + i * 120;
+		BioBLESS.navigation.button[j].t = BioBLESS.plugins[j];
+		BioBLESS.navigation.button[j].on('mousedown', function(){
+			    BioBLESS.change_stage(BioBLESS[this.t]);
 		    });
 	};
 	
-	PLUMB.navigation.down = new PIXI.Graphics();
-	PLUMB.navigation.down.interactive = true;
-	PLUMB.navigation.down.buttonMode = true;
-	PLUMB.navigation.up = new PIXI.Graphics();
-	PLUMB.navigation.up.interactive = false;
-	PLUMB.navigation.up.buttonMode = false;
-	PLUMB.navigation.up.alpha = 0;
-	PLUMB.navigation.down.lineStyle(0);
-	PLUMB.navigation.up.lineStyle(0);
-	PLUMB.navigation.down.beginFill(0xffffff);
-	PLUMB.navigation.down.moveTo(40, this.navigation.h - 30);
-	PLUMB.navigation.down.lineTo(80, this.navigation.h - 30);
-	PLUMB.navigation.down.lineTo(60, this.navigation.h - 10);
-	PLUMB.navigation.down.endFill();
-	PLUMB.navigation.up.beginFill(0xffffff);
-	PLUMB.navigation.up.moveTo(40, this.navigation.h - 10);
-	PLUMB.navigation.up.lineTo(80, this.navigation.h - 10);
-	PLUMB.navigation.up.lineTo(60, this.navigation.h - 30);
-	PLUMB.navigation.up.endFill();
-	var that = PLUMB;
-	PLUMB.navigation.down.on('mousedown',function(){
-		    if(PLUMB.navigation.condition == 0){
-				PLUMB.navigation.down.interactive = false;
-	            PLUMB.navigation.down.buttonMode = false;
-				PLUMB.navigation.up.interactive = true;
-	            PLUMB.navigation.up.buttonMode = true;
-				PLUMB.navigation.condition = -1;
-				for(var j = 0; j < PLUMB.navigation.button.length; j++){
-					PLUMB.navigation.button[j].interactive = true;
-		            PLUMB.navigation.button[j].buttonMode = true;
+	BioBLESS.navigation.down = new PIXI.Graphics();
+	BioBLESS.navigation.down.interactive = true;
+	BioBLESS.navigation.down.buttonMode = true;
+	BioBLESS.navigation.up = new PIXI.Graphics();
+	BioBLESS.navigation.up.interactive = false;
+	BioBLESS.navigation.up.buttonMode = false;
+	BioBLESS.navigation.up.alpha = 0;
+	BioBLESS.navigation.down.lineStyle(0);
+	BioBLESS.navigation.up.lineStyle(0);
+	BioBLESS.navigation.down.beginFill(0xffffff);
+	BioBLESS.navigation.down.moveTo(40, this.navigation.h - 30);
+	BioBLESS.navigation.down.lineTo(80, this.navigation.h - 30);
+	BioBLESS.navigation.down.lineTo(60, this.navigation.h - 10);
+	BioBLESS.navigation.down.endFill();
+	BioBLESS.navigation.up.beginFill(0xffffff);
+	BioBLESS.navigation.up.moveTo(40, this.navigation.h - 10);
+	BioBLESS.navigation.up.lineTo(80, this.navigation.h - 10);
+	BioBLESS.navigation.up.lineTo(60, this.navigation.h - 30);
+	BioBLESS.navigation.up.endFill();
+	var that = BioBLESS;
+	BioBLESS.navigation.down.on('mousedown',function(){
+		    if(BioBLESS.navigation.condition == 0){
+				BioBLESS.navigation.down.interactive = false;
+	            BioBLESS.navigation.down.buttonMode = false;
+				BioBLESS.navigation.up.interactive = true;
+	            BioBLESS.navigation.up.buttonMode = true;
+				BioBLESS.navigation.condition = -1;
+				for(var j = 0; j < BioBLESS.navigation.button.length; j++){
+					BioBLESS.navigation.button[j].interactive = true;
+		            BioBLESS.navigation.button[j].buttonMode = true;
 				};
 			};
 	    });
-	PLUMB.navigation.up.on('mousedown',function(){
-		    if(PLUMB.navigation.condition == 0){
-				PLUMB.navigation.down.interactive = true;
-	            PLUMB.navigation.down.buttonMode = true;
-				PLUMB.navigation.up.interactive = false;
-	            PLUMB.navigation.up.buttonMode = false;
-				PLUMB.navigation.condition = 1;
-				for(var j = 0; j < PLUMB.navigation.button.length; j++){
-					PLUMB.navigation.button[j].interactive = false;
-		            PLUMB.navigation.button[j].buttonMode = false;
+	BioBLESS.navigation.up.on('mousedown',function(){
+		    if(BioBLESS.navigation.condition == 0){
+				BioBLESS.navigation.down.interactive = true;
+	            BioBLESS.navigation.down.buttonMode = true;
+				BioBLESS.navigation.up.interactive = false;
+	            BioBLESS.navigation.up.buttonMode = false;
+				BioBLESS.navigation.condition = 1;
+				for(var j = 0; j < BioBLESS.navigation.button.length; j++){
+					BioBLESS.navigation.button[j].interactive = false;
+		            BioBLESS.navigation.button[j].buttonMode = false;
 				};
 			};
 	    });
-	PLUMB.animation[PLUMB.animation.length] = function(){
-		if(PLUMB.navigation.condition == 1){
-			if(Math.abs(PLUMB.navigation.position.y - PLUMB.navigation.start_y) > 1){
-				PLUMB.navigation.position.y -= (PLUMB.navigation.position.y - PLUMB.navigation.start_y) * 0.15;
-				PLUMB.navigation.up.alpha *= 0.85;
-				PLUMB.navigation.down.alpha = 1 - PLUMB.navigation.up.alpha;
+	BioBLESS.animation[BioBLESS.animation.length] = function(){
+		if(BioBLESS.navigation.condition == 1){
+			if(Math.abs(BioBLESS.navigation.position.y - BioBLESS.navigation.start_y) > 1){
+				BioBLESS.navigation.position.y -= (BioBLESS.navigation.position.y - BioBLESS.navigation.start_y) * 0.15;
+				BioBLESS.navigation.up.alpha *= 0.85;
+				BioBLESS.navigation.down.alpha = 1 - BioBLESS.navigation.up.alpha;
 			}else{
-				PLUMB.navigation.position.y = PLUMB.navigation.start_y;
-				PLUMB.navigation.condition = 0;
-				PLUMB.navigation.down.alpha = 1;
-				PLUMB.navigation.up.alpha = 0;
+				BioBLESS.navigation.position.y = BioBLESS.navigation.start_y;
+				BioBLESS.navigation.condition = 0;
+				BioBLESS.navigation.down.alpha = 1;
+				BioBLESS.navigation.up.alpha = 0;
 				
 			};
-		}else if(PLUMB.navigation.condition == -1){
-			if(Math.abs(PLUMB.navigation.position.y) > 1){
-				PLUMB.navigation.position.y *= 0.85;
-				PLUMB.navigation.down.alpha *= 0.85;
-				PLUMB.navigation.up.alpha = 1 - PLUMB.navigation.down.alpha;
+		}else if(BioBLESS.navigation.condition == -1){
+			if(Math.abs(BioBLESS.navigation.position.y) > 1){
+				BioBLESS.navigation.position.y *= 0.85;
+				BioBLESS.navigation.down.alpha *= 0.85;
+				BioBLESS.navigation.up.alpha = 1 - BioBLESS.navigation.down.alpha;
 			}else{
-				PLUMB.navigation.position.y = 0;
-				PLUMB.navigation.condition = 0;
-				PLUMB.navigation.down.alpha = 0;
-				PLUMB.navigation.up.alpha = 1;
+				BioBLESS.navigation.position.y = 0;
+				BioBLESS.navigation.condition = 0;
+				BioBLESS.navigation.down.alpha = 0;
+				BioBLESS.navigation.up.alpha = 1;
 				
 			};
 		};
@@ -134,9 +134,9 @@ PLUMB.prepare_navigation = function(){
 	this.navigation.addChild(background);
 	this.navigation.addChild(this.navigation.up);
 	this.navigation.addChild(this.navigation.down);
-	for(var i = 0; i < PLUMB.navigation.button.length; i++){
-		this.navigation.addChild(PLUMB.navigation.button[i]);
-		this.navigation.addChild(PLUMB.navigation.button[i].title);
+	for(var i = 0; i < BioBLESS.navigation.button.length; i++){
+		this.navigation.addChild(BioBLESS.navigation.button[i]);
+		this.navigation.addChild(BioBLESS.navigation.button[i].title);
 	};
 	this.navigation.position.y -= this.navigation.h - 160;
 	this.navigation.start_y = this.navigation.position.y;
@@ -149,48 +149,38 @@ PLUMB.prepare_navigation = function(){
 	background2.endFill();
 	background2.lineStyle(3, 0xffffff, 1);
 	background2.drawCircle(60, 60, 50);
-	var title = new PIXI.Text('PLUMB', {fill: "#ffffff"});
+	var title = new PIXI.Text('BioBLESS', {fill: "#ffffff"});
 	title.position.y = 45;
 	title.position.x = 13;
 	this.navigation_title.addChild(background2);
 	this.navigation_title.addChild(title);
 };
-PLUMB.init = function() {
-    PLUMB.width = $('body').width();
-    PLUMB.height = $('body').height();
-    PLUMB.home = null;
-    PLUMB.stage = new PIXI.Container();
+BioBLESS.init = function() {
+    BioBLESS.width = $('body').width();
+    BioBLESS.height = $('body').height();
+    BioBLESS.home = null;
+    BioBLESS.stage = new PIXI.Container();
 	
     var canvas = document.getElementById('canvas');
-    var renderer = PIXI.autoDetectRenderer(PLUMB.width, PLUMB.height, {view : canvas, antialias : true, backgroundColor : 0xabcdef});
+    var renderer = PIXI.autoDetectRenderer(BioBLESS.width, BioBLESS.height, {view : canvas, antialias : true, backgroundColor : 0xabcdef});
     if(!renderer)
         return;
-    var get_display_name = function(s) {
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    };
-    for(var i = 0; i < PLUMB.plugins.length; i++) {
-        var plugin_name = PLUMB.plugins[i];
-        var display_name = get_display_name(plugin_name);
-        $('#plugins').append('<li id="' + plugin_name + '">' + display_name + '</li>');
-        eval('var callback = function(data) {PLUMB.' + plugin_name + ' = eval("new function() {" + data + "}");$("#' + plugin_name + '").on("click", function() {PLUMB.change_stage(PLUMB.' + plugin_name + ')});}');
-        $.get('plugins/' + plugin_name + '.js', callback);
-    };
     var prev_time = 0;
     var fps = 0;
     var render = requestAnimationFrame;
     var animate = function(now) {
-        renderer.render(PLUMB.stage);
+        renderer.render(BioBLESS.stage);
         fps = Math.floor(1000 / (now - prev_time));
         prev_time = now;
-		for(var i = 0; i < PLUMB.animation.length; i++)
-		    PLUMB.animation[i]();
+		for(var i = 0; i < BioBLESS.animation.length; i++)
+		    BioBLESS.animation[i]();
         render(animate);
     };
     render(animate);
     var next = function() {
-        if(PLUMB.home){
-            PLUMB.stage.addChild(PLUMB.home.stage);
-			PLUMB.plugin_stage = PLUMB.home.stage;
+        if(BioBLESS.home){
+            BioBLESS.stage.addChild(BioBLESS.home.stage);
+			BioBLESS.plugin_stage = BioBLESS.home.stage;
 		}else
             setTimeout(next, 50);
     };
@@ -198,36 +188,36 @@ PLUMB.init = function() {
         var fps_obj = new PIXI.Text("FPS: " + fps);
         fps_obj.x = 150;
         fps_obj.y = 30;
-        PLUMB.stage.removeChild(PLUMB.stage.fps);
-        PLUMB.stage.fps = fps_obj;
-        PLUMB.stage.addChild(fps_obj);
+        BioBLESS.stage.removeChild(BioBLESS.stage.fps);
+        BioBLESS.stage.fps = fps_obj;
+        BioBLESS.stage.addChild(fps_obj);
     }, 1000);
     setTimeout(next, 1);
 	
 	onDragStart_d = function(event) {
-		if(!PLUMB.get_current_plugin_stage())
+		if(!BioBLESS.get_current_plugin_stage())
 		    return;
         this.data = event.data;
         this.dragging = true;
 		var startPosition = this.data.getLocalPosition(this.parent);
 		this.startX = startPosition.x;
 		this.startY = startPosition.y;
-		PLUMB.get_current_plugin_stage().movable_stage.startX = PLUMB.get_current_plugin_stage().movable_stage.position.x;
-		PLUMB.get_current_plugin_stage().movable_stage.startY = PLUMB.get_current_plugin_stage().movable_stage.position.y;
+		BioBLESS.get_current_plugin_stage().movable_stage.startX = BioBLESS.get_current_plugin_stage().movable_stage.position.x;
+		BioBLESS.get_current_plugin_stage().movable_stage.startY = BioBLESS.get_current_plugin_stage().movable_stage.position.y;
     };
     onDragEnd_d = function() {
         this.dragging = false;
         this.data = null;
     };
     onDragMove_d = function(event) {
-		if(!PLUMB.get_current_plugin_stage())
+		if(!BioBLESS.get_current_plugin_stage())
 		    return;
         if(this.dragging) {
             var newPosition = this.data.getLocalPosition(this.parent);
-            PLUMB.get_current_plugin_stage().movable_stage.position.x = newPosition.x - this.startX + PLUMB.get_current_plugin_stage().movable_stage.startX;
-            PLUMB.get_current_plugin_stage().movable_stage.position.y = newPosition.y - this.startY + PLUMB.get_current_plugin_stage().movable_stage.startY;
+            BioBLESS.get_current_plugin_stage().movable_stage.position.x = newPosition.x - this.startX + BioBLESS.get_current_plugin_stage().movable_stage.startX;
+            BioBLESS.get_current_plugin_stage().movable_stage.position.y = newPosition.y - this.startY + BioBLESS.get_current_plugin_stage().movable_stage.startY;
         };
-    	PLUMB.get_current_plugin_stage().movable_stage.inPosition = event.data.getLocalPosition(PLUMB.get_current_plugin_stage().movable_stage);
+    	BioBLESS.get_current_plugin_stage().movable_stage.inPosition = event.data.getLocalPosition(BioBLESS.get_current_plugin_stage().movable_stage);
     };
 	var dragArea = new PIXI.Graphics();
 		dragArea.beginFill(0, 0);
@@ -241,7 +231,7 @@ PLUMB.init = function() {
                 .on('touchendoutside', onDragEnd_d)
                 .on('mousemove', onDragMove_d)
                 .on('touchmove', onDragMove_d);
-	PLUMB.stage.addChild(dragArea);
+	BioBLESS.stage.addChild(dragArea);
 	
     var scrollFunc=function(e){
         var d = 0;
@@ -254,17 +244,17 @@ PLUMB.init = function() {
             d = e.detail;
         };
 
-		if(PLUMB.get_current_plugin_stage() == null)
+		if(BioBLESS.get_current_plugin_stage() == null)
 		    return;
 		if(d > 0){
-	        if(PLUMB.get_current_plugin_stage().movable_stage._scale > 3)
+	        if(BioBLESS.get_current_plugin_stage().movable_stage._scale > 3)
 	            return;
-		    PLUMB.get_current_plugin_stage().movable_stage._scale *= 1.1;
+		    BioBLESS.get_current_plugin_stage().movable_stage._scale *= 1.1;
 		
 		}else{
-			if(PLUMB.get_current_plugin_stage().movable_stage._scale < 0.1)
+			if(BioBLESS.get_current_plugin_stage().movable_stage._scale < 0.1)
                 return;
-			PLUMB.get_current_plugin_stage().movable_stage._scale /= 1.1;
+			BioBLESS.get_current_plugin_stage().movable_stage._scale /= 1.1;
 		}
     }
     /*注册事件*/
@@ -273,18 +263,18 @@ PLUMB.init = function() {
     }//W3C
     window.onmousewheel=document.onmousewheel=scrollFunc;//IE/Opera/Chrome/Safari
 	
-	PLUMB.prepare_navigation();
-	PLUMB.stage.addChild(PLUMB.navigation);
-	PLUMB.stage.addChild(PLUMB.navigation_title);
+	BioBLESS.prepare_navigation();
+	BioBLESS.stage.addChild(BioBLESS.navigation);
+	BioBLESS.stage.addChild(BioBLESS.navigation_title);
 };
 
-PLUMB.change_stage = function(plugin) {
-    var child_stage = PLUMB.get_current_plugin_stage();
+BioBLESS.change_stage = function(plugin) {
+    var child_stage = BioBLESS.get_current_plugin_stage();
     if(!child_stage)
         return;
-    PLUMB.stage.removeChild(child_stage);
-    PLUMB.stage.addChild(plugin.stage);
-	PLUMB.stage.addChild(PLUMB.navigation);
-	PLUMB.stage.addChild(PLUMB.navigation_title);
-	PLUMB.plugin_stage = plugin.stage;
+    BioBLESS.stage.removeChild(child_stage);
+    BioBLESS.stage.addChild(plugin.stage);
+	BioBLESS.stage.addChild(BioBLESS.navigation);
+	BioBLESS.stage.addChild(BioBLESS.navigation_title);
+	BioBLESS.plugin_stage = plugin.stage;
 };

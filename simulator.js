@@ -1,4 +1,5 @@
-﻿this.stage = new PIXI.Container();
+﻿BioBLESS.simulator = new function() {
+this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
 this.stage.movable_stage._scale = 1;
 this.draw = function(_nodes){
@@ -138,4 +139,5 @@ this.draw = function(_nodes){
 };
 
 var b=$.getJSON("/misc/simulator.json");
-setTimeout(function(){PLUMB.simulator.draw(b.responseJSON)},100);
+setTimeout(function(){BioBLESS.simulator.draw(b.responseJSON)},100);
+};
