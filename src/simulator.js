@@ -138,6 +138,6 @@ this.draw = function(_nodes){
 	return this.stage;
 };
 
-var b=$.getJSON("/misc/simulator.json");
+var b=$.getJSON("../misc/simulator.json");
 setTimeout(function(){BioBLESS.simulator.draw(b.responseJSON)},100);
 };

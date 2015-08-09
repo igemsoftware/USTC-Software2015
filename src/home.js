@@ -186,7 +186,7 @@ this.draw = function(devices){
 		
 	    return this.stage;
 	};
-var a=$.getJSON("/misc/devices.json");
+var a=$.getJSON("../misc/devices.json");
 setTimeout(function(){BioBLESS.home.draw(a.responseJSON)},100);
 return this;
 };
