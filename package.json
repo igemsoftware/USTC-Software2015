@@ -13,7 +13,7 @@
         "mocha-phantomjs": "3.6.0"
     },
     "scripts": {
-        "build": "uglifyjs src/Ahead.js src/home.js src/device.js src/simulator.js src/IDdraw.js >bin/biobless.min.js",
+        "build": "uglifyjs src/init.js src/home.js src/device.js src/simulator.js src/IDdraw.js >bin/biobless.min.js",
         "build-doc": "jsdoc src -d doc",
         "pretest": "npm run build",
         "test": "mocha-phantomjs test/index.html"
