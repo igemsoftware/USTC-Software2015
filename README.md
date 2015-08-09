@@ -1,3 +1,5 @@
+[![Build Status](https://magnum.travis-ci.com/ustc2015/frontend.svg?token=mKX17GB5mm6v1kppSB7o&branch=master)](https://magnum.travis-ci.com/ustc2015/frontend)
+
 # frontend
 
 jQuery URL: https://jquery.com/download/ License: MIT
