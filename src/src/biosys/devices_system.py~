@@ -3,79 +3,89 @@
 from parts_system import parts_system
 import numpy
 
-class Substance:
-    
-    def __init__(self,subdata):
-        name=subdata[0]
-        constance=subdata[1]
-        self.Name=name
-        self.DNA=name+'::DNA'
-        self.RNA=name+'::RNA'
-        self.Protein=name+'::Protein'
-        self.DNAtoRNA=constance[0]
-        self.RNAtoProtein=constance[1]
-        self.RNADie=constance[2]
-        self.ProteinDie=constance[3]
+class substance(object):
+    '''
+    Parameter:
+        string:the name of the substance
+        list:constance of the RNA_create,RNA_die,protein_create,protein_die
+        string:the promotor of connect with this substance
+    '''
+    def __init__(self,name,constance,promotor):
+        self.promoter=promotor
+        self.name=name
+        self.DNA=name+':DNA'
+        self.RNA=name+':RNA'
+        self.protein=name
+        self.RNA_create=constance[0]
+        self.RNA_die=consrtance[1]
+        self.protein_create=constance[2]
+        self.protein_die=constance[3]
         
     @property
-    def GetSpecies(self):
-        return [self.DNA,self.RNA,self.Protein]
+    def get_species(self):
+        return [self.DNA,self.RNA,self.protein]
     
     @property
-    def GetReaction(self):
-        return [[[self.DNA],[self.DNA,self.RNA],self.DNAtoRNA],
-                [[self.RNA],[self.RNA,self.Protein],self.RNAtoProtein],
-                [[self.RNA],[],self.RNADie],
-                [[self.Protein],[],]self.ProteinDie]
+    def get_effect(self):
+        return [[[self.DNA,promotor+":Act"],[self.DNA,self.RNA,self.promoter+":Act"],self.RNA_create,[[],[]]],
+                [[self.RNA],[],self.RNA_die,[[],[]]],
+                [[self.RNA],[self.RNA,self.protein],protein_creat,[[],[]]]
+                [[self.protein],[],],self.protein_die,[[],[]]]
 
-def Negative(Reaction,Relulon,RConst):
-    Reactant=Reaction[0]
-    Product=Reaction[1]
-    Const=Reaction[2]
-    Temp=join(Reactant)+'to'+join(Product)
-    return [[Reactant,Temp,Const],
-            [Temp,Reactant,RConst],
-            [Temp,Product,Const]]
-
-class Gate:
-    
-    def __init__(self,gate):
-        self.Type=gate[0]
-        self.Output=gate[1]
-        self.Input=gate[2]
-
+class promoter(object):
+    '''
+    Parameter:
+        string:the name of promoter
+        gate:
+            ["Strong"]|
+            ["Not",[["",int],..]]|
+            ["Nor",[["",int]..]]|
+            [Nand[..]
+            ["And",[...]]|
+            [Or[..]|
+    '''
+    def __init__(self,name,active,gate):
+        self.name=name
+        self.active_name=name+":Act"
+        
     @property
-    def Mod(self):
-        
-        return [SpeciesToAdd,ReactionToDelete,ReactionToAdd]
+    def get_species(self):
+        return [self.name,self.active_name]
+    
+    @property
+    def get_effect(self):
+        if gate[0]=="Strong":
+            return [[[self.name],[self.active],active,[[],[]]]]
+        if (gate[0]=="Not")or(gate[0]=="Nor"):
+            return [[[self.name],[self.active],active,[gate[1],[]]]]
+        if gate[0]=="Or":
+            return [[[self.name],[self.active],0,[[],gate[1]]]]
+        if gate[0]=="And":
+            pass
+        if gate[0]=="Nand":
+            pass
 
-class DeviceSystem:
-
-    def SetSubstances(self,subs):
-        self.Substances=numpy.vectorize(lambda SubData:Substance(SubData))(subs)
-        SubTemp=Substances.transpose()[0]
-        self.SubstanceNameInverse={self SubTemp[NameTemp]:Substances[NameTemp]
-            for NameTemp in range(len(self.SubTemp))}
-        Species=numpy.vectorize(lambda x:x.GetSpecies)(self.Substances).flatten()
-        Reactions=numpy.vectorize(lambda x:x.GetReaction)(self.Substances).flatten()
-        self.PartsSystem=ReactionSystem(Reactions,Species)
-
-    def SetGate(self,gates):
-        gates[1]=map(lambda sub:self.SubstanceNameInverse[sub],gates[1])
-        gates[2]=map(lambda sub:self.SubstanceNameInverse[sub],gates[2])
-        self.Gates=numpy.vetorize(lambda GatData:Gate(GatData))(gates)
-        for Gate in self.Gates:
-            self.GateModReaction(Gate)
-        
-    def __init__(self,subs,gates):
-        self.SubSource=subs
-        self.SetSubstances(self.SetSource)
-        self.GatSource=gates
-        self.SetGate(self.GatSource)
-        
-    def GateModReaction(self,Gate):
-        Mod=Gate.Mod
-        map(lambda SingleSpecies:self.PartsSystem.AddSpecies(SingleSpecies),Mod[0])
-        map(lambda SingReaction:self.PartsSystem.DelReaction(SingleReaction),Mod[1])
-        map(lambda SingReaction:self.PartsSystem.AddReaction(SingleReaction),Mod[2])
-        
+class device_system(parts_system):
+    
+    def set_substance(self,substaces):
+        self.substances=[]
+        for single_substance in substances:
+            self.substances.append(substance(single_substance))
+        for single_substance in self.substances:
+            species+=single_substance.get_species
+            effect+=single_substance.get_effect
+    
+    def set_promotors(self,promotors):
+        self.promotors=[]
+        for single_promotors in promotors:
+            self.promotors,append(promotors(single_promotor))
+        for single_promotor in self.promotors:
+            species+=single_promotors.get_species
+            effect+=single_promoters.geteffect
+    
+    def __init__(self,substances,promotors):
+        self.species=[]
+        self.effect=[]
+        self.set_substance(substances)
+        self.set_promoters(promotors)
+        self.set_species_and_effect(self.species,self.effect)
