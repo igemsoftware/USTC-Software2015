@@ -20,10 +20,6 @@ npm run build-doc
 
 # Unit Test
 
-TODO:
+mocha URL: https://www.npmjs.com/package/mocha License: MIT
 
-Travis-CI https://travis-ci.org/
-
-mocha.js
-
-chai.js
+chai URL: https://github.com/chaijs/chai License: MIT
