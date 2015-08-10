@@ -1,3 +1,4 @@
+$(function() {$('canvas').hide();});
 describe('window', function() {
     it('should have property jQuery', function() {
         window.should.have.property('jQuery');
