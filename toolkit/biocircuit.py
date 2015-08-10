@@ -54,20 +54,34 @@ def create_circuit(expr):
     circuit = nx.DiGraph()
     not_list = get_gate_not(expr)
     edges = []
-    andx = 0
+    node_num = get_node_num(expr)
     for i in not_list:
         edges.append(('v%d' % i, 'not%d' %i))
+    or_input = []
+    andx = 0
     for i in expr:
-        for j in range(len(i)):
-            if i[j] == '1':
-                edges.append(('v%d' % j, 'and%d' % andx))
-            elif i[j] == '0':
-                edges.append(('not%d' % j, 'and%d' % andx))
+        and_input = []
+        for j in range(node_num[0]):
+            if i[j] == '0':
+                and_input.append('not%d' % j)
+            elif i[j] == '1':
+                and_input.append('v%d' % j)
             else:
                 pass
-        andx += 1
-    for i in range(andx):
-        edges.append(('and%d' % i, 'or'))
-    edges.append(('or', 'out'))
+        while len(and_input) > 1:
+            edges.append((and_input.pop(), 'and%d' % andx))
+            edges.append((and_input.pop(), 'and%d' % andx))
+            and_input.append('and%d' % andx)
+            andx += 1
+        else:
+            or_input.append(and_input[0])
+    orx = 0
+    while len(or_input) > 1:
+        edges.append((or_input.pop(), 'or%d' % orx))
+        edges.append((or_input.pop(), 'or%d' % orx))
+        or_input.append('or%d' % orx)
+        orx += 1
+    else:
+        edges.append((or_input[0], 'out'))
     circuit.add_edges_from(edges)
     return circuit
