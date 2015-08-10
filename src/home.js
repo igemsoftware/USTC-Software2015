@@ -1,228 +1,250 @@
 ﻿(function() {
-var home_obj = function() {
-this.stage = new PIXI.Container();
-this.stage.movable_stage = new PIXI.Container();
-this.stage.movable_stage._scale = 1;
-this.DrawGate = function(device){
-        var element = new PIXI.Container();
-        element.graphics = new PIXI.Graphics();
-        element.title = new PIXI.Text(device.name);
-        element.title.anchor.x = element.title.anchor.y = 0.5;
-        element.title.position.x = 75;
-        element.title.position.y = 35;
-        switch(device.icon){
-            case "XOR":
-            case "AND":
-            case "OR":
-            case "xor":
-            case "and":
-            case "or":
-                element.graphics.lineStyle(3, 0x000000, 1);
-                element.graphics.moveTo(0, 25);
-                element.graphics.lineTo(30, 25);
-                element.graphics.moveTo(0, 45);
-                element.graphics.lineTo(30, 45);
-                element.graphics.moveTo(120, 35);
-                element.graphics.lineTo(150, 35);
-                element.graphics.beginFill(0, 0);
-                element.graphics.drawRect(30, 0, 90, 70);
-                element.graphics.endFill();
-                break;
-            case "NOT":
-            case "not":
-                element.graphics.lineStyle(3, 0x000000, 1);
-                element.graphics.moveTo(0, 35);
-                element.graphics.lineTo(30, 35);
-                element.graphics.moveTo(120, 35);
-                element.graphics.lineTo(150, 35);
-                element.graphics.moveTo(135, 35);
-                element.graphics.lineTo(120, 20);
-                element.graphics.beginFill(0, 0);
-                element.graphics.drawRect(30, 0, 90, 70);
-                element.graphics.endFill();
-                break;
-            case "NAND":
-            case "NOR":
-            case "nand":
-            case "nor":
-            case "XNOR":
-            case "xnor":
-                element.graphics.lineStyle(3, 0x000000, 1);
-                element.graphics.moveTo(0, 25);
-                element.graphics.lineTo(30, 25);
-                element.graphics.moveTo(0, 45);
-                element.graphics.lineTo(30, 45);
-                element.graphics.moveTo(120, 35);
-                element.graphics.lineTo(150, 35);
-                element.graphics.moveTo(135, 35);
-                element.graphics.lineTo(120, 20);
-                element.graphics.beginFill(0, 0);
-                element.graphics.drawRect(30, 0, 90, 70);
-                element.graphics.endFill();
-                break;
-            default:
-                alert("Error - 1001!");
-        }
-        element.addChild(element.graphics);
-        element.addChild(element.title);
-        return element;
-    };
-
-this.draw = function(devices){
-        this.stage.movable_stage._scale = 1;
-        var w = BioBLESS.width;
-        var h = BioBLESS.height;
-        var that = this;
-        var elements = [];
-        var waitForDoubleClick = false;
-        
-
-
-        that.onDragStart_e = function(event) {
-            if(waitForDoubleClick){
-                var a=$.getJSON("/misc/devices.json");
-                var that = this;
-                var next = function() {
-                    if(a.responseJSON){
-                        BioBLESS.device.draw(a.responseJSON, that.parent.Index);
-                        BioBLESS.change_stage(BioBLESS.device);
-                    }else
-                        setTimeout(next, 50);
-                };
-                setTimeout(next, 50);
-                return;
-            }else{
-                waitForDoubleClick = true;
-                setTimeout(function(){
-                    waitForDoubleClick = false;
-                }, 500);
-            }
-            this.data = event.data;
-            this.alpha = 0.5;
-            this.dragging = true;
-        };
-        that.onDragEnd_e = function() {
-            this.alpha = 1;
-            this.dragging = false;
-            this.data = null;
-        };
-        that.onDragMove_e = function() {
-            if(this.dragging) {
-                var newPosition = this.data.getLocalPosition(this.parent.parent);
-                this.parent.position.x = newPosition.x - 75;
-                this.parent.position.y = newPosition.y - 35;
-            }
-        };
-            
-            
-        that.onDragStart = function(event) {
-            this.data = event.data;
-            this.alpha = 0.5;
-            this.dragging = true;
-            this.startX = this.position.x;
-            this.startY = this.position.y;
-        };
-        that.onDragEnd = function() {
-            this.alpha = 1;
-            this.dragging = false;
-            this.data = null;
-            if(!(this.position.x + 75 >= w - 220 && this.position.x + 75 <= w - 20 && this.position.y >= 110 && this.position.y <= h - 20)){
-                elements[elements.length] = that.DrawGate(devices[this.Index]);
-                elements[elements.length - 1].position.x = this.childPosition.x - 75;
-                elements[elements.length - 1].position.y = this.childPosition.y - 35;
-                elements[elements.length - 1].graphics.interactive = true;
-                elements[elements.length - 1].graphics.buttonMode = true;
-                elements[elements.length - 1].Index = this.Index;
-                elements[elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
-                    .on('touchstart', that.onDragStart_e)
-                    .on('mouseup', that.onDragEnd_e)
-                    .on('mouseupoutside', that.onDragEnd_e)
-                    .on('touchend', that.onDragEnd_e)
-                    .on('touchendoutside', that.onDragEnd_e)
-                    .on('mousemove', that.onDragMove_e)
-                    .on('touchmove', that.onDragMove_e);
-                that.stage.movable_stage.addChild(elements[elements.length - 1]);
-            }
-            this.position.x = this.startX;
-            this.position.y = this.startY;
-            
-            
-        };
-        that.onDragMove = function() {
-            if(this.dragging) {
-                var newPosition = this.data.getLocalPosition(this.parent);
-                this.position.x = newPosition.x - 75;
-                this.position.y = newPosition.y - 35;
-                this.childPosition = this.data.getLocalPosition(that.stage.movable_stage);
-            }
-        };
-
-
-        that._logicGates = [];
-        that.logicGates = [];
-        for(var i = 0; i < devices.length; i++){
-            that._logicGates[i] = this.DrawGate(devices[i]);
-            that.logicGates[i] = this.DrawGate(devices[i]);
-            that._logicGates[i].position.x = w - 195;
-            that._logicGates[i].position.y = 140 + i * 100;
-            that.logicGates[i].position.x = w - 195;
-            that.logicGates[i].position.y = 140 + i * 100;
-            that.logicGates[i].interactive = true;
-            that.logicGates[i].buttonMode = true;
-            that.logicGates[i].Index = i;
-            that.logicGates[i].on('mousedown', that.onDragStart)
-                .on('touchstart', that.onDragStart)
-                .on('mouseup', that.onDragEnd)
-                .on('mouseupoutside', that.onDragEnd)
-                .on('touchend', that.onDragEnd)
-                .on('touchendoutside', that.onDragEnd)
-                .on('mousemove', that.onDragMove)
-                .on('touchmove', that.onDragMove);
-        }
-
-
-        that.plusobj = new PIXI.Graphics();
-        that.plusobj.beginFill(0x123456, 0.5);
-        that.plusobj.drawCircle(w - 60, 50, 30);
-        that.plusobj.endFill();
-        that.plusobj.lineStyle(3, 0xffff00, 1);
-        that.plusobj.moveTo(w - 75, 50);
-        that.plusobj.lineTo(w - 45, 50);
-        that.plusobj.moveTo(w - 60, 35);
-        that.plusobj.lineTo(w - 60, 65);
-        that.plusobj.interactive = true;
-        that.plusobj.buttonMode = true;
-        that.list = new PIXI.Graphics();
-        that.list.beginFill(0x897897, 0.5);
-        that.list.drawRoundedRect(w - 220, 110, 200, h - 130, 20);
-        that.list.endFill();
-        var added = false;
-        that.plusobj.on('mousedown', function() {
-                if(added){
-                    that.stage.removeChild(that.list);
-                    for(var i = 0; i < devices.length; i++){
-                        that.stage.removeChild(that._logicGates[i]);
-                        that.stage.removeChild(that.logicGates[i]);
-                    }
-                }else{
-                    that.stage.addChild(that.list);
-                    for(var j = 0; j < devices.length; j++){
-                        that.stage.addChild(that._logicGates[j]);
-                        that.stage.addChild(that.logicGates[j]);
-                    }
-                }
-                added = !added;
-            });
-            
-        
-        
-        this.stage.addChild(this.stage.movable_stage);
-        this.stage.addChild(that.plusobj);
-        
-        return this.stage;
-    };
-var a=$.getJSON("/misc/devices.json");
-setTimeout(function(){BioBLESS.home.draw(a.responseJSON);},100);
-};
-BioBLESS.home = new home_obj();
+	var home_obj = function() {
+	this.stage = new PIXI.Container();
+	this.stage.movable_stage = new PIXI.Container();
+	this.stage.movable_stage._scale = 1;
+	this.DrawGate = function(device){
+			var element = new PIXI.Container();
+			element.graphics = new PIXI.Graphics();
+			element.title = new PIXI.Text(device.name);
+			element.title.anchor.x = element.title.anchor.y = 0.5;
+			element.title.position.x = 75;
+			element.title.position.y = 35;
+			switch(device.icon){
+				case "XOR":;
+				case "AND":;
+			    case "OR":;
+				case "xor":;
+				case "and":;
+			    case "or":
+				    element.graphics.lineStyle(3, 0x000000, 1);
+		    		element.graphics.moveTo(0, 25);
+				    element.graphics.lineTo(30, 25);
+		    		element.graphics.moveTo(0, 45);
+				    element.graphics.lineTo(30, 45);
+		    		element.graphics.moveTo(120, 35);
+				    element.graphics.lineTo(150, 35);
+		    		element.graphics.beginFill(0, 0);
+				    element.graphics.drawRect(30, 0, 90, 70);
+				    element.graphics.endFill();
+					break;
+				case "NOT":
+				case "not":
+				    element.graphics.lineStyle(3, 0x000000, 1);
+		    		element.graphics.moveTo(0, 35);
+				    element.graphics.lineTo(30, 35);
+		    		element.graphics.moveTo(120, 35);
+				    element.graphics.lineTo(150, 35);
+					element.graphics.moveTo(135, 35);
+					element.graphics.lineTo(120, 20);
+		    		element.graphics.beginFill(0, 0);
+				    element.graphics.drawRect(30, 0, 90, 70);
+				    element.graphics.endFill();
+					break;
+				case "NAND":;
+				case "NOR":;
+				case "XNOR":
+				case "nand":;
+				case "nor":;
+				case "xnor":
+				    element.graphics.lineStyle(3, 0x000000, 1);
+		    		element.graphics.moveTo(0, 25);
+				    element.graphics.lineTo(30, 25);
+		    		element.graphics.moveTo(0, 45);
+				    element.graphics.lineTo(30, 45);
+		    		element.graphics.moveTo(120, 35);
+				    element.graphics.lineTo(150, 35);
+					element.graphics.moveTo(135, 35);
+					element.graphics.lineTo(120, 20);
+		    		element.graphics.beginFill(0, 0);
+				    element.graphics.drawRect(30, 0, 90, 70);
+				    element.graphics.endFill();
+					break;
+				default:
+				    alert("Error - 1001!");
+			}
+			element.addChild(element.graphics);
+			element.addChild(element.title);
+			return element;
+		};
+	
+	this.draw = function(devices){
+		    this.stage.movable_stage._scale = 1;
+	        var w = PLUMB.width;
+	        var h = PLUMB.height;
+			var that = this;
+			var elements = new Array();
+			var waitForDoubleClick = false;
+			
+	
+	
+			that.onDragStart_e = function(event) {
+				if(waitForDoubleClick){
+					var a=$.getJSON("/misc/devices.json");
+					var that = this;
+					var next = function() {
+	                    if(a.responseJSON){
+	                        PLUMB.device.draw(a.responseJSON, that.parent.Index);
+							PLUMB.change_stage(PLUMB.device);
+						}else
+	                        setTimeout(next, 50);
+	                };
+					setTimeout(next, 50);
+					return;
+				}else{
+					waitForDoubleClick = true;
+					setTimeout(function(){
+						waitForDoubleClick = false;
+					}, 500);
+				};
+	            this.data = event.data;
+	            this.alpha = 0.5;
+	            this.dragging = true;
+	        };
+	        that.onDragEnd_e = function() {
+	            this.alpha = 1;
+	            this.dragging = false;
+	            this.data = null;
+	        };
+	        that.onDragMove_e = function() {
+	            if(this.dragging) {
+	                var newPosition = this.data.getLocalPosition(this.parent.parent);
+	                this.parent.position.x = newPosition.x - 75;
+	                this.parent.position.y = newPosition.y - 35;
+	            }
+	        };
+				
+				
+		    that.onDragStart = function(event) {
+	            this.data = event.data;
+	            this.alpha = 0.5;
+	            this.dragging = true;
+				this.startX = this.position.x;
+				this.startY = this.position.y;
+	        };
+	        that.onDragEnd = function() {
+	            this.alpha = 1;
+	            this.dragging = false;
+	            this.data = null;
+				if(!(this.position.x + 75 >= w - 220 && this.position.x + 75 <= w - 20 && this.position.y >= 110 && this.position.y <= h - 20)){
+					elements[elements.length] = that.DrawGate(devices[this.Index]);
+					elements[elements.length - 1].position.x = this.childPosition.x - 75;
+					elements[elements.length - 1].position.y = this.childPosition.y - 35;
+					elements[elements.length - 1].graphics.interactive = true;
+	                elements[elements.length - 1].graphics.buttonMode = true;
+					elements[elements.length - 1].Index = this.Index;
+					elements[elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
+	                    .on('touchstart', that.onDragStart_e)
+	                    .on('mouseup', that.onDragEnd_e)
+	                    .on('mouseupoutside', that.onDragEnd_e)
+	                    .on('touchend', that.onDragEnd_e)
+	                    .on('touchendoutside', that.onDragEnd_e)
+	                    .on('mousemove', that.onDragMove_e)
+	                    .on('touchmove', that.onDragMove_e);
+					that.stage.movable_stage.addChild(elements[elements.length - 1]);
+				};
+				this.position.x = this.startX;
+				this.position.y = this.startY;
+				
+				
+	        };
+	        that.onDragMove = function() {
+	            if(this.dragging) {
+	                var newPosition = this.data.getLocalPosition(this.parent);
+	                this.position.x = newPosition.x - 75;
+	                this.position.y = newPosition.y - 35;
+					this.childPosition = this.data.getLocalPosition(that.stage.movable_stage);
+	            }
+	        };
+			
+			
+			
+		    
+			
+			
+			that._logicGates = new Array();
+			that.logicGates = new Array();
+			for(var i = 0; i < devices.length; i++){
+			    that._logicGates[i] = this.DrawGate(devices[i]);
+				that.logicGates[i] = this.DrawGate(devices[i]);
+				that._logicGates[i].position.x = w - 195;
+				that._logicGates[i].position.y = 140 + i * 100;
+				that.logicGates[i].position.x = w - 195;
+				that.logicGates[i].position.y = 140 + i * 100;
+				that.logicGates[i].interactive = true;
+	            that.logicGates[i].buttonMode = true;
+				that.logicGates[i].Index = i;
+				that.logicGates[i].on('mousedown', that.onDragStart)
+	                .on('touchstart', that.onDragStart)
+	                .on('mouseup', that.onDragEnd)
+	                .on('mouseupoutside', that.onDragEnd)
+	                .on('touchend', that.onDragEnd)
+	                .on('touchendoutside', that.onDragEnd)
+	                .on('mousemove', that.onDragMove)
+	                .on('touchmove', that.onDragMove);
+			};
+			
+			
+			
+			
+		
+		
+		    
+		
+		    that.plusobj = new PIXI.Graphics();
+	        that.plusobj.beginFill(0x345678, 1);
+	        that.plusobj.drawCircle(0, 0, 30);
+	        that.plusobj.endFill();
+	        that.plusobj.lineStyle(3, 0xffff00, 1);
+	        that.plusobj.moveTo(-15, 0);
+	        that.plusobj.lineTo(15, 0);
+	        that.plusobj.moveTo(0, -15);
+	        that.plusobj.lineTo(0, 15);
+	        that.plusobj.interactive = true;
+	        that.plusobj.buttonMode = true;
+			that.plusobj.condition = 0;
+			that.plusobj.position.x = w - 60;
+			that.plusobj.position.y = 50;
+	        that.list = new PIXI.Graphics();
+	        that.list.beginFill(0x897897, 0.5);
+	        that.list.drawRoundedRect(w - 220, 110, 200, h - 130, 20);
+	        that.list.endFill();
+	        var added = false;
+	        that.plusobj.on('mousedown', function() {
+	                if(added){
+	                    that.stage.removeChild(that.list);
+						for(var i = 0; i < devices.length; i++){
+							that.stage.removeChild(that._logicGates[i]);
+							that.stage.removeChild(that.logicGates[i]);
+						};
+						that.plusobj.condition = 0;
+					}else{
+	                    that.stage.addChild(that.list);
+						for(var i = 0; i < devices.length; i++){
+							that.stage.addChild(that._logicGates[i]);
+							that.stage.addChild(that.logicGates[i]);
+						};
+						that.plusobj.condition = 1;
+					};
+	                added = !added;
+	            });
+			PLUMB.animation[PLUMB.animation.length] = function(){
+				if(Math.abs(PLUMB.home.plusobj.rotation - 0.7854 * PLUMB.home.plusobj.condition) > 0.01){
+					PLUMB.home.plusobj.rotation -= (PLUMB.home.plusobj.rotation - 0.7854 * PLUMB.home.plusobj.condition) * 0.15;
+				}else{
+					PLUMB.home.plusobj.rotation = 0.7854 * PLUMB.home.plusobj.condition;
+				};
+			};
+			
+			
+			this.stage.addChild(this.stage.movable_stage);
+	        this.stage.addChild(that.plusobj);
+			
+		    return this.stage;
+		};
+	var a=$.getJSON("/misc/devices.json");
+	setTimeout(function(){PLUMB.home.draw(a.responseJSON)},100);
+	
+	};
+	BioBLESS.home = new home_obj();
 })();
