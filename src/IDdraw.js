@@ -181,8 +181,8 @@ BioBLESS.IDdraw.Create = function(devices, w, h){
         }
     };
     this.stage = new PIXI.Container();
-    that._SBOL = new Array();
-    that.SBOL = new Array();
+    that._SBOL = [];
+    that.SBOL = [];
     for(var i = 0; i < devices.length; i++){
             that._SBOL[i] = this.drawElement(devices[i].icon);
             that.SBOL[i] = this.drawElement(devices[i].icon);
@@ -201,6 +201,6 @@ BioBLESS.IDdraw.Create = function(devices, w, h){
                 .on('touchendoutside', onDragEnd)
                 .on('mousemove', onDragMove)
                 .on('touchmove', onDragMove);
-        };
+        }
         return this.stage;
 };

@@ -1,22 +1,22 @@
 BioBLESS.get_current_plugin_stage = function() {
     return BioBLESS.plugin_stage;
-}
-BioBLESS.animation = new Array();
+};
+BioBLESS.animation = [];
 BioBLESS.animation[BioBLESS.animation.length] = function(){
-    if(BioBLESS.get_current_plugin_stage() != null){
+    if(BioBLESS.get_current_plugin_stage() !== null){
         if(Math.abs(BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) > 0.001){
-            if(BioBLESS.get_current_plugin_stage().movable_stage.inPosition == null){
+            if(BioBLESS.get_current_plugin_stage().movable_stage.inPosition === null){
                 BioBLESS.get_current_plugin_stage().movable_stage.inPosition = function(){};
                 BioBLESS.get_current_plugin_stage().movable_stage.inPosition.x = BioBLESS.width / 2;
                 BioBLESS.get_current_plugin_stage().movable_stage.inPosition.y = BioBLESS.height / 2;
-            };
+            }
             BioBLESS.get_current_plugin_stage().movable_stage.position.x += (BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25 * BioBLESS.get_current_plugin_stage().movable_stage.inPosition.x;
             BioBLESS.get_current_plugin_stage().movable_stage.position.y += (BioBLESS.get_current_plugin_stage().movable_stage.scale.y - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25 * BioBLESS.get_current_plugin_stage().movable_stage.inPosition.y;
             BioBLESS.get_current_plugin_stage().movable_stage.scale.x -= (BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25;
             BioBLESS.get_current_plugin_stage().movable_stage.scale.y -= (BioBLESS.get_current_plugin_stage().movable_stage.scale.y - BioBLESS.get_current_plugin_stage().movable_stage._scale) * 0.25;
         }else
             BioBLESS.get_current_plugin_stage().movable_stage.scale.x = BioBLESS.get_current_plugin_stage().movable_stage.scale.y = BioBLESS.get_current_plugin_stage().movable_stage._scale;
-    };
+    }
 };
 BioBLESS.prepare_navigation = function(){
     BioBLESS.navigation = new PIXI.Container();
@@ -29,7 +29,10 @@ BioBLESS.prepare_navigation = function(){
     background.drawRect(0, 0, this.navigation.w, this.navigation.h);
     background.endFill();
     background.lineStyle(3, 0xffffff, 1);
-    BioBLESS.navigation.button = new Array();
+    BioBLESS.navigation.button = [];
+    var onmousedown_obj = function() {
+        BioBLESS.change_stage(BioBLESS[this.t]);
+    };
     for(var i = 1; i < BioBLESS.plugins.length + 1; i++){
         var j = i - 1;
         BioBLESS.navigation.button[j] = new PIXI.Graphics();
@@ -44,14 +47,12 @@ BioBLESS.prepare_navigation = function(){
         if(BioBLESS.plugins[j].length > 7){
             BioBLESS.navigation.button[j].title.scale.x *= 7 / BioBLESS.plugins[j].length;
             BioBLESS.navigation.button[j].title.scale.y *= 7 / BioBLESS.plugins[j].length;
-        };
+        }
         BioBLESS.navigation.button[j].title.position.x = 60;
         BioBLESS.navigation.button[j].title.position.y = 60 + i * 120;
         BioBLESS.navigation.button[j].t = BioBLESS.plugins[j];
-        BioBLESS.navigation.button[j].on('mousedown', function(){
-                BioBLESS.change_stage(BioBLESS[this.t]);
-            });
-    };
+        BioBLESS.navigation.button[j].on('mousedown', onmousedown_obj);
+    }
     
     BioBLESS.navigation.down = new PIXI.Graphics();
     BioBLESS.navigation.down.interactive = true;
@@ -74,7 +75,7 @@ BioBLESS.prepare_navigation = function(){
     BioBLESS.navigation.up.endFill();
     var that = BioBLESS;
     BioBLESS.navigation.down.on('mousedown',function(){
-            if(BioBLESS.navigation.condition == 0){
+            if(BioBLESS.navigation.condition === 0){
                 BioBLESS.navigation.down.interactive = false;
                 BioBLESS.navigation.down.buttonMode = false;
                 BioBLESS.navigation.up.interactive = true;
@@ -83,11 +84,11 @@ BioBLESS.prepare_navigation = function(){
                 for(var j = 0; j < BioBLESS.navigation.button.length; j++){
                     BioBLESS.navigation.button[j].interactive = true;
                     BioBLESS.navigation.button[j].buttonMode = true;
-                };
-            };
+                }
+            }
         });
     BioBLESS.navigation.up.on('mousedown',function(){
-            if(BioBLESS.navigation.condition == 0){
+            if(BioBLESS.navigation.condition === 0){
                 BioBLESS.navigation.down.interactive = true;
                 BioBLESS.navigation.down.buttonMode = true;
                 BioBLESS.navigation.up.interactive = false;
@@ -96,8 +97,8 @@ BioBLESS.prepare_navigation = function(){
                 for(var j = 0; j < BioBLESS.navigation.button.length; j++){
                     BioBLESS.navigation.button[j].interactive = false;
                     BioBLESS.navigation.button[j].buttonMode = false;
-                };
-            };
+                }
+            }
         });
     BioBLESS.animation[BioBLESS.animation.length] = function(){
         if(BioBLESS.navigation.condition == 1){
@@ -111,7 +112,7 @@ BioBLESS.prepare_navigation = function(){
                 BioBLESS.navigation.down.alpha = 1;
                 BioBLESS.navigation.up.alpha = 0;
                 
-            };
+            }
         }else if(BioBLESS.navigation.condition == -1){
             if(Math.abs(BioBLESS.navigation.position.y) > 1){
                 BioBLESS.navigation.position.y *= 0.85;
@@ -123,20 +124,18 @@ BioBLESS.prepare_navigation = function(){
                 BioBLESS.navigation.down.alpha = 0;
                 BioBLESS.navigation.up.alpha = 1;
                 
-            };
-        };
+            }
+        }
     };
-    
-    
-    
-    
+
+
     this.navigation.addChild(background);
     this.navigation.addChild(this.navigation.up);
     this.navigation.addChild(this.navigation.down);
-    for(var i = 0; i < BioBLESS.navigation.button.length; i++){
-        this.navigation.addChild(BioBLESS.navigation.button[i]);
-        this.navigation.addChild(BioBLESS.navigation.button[i].title);
-    };
+    for(var v = 0; v < BioBLESS.navigation.button.length; v++){
+        this.navigation.addChild(BioBLESS.navigation.button[v]);
+        this.navigation.addChild(BioBLESS.navigation.button[v].title);
+    }
     this.navigation.position.y -= this.navigation.h - 160;
     this.navigation.start_y = this.navigation.position.y;
     

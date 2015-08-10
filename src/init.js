@@ -59,7 +59,7 @@ BioBLESS.init = function() {
             var newPosition = this.data.getLocalPosition(this.parent);
             BioBLESS.get_current_plugin_stage().movable_stage.position.x = newPosition.x - this.startX + BioBLESS.get_current_plugin_stage().movable_stage.startX;
             BioBLESS.get_current_plugin_stage().movable_stage.position.y = newPosition.y - this.startY + BioBLESS.get_current_plugin_stage().movable_stage.startY;
-        };
+        }
         BioBLESS.get_current_plugin_stage().movable_stage.inPosition = event.data.getLocalPosition(BioBLESS.get_current_plugin_stage().movable_stage);
     };
     var dragArea = new PIXI.Graphics();
@@ -85,9 +85,9 @@ BioBLESS.init = function() {
             d = e.wheelDelta;
         }else if(e.detail){//Firefox
             d = e.detail;
-        };
+        }
 
-        if(BioBLESS.get_current_plugin_stage() == null)
+        if(BioBLESS.get_current_plugin_stage() === null)
             return;
         if(d > 0){
             if(BioBLESS.get_current_plugin_stage().movable_stage._scale > 3)
@@ -99,7 +99,7 @@ BioBLESS.init = function() {
                 return;
             BioBLESS.get_current_plugin_stage().movable_stage._scale /= 1.1;
         }
-    }
+    };
     /*注册事件*/
     if(document.addEventListener){
         document.addEventListener('DOMMouseScroll',scrollFunc,false);
