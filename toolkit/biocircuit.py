@@ -1,12 +1,15 @@
-#/usr/bin/env python3
+#!/usr/bin/env python3
 
-__author__ = 'E-Neo'
-__author_email__ = 'e-neo@qq.com'
+__author__ = 'E-Neo <e-neo@qq.com>'
 
+# Maybe pyeda is better in the future, but pyeda contains some
+# bugs by far(0.28.0). Espresso Algorithm is better than Q-M
+# Algorithm
 import qm
 import networkx as nx
 
 def string2truthtable(string):
+    '''convert string to truthtable'''
     ones = []
     zeros = []
     dc = []
@@ -20,10 +23,12 @@ def string2truthtable(string):
     return ones, zeros, dc
 
 def string2expr(string):
+    '''convert string to Boolean expression'''
     f_tt = string2truthtable(string)
     return qm.qm(f_tt[0], f_tt[1], f_tt[2])
 
 def get_gate_not(expr):
+    '''get the index of not gates'''
     not_list = []
     for i in range(len(expr)):
         for j in expr:
@@ -33,6 +38,8 @@ def get_gate_not(expr):
     return not_list
 
 def get_node_num(expr):
+    '''get the number of nodes
+    return a tuple: (var_num, not_num, and_num, or_num)'''
     var_num = len(expr[0])
     not_num = len(get_gate_not(expr))
     and_num = 0
@@ -42,6 +49,8 @@ def get_node_num(expr):
     return var_num, not_num, and_num, or_num
 
 def create_circuit(expr):
+    '''create a logic circuit from a Boolean expression
+    return a networkx.DiGraph'''
     circuit = nx.DiGraph()
     not_list = get_gate_not(expr)
     edges = []
