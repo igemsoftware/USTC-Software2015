@@ -8,11 +8,12 @@
 </head>
 <body>
     <div id="mocha"></div>
-    <script src="bin/mocha-2.2.5.js" type="text/javascript"></script>
-    <script src="bin/chai-3.2.0.js" type="text/javascript"></script>
-    <script type="text/javascript">mocha.setup('bdd');chai.should();</script>
-    <script src="../bin/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="bin/mocha.js" type="text/javascript"></script>
+    <script src="bin/chai.js" type="text/javascript"></script>
+    <script src="../bin/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+        mocha.setup('bdd');
+        chai.should();
         // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
         if(!Function.prototype.bind) {
             Function.prototype.bind = function(oThis) {
@@ -33,7 +34,7 @@
             };
         }
     </script>
-    <script src="../bin/pixi-3.0.7.min.js" type="text/javascript"></script>
+    <script src="../bin/pixi.min.js" type="text/javascript"></script>
     <script src="../bin/biobless.min.js" type="text/javascript"></script>
     <script src="tests.js" type="text/javascript"></script>
     <script type="text/javascript">

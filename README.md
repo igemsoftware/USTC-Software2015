@@ -2,24 +2,32 @@
 
 # frontend
 
-jQuery URL: https://jquery.com/download/ License: MIT
+jQuery-2.1.4:
 
-Pixi.js URL: https://github.com/GoodBoyDigital/pixi.js License: MIT
+URL: https://jquery.com/download/ License: MIT
+
+Pixi.js-3.0.7:
+
+URL: https://github.com/GoodBoyDigital/pixi.js License: MIT
 
 # Build
 
-Run:
+npm install
 
 npm run build
 
 # Documentations
 
-Run:
-
 npm run build-doc
 
 # Unit Test
 
-mocha URL: https://www.npmjs.com/package/mocha License: MIT
+mocha-2.2.5:
 
-chai URL: https://github.com/chaijs/chai License: MIT
+URL: https://www.npmjs.com/package/mocha License: MIT
+
+chai-3.2.0:
+
+URL: https://github.com/chaijs/chai License: MIT
+
+npm test
