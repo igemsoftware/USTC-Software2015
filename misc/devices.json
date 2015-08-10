@@ -1,7 +1,95 @@
             [{
             "id": 0,
-                   "name": "test",
-                  "icon":  null,
+                   "name": "OR",
+                  "icon":  "or",
+                
+                  "type": 
+                {
+                       "type": null,
+                       "function": "",
+                    "chassis":"",
+                      "standard":"",
+                      "contributor":""
+                  },
+                
+                  "lines":
+                {
+                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
+                       "options":[]
+                  }
+                ,
+                
+                  "input":
+                {
+                       "id":["p100", "p200"],
+                       "options":[]
+                   },
+                  "output":["p5", "p6"],
+              
+                  "map":
+                [ 
+                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
+                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
+                     {"id":"e3", "id1":"p100", "id2":"e2", "type":"inh"},
+                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
+                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
+                    {"id":"e6", "id1":"p200", "id2":"e5", "type":"inh"}
+                    
+                  ],
+                
+                   "posloc":
+                  [
+                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
+                  ]   
+            },
+			{
+            "id": 0,
+                   "name": "NOR",
+                  "icon":  "nor",
+                
+                  "type": 
+                {
+                       "type": null,
+                       "function": "",
+                    "chassis":"",
+                      "standard":"",
+                      "contributor":""
+                  },
+                
+                  "lines":
+                {
+                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
+                       "options":[]
+                  }
+                ,
+                
+                  "input":
+                {
+                       "id":["p100", "p200"],
+                       "options":[]
+                   },
+                  "output":["p5", "p6"],
+              
+                  "map":
+                [ 
+                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
+                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
+                     {"id":"e3", "id1":"p100", "id2":"e2", "type":"inh"},
+                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
+                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
+                    {"id":"e6", "id1":"p200", "id2":"e5", "type":"inh"}
+                    
+                  ],
+                
+                   "posloc":
+                  [
+                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
+                  ]   
+            },
+			{
+            "id": 0,
+                   "name": "NOT",
+                  "icon":  "not",
                 
                   "type": 
                 {
