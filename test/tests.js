@@ -10,7 +10,7 @@ describe('window', function() {
     });
 });
 describe('BioBLESS', function() {
-    it('should have property plugins', function() {
-        BioBLESS.should.have.property('plugins');
+    it('should have property init', function() {
+        BioBLESS.should.have.property('init');
     });
 });
