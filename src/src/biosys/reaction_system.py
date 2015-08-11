@@ -11,7 +11,7 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
-import numpy, scipy, scipy.misc, scipy.stats, pylab, matplotlib
+import numpy, scipy, scipy.misc, scipy.stats, pylab
 
 
 class reaction_system(object):
@@ -169,9 +169,6 @@ class reaction_system(object):
                 print_temp += product + " "
             print_temp += "\t\t" + str(single_reaction[2])
             print print_temp
-
-    def __init__(self):
-        pass
 
     def __init__(self, reactions, speciesname):
         """
