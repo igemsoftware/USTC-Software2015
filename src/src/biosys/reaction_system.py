@@ -11,7 +11,7 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
-import numpy, scipy, scipy.misc, scipy.stats, pylab
+import numpy, scipy, scipy.misc, scipy.stats, pylab, matplotlib
 
 
 class reaction_system(object):
@@ -225,14 +225,16 @@ class reaction_system(object):
             intensities = intensity_list(self.reactant_data, current)
             possibility = intensities * self.constant
             possibility_sum = possibility.sum()
-            if possibility_sum == 0: break
+            if possibility_sum == 0:
+                break
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
-            next_reaction = numpy.random.choice(numpy.arange(reactionnumber), p=possibility / possibility_sum)
+            next_reaction = numpy.random.choice(numpy.arange(reactionnumber),
+                                                p=[i / float(possibility_sum) for i in possibility])
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp[0]] -= species_temp[1]
             for species_temp in self.product_data[next_reaction]:
                 current[species_temp[0]] += species_temp[1]
-            time = time + delta_time
+            time += delta_time
             self.record.append([time + 0, current.tolist()])
         return self.record
 
