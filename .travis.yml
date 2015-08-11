@@ -12,8 +12,7 @@ install:
 script:
     - cd ../src
     - pwd
-    - pip install pylint-django
-    - pylint --load-plugins pylint-django --errors-only src
+    - python pylint --load-plugins pylint-django --errors-only src
     - python manage.py migrate
     - python manage.py test test
     - cd ../frontend
