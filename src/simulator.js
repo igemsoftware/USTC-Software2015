@@ -140,7 +140,7 @@ this.draw = function(_nodes){
 };
 
 var b=$.getJSON("../misc/simulator.json");
-setTimeout(function(){BioBLESS.simulator.draw(b.responseJSON);},100);
+setTimeout(function(){BioBLESS.simulator.draw(b.responseJSON);},1000);
 };
 BioBLESS.simulator = new simulator_obj();
 })();
