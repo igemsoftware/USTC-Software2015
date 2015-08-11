@@ -204,7 +204,7 @@ this.draw = function(devices, n){
     this.height_analysis(devices, n);
     this.part_analysis(devices, n);
     var i, j, k, l, Num, s;//备用变量
-    ////////////////////////////////////////////数据处理
+    //////////////////////////////////////////////////数据处理
     var nodeH = 40, nodeW = 130, nodeDis = 180, floorDis = 120;
     var stageH = floorDis * (this.protein_heightest - this.protein_lowest + 4);
     var stageW = nodeDis * (this.parts_num + 3);
