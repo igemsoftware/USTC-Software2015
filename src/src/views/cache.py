@@ -1,10 +1,10 @@
-from argparse import _ActionsContainer
-
 __author__ = 'zsy95_000'
 from django.http import HttpResponse
 import json
 
+# Global data
 data = {}
+
 data_uuid = {}
 
 
