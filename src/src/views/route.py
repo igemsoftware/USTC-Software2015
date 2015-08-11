@@ -1,3 +1,8 @@
+"""
+This module provide universal interfaces for frontend and backend
+
+"""
+
 __author__ = 'zsy95_000'
 
 from uuid import uuid4
@@ -49,7 +54,7 @@ def render_to_response_local(path, args):
     return HttpResponse(Template(data).render(Context(args)))
 
 
-def route_page(request, pkgname, subpath, params = {}):
+def route_page(request, pkgname, subpath, params={}):
     """
     Render a page with get/post parameters
     If content_path is empty, set index.html as default

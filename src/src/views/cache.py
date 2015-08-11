@@ -1,3 +1,8 @@
+"""
+This file provide data cache for frontend and backend to communicate
+
+"""
+
 __author__ = 'zsy95_000'
 from django.http import HttpResponse
 import json
