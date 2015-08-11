@@ -112,10 +112,11 @@ class reaction_system(object):
         self.reactant = numpy.array(self.reactant)
         self.product = numpy.array(self.product)
         self.constant = numpy.array(self.constant)
-        self.reactant_data = map(lambda temp1: itemfreq(temp1), (
+        self.reactant_data = map(itemfreq, (
         map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.reactant)))
-        self.product_data = map(lambda temp1: itemfreq(temp1), (
+        self.product_data = map(itemfreq, (
         map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.product)))
+
 
     def add_reaction(self, reaction):
         """
