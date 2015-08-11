@@ -10,7 +10,7 @@ import networkx as nx
 
 
 def string2truthtable(string):
-    '''convert string to truthtable'''
+    """convert string to truthtable"""
     ones = []
     zeros = []
     dc = []
@@ -25,13 +25,13 @@ def string2truthtable(string):
 
 
 def string2expr(string):
-    '''convert string to Boolean expression'''
+    """convert string to Boolean expression"""
     f_tt = string2truthtable(string)
     return qm.qm(f_tt[0], f_tt[1], f_tt[2])
 
 
 def get_gate_not(expr):
-    '''get the index of not gates'''
+    """get the index of not gates"""
     not_list = []
     for i in range(len(expr)):
         for j in expr:
@@ -42,8 +42,8 @@ def get_gate_not(expr):
 
 
 def get_node_num(expr):
-    '''get the number of nodes
-    return a tuple: (var_num, not_num, and_num, or_num)'''
+    """get the number of nodes
+    return a tuple: (var_num, not_num, and_num, or_num)"""
     var_num = len(expr[0])
     not_num = len(get_gate_not(expr))
     and_num = 0
@@ -54,8 +54,8 @@ def get_node_num(expr):
 
 
 def create_circuit(expr):
-    '''create a logic circuit from a Boolean expression
-    return a networkx.DiGraph'''
+    """create a logic circuit from a Boolean expression
+    return a networkx.DiGraph"""
     circuit = nx.DiGraph()
     not_list = get_gate_not(expr)
     edges = []
