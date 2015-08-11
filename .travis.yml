@@ -1,0 +1,19 @@
+language: python
+python:
+    - "2.7"
+before_install:
+    - cd src/
+    - pwd
+install:
+    - pip install pylint --no-compile
+    - pip install -r requirements.txt
+    - cd ../frontend
+    - npm install
+script:
+    - cd ../src
+    - pwd
+    - pylint --load-plugins pylint-django --errors-only src
+    - python manage.py migrate
+    - python manage.py test test
+    - cd ../frontend
+    - npm test
