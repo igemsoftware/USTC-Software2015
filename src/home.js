@@ -221,4 +221,4 @@ BioBLESS.home.draw = function(devices){
         return BioBLESS.stage;
     };
 var a=$.getJSON("../misc/devices.json");
-setTimeout(function(){BioBLESS.home.draw(a.responseJSON);},100);
+setTimeout(function(){BioBLESS.home.draw(a.responseJSON);},1000);
