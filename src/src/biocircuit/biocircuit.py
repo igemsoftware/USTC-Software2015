@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 __author__ = 'E-Neo <e-neo@qq.com>'
 
@@ -7,6 +7,7 @@ __author__ = 'E-Neo <e-neo@qq.com>'
 # Algorithm
 import qm
 import networkx as nx
+
 
 def string2truthtable(string):
     '''convert string to truthtable'''
@@ -22,10 +23,12 @@ def string2truthtable(string):
             dc.append(i)
     return ones, zeros, dc
 
+
 def string2expr(string):
     '''convert string to Boolean expression'''
     f_tt = string2truthtable(string)
     return qm.qm(f_tt[0], f_tt[1], f_tt[2])
+
 
 def get_gate_not(expr):
     '''get the index of not gates'''
@@ -37,6 +40,7 @@ def get_gate_not(expr):
                 break
     return not_list
 
+
 def get_node_num(expr):
     '''get the number of nodes
     return a tuple: (var_num, not_num, and_num, or_num)'''
@@ -47,6 +51,7 @@ def get_node_num(expr):
         and_num += len(i.replace('X', '')) - 1
     or_num = len(expr) - 1
     return var_num, not_num, and_num, or_num
+
 
 def create_circuit(expr):
     '''create a logic circuit from a Boolean expression
