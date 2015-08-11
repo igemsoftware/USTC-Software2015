@@ -2,12 +2,11 @@ BioBLESS.plugins = ["home", "device", "simulator"];
 BioBLESS.init = function() {
     BioBLESS.width = $('body').width();
     BioBLESS.height = $('body').height();
-    BioBLESS.stage = new PIXI.Container();
-    
     var renderer = PIXI.autoDetectRenderer(BioBLESS.width, BioBLESS.height, {antialias : true, backgroundColor : 0xabcdef});
     if(!renderer)
         return;
     document.body.appendChild(renderer.view);
+    BioBLESS.stage = new PIXI.Container();
     var prev_time = 0;
     var fps = 0;
     var render = requestAnimationFrame;

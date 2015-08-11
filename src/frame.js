@@ -3,7 +3,7 @@ BioBLESS.get_current_plugin_stage = function() {
 };
 BioBLESS.animation = [];
 BioBLESS.animation[BioBLESS.animation.length] = function(){
-    if(BioBLESS.get_current_plugin_stage() !== null){
+    if(BioBLESS.get_current_plugin_stage() !== undefined){
         if(Math.abs(BioBLESS.get_current_plugin_stage().movable_stage.scale.x - BioBLESS.get_current_plugin_stage().movable_stage._scale) > 0.001){
             if(BioBLESS.get_current_plugin_stage().movable_stage.inPosition === null){
                 BioBLESS.get_current_plugin_stage().movable_stage.inPosition = function(){};

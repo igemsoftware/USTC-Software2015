@@ -1,9 +1,8 @@
-﻿(function() {
-var home_obj = function() {
-this.stage = new PIXI.Container();
-this.stage.movable_stage = new PIXI.Container();
-this.stage.movable_stage._scale = 1;
-this.DrawGate = function(device){
+﻿BioBLESS.home = {};
+BioBLESS.home.stage = new PIXI.Container();
+BioBLESS.home.stage.movable_stage = new PIXI.Container();
+BioBLESS.home.stage.movable_stage._scale = 1;
+BioBLESS.home.DrawGate = function(device){
         var element = new PIXI.Container();
         element.graphics = new PIXI.Graphics();
         element.title = new PIXI.Text(device.name);
@@ -68,11 +67,11 @@ this.DrawGate = function(device){
         return element;
     };
 
-this.draw = function(devices){
-        this.stage.movable_stage._scale = 1;
+BioBLESS.home.draw = function(devices){
+        BioBLESS.home.stage.movable_stage._scale = 1;
         var w = BioBLESS.width;
         var h = BioBLESS.height;
-        var that = this;
+        var that = BioBLESS.home;
         var elements = [];
         var waitForDoubleClick = false;
         
@@ -161,8 +160,8 @@ this.draw = function(devices){
         that._logicGates = [];
         that.logicGates = [];
         for(var i = 0; i < devices.length; i++){
-            that._logicGates[i] = this.DrawGate(devices[i]);
-            that.logicGates[i] = this.DrawGate(devices[i]);
+            that._logicGates[i] = BioBLESS.home.DrawGate(devices[i]);
+            that.logicGates[i] = BioBLESS.home.DrawGate(devices[i]);
             that._logicGates[i].position.x = w - 195;
             that._logicGates[i].position.y = 140 + i * 100;
             that.logicGates[i].position.x = w - 195;
@@ -216,13 +215,10 @@ this.draw = function(devices){
             
         
         
-        this.stage.addChild(this.stage.movable_stage);
-        this.stage.addChild(that.plusobj);
+        BioBLESS.home.stage.addChild(BioBLESS.home.stage.movable_stage);
+        BioBLESS.home.stage.addChild(that.plusobj);
         
-        return this.stage;
+        return BioBLESS.stage;
     };
-var a=$.getJSON("/misc/devices.json");
+var a=$.getJSON("../misc/devices.json");
 setTimeout(function(){BioBLESS.home.draw(a.responseJSON);},100);
-};
-BioBLESS.home = new home_obj();
-})();

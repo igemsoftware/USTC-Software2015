@@ -215,7 +215,7 @@ this.draw = function(devices, n){
     
     
     
-    var texture = PIXI.Texture.fromImage("/misc/test.png");
+    var texture = PIXI.Texture.fromImage("../misc/test.png");
     
     var parts = [];
     var BBAs = [];
