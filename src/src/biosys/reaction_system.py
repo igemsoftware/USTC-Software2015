@@ -102,10 +102,7 @@ class reaction_system(object):
         """
 
         def itemfreq(temp):
-            if len(temp) == 0:
-                return numpy.array([])
-            else:
-                return scipy.stats.itemfreq(temp)
+            return numpy.array([]) if len(temp) == 0 else scipy.stats.itemfreq(temp)
 
         self.reactions = numpy.array(reaction)
         self.reactant, self.product, self.constant = self.reactions.transpose()
@@ -113,10 +110,9 @@ class reaction_system(object):
         self.product = numpy.array(self.product)
         self.constant = numpy.array(self.constant)
         self.reactant_data = map(itemfreq, (
-        map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.reactant)))
+            map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.reactant)))
         self.product_data = map(itemfreq, (
-        map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.product)))
-
+            map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.product)))
 
     def add_reaction(self, reaction):
         """
