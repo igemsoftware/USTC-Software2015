@@ -1,7 +1,0 @@
-StrongPromoter->Substance1
-
-              Gate
-Substance1  --------> Substance2
-
-
-Substance [Substance::DNA,Substance::RNA,Substance::Protein]
