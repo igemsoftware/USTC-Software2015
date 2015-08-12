@@ -13,8 +13,8 @@ install:
     - pip install --upgrade pip
     # - pip install numpy ::Numpy is OK
     - pip freeze
-    # !!! It will take 14 minites !!!v
-    - pip install -v scipy | grep ^Building
+    # !!! It will take 14 minites, so output is needed !!!
+    - pip install -v scipy | grep ^building
     - pip freeze
     # !!! It will take 4 minites !!!v
     - pip install matplotlib
