@@ -2,7 +2,7 @@ language: python
 python:
     - "2.7"
 install:
-    - cd BioBLESS
+    - cd backend
     - pip install pylint --no-compile
     - pip install scipy --no-compile
 
@@ -11,9 +11,9 @@ install:
     - npm -v
     - cd ../frontend && npm install
 script:
-    - cd ../BioBLESS
+    - cd ../backend
     - pwd
-    - pylint --load-plugins pylint_django --errors-only BioBLESS
+    - pylint --load-plugins pylint_django --errors-only backend
     - python manage.py migrate
     - python manage.py test test
     - cd ../frontend
