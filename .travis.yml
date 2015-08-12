@@ -5,11 +5,14 @@ python:
 install:
     - cd backend
     - pip freeze
+    - sudo apt-get install libicu-devel
+    - sudo apt-get install blas-devel
+    - sudo apt-get install lapack-devel
+    - sudo apt-get install texinfo-tex
     - sudo apt-get install libblas-dev
     - sudo apt-get install liblapack-dev
     - sudo apt-get install libatlas-base-dev
     - sudo apt-get install gfortran
-    - sudo apt-get install libatlas-sse2-dev
     - pip install scipy
 
 
