@@ -25,7 +25,7 @@ def cache(request, pkgname, key):
     content = request.GET.get(key)
     if content:
         pkgdata[key] = content
-        return HttpResponse('ok')
+        return HttpResponse('Done')
     else:
         return HttpResponse(str(pkgdata.get(key)))
 
@@ -41,6 +41,6 @@ def cache_dict(request, pkgname):
     content = request.GET.get('data')
     if content:
         data[pkgname] = json.loads(content)
-        return HttpResponse('ok')
+        return HttpResponse('Done')
     else:
         return HttpResponse(json.dumps(pkgdata))

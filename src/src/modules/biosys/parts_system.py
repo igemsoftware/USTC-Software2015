@@ -15,8 +15,6 @@ from reaction_system import reaction_system
 
 
 class parts_system(reaction_system):
-    def __init__(self):
-        pass
 
     def __init__(self, species, effect):
         self.set_species_and_effect(species, effect)

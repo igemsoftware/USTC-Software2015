@@ -1,3 +1,6 @@
+"""
+A test case for basic django check
+"""
 __author__ = 'zsy95_000, ctyi'
 
 # from django.shortcuts import render_to_response
@@ -16,15 +19,14 @@ def aplusb(request, a, b):
     :return: a + b
     """
     try:
-        a=int(a)
-        b=int(b)
+        a = int(a)
+        b = int(b)
     except ValueError:
         return http.HttpResponseForbidden()
-    #if a==1 and b==2:
-        #return http.HttpResponseForbidden()
-        #return http.HttpResponse(simplejson.dumps({'answer': "I don't know"}), content_type="application/json")
-    return http.HttpResponse(json.dumps({'answer': a+b}), content_type="application/json")
-
+        # if a==1 and b==2:
+        # return http.HttpResponseForbidden()
+        # return http.HttpResponse(simplejson.dumps({'answer': "I don't know"}), content_type="application/json")
+    return http.HttpResponse(json.dumps({'answer': a + b}), content_type="application/json")
 
 # def hello(request):
 #     str1 = ""

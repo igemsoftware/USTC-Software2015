@@ -246,7 +246,10 @@ class reaction_system(object):
         list = map(lambda single_species: self.species_name_inverse[single_species], list)
         for species in list:
             pylab.plot(map(lambda x: x[0], self.record), map(lambda x: x[1][species], self.record))
+        # !!! TODO: Something error HERE, pylab can only show once !!!
+        # pylab.ion()
         pylab.show()
+        pylab.close()
 
     def show_simulate(self, initial, stop_time, list):
         """

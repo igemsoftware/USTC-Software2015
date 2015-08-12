@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from src.views.views import aplusb
-from src.views.route import route_content, route_page
+from src.views.route import route_content, route_page, reg
 from src.views.cache import cache, cache_dict
 from src.views.pkgapi import api
+
 
 urlpatterns = [
     url(r'^$', include('home.urls')),
@@ -28,8 +29,29 @@ urlpatterns = [
     url(r'^route/(?P<pkgname>.*)/(?P<subpath>.*)', route_content),
     # To show something HTML
     url(r'^page/(?P<pkgname>.*)/(?P<subpath>.*)', route_page),
+    # Register
+    url(r'^register/(?P<pkgname>.*)', reg),
     # Cache
     url(r'^cache/(?P<pkgname>.*)/(?P<key>.*)', cache),
     url(r'^cache_dict/(?P<pkgname>.*)/', cache_dict),
     url(r'^api/', api),
 ]
+
+
+def addurl(pattern, entry):
+    """
+    !!! This function must be defined before the register operation,
+    !!! for the way that python explain the code in order,
+    !!! otherwise no-definition exception comes out
+    :param pattern:
+    :param entry:
+    :return:
+    """
+    urlpatterns.append(url(pattern, entry))
+
+# Here is a good place to initialize all modules
+from src.views.route import register_all
+register_all()
+
+
+

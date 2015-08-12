@@ -6,12 +6,13 @@ This module provide universal interfaces for frontend and backend
 __author__ = 'zsy95_000'
 
 from uuid import uuid4
-import os.path
+import os
+from os import path
 from os.path import exists
-
+import importlib
 from src.common import path_sbin
 from src.controls import send
-from src.models.settings import sbin
+from src.models.settings import sbin, hostURL
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -68,8 +69,9 @@ def route_page(request, pkgname, subpath, params={}):
     params.update(request.GET.__dict__)
     params.update(request.POST)
     params['uuid'] = uuid4()
+    params['host'] = hostURL
     if subpath == "":
-        full_path = os.path.join(full_path, "index.html")
+        full_path = path.join(full_path, "index.html")
         return render_to_response_local(full_path, params) \
             if exists(full_path) \
             else HttpResponse("This package do not have a main page")
@@ -79,6 +81,31 @@ def route_page(request, pkgname, subpath, params={}):
             else HttpResponse("Page not found: " + full_path)
 
 
+def reg(request, pkgname):
+    """
+    Load the specified package
+    * means all.
+    :param request:
+    :param pkgname: Name
+    :return:
+    """
+    if pkgname == "*":
+        register_all()
+    else:
+        register(pkgname)
+    return HttpResponse("Done.")
+
+
+def register_all():
+    """
+    Start init all packages.
+    NOTE : Cannot be used in __init__
+    :param pkgname: package name
+    :return: None
+    """
+    map(register, [i for i in os.listdir(sbin) if path.isdir(path.join(sbin, i))])
+
+
 def register(pkgname):
     """
     Start init a package.
@@ -86,6 +113,6 @@ def register(pkgname):
     :param pkgname: package name
     :return: None
     """
-    fn = os.path.join(sbin, pkgname, "__init__.py")
+    fn = path.join(sbin, pkgname, "__init__.py")
     if exists(fn):
         __import__(pkgname)
