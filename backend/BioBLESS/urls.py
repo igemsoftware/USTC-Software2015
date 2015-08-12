@@ -19,6 +19,7 @@ from BioBLESS.views.views import aplusb
 from BioBLESS.views.route import route_content, route_page, reg
 from BioBLESS.views.cache import cache, cache_dict
 from BioBLESS.views.pkgapi import api
+from test_samples import test_reaction_system_sample, test_parts_system_sample
 
 
 urlpatterns = [
@@ -34,8 +35,15 @@ urlpatterns = [
     # Cache
     url(r'^cache/(?P<pkgname>.*)/(?P<key>.*)', cache),
     url(r'^cache_dict/(?P<pkgname>.*)/', cache_dict),
+
+    # biosys
+    url(r'^biosys/test-reaction-system-sample/$', test_reaction_system_sample),
+    url(r'^biosys/test-parts-system-sample/$', test_parts_system_sample),
+
     url(r'^api/', api),
 ]
+
+
 
 
 
