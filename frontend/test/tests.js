@@ -13,5 +13,10 @@ describe('window', function() {
 describe('BioBLESS', function() {
     it('should have property init', function() {
         BioBLESS.should.have.property('init');
+        BioBLESS.IDdraw.drawElement("0000000").should.have.property('PIXI.Graphics');
     });
 });
+//chai should 
+//
+
+

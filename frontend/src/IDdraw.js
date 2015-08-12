@@ -1,4 +1,14 @@
+/**
+ * IDdraw function works for preparing SBOL considering about its own ID
+ * @author USTC-software frontend
+ * @since  2015-8-9
+ */
 BioBLESS.IDdraw = function(){};
+/**
+ * drawElement makes svg of SBOL according to IDnumber
+ * @param icon caused by users
+ * @return graphics {PIXI.Grphics}
+ */
 BioBLESS.IDdraw.drawElement = function(icon){
     var graphics = new PIXI.Graphics();
     graphics.lineStyle(3, 0x000000, 1);
