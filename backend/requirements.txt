@@ -3,4 +3,3 @@ simplejson
 pylint-django
 coverage
 networkx
-numpy
