@@ -1,12 +1,23 @@
 [![Build Status](https://magnum.travis-ci.com/ustc2015/igem.svg?token=mKX17GB5mm6v1kppSB7o&branch=master)](https://magnum.travis-ci.com/ustc2015/igem)
 
 # iGEM USTC Software 2015
+
 ## 目录结构
-`doc`目录下存放面向软件开发者和使用者的文档
-`src`目录下存放的是django源代码，`src/src`下存放软件逻辑代码，`src/test`目录下存放单元测试代码
++ `frontend` 前端代码
++ `backend`  后端代码
++ `doc`      面向软件开发者和使用者的文档
+
+# backend
+
++ `backend`目录下存放的是django源代码，
++ `backend/BioBLESS`下存放软件逻辑代码，
++ `backend/test`目录下存放单元测试代码
+
 ## 相关依赖
-django
-simplejson
++ django
++ numpy
++ scipy
++ matplotlib
 
 # frontend
 
