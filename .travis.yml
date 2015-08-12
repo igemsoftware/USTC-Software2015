@@ -12,7 +12,7 @@ install:
     - sudo apt-get install gfortran
     - pip install numpy
     - pip freeze
-    - pip install scipy
+    - pip install scipy --no-compile
     - pip freeze
 
     # - sudo apt-get install python-numpy
