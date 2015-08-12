@@ -13,10 +13,10 @@ install:
     - pip install --upgrade pip
     # - pip install numpy ::Numpy is OK
     - pip freeze
-    # !!! It always deadloop here !!!v
-    - pip install -v scipy --no-compile
+    # !!! It will take 14 minites !!!v
+    - pip install -v scipy
     - pip freeze
-
+    - pip install -v matplotlib
     # - sudo apt-get install python-scipy
     # - sudo apt-get install python-matplotlib
     - pip install pylint --no-compile
