@@ -10,9 +10,9 @@ import os
 from os import path
 from os.path import exists
 import importlib
-from src.common import path_sbin
-from src.controls import send
-from src.models.settings import sbin, hostURL
+from BioBLESS.common import path_sbin
+from BioBLESS.controls import send
+from BioBLESS.models.settings import sbin, hostURL
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response

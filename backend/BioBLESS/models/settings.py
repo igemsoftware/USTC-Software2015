@@ -3,7 +3,7 @@ import os
 
 
 # TODO : Fill the sbin.
-sbin = os.path.join("src", "modules")
+sbin = os.path.join("BioBLESS", "modules")
 # TODO : Fill the source.
 hostURL = "http://127.0.0.1:8000"  # MUST HAVE HTTP!!!
 

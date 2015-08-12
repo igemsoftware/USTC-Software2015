@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.http import HttpResponse
-from src.urls import urlpatterns
+from BioBLESS.urls import urlpatterns
 from task1 import test2
 
 

@@ -1,7 +1,7 @@
 __author__ = 'zsy95_000'
 
 
-#from src.views import pkglocal, route
+#from BioBLESS.views import pkglocal, route
 
 from django.http import HttpResponse
 

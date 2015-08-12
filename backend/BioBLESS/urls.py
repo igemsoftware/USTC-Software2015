@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from src.views.views import aplusb
-from src.views.route import route_content, route_page, reg
-from src.views.cache import cache, cache_dict
-from src.views.pkgapi import api
+from BioBLESS.views.views import aplusb
+from BioBLESS.views.route import route_content, route_page, reg
+from BioBLESS.views.cache import cache, cache_dict
+from BioBLESS.views.pkgapi import api
 
 
 urlpatterns = [
@@ -50,7 +50,7 @@ def addurl(pattern, entry):
     urlpatterns.append(url(pattern, entry))
 
 # Here is a good place to initialize all modules
-from src.views.route import register_all
+from BioBLESS.views.route import register_all
 register_all()
 
 

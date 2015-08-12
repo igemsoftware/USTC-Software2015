@@ -1,4 +1,4 @@
-from src.urls import addurl
+from BioBLESS.urls import addurl
 from test_samples import test_reaction_system_sample, test_parts_system_sample
 
 # This is the only section witch has connections with the platform
