@@ -4,3 +4,4 @@ pylint-django
 coverage
 networkx
 numpy
+matplotlib
