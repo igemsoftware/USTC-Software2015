@@ -22,7 +22,7 @@ class parts_system(reaction_system):
     def set_species_and_effect(self, species, effect):
         species += map(lambda single_effect: [str(single_effect), 0], effect)
         self.set_species_name(species)
-        reactions = [];
+        reactions = []
         for single_effect in effect:
             effect_temp = str(single_effect)
             reactions.append([single_effect[0], [effect_temp], single_effect[2]])

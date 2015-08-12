@@ -1,8 +1,12 @@
+sudo: required
 language: python
 python:
     - "2.7"
 install:
     - cd backend
+    - sudo apt-get install python-numpy
+    - sudo apt-get install python-scipy
+    - sudo apt-get install python-matplotlib
     - pip install pylint --no-compile
     # - pip install scipy --no-compile
 
