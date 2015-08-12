@@ -4,18 +4,19 @@ python:
     - "2.7"
 install:
     - cd backend
-    - pip freeze
-
+    # libraries for scipy
     - sudo apt-get install libblas-dev
     - sudo apt-get install liblapack-dev
     - sudo apt-get install libatlas-base-dev
     - sudo apt-get install gfortran
-    - pip install numpy
+    # update pip
+    - sudo pip install --upgrade pip
+    # - pip install numpy ::Numpy is OK
     - pip freeze
+    # !!! It always deadloop here !!!
     - pip install scipy --no-compile
     - pip freeze
 
-    # - sudo apt-get install python-numpy
     # - sudo apt-get install python-scipy
     # - sudo apt-get install python-matplotlib
     - pip install pylint --no-compile
