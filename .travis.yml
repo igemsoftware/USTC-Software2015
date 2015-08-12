@@ -5,10 +5,19 @@ python:
 install:
     - cd backend
     - pip freeze
+    - sudo apt-get install libblas-dev
+    - sudo apt-get install liblapack-dev
+    # - sudo apt-get install libatlas-base-dev
+    - sudo apt-get install gfortran
+    # - sudo apt-get install libatlas-sse2-dev
     - pip install scipy
-    - sudo apt-get install python-numpy
-    - sudo apt-get install python-scipy
-    - sudo apt-get install python-matplotlib
+
+
+
+
+    # - sudo apt-get install python-numpy
+    # - sudo apt-get install python-scipy
+    # - sudo apt-get install python-matplotlib
     - pip install pylint --no-compile
     - pip freeze
 
