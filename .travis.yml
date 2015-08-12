@@ -11,17 +11,13 @@ install:
     - sudo apt-get install gfortran
     # update pip
     - pip install --upgrade pip
-    # - pip install numpy ::Numpy is OK
+    # - pip install numpy :: Numpy is OK
+    # !!! It will take 14 minites, so output is needed. But the full output is too long !!!
+    - pip install -v scipy | grep ^.*building
     - pip freeze
-    # !!! It will take 14 minites, so output is needed !!!
-    - pip install -v scipy | grep ^building
-    - pip freeze
-    # !!! It will take 4 minites !!!v
+    # It will take 4 minites
     - pip install matplotlib
-    # - sudo apt-get install python-scipy
-    # - sudo apt-get install python-matplotlib
     - pip install pylint
-    - pip freeze
     - pip install -r requirements.txt
     - node -v
     - npm -v
