@@ -38,20 +38,4 @@ urlpatterns = [
 ]
 
 
-def addurl(pattern, entry):
-    """
-    !!! This function must be defined before the register operation,
-    !!! for the way that python explain the code in order,
-    !!! otherwise no-definition exception comes out
-    :param pattern:
-    :param entry:
-    :return:
-    """
-    urlpatterns.append(url(pattern, entry))
-
-# Here is a good place to initialize all modules
-from BioBLESS.views.route import register_all
-register_all()
-
-
 
