@@ -10,11 +10,11 @@ install:
     - sudo apt-get install libatlas-base-dev
     - sudo apt-get install gfortran
     # update pip
-    - sudo pip install --upgrade pip
+    - pip install --upgrade pip
     # - pip install numpy ::Numpy is OK
     - pip freeze
-    # !!! It always deadloop here !!!
-    - pip install scipy --no-compile
+    # !!! It always deadloop here !!!v
+    - pip install -v scipy --no-compile
     - pip freeze
 
     # - sudo apt-get install python-scipy
