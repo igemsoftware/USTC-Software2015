@@ -90,3 +90,15 @@ def create_circuit(expr):
         edges.append((or_input[0], 'out'))
     circuit.add_edges_from(edges)
     return circuit
+
+
+# d_gate = ('not': {'NOT0': (0, 3, 0, 1), ...}, ...)
+def circuit_score(G, d_gate):
+    """return scores of the circuit"""
+    gate = G.node()
+    gate.pop(gate.index('out'))
+    for i in gate:
+        if i[0] == 'v':
+            gate.pop(gate.index(i))
+
+    return
