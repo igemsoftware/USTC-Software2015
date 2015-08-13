@@ -8,7 +8,8 @@ BioBLESS.device = {};
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors
 */ 
-var nodeH = 40, nodeW = 130, nodeDis = 180, floorDis = 135;
+var nodeH = 100, nodeW = 50, nodeDis = 100, floorDis = 135;
+var svg_index = 0;
 /** 
 * @description {PIXI.Container} the stage of the whole devices
 */ 
@@ -39,6 +40,35 @@ this.stage = new PIXI.Container();
 * @param {devices} the whole devices
 * @param {Num} the index of the device you want to draw
 */ 
+
+this.draw_line = function(graphic, start_x, start_y, end_x, end_y, mode){
+	if(mode === true){
+		graphic.moveTo(start_x, start_y);
+		graphic.lineTo(start_x, end_y);
+		graphic.lineTo(end_x, end_y);
+		graphic.lineTo(start_x, end_y);
+	}else{
+		graphic.moveTo(start_x, start_y);
+		graphic.lineTo(end_x, start_y);
+		graphic.lineTo(end_x, end_y);
+		graphic.lineTo(end_x, start_y);
+	}
+}
+this.draw_arrow = function(graphic, scale, x, y, mode){
+	switch(mode){
+		case "down":
+		    graphic.moveTo(x, y);
+			graphic.lineTo(x - scale + 2, y - scale);
+			graphic.lineTo(x + scale - 2, y - scale);
+			break;
+		case "up":
+		    graphic.moveTo(x, y);
+			graphic.lineTo(x - scale + 2, y + scale);
+			graphic.lineTo(x + scale - 2, y + scale);
+			break;
+			
+	}
+}
 this.prepare = function(devices, n){
 	var i, j, k, l, Num, s;//备用变量
 	this.chosen = false;
@@ -254,6 +284,17 @@ this.part_analysis = function(devices, n){
 * @param {devices} the whole devices
 * @param {Num} the index of the device you want to draw
 */ 
+var id = ["00000167","00000057","00000316","00000139","00000141","00000627","10000001","00001957","00001956","00001955","00000296","00005850","00001687"];
+this.get_id = function(){
+	return id[svg_index++ % 13];
+}
+
+this.draw_protein = function(){
+	var graphic = new PIXI.Graphics();
+	graphic.lineStyle(3, 0x000000, 1);
+	graphic.drawCircle(25, 50, 20);
+	return graphic;
+};
 this.draw = function(devices, n){
 	if(!devices[n]){
 		alert("Error!");
@@ -282,12 +323,12 @@ this.draw = function(devices, n){
 	};
 	var graphics = new PIXI.Graphics();
 	
-	graphics.lineStyle(10, 0x00ff55, 1);
+	graphics.lineStyle(8, 0x00ff55, 1);
 	Num = 0;
 	for(i = 0; i < this.lines_num; i++){
 		graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
 		for(j = 0; j < devices[n].lines.id[i].length; j++){
-			parts[this.to_part[i][j]] = new PIXI.Sprite(texture);
+			parts[this.to_part[i][j]] = BioBLESS.IDdraw.drawElement(this.get_id());
 			parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
 			parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
 			if(BBAs[this.to_part[i][j]]){
@@ -309,13 +350,13 @@ this.draw = function(devices, n){
 		graphics.lineTo((Num + i + 1) * nodeDis - 11, this.stage_h / 2.0 + 8);
 	};//绘制主线上的part
 	
-	
-	graphics.lineStyle(6, 0xff3300, 1);
+	var ind = 15;
+	graphics.lineStyle(4, 0xff3300, 1);
 	for(var d = 1; d < this.parts_num; d++){
 		for(i = 0; i < this.parts_num - d; i++){
 			j = i + d;
 			if(this.is_line[i][j]){
-				parts[i].protein = new PIXI.Sprite(texture);
+				parts[i].protein = this.draw_protein();
 				parts[i].protein.position.x = parts[i].position.x;
 				parts[i].protein.position.y = parts[i].position.y - this.protein_height[i] * floorDis;
 				if(this.protein_height[i] > 0){
@@ -323,48 +364,33 @@ this.draw = function(devices, n){
 					this.part[j].upLine++;
 					k = nodeW / (this.part[i].upIndegree + this.part[i].upOutdegree + 1);
 					l = nodeW / (this.part[j].upIndegree + this.part[j].upOutdegree + 1);
-					graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].position.y);
-					graphics.lineTo(parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + nodeH + 5);
-					graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + nodeH + 5);
-					graphics.lineTo(parts[i].position.x + k * this.part[i].upLine - 8, parts[i].protein.position.y + nodeH + 15);
-					graphics.lineTo(parts[i].position.x + k * this.part[i].upLine + 8, parts[i].protein.position.y + nodeH + 15);
+					graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].position.y + ind);
+					graphics.lineTo(parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + nodeH - 18);
+					this.draw_arrow(graphics, 6, parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + nodeH - 20, "up");
 					
-					
-					graphics.moveTo(parts[i].protein.position.x + nodeW, parts[i].protein.position.y + nodeH / 2.0);
-					graphics.lineTo(parts[j].position.x + l * this.part[j].upLine, parts[i].protein.position.y + nodeH / 2.0);
-					graphics.moveTo(parts[j].position.x + l * this.part[j].upLine, parts[i].protein.position.y + nodeH / 2.0 - 3);
-					graphics.lineTo(parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 8);
+					this.draw_line(graphics, parts[i].protein.position.x + nodeW, parts[i].protein.position.y + nodeH / 2.0, parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 8 + ind + 5, false);
 					if(this.line_type[i][j] == 'inh'){
-						graphics.moveTo(parts[j].position.x + l * this.part[j].upLine - 10, parts[j].position.y - 7);
-						graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 10, parts[j].position.y - 7);
+						graphics.moveTo(parts[j].position.x + l * this.part[j].upLine - 6, parts[j].position.y - 7 + ind + 5);
+						graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 6, parts[j].position.y - 7 + ind + 5);
 					}else{
-						graphics.moveTo(parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 5);
-						graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 8, parts[j].position.y - 15);
-						graphics.lineTo(parts[j].position.x + l * this.part[j].upLine - 8, parts[j].position.y - 15);
+						this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 5 + ind + 5, "down");
 					};
 				}else{
 					this.part[i].downLine++;
 					this.part[j].downLine++;
 					k = nodeW / (this.part[i].downIndegree + this.part[i].downOutdegree + 1);
 					l = nodeW / (this.part[j].downIndegree + this.part[j].downOutdegree + 1);
-					graphics.moveTo(parts[i].position.x + k * this.part[i].downLine, parts[i].position.y+ nodeH);
-					graphics.lineTo(parts[i].position.x + k * this.part[i].downLine, parts[i].protein.position.y - 5);
-					graphics.moveTo(parts[i].position.x + k * this.part[i].downLine, parts[i].protein.position.y - 5);
-					graphics.lineTo(parts[i].position.x + k * this.part[i].downLine - 8, parts[i].protein.position.y - 15);
-					graphics.lineTo(parts[i].position.x + k * this.part[i].downLine + 8, parts[i].protein.position.y - 15);
+					graphics.moveTo(parts[i].position.x + k * this.part[i].downLine, parts[i].position.y + nodeH - ind - 15);
+					graphics.lineTo(parts[i].position.x + k * this.part[i].downLine, parts[i].protein.position.y + 16);
+					this.draw_arrow(graphics, 6, parts[i].position.x + k * this.part[i].downLine, parts[i].protein.position.y + 18, "down");
 					
+					this.draw_line(graphics, parts[i].protein.position.x + nodeW, parts[i].protein.position.y + nodeH / 2.0, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 8 - ind - 15, false);
 					
-					graphics.moveTo(parts[i].protein.position.x + nodeW, parts[i].protein.position.y + nodeH / 2.0);
-					graphics.lineTo(parts[j].position.x + l * this.part[j].downLine, parts[i].protein.position.y + nodeH / 2.0);
-					graphics.moveTo(parts[j].position.x + l * this.part[j].downLine, parts[i].protein.position.y + nodeH / 2.0 + 3);
-					graphics.lineTo(parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 8);
-					if(this.line_type[i][j] == 'inh'){
-						graphics.moveTo(parts[j].position.x + l * this.part[j].downLine - 10, parts[j].position.y + nodeH + 7);
-						graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 10, parts[j].position.y + nodeH + 7);
+					if(this.line_type[i][j] !== 'inh'){
+						graphics.moveTo(parts[j].position.x + l * this.part[j].downLine - 6, parts[j].position.y + nodeH + 7 - ind - 15);
+						graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 6, parts[j].position.y + nodeH + 7 - ind - 15);
 					}else{
-						graphics.moveTo(parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5);
-						graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 8, parts[j].position.y + nodeH + 15);
-						graphics.lineTo(parts[j].position.x + l * this.part[j].downLine - 8, parts[j].position.y + nodeH + 15);
+						this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5 - ind - 15, "up");
 					};
 				};
 				
@@ -375,18 +401,17 @@ this.draw = function(devices, n){
 		i = parseInt(devices[n].output[j].substring(1)) - 1;
 		this.part[i].upLine++;
 		k = nodeW / (this.part[i].upIndegree + this.part[i].upOutdegree + 1);
-		parts[i].protein = new PIXI.Sprite(texture);
+		parts[i].protein = this.draw_protein();
 		parts[i].protein.position.x = parts[i].position.x;
 		parts[i].protein.position.y = parts[i].position.y - this.protein_height[i] * floorDis;
-		graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].position.y);
-		graphics.lineTo(parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + (nodeH + floorDis) / 2 - 3);
-		graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + (nodeH + floorDis) / 2);
-		graphics.lineTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + (nodeH + floorDis) / 2);
-		graphics.moveTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + (nodeH + floorDis) / 2 + 3);
-		graphics.lineTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5);
-		graphics.moveTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5);
-		graphics.lineTo(parts[i].position.x + nodeW / 2 - 8, parts[i].protein.position.y + nodeH + 15);
-		graphics.lineTo(parts[i].position.x + nodeW / 2 + 8, parts[i].protein.position.y + nodeH + 15);
+		if(this.part[i].upLine > 1){
+		    this.draw_line(graphics, parts[i].position.x + k * this.part[i].upLine, parts[i].position.y + ind, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + (nodeH + floorDis) / 2, true);
+		    this.draw_line(graphics, parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + (nodeH + floorDis) / 2, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, false);
+		}else{
+			graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].position.y + ind);
+			graphics.lineTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12);
+		}
+		this.draw_arrow(graphics, 6, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, "up");
 	};//绘制有关蛋白质节点的支路
 	
 	
@@ -402,8 +427,8 @@ this.draw = function(devices, n){
 				graphics.moveTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
 				graphics.lineTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 40);
 				if(devices[n].map[i].type == 'inh'){
-					graphics.moveTo(parts[k].protein.position.x + nodeW + 33, parts[k].protein.position.y + nodeH / 2.0 + 7);
-					graphics.lineTo(parts[k].protein.position.x + nodeW + 17, parts[k].protein.position.y + nodeH / 2.0 + 7);
+					graphics.moveTo(parts[k].protein.position.x + nodeW + 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
+					graphics.lineTo(parts[k].protein.position.x + nodeW + 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
 				}else{
 					graphics.moveTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 7);
 					graphics.lineTo(parts[k].protein.position.x + nodeW + 17, parts[k].protein.position.y + nodeH / 2.0 + 18);
@@ -419,8 +444,8 @@ this.draw = function(devices, n){
 				graphics.moveTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
 				graphics.lineTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 40);
 				if(devices[n].map[i].type == 'inh'){
-					graphics.moveTo(parts[k].protein.position.x - 17, parts[k].protein.position.y + nodeH / 2.0 + 7);
-					graphics.lineTo(parts[k].protein.position.x - 33, parts[k].protein.position.y + nodeH / 2.0 + 7);
+					graphics.moveTo(parts[k].protein.position.x - 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
+					graphics.lineTo(parts[k].protein.position.x - 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
 				}else{
 					graphics.moveTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 7);
 					graphics.lineTo(parts[k].protein.position.x - 17, parts[k].protein.position.y + nodeH / 2.0 + 18);
@@ -449,15 +474,13 @@ this.draw = function(devices, n){
 			        parts[k].Text.anchor.y = 0.5;
 					parts[k].Text.position.x = parts[k].position.x + this.part[k].downLine * l;
 					parts[k].Text.position.y = parts[k].position.y + nodeH + 55 - p;
-					graphics.moveTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8);
+					graphics.moveTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15);
 					graphics.lineTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 40 - p);
 					if(devices[n].map[i].type == 'inh'){
-						graphics.moveTo(parts[k].position.x + this.part[k].downLine * l - 8, parts[k].position.y + nodeH + 8);
-						graphics.lineTo(parts[k].position.x + this.part[k].downLine * l + 8, parts[k].position.y + nodeH + 8);
+						graphics.moveTo(parts[k].position.x + this.part[k].downLine * l - 6, parts[k].position.y + nodeH + 8 - ind - 15);
+						graphics.lineTo(parts[k].position.x + this.part[k].downLine * l + 6, parts[k].position.y + nodeH + 8 - ind - 15);
 					}else{
-						graphics.moveTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8);
-						graphics.lineTo(parts[k].position.x + this.part[k].downLine * l - 8, parts[k].position.y + nodeH + 18);
-						graphics.lineTo(parts[k].position.x + this.part[k].downLine * l + 8, parts[k].position.y + nodeH + 18);
+						this.draw_arrow(graphics, 6, parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15, "up");
 					};
 					
 					this.input[j].x = parts[k].Text.position.x;
