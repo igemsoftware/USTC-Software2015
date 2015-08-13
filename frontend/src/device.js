@@ -1,12 +1,10 @@
-﻿(function() {
-/** 
+﻿/** 
 * @author needsay
-* @constructor device_obj 
+* @constructor BioBLESS.device 
 * @description the class of devices 
-* @example new device_obj(); 
-* @version 0.2.1
+* @version 0.2.2
 */ 
-var device_obj = function() {
+BioBLESS.device = {};
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors
 */ 
@@ -14,15 +12,15 @@ var nodeH = 40, nodeW = 130, nodeDis = 180, floorDis = 135;
 /** 
 * @description {PIXI.Container} the stage of the whole devices
 */ 
-this.stage = new PIXI.Container();
+BioBLESS.device.stage = new PIXI.Container();
 /** 
 * @description {PIXI.Container} the movable stage
 */ 
-this.stage.movable_stage = new PIXI.Container();
+BioBLESS.device.stage.movable_stage = new PIXI.Container();
 /** 
 * @description {Num} used for controling stage scale in scale animation
 */ 
-this.stage.movable_stage._scale = 1;
+BioBLESS.device.stage.movable_stage._scale = 1;
 
 /** 
 * @author needsay
@@ -507,7 +505,7 @@ this.draw = function(devices, n){
 * @description analyse the layout of the whole devices
 * @param {devices} the whole devices
 */ 
-this.devs_analysis = function(devices){
+BioBLESS.device.devs_analysis = function(devices){
 	var i, j, k, l, temp;
 	this.devs = [];
 	for(i = 0; i < devices.length; i++){
@@ -585,7 +583,7 @@ this.devs_analysis = function(devices){
 	};
 	this.devs_width = x;
 };
-this.draw_lines_between_devices = function(){
+BioBLESS.device.draw_lines_between_devices = function(){
 	var i, j, k, l, temp;
 	for(i = 0; i < this.devs.length; i++){
 		for(j = 0; j < this.devs[i].output.length; j++){
@@ -636,7 +634,7 @@ this.draw_lines_between_devices = function(){
 * @param {devices} the whole devices
 * @param {Num} the index of the device you want to draw (If n is equal to -1, the stage returned will contain the whole devices)
 */ 
-this.draw = function(devices, n){
+BioBLESS.device.draw = function(devices, n){
 	
 	
 	if(n !== -1){
@@ -674,6 +672,3 @@ this.draw = function(devices, n){
 }
 
 
-};
-BioBLESS.device = new device_obj();
-})();
