@@ -71,8 +71,6 @@ def create_circuit(expr):
                 and_input.append('not%d' % j)
             elif i[j] == '1':
                 and_input.append('v%d' % j)
-            else:
-                pass
         while len(and_input) > 1:
             edges.append((and_input.pop(), 'and%d' % andx))
             edges.append((and_input.pop(), 'and%d' % andx))
@@ -95,14 +93,29 @@ def create_circuit(expr):
 # d_gate = {'not': {'NOT0': (0, 3, 0, 1), 'NOT1': (1, 2, 1, 0), ...}, ...}
 def circuit_score(G, d_gate):
     """return scores of the circuit"""
-    flat = lambda L: sum(map(flat,L),[]) if isinstance(L,list) else [L]
-    gate = G.nodes()
-    gate.pop(gate.index('out'))
-    for i in gate:
+    n_gate = G.nodes()
+    n_gate.pop(n_gate.index('out'))
+    for i in n_gate:
         if i[0] == 'v':
-            gate.pop(gate.index(i))
+            n_gate.pop(n_gate.index(i))
+    bio_not = list(d_gate['not'].keys())
+    bio_and = list(d_gate['and'].keys())
+    bio_or  = list(d_gate['or'].keys())
     score = []
-    for i in gate:
-        if i[0] == 'a':
-            score = []
-    return
+    if n_gate[0][0] == 'n':
+        score = bio_not
+    elif n_gate[0][0] == 'a':
+        score = bio_and
+    elif n_gate[0][0] == 'o':
+        score = bio_or
+    for n in range(1, len(n_gate)):
+        if  n_gate[n][0] == 'n':
+            score = [[i, j] for i in score for j in bio_not]
+        elif n_gate[n][0] == 'a':
+            score = [[i, j] for i in score for j in bio_and]
+        elif n_gate[n][0] == 'o':
+            score = [[i, j] for i in score for j in bio_or]
+    flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
+    for i in range(len(score)):
+        score[i] = flat(score[i])
+    return score
