@@ -3,3 +3,10 @@ simplejson
 pylint-django
 coverage
 networkx
+pylab
+scipy
+numpy
+matplotlib
+markdown
+djangorestframework
+django-filter

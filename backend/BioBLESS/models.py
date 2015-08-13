@@ -8,3 +8,5 @@ class parts(models.Model):
     type = models.CharField(max_length=25)
     description = models.CharField(max_length=150)
     sequence = models.CharField(max_length=68000)
+    uid = models.AutoField(primary_key=True)
+    id = models.IntegerField(unique=True)
