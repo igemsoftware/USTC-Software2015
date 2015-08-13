@@ -139,5 +139,11 @@ def circuit_score(G, d_gate):
         gate.append({'score': score, 'gate': dict(zip(n_gate, result[i]))})
     return gate
 
+
 def api_circuit(G, gate):
+    l_node = G.nodes()
+    graph = []
+    for i in gate:
+
+        graph.append({'score': i['score']})
     return graph
