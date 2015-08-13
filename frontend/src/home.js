@@ -64,16 +64,6 @@ BioBLESS.home.DrawGate = function(device){
             case "xor":
             case "and":
             case "or":
-                element.graphics.lineStyle(3, 0x000000, 1);
-                element.graphics.moveTo(0, 25);
-                element.graphics.lineTo(30, 25);
-                element.graphics.moveTo(0, 45);
-                element.graphics.lineTo(30, 45);
-                element.graphics.moveTo(120, 35);
-                element.graphics.lineTo(150, 35);
-                element.graphics.beginFill(0, 0);
-                element.graphics.drawRect(30, 0, 90, 70);
-                element.graphics.endFill();
                 element.input_1.beginFill(0x000000, 1);
                 element.input_1.drawRect(0, 0, 30, 3);
                 element.input_1.position.x = 0;
@@ -87,11 +77,6 @@ BioBLESS.home.DrawGate = function(device){
                 break;
             case "NOT":
             case "not":
-                element.graphics.lineStyle(3, 0x000000, 1);
-                element.graphics.moveTo(0, 35);
-                element.graphics.lineTo(30, 35);
-                element.graphics.moveTo(120, 35);
-                element.graphics.lineTo(150, 35);
                 element.input_1.beginFill(0x000000, 1); ;
                 element.input_1.drawRect(0, 0, 30, 3);
                 element.input_1.position.x = 0;
@@ -99,27 +84,12 @@ BioBLESS.home.DrawGate = function(device){
                 element.input_1.endFill();
                 element.graphics.moveTo(135, 35);
                 element.graphics.lineTo(120, 20);
-                element.graphics.beginFill(0, 0);
-                element.graphics.drawRect(30, 0, 90, 70);
-                element.graphics.endFill();
                 break;
             case "NAND":
             case "NOR":
             case "nor":
             case "XNOR":
             case "xnor":
-                element.graphics.lineStyle(3, 0x000000, 1);
-                element.graphics.moveTo(0, 25);
-                element.graphics.lineTo(30, 25);
-                element.graphics.moveTo(0, 45);
-                element.graphics.lineTo(30, 45);
-                element.graphics.moveTo(120, 35);
-                element.graphics.lineTo(150, 35);
-                element.graphics.moveTo(135, 35);
-                element.graphics.lineTo(120, 20);
-                element.graphics.beginFill(0, 0);
-                element.graphics.drawRect(30, 0, 90, 70);
-                element.graphics.endFill();
                 element.input_1.beginFill(0x000000, 1);
                 element.input_1.drawRect(0, 0, 30, 3);
                 element.input_1.position.x = 0;
@@ -221,16 +191,16 @@ BioBLESS.home.onDragMove_e = function() {
             this.parent.input_2.Lines[0].endFill();
         }
         if(this.parent.output.Connection){
-            if(this.parent.ouput.Lines[0].father === this.parent.ouput){
-                xRect = this.parent.ouput.Lines[0].mother.position.x + this.parent.ouput.Lines[0].mother.parent.position.x;
-                yRect = this.parent.ouput.Lines[0].mother.position.y + this.parent.ouput.Lines[0].mother.parent.position.y;
+            if(this.parent.output.Lines[0].father === this.parent.output){
+                xRect = this.parent.output.Lines[0].mother.position.x + this.parent.output.Lines[0].mother.parent.position.x;
+                yRect = this.parent.output.Lines[0].mother.position.y + this.parent.output.Lines[0].mother.parent.position.y;
             }
             else{
-                xRect = this.parent.ouput.Lines[0].father.position.x + this.parent.ouput.Lines[0].father.parent.position.x;
-                yRect = this.parent.ouput.Lines[0].father.position.y + this.parent.ouput.Lines[0].father.parent.position.y; 
+                xRect = this.parent.output.Lines[0].father.position.x + this.parent.output.Lines[0].father.parent.position.x;
+                yRect = this.parent.output.Lines[0].father.position.y + this.parent.output.Lines[0].father.parent.position.y; 
             }
-            wRect = this.parent.position.x + this.parent.ouput.position.x - xRect;
-            hRect = this.parent.position.y + this.parent.ouput.position.y - yRect;
+            wRect = this.parent.position.x + this.parent.output.position.x - xRect;
+            hRect = this.parent.position.y + this.parent.output.position.y - yRect;
             this.parent.output.Lines[0].clear();
             this.parent.output.Lines[0].beginFill(0x000000, 1);
             this.parent.output.Lines[0].drawRect(xRect, yRect, wRect/2, 3);
@@ -273,8 +243,6 @@ BioBLESS.home.onDrawLineUp = function(event){
         this.Connection = true;
         this.Lines = drawPart;
         drawPart[0].mother = this;
-        drawPart[0].mother.wRect = 0 - drawPart[0].father.wRect;
-        drawPart[0].mother.hRect = 0 - drawPart[0].father.hRect;
     }
 };
 /**
@@ -294,7 +262,7 @@ BioBLESS.home.onDrawLineMove = function(event){
             drawPart[0].drawRect(xRect, yRect, wRect/2, 3);
             drawPart[0].drawRect(xRect + wRect/2, yRect, 3, hRect);
             drawPart[0].drawRect(xRect + wRect/2, yRect + hRect, wRect/2, -3);
-            drawPart[0].endFill;
+            drawPart[0].endFill();
             drawPart[0].father.parent.parent.addChild(drawPart[0]);
     }
 };
@@ -384,7 +352,27 @@ BioBLESS.home.draw = function(devices){
     	this.position.x = this.startX;
     	this.position.y = this.startY; 
 	};
-
+    that._logicGates = [];
+    that.logicGates = [];
+    for(var i = 0; i < devices.length; i++){
+        that._logicGates[i] = BioBLESS.home.DrawGate(devices[i]);
+        that.logicGates[i] = BioBLESS.home.DrawGate(devices[i]);
+        that._logicGates[i].position.x = w - 195;
+        that._logicGates[i].position.y = 140 + i * 100;
+        that.logicGates[i].position.x = w - 195;
+        that.logicGates[i].position.y = 140 + i * 100;
+        that.logicGates[i].interactive = true;
+        that.logicGates[i].buttonMode = true;
+        that.logicGates[i].Index = i;
+        that.logicGates[i].on('mousedown', that.onDragStart)
+            .on('touchstart', that.onDragStart)
+            .on('mouseup', that.onDragEnd)
+            .on('mouseupoutside', that.onDragEnd)
+            .on('touchend', that.onDragEnd)
+            .on('touchendoutside', that.onDragEnd)
+            .on('mousemove', that.onDragMove)
+            .on('touchmove', that.onDragMove);
+    }
     /**
      * plusobj is a button to show list
      * @type {PIXI.Graphics}
