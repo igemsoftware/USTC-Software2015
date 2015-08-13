@@ -4,6 +4,7 @@
 * @constructor device_obj 
 * @description the class of devices 
 * @example new device_obj(); 
+* @version 0.2.1
 */ 
 var device_obj = function() {
 /** 
@@ -145,7 +146,7 @@ this.height_analysis = function(devices, n){
 			if(this.is_line[i][j]){
 				if(this.part_to_line[i] == this.part_to_line[j]){
 					l = 0;
-					for(k = i; k <= j; k++){
+					for(k = i + 1; k < j; k++){
 						if(++this.part[k].up_max_height > l)
 						    l = this.part[k].up_max_height;
 					};
@@ -154,7 +155,7 @@ this.height_analysis = function(devices, n){
 				    };
 				}else{
 					l = 0;
-					for(k = i; k <= j; k++){
+					for(k = i + 1; k < j; k++){
 						if(--this.part[k].down_max_height < l)
 						    l = this.part[k].down_max_height;
 					};
@@ -169,7 +170,7 @@ this.height_analysis = function(devices, n){
 			if(this.is_line[j][i]){
 				if(this.part_to_line[i] == this.part_to_line[j]){
 					l = 0;
-					for(k = i; k <= j; k++){
+					for(k = i + 1; k < j; k++){
 						if(++this.part[k].up_max_height > l)
 						    l = this.part[k].up_max_height;
 					};
@@ -178,7 +179,7 @@ this.height_analysis = function(devices, n){
 				    };
 				}else{
 					l = 0;
-					for(k = i; k <= j; k++){
+					for(k = i + 1; k < j; k++){
 						if(--this.part[k].down_max_height < l)
 						    l = this.part[k].down_max_height;
 					};
