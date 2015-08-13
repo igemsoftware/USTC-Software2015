@@ -1,34 +1,47 @@
 [![Build Status](https://magnum.travis-ci.com/ustc2015/igem.svg?token=mKX17GB5mm6v1kppSB7o&branch=master)](https://magnum.travis-ci.com/ustc2015/igem)
 
-# iGEM USTC Software 2015
-## 目录结构
-`doc`目录下存放面向软件开发者和使用者的文档
-`src`目录下存放的是django源代码，`src/src`下存放软件逻辑代码，`src/test`目录下存放单元测试代码
-## 相关依赖
-django
-simplejson
+# BioBLESS - iGEM USTC Software 2015
 
-# frontend
+## Structure of the project
++ `frontend` Frontend code lies here
++ `backend`  Backend code locates here
++ `doc`      Documents for developers and users
 
-jQuery-2.1.4:
+---
+# Backend
+
++ `backend` Root of django
++ `backend/BioBLESS` Functional codes
++ `backend/test` Test case
+
+### Dependency
++ **django** for website
++ **numpy & scipy** for calculation
++ **matplotlib** for plotting
+
+---
+
+# Frontend
+
++ jQuery-2.1.4:
 
 URL: https://jquery.com/download/ License: MIT
 
-Pixi.js-3.0.7:
++ Pixi.js-3.0.7:
 
 URL: https://github.com/GoodBoyDigital/pixi.js License: MIT
 
-## Build
+### Build
 
-npm install
++ npm install
 
-npm run build
++ npm run build
 
-## Documentations
+### Documentations
 
 npm run build-doc
 
-## Unit Test
+### Unit Test
 
 mocha-2.2.5:
 
@@ -39,3 +52,7 @@ chai-3.2.0:
 URL: https://github.com/chaijs/chai License: MIT
 
 npm test
+
+
+
+

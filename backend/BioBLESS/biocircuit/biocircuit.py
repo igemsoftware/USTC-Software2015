@@ -90,3 +90,19 @@ def create_circuit(expr):
         edges.append((or_input[0], 'out'))
     circuit.add_edges_from(edges)
     return circuit
+
+
+# d_gate = {'not': {'NOT0': (0, 3, 0, 1), 'NOT1': (1, 2, 1, 0), ...}, ...}
+def circuit_score(G, d_gate):
+    """return scores of the circuit"""
+    flat = lambda L: sum(map(flat,L),[]) if isinstance(L,list) else [L]
+    gate = G.nodes()
+    gate.pop(gate.index('out'))
+    for i in gate:
+        if i[0] == 'v':
+            gate.pop(gate.index(i))
+    score = []
+    for i in gate:
+        if i[0] == 'a':
+            score = []
+    return

@@ -1,12 +1,22 @@
+sudo: required
 language: python
 python:
     - "2.7"
 install:
+    # * NOTICE : Time limit for no-response-operation is 10 minutes, or an error will be caused.
     - cd backend
-    - pip install pylint --no-compile
-    # - pip install scipy --no-compile
-
+    # libraries for scipy
+    - sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev gfortran
+    # update pip
+    - pip install --upgrade pip
+    # - pip install numpy :: Numpy is OK
+    # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
+    - pip install -v scipy | grep ^.*building
+    # It will take 4 minutes
+    - pip install matplotlib
+    - pip install pylint
     - pip install -r requirements.txt
+    
     - node -v
     - npm -v
     - cd ../frontend && npm install
