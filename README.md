@@ -18,6 +18,7 @@
 + **django** for website
 + **numpy & scipy** for calculation
 + **matplotlib** for plotting
++ **networkx** for graph
 
 ---
 
