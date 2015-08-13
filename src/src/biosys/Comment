@@ -1,7 +1,16 @@
-StrongPromoter->Substance1
+>>> import devices_system_test as ds
+>>> 
+>>> NOTIn1=ds.not_1("P11","R1","lac1","P12","AndIn1","In1")
+>>> NOTIn2=ds.not_1("P21","R2","lac2","P22","AndIn2","In2")
+>>> Ander=ds.and_1("P3","R3","NotIn","AndIn1","AndIn2")
+>>> NotOut=ds.not_1("P41","R4","lac4","P42","Out","NotIn")
+>>> System=NOTIn1+NOTIn2+Ander+NotOut
+>>> System.show_simulate([["P11",10],["P12",10],["P3",10],["P21",10],["P22",10],["P41",10],["P42",10]],20,["Out"])
+>>> System.show_simulate([["P11",10],["P12",10],["P3",10],["P21",10],["P22",10],["P41",10],["P42",10]],20,["AndIn1","AndIn2","NotIn","Out"])
+>>> System.show_simulate([["P11",10],["P12",10],["P3",10],["P21",10],["P22",10],["P41",10],["P42",10]],20,["AndIn1","AndIn2","Out"])
+>>> System.show_simulate([["P11",10],["P12",10],["P3",10],["P21",10],["P22",10],["P41",10],["P42",10]],20,["AndIn1","AndIn2","NotIn","Out"])
+>>> System.show_simulate([["P11",10],["P12",10],["P3",10],["P21",10],["P22",10],["P41",10],["P42",10]],30,["AndIn1","AndIn2","NotIn","Out"])
+>>> System.show_simulate([["P11",10],["P12",10],["P3",10],["P21",10],["P22",10],["P41",10],["P42",10]],50,["AndIn1","AndIn2","NotIn","Out"])
 
-              Gate
-Substance1  --------> Substance2
 
-
-Substance [Substance::DNA,Substance::RNA,Substance::Protein]
+问题：__and__,初始化仍然不方便

@@ -183,7 +183,7 @@ class reaction_system(object):
         self.set_reactions(reactions)
 
     def __add__(self,other):
-        return self.__class__(numpy.array([self.reactant,self.product,self.constant]).transpose().tolist()+numpy.array([other.reactant,other.product,other.constant]).transpose().tolist(),list(set(self.species_name.tolist()+other.species_name.tolist())))
+        return reaction_system(numpy.array([self.reactant,self.product,self.constant]).transpose().tolist()+numpy.array([other.reactant,other.product,other.constant]).transpose().tolist(),list(set(self.species_name.tolist()+other.species_name.tolist())))
     
     def simulate(self,initial,stop_time):
         '''
