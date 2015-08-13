@@ -11,8 +11,10 @@
         {"from": 0, "to": 1},
         {"from": 3, "to": 4},
         ...
-    ]
+    ],
 
-"score": float
+"score": float,
+
+"wuzhi": [{"id": 0, "parts": {"d1":"int", "d2":"int", ...}, "input": {"p100":"xxx", "p200":"xxx", ...}}]
 
 }
