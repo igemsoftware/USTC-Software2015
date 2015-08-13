@@ -142,14 +142,21 @@ def circuit_score(G, d_gate):
 
 def api_circuit(G, gate):
     l_node = G.nodes()
+    l_node.pop(l_node.index('out'))
     no_such_list = []
     for i in l_node:
-        if (i[0] == 'v') or (i == 'out'):
+        if (i[0] == 'v'):
             no_such_list.append(l_node.pop(l_node.index(i)))
     graph = []
+    l = [i for i in no_such_list]
+    l.extend([i for i in l_node])
     for i in gate:
-        nodes = no_such_list
+        arcs = []
+        nodes = [i.replace('v', 'INPUT') for i in no_such_list]
+        nodes.append('OUT')
         for j in range(len(l_node)):
             nodes.append(i['gate'][l_node[j]])
-        graph.append({'nodes': nodes, 'score': i['score']})
+        for j in G.edges():
+            arcs.append({'from': , 'to':})
+        graph.append({'nodes': nodes, 'arcs': arcs, 'score': i['score']})
     return graph
