@@ -2,7 +2,7 @@
 * @author needsay
 * @constructor BioBLESS.device 
 * @description the class of devices 
-* @version 0.2.2
+* @version 0.2.3
 */ 
 BioBLESS.device = {};
 /** 
@@ -75,13 +75,17 @@ this.prepare = function(devices, n){
 	this._index = n;
 	this.input = [];
 	for(i = 0; i < devices[n].input.id.length; i++){
-		this.input[i] = function(){};
-		this.input[i].to_dev_index = null;
+		this.input[i] = {};
+		this.input[i].to_dev_index = [];
+		this.input[i].to_dev_output_index = [];
+		this.input[i].x = [];
+		this.input[i].y = [];
 	};
 	this.output = [];
 	for(i = 0; i < devices[n].output.length; i++){
-		this.output[i] = function(){};
-		this.output[i].to_dev_index = null;
+		this.output[i] = {};
+		this.output[i].to_dev_index = [];
+		this.output[i].to_dev_input_index = [];
 	};
 	
 	
@@ -425,7 +429,7 @@ this.draw = function(devices, n){
 			parts[k].protein.Text.anchor.y = 0.5;
 			if(k < l){
 				graphics.moveTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
-				graphics.lineTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 40);
+				graphics.lineTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind);
 				if(devices[n].map[i].type == 'inh'){
 					graphics.moveTo(parts[k].protein.position.x + nodeW + 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
 					graphics.lineTo(parts[k].protein.position.x + nodeW + 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
@@ -438,11 +442,11 @@ this.draw = function(devices, n){
 				
 				
 				parts[k].protein.Text.position.x = parts[k].protein.position.x + nodeW + 25;
-				parts[k].protein.Text.position.y =  parts[k].protein.position.y + nodeH / 2.0 + 55;
+				parts[k].protein.Text.position.y =  parts[k].protein.position.y + nodeH / 2.0 + 55 - ind;
 				
 			}else{
 				graphics.moveTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
-				graphics.lineTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 40);
+				graphics.lineTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind);
 				if(devices[n].map[i].type == 'inh'){
 					graphics.moveTo(parts[k].protein.position.x - 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
 					graphics.lineTo(parts[k].protein.position.x - 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
@@ -453,13 +457,13 @@ this.draw = function(devices, n){
 				}
 				
 				parts[k].protein.Text.position.x = parts[k].protein.position.x - 25;
-				parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55;
+				parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind;
 			};
 			
 			for(var p = 0; p < devices[n].input.id.length; p++){
 				if(devices[n].input.options[0][p] === devices[n].map[i].id1){
-					this.input[p].x = parts[k].protein.Text.position.x;
-					this.input[p].y = parts[k].protein.Text.position.y;
+					this.input[p].x[this.input[p].x.length] = parts[k].protein.Text.position.x;
+					this.input[p].y[this.input[p].y.length] = parts[k].protein.Text.position.y;
 				}
 			};
 		}else{
@@ -467,7 +471,7 @@ this.draw = function(devices, n){
 				if(devices[n].input.id[j] === devices[n].map[i].id1){
 					k = parseInt(devices[n].map[i].id2.substring(1)) - 1;
 					l = nodeW / (this.part[k].downIndegree + this.part[k].downOutdegree + 1);
-					var p = 20;
+					var p = 50;
 					this.part[k].downLine++;
 					parts[k].Text = new PIXI.Text(devices[n].map[i].id1);
 			        parts[k].Text.anchor.x = 0.5;
@@ -483,8 +487,8 @@ this.draw = function(devices, n){
 						this.draw_arrow(graphics, 6, parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15, "up");
 					};
 					
-					this.input[j].x = parts[k].Text.position.x;
-					this.input[j].y = parts[k].Text.position.y;
+					this.input[j].x[this.input[j].x.length] = parts[k].Text.position.x;
+					this.input[j].y[this.input[j].y.length] = parts[k].Text.position.y;
 					break;
 				};
 			};
@@ -540,12 +544,10 @@ BioBLESS.device.devs_analysis = function(devices){
 			for(k = 0; k < devices.length; k++){
 				for(l = 0; l < devices[k].input.id.length; l++){
 					if(devices[i].lines.options[0][(parseInt(devices[i].output[j].substring(1)) - 1)] === devices[k].input.options[0][l]){
-						this.devs[k].input[l].to_dev_index = i;
-						this.devs[k].input[l].to_dev_output_index = j;
-						this.devs[i].output[j].to_dev_index = k;
-						this.devs[i].output[j].to_dev_input_index = l;
-						k = devices.length;
-						break;
+						this.devs[k].input[l].to_dev_index[this.devs[k].input[l].to_dev_index.length] = i;
+						this.devs[k].input[l].to_dev_output_index[this.devs[k].input[l].to_dev_index.length - 1] = j;
+						this.devs[i].output[j].to_dev_index[this.devs[i].output[j].to_dev_index.length] = k;
+						this.devs[i].output[j].to_dev_input_index[this.devs[i].output[j].to_dev_index.length - 1] = l;
 					};
 				};
 			};
@@ -555,7 +557,7 @@ BioBLESS.device.devs_analysis = function(devices){
 	this.poi[0] = [];
 	for(i = 0; i < devices.length; i++){
 		for(j = 0; j < devices[i].input.id.length; j++){
-			if(this.devs[i].input[j].to_dev_index === null){
+			if(this.devs[i].input[j].to_dev_index.length === 0){
 					this.poi[0][this.poi[0].length] = this.devs[i];
 				this.devs[i].chosen = true;
 				break;
@@ -567,10 +569,10 @@ BioBLESS.device.devs_analysis = function(devices){
 		this.poi[i + 1] = [];
 		for(j = 0; j < this.poi[i].length; j++){
 			for(k = 0; k < this.poi[i][j].output.length; k++){
-				if(this.poi[i][j].output[k].to_dev_index !== null){
-    				if(this.devs[this.poi[i][j].output[k].to_dev_index].chosen === false){
-	     				this.poi[i + 1][this.poi[i + 1].length] = this.devs[this.poi[i][j].output[k].to_dev_index];
-		    			this.devs[this.poi[i][j].output[k].to_dev_index].chosen = true;
+				for(l = 0; l < this.poi[i][j].output[k].to_dev_index.length; l++){
+    				if(this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen === false){
+	     				this.poi[i + 1][this.poi[i + 1].length] = this.devs[this.poi[i][j].output[k].to_dev_index[l]];
+		    			this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen = true;
 						break;
 			    	}
 			    }
@@ -610,12 +612,15 @@ BioBLESS.device.draw_lines_between_devices = function(){
 	var i, j, k, l, temp;
 	for(i = 0; i < this.devs.length; i++){
 		for(j = 0; j < this.devs[i].output.length; j++){
-			if(this.devs[i].output[j].to_dev_index !== null){
+			for(l = 0; l < this.devs[i].output[j].to_dev_index.length; l++){
 				var graphic = new PIXI.Graphics();
 				graphic.lineStyle(6, 0xffff00, 1);
-				var input_dev =  this.devs[this.devs[i].output[j].to_dev_index];
-				var input_x = input_dev.stage.position.x + input_dev.input[this.devs[i].output[j].to_dev_input_index].x;
-				var input_y = input_dev.stage.position.y + input_dev.input[this.devs[i].output[j].to_dev_input_index].y;
+				var input_dev =  this.devs[this.devs[i].output[j].to_dev_index[l]];
+				for(k = 0; k < input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x.length; k++){
+					
+				
+				var input_x = input_dev.stage.position.x + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x[k];
+				var input_y = input_dev.stage.position.y + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].y[k];
 				var output_x = this.devs[i].stage.position.x + this.devs[i].output[j].x;
 				var output_y = this.devs[i].stage.position.y + this.devs[i].output[j].y;
 				if(input_x > output_x + nodeW + 25 || input_x === output_x - 25){
@@ -646,6 +651,8 @@ BioBLESS.device.draw_lines_between_devices = function(){
 				
 				
 				
+				
+				}
 				this.stage.movable_stage.addChild(graphic);
 			};
 		};
@@ -658,7 +665,7 @@ BioBLESS.device.draw_lines_between_devices = function(){
 * @param {Num} the index of the device you want to draw (If n is equal to -1, the stage returned will contain the whole devices)
 */ 
 BioBLESS.device.draw = function(devices, n){
-	
+	this.stage.movable_stage.removeChildren();
 	
 	if(n !== -1){
 		var i, j, k, l, temp;
