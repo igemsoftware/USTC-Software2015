@@ -6,6 +6,7 @@ __author__ = 'E-Neo <e-neo@qq.com>'
 # bugs by far(0.28.0). Espresso Algorithm is better than Q-M
 # Algorithm
 import qm
+import numpy as np
 import networkx as nx
 
 
@@ -90,6 +91,21 @@ def create_circuit(expr):
     return circuit
 
 
+def calc_score(l_gate, d_gate):
+    """return a score"""
+    para = np.array([0, 0, 0, 0])
+    for i in l_gate:
+        if i[0] == 'N':
+            t = d_gate['not'][i]
+        elif i[0] == 'A':
+            t = d_gate['and'][i]
+        elif i[0] == 'O':
+            t = d_gate['or'][i]
+        para += np.array(t)
+    s = 2**(para[0]-1) + 2**(para[1]-1) + para[2] + para[3]
+    return s
+
+
 # d_gate = {'not': {'NOT0': (0, 3, 0, 1), 'NOT1': (1, 2, 1, 0), ...}, ...}
 def circuit_score(G, d_gate):
     """return scores of the circuit"""
@@ -101,21 +117,24 @@ def circuit_score(G, d_gate):
     bio_not = list(d_gate['not'].keys())
     bio_and = list(d_gate['and'].keys())
     bio_or  = list(d_gate['or'].keys())
-    score = []
+    result = []
     if n_gate[0][0] == 'n':
-        score = bio_not
+        result = bio_not
     elif n_gate[0][0] == 'a':
-        score = bio_and
+        result = bio_and
     elif n_gate[0][0] == 'o':
-        score = bio_or
+        result = bio_or
     for n in range(1, len(n_gate)):
         if  n_gate[n][0] == 'n':
-            score = [[i, j] for i in score for j in bio_not]
+            result = [[i, j] for i in result for j in bio_not]
         elif n_gate[n][0] == 'a':
-            score = [[i, j] for i in score for j in bio_and]
+            result = [[i, j] for i in result for j in bio_and]
         elif n_gate[n][0] == 'o':
-            score = [[i, j] for i in score for j in bio_or]
+            result = [[i, j] for i in result for j in bio_or]
     flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
-    for i in range(len(score)):
-        score[i] = flat(score[i])
-    return score
+    gate = []
+    for i in range(len(result)):
+        result[i] = flat(result[i])
+        score = calc_score(result[i], d_gate)
+        gate.append({'score': score, 'gate': dict(zip(n_gate, result[i]))})
+    return gate
