@@ -1,0 +1,16 @@
+//specify the connection status and gates selection of the logic circuit
+
+{
+
+//gate selection & inputs & output
+"nodes":["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT0", ...],
+
+//connection status
+"arcs":
+    [
+        {"from": 0, "to": 1},
+        {"from": 3, "to": 4},
+        ...
+    ]
+    
+}
