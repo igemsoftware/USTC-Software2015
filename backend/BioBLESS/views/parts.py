@@ -22,7 +22,14 @@ class PartsView(APIView):
         """
         deal with the POST method only
         """
+        pre_filter={}
+        if "id" in request.data:
+            pre_filter['id'] = request.data['id']
+        for key in request.data:
+            if key != "id":
+                pre_filter[key+"__contains"]=request.data[key]
+        queryset=parts.objects.filter(**pre_filter)
         ResopnseDict={}
-        ResopnseDict["data"]=request.data
+        ResopnseDict["data"]=queryset
         ResopnseDict["status"]="SUCCESS"
         return Response(ResopnseDict)

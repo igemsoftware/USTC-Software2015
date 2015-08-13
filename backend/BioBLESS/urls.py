@@ -23,7 +23,7 @@ from BioBLESS.biosys.test_samples import test_reaction_system_sample, test_parts
 urlpatterns = [
     url(r'^$', include('home.urls')),
     url(r'^aplusb/(\d+)/(\d+)/$', BioBLESS.views.views.aplusb),
-    url(r'^admin/', include(admin.site.urls)),
+    #url(r'^admin/', include(admin.site.urls)),
     url(r'^parts/', BioBLESS.views.parts.PartsView.as_view()),
     # biosys
     url(r'^biosys/test-reaction-system-sample/$', test_reaction_system_sample),
