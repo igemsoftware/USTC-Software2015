@@ -11,9 +11,9 @@ Create some biocircuits and calculate their scores
 >>> from biocircuit import circuit_score, api_circuit
 >>> from biogate import d_gate
 >>> expr = string2expr('10110101')
->>> circuit = create_circuit(l)
->>> scores = circuit_score(G, d_gate)
->>> api_for_front = api_circuit(G, scores)
+>>> circuit = create_circuit(expr)
+>>> scores = circuit_score(circuit, d_gate)
+>>> api_for_front = api_circuit(circuit, scores)
 """
 __author__ = 'E-Neo <e-neo@qq.com>'
 
