@@ -23,6 +23,9 @@ BioBLESS.device.stage.movable_stage = new PIXI.Container();
 */ 
 BioBLESS.device.stage.movable_stage._scale = 1;
 
+BioBLESS.device.get_gates_supsification = function(){
+	this.gates = $.getJSON("/misc/gates_supsification.json");
+};
 /** 
 * @author needsay
 * @constructor dev
@@ -74,6 +77,7 @@ this.prepare = function(devices, n){
 	this.chosen = false;
 	this._index = n;
 	this.input = [];
+	this.input_num = 0;
 	for(i = 0; i < devices[n].input.id.length; i++){
 		this.input[i] = {};
 		this.input[i].to_dev_index = [];
@@ -82,6 +86,7 @@ this.prepare = function(devices, n){
 		this.input[i].y = [];
 	};
 	this.output = [];
+	this.output_num = 0;
 	for(i = 0; i < devices[n].output.length; i++){
 		this.output[i] = {};
 		this.output[i].to_dev_index = [];
@@ -178,7 +183,7 @@ this.height_analysis = function(devices, n){
 			if(this.is_line[i][j]){
 				if(this.part_to_line[i] == this.part_to_line[j]){
 					l = 0;
-					for(k = i + 1; k < j; k++){
+					for(k = i; k < j; k++){
 						if(++this.part[k].up_max_height > l)
 						    l = this.part[k].up_max_height;
 					};
@@ -187,7 +192,7 @@ this.height_analysis = function(devices, n){
 				    };
 				}else{
 					l = 0;
-					for(k = i + 1; k < j; k++){
+					for(k = i; k < j; k++){
 						if(--this.part[k].down_max_height < l)
 						    l = this.part[k].down_max_height;
 					};
@@ -202,7 +207,7 @@ this.height_analysis = function(devices, n){
 			if(this.is_line[j][i]){
 				if(this.part_to_line[i] == this.part_to_line[j]){
 					l = 0;
-					for(k = i + 1; k < j; k++){
+					for(k = i + 1; k <= j; k++){
 						if(++this.part[k].up_max_height > l)
 						    l = this.part[k].up_max_height;
 					};
@@ -211,7 +216,7 @@ this.height_analysis = function(devices, n){
 				    };
 				}else{
 					l = 0;
-					for(k = i + 1; k < j; k++){
+					for(k = i + 1; k <= j; k++){
 						if(--this.part[k].down_max_height < l)
 						    l = this.part[k].down_max_height;
 					};
@@ -539,7 +544,34 @@ BioBLESS.device.devs_analysis = function(devices){
 		this.devs[i] = new dev();
 		this.devs[i].draw(devices, i);
 	};
-	for(i = 0; i < devices.length; i++){
+	
+	var gates = this.gates.responseJSON;
+	var g = [];
+	for(i = 0; i < gates.nodes.length; i++){
+		for(j = 0; j < devices.length; j++){
+			if(gates.nodes[i] === devices[j].name){
+				g[i] = j;
+				break;
+			}
+		};
+		if(j === devices.length)
+		    alert("Error - 1002!");
+	};
+	for(i = 0; i < gates.arcs.length; i++){
+		var from = gates.arcs[i].from;
+		var to = gates.arcs[i].to;
+		this.devs[g[from]].output[0].to_dev_index[this.devs[g[from]].output[0].to_dev_index.length] = g[to];
+		this.devs[g[from]].output[0].to_dev_input_index[this.devs[g[from]].output[0].to_dev_input_index.length] = this.devs[g[to]].input_num;
+		this.devs[g[to]].input[this.devs[g[to]].input_num].to_dev_index[0] = g[from];
+		this.devs[g[to]].input[this.devs[g[to]].input_num].to_dev_output_index[0] = 0;
+		this.devs[g[to]].input_num++;
+	}
+	
+	
+	
+	
+	
+	/*for(i = 0; i < devices.length; i++){
 		for(j = 0; j < devices[i].output.length; j++){
 			for(k = 0; k < devices.length; k++){
 				for(l = 0; l < devices[k].input.id.length; l++){
@@ -552,7 +584,7 @@ BioBLESS.device.devs_analysis = function(devices){
 				};
 			};
 		};
-	};
+	};*/
 	this.poi = [];
 	this.poi[0] = [];
 	for(i = 0; i < devices.length; i++){
@@ -671,7 +703,6 @@ BioBLESS.device.draw = function(devices, n){
 		var i, j, k, l, temp;
 		this.devs_analysis(devices);
 		this.draw_lines_between_devices();
-		
 		
 		
 		

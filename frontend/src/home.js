@@ -122,9 +122,10 @@ var waitForDoubleClick = false;
 BioBLESS.home.onDragStart_e = function(event) {
     if(waitForDoubleClick){
         var a=$.getJSON("/misc/devices.json");
+		BioBLESS.device.get_gates_supsification();
         var that = this;
         var next = function() {
-            if(a.responseJSON){
+            if(a.responseJSON && BioBLESS.device.gates.responseJSON){
                 BioBLESS.device.draw(a.responseJSON, that.parent.Index);
                 BioBLESS.change_stage(BioBLESS.device);
             }else
