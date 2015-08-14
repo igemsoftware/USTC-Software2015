@@ -1,0 +1,308 @@
+[
+    [
+	{ 
+            "id": , 
+            "name": "NOT6", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7", "d8"]]
+            }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p7"], 
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"},   //此物质抑制第二条链上的Promoter   
+		{"id":"e3", "id1":"p100", "id2":"d2", "type":"inh"}, //输入物质抑制RBS     
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ],
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT7", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7"], ["d8", "d9", "d10", "d11"]], 
+		
+	    }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p10"], 
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"act"},   //上物质激活第二条链上的Promoter   
+		{"id":"e3", "id1":"d6", "id2":"p6", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p6", "id2":"d9", "type":"lock"},   //上物质lock第三条链上的RBS  
+		{"id":"e5", "id1":"p100", "id2":"d2", "type":"inh"}, //输入物质抑制第一条链上的RBS     
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ],
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT5", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "",
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7"], ["d8", "d9", "d10", "d11"]], 
+		
+	    }, 
+            "input": {
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p10"], //第三条链上的coding sequence
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"},   //上物质抑制第二条链上的Promoter   
+		{"id":"e3", "id1":"d6", "id2":"p6", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p6", "id2":"d9", "type":"lock"},   //上物质lock第三条链上的RBS  
+		{"id":"e5", "id1":"p100", "id2":"d5", "type":"inh"}, //输入物质抑制第二条链上的Promoter     
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ], 
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT4", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7", "d8"], ["d9", "d10", "d11", "d12"]], 
+		
+	    }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p11"], //第三条链上的coding sequence
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"},   //上物质抑制第二条链上的Promoter   
+		{"id":"e3", "id1":"d7", "id2":"p7", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p7", "id2":"d9", "type":"inh"},   //上物质抑制第三条链上的RBS  
+		{"id":"e5", "id1":"p100", "id2":"d5", "type":"inh"}, //输入物质抑制第二条链上的Promoter     
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ],
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT2", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7", "d8"], ["d9", "d10", "d11", "d12"]], 
+		
+	    }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p11"], //第三条链上的coding sequence
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"},   //上物质抑制第二条链上的Promoter   
+		{"id":"e3", "id1":"d7", "id2":"p7", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p7", "id2":"d9", "type":"act"},   //上物质激活第三条链上的RBS  
+		{"id":"e5", "id1":"p100", "id2":"d2", "type":"act"}, //输入物质激活第一条链上的RBS    
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ],
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT3", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7"], ["d8", "d9", "d10", "d11"]], 
+		
+	    }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p10"], //第三条链上的coding sequence
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"},   //上物质抑制第二条链上的Promoter   
+		{"id":"e3", "id1":"d6", "id2":"p6", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p6", "id2":"d9", "type":"key"},   //上物质key第三条链上的RBS  
+		{"id":"e5", "id1":"p100", "id2":"d5", "type":"act"}, //输入物质激活第二条链上的Promoter     
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ],
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT1", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7", "d8"], ["d9", "d10", "d11"], ["d12", "d13", "d14", "d15"]], 
+		
+	    }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p14"], //第三条链上的coding sequence
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"act"},   //上物质激活第二条链上的Promoter   
+		{"id":"e3", "id1":"d7", "id2":"p7", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p7", "id2":"d9", "type":"inh"},   //上物质抑制第三条链上的Promoter
+		{"id":"e5", "id1":"d10", "id2":"p10", "type":"trans"}, //第三条链上coding sequence 转录翻译成物质 
+		{"id":"e6", "id1":"p10", "id2":"d13", "type":"key"},   //上物质key第四条链上的RBS
+		{"id":"e7", "id1":"p100", "id2":"d5", "type":"act"}, //输入物质激活第一条链上的RBS    
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    {"from":"d1", "to":"d2"}, 
+		] 
+            } 
+	},
+    ],
+    [ 
+	{ 
+            "id": , 
+            "name": "NOT0", 
+            "icon": { 
+		"text": "≥1", 
+		"inverter": false 
+            }, 
+            "type": { 
+		"type": null, 
+		"function": "", 
+		"chassis": "", 
+		"standard": "", 
+		"contributor": "" 
+            }, 
+            "parts": { 
+		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7"], ["d8", "d9", "d10", "d11"], ["d12", "d13", "d14", "d15"]]
+		
+	    }, 
+            "input": { 
+		"id":["p100"], //输入物质
+		
+	    }, 
+            "output": ["p14"], //第三条链上的coding sequence
+            "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna 
+		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, //第一条链上coding sequence 转录翻译成物质
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"act"},   //上物质激活第二条链上的Promoter   
+		{"id":"e3", "id1":"d6", "id2":"p6", "type":"trans"}, //第二条链上coding sequence 转录翻译成物质 
+		{"id":"e4", "id1":"p6", "id2":"d9", "type":"lock"},   //上物质lock第三条链上的RBS
+		{"id":"e5", "id1":"d10", "id2":"p10", "type":"trans"}, //第三条链上coding sequence 转录翻译成物质 
+		{"id":"e6", "id1":"p10", "id2":"d12", "type":"act"},   //上物质激活第四条链上的Promoter
+		{"id":"e7", "id1":"p100", "id2":"d5", "type":"act"} //输入物质激活第一条链上的RBS    
+            ], 
+            "unavailable":{ 
+		"posloc": [ 
+                    
+		] 
+            } 
+	}
+    ]
+]
+
