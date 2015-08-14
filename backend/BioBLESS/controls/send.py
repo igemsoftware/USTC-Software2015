@@ -7,6 +7,7 @@ from django.core.servers.basehttp import FileWrapper
 
 
 def warp(path, content_type='application/octet-stream'):
+
     """
     Provider download for a large file
     :param path: The path of the local file
