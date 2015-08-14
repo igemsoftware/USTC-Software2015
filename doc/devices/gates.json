@@ -1,19 +1,8 @@
 [
-    [
 	{ 
-            "id": , 
-            "name": "NOT6", 
-            "icon": { 
-		"text": "≥1", 
-		"inverter": false 
-            }, 
-            "type": { 
-		"type": null, 
-		"function": "", 
-		"chassis": "", 
-		"standard": "", 
-		"contributor": "" 
-            }, 
+            "id": "NOT6",
+            "input": ["p100"],
+            "output": ["p7"], 
             "parts": { 
 		"id":[["d1", "d2", "d3", "d4"], ["d5", "d6", "d7", "d8"]],
 		"type": {
@@ -27,23 +16,19 @@
 		    "d8": "Terminator"
 		}
             }, 
-            "input": { 
-		"id":["p100"], 
-	    }, 
-            "output": ["p7"], 
             "map": [    
 		{"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, 
-		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"},   
-		{"id":"e3", "id1":"p100", "id2":"d2", "type":"inh"}, 
-            ], 
-            "unavailable":{ 
-		"posloc": [ 
-                    {"from":"d1", "to":"d2"}, 
-		] 
-            } 
+		{"id":"e2", "id1":"p3", "id2":"d5", "type":"inh"}, 
+		{"id":"e3", "id1":"p100", "id2":"d2", "type":"inh"}
+            ],
+            "type": { 
+		"type": null, 
+		"function": null, 
+		"chassis": null, 
+		"standard": null, 
+		"contributor": null 
+            }
 	},
-    ],
-    [ 
 	{ 
             "id": , 
             "name": "NOT7", 
