@@ -9,4 +9,5 @@ numpy
 matplotlib
 markdown
 djangorestframework
+django-rest-swagger
 django-filter

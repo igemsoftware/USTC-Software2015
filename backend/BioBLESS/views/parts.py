@@ -19,8 +19,9 @@ class PartsSerializer(serializers.Serializer):
     # sequence = serializers.CharField()
     # type = serializers.CharField()
 class PartsView(APIView):
-    """
-    This function return frontend parts info.
+    """This URI return frontend parts info in the database.
+
+    Usage:
     """
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer, )

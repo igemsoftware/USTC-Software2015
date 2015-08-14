@@ -11,10 +11,10 @@ install:
     - pip install --upgrade pip
     # - pip install numpy :: Numpy is OK
     # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
-    - pip install -v scipy | grep ^.*building
+    #- pip install -v scipy | grep ^.*building
     # It will take 4 minutes
-    - pip install matplotlib
-    - pip install pylint
+    #- pip install matplotlib
+    #- pip install pylint
     - pip install -r requirements.txt
     
     - node -v
@@ -23,7 +23,7 @@ install:
 script:
     - cd ../backend
     - pwd
-    - pylint --load-plugins pylint_django --errors-only backend
+    - pylint --load-plugins pylint_django --errors-only BioBLESS
     - python manage.py migrate
     - python manage.py test test
     - cd ../frontend
