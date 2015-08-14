@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+""""""
 __author__ = 'E-Neo <e-neo@qq.com>'
 
 # Maybe pyeda is better in the future, but pyeda contains some
@@ -11,7 +11,10 @@ import networkx as nx
 
 
 def string2truthtable(string):
-    """convert string to truthtable"""
+    """Convert string to truthtable.
+
+
+    """
     ones = []
     zeros = []
     dc = []
@@ -26,13 +29,13 @@ def string2truthtable(string):
 
 
 def string2expr(string):
-    """convert string to Boolean expression"""
+    """Convert string to Boolean expression."""
     f_tt = string2truthtable(string)
     return qm.qm(f_tt[0], f_tt[1], f_tt[2])
 
 
 def get_gate_not(expr):
-    """get the index of not gates"""
+    """circuitet the index of not gates."""
     not_list = []
     for i in range(len(expr)):
         for j in expr:
@@ -43,7 +46,8 @@ def get_gate_not(expr):
 
 
 def get_node_num(expr):
-    """get the number of nodes
+    """circuitet the number of nodes.
+
     return a tuple: (var_num, not_num, and_num, or_num)"""
     var_num = len(expr[0])
     not_num = len(get_gate_not(expr))
@@ -55,9 +59,10 @@ def get_node_num(expr):
 
 
 def create_circuit(expr):
-    """create a logic circuit from a Boolean expression
-    return a networkx.DiGraph"""
-    circuit = nx.DiGraph()
+    """Create a logic circuit from a Boolean expression
+
+    return a networkx.Dicircuitraph"""
+    circuit = nx.Dicircuitraph()
     not_list = get_gate_not(expr)
     edges = []
     node_num = get_node_num(expr)
@@ -77,16 +82,14 @@ def create_circuit(expr):
             edges.append((and_input.pop(), 'and%d' % andx))
             and_input.append('and%d' % andx)
             andx += 1
-        else:
-            or_input.append(and_input[0])
+        or_input.append(and_input[0])
     orx = 0
     while len(or_input) > 1:
         edges.append((or_input.pop(), 'or%d' % orx))
         edges.append((or_input.pop(), 'or%d' % orx))
         or_input.append('or%d' % orx)
         orx += 1
-    else:
-        edges.append((or_input[0], 'out'))
+    edges.append((or_input[0], 'out'))
     circuit.add_edges_from(edges)
     return circuit
 
@@ -107,16 +110,18 @@ def calc_score(l_gate, d_gate):
 
 
 # d_gate = {'not': {'NOT0': (0, 3, 0, 1), 'NOT1': (1, 2, 1, 0), ...}, ...}
-def circuit_score(G, d_gate):
-    """return scores of the circuit"""
-    n_gate = G.nodes()
+def circuit_score(circuit, d_gate):
+    """return scores of the circuit
+
+    """
+    n_gate = circuit.nodes()
     n_gate.pop(n_gate.index('out'))
     for i in n_gate:
         if i[0] == 'v':
             n_gate.pop(n_gate.index(i))
     bio_not = list(d_gate['not'].keys())
     bio_and = list(d_gate['and'].keys())
-    bio_or  = list(d_gate['or'].keys())
+    bio_or = list(d_gate['or'].keys())
     result = []
     if n_gate[0][0] == 'n':
         result = bio_not
@@ -140,8 +145,9 @@ def circuit_score(G, d_gate):
     return gate
 
 
-def api_circuit(G, gate):
-    l_node = G.nodes()
+def api_circuit(circuit, gate):
+    """api for front"""
+    l_node = circuit.nodes()
     l_node.pop(l_node.index('out'))
     no_such_list = []
     for i in l_node:
@@ -157,7 +163,7 @@ def api_circuit(G, gate):
         nodes.append('OUT')
         for j in range(len(l_node)):
             nodes.append(i['gate'][l_node[j]])
-        for j in G.edges():
+        for j in circuit.edges():
             arcs.append({'from': l.index(j[0]), 'to': l.index(j[1])})
         graph.append({'nodes': nodes, 'arcs': arcs, 'score': i['score']})
     return graph
