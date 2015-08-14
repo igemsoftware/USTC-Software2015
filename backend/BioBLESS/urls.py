@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^parts/', BioBLESS.views.parts.PartsView.as_view()),
     # biosys
     url(r'^biosys/test-reaction-system-sample/$', test_reaction_system_sample),
-    url(r'^biosys/test-parts-system-sample/$', test_parts_system_sample)
+    url(r'^biosys/test-parts-system-sample/$', test_parts_system_sample),
+    url(r'^docs/', include('rest_framework_swagger.urls')),
 ]
