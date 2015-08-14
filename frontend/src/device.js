@@ -632,7 +632,7 @@ BioBLESS.device.devs_analysis = function(devices){
 	var x = 0;
 	for(i = 0; i < this.row.length; i++){
 		for(j = 0; j < this.poi[i].length; j++){
-			this.poi[i][j].stage.position.x = x;
+			this.poi[i][j].stage.position.x = x + j % 2 * 20;
 			this.poi[i][j].stage.position.y = (j + 1) / (this.poi[i].length + 1) * this.devs_height - this.poi[i][j].stage_h / 2;
 			this.stage.movable_stage.addChild(this.poi[i][j].stage);
 		};
@@ -707,10 +707,11 @@ BioBLESS.device.draw = function(devices, n){
 		
 		
 		
-		
-		this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = this.row[0].width / this.devs_width;
-		this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * this.row[0].width / this.devs_width) / 2; 
-		this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * this.row[0].width / this.devs_width) / 2; 
+		var t1 = this.row[0].width / this.devs_width;
+		var t2 = BioBLESS.height / this.devs_height;
+		this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (t1 < t2)? t1 : t2;
+		this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2)) / 2; 
+		this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * ((t1 < t2)? t1 : t2)) / 2; 
 		
 	}else{
 	    this.stage.movable_stage._scale = 1;
