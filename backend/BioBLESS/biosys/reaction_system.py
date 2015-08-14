@@ -205,7 +205,7 @@ class reaction_system(object):
                                    single_reactant)).prod()
 
         def intensity_list(reactant, current):
-            return map(lambda single_reactant: intensity(single_reactant, current), reactant)
+            return numpy.array(map(lambda single_reactant: intensity(single_reactant, current), reactant))
 
         def initialize(init_list):
             for single_init in init_list:
@@ -217,7 +217,7 @@ class reaction_system(object):
         initialize(initial)
         time = 0
         self.record = [[time, current.tolist()]]
-        reactionnumber = self.reaction_number
+        reaction_number = self.reaction_number
         while time < stop_time:
             intensities = intensity_list(self.reactant_data, current)
             possibility = intensities * self.constant
@@ -225,8 +225,8 @@ class reaction_system(object):
             if possibility_sum == 0:
                 break
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
-            next_reaction = numpy.random.choice(numpy.arange(reactionnumber),
-                                                p=[i / float(possibility_sum) for i in possibility])
+            next_reaction = numpy.random.choice(numpy.arange(reaction_number),
+                                                p=[i / possibility_sum for i in possibility])
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp[0]] -= species_temp[1]
             for species_temp in self.product_data[next_reaction]:
@@ -235,7 +235,7 @@ class reaction_system(object):
             self.record.append([time + 0, current.tolist()])
         return self.record
 
-    def show_record(self, list):
+    def show_record(self, plot_list=None):
         """
         Show the graph of the record simulated
         Parameters:
@@ -243,15 +243,27 @@ class reaction_system(object):
         Returns:
             none
         """
-        list = map(lambda single_species: self.species_name_inverse[single_species], list)
-        for species in list:
-            pylab.plot(map(lambda x: x[0], self.record), map(lambda x: x[1][species], self.record))
+        plot_list = [self.species_name_inverse[single_species] for single_species in plot_list] \
+            if plot_list else self.species_name_inverse.values()
+
+        for species in plot_list:
+            pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         # !!! TODO: Something error HERE, pylab can only show once !!!
         # pylab.ion()
         pylab.show()
-        pylab.close()
 
-    def show_simulate(self, initial, stop_time, list):
+    @property
+    def record_list(self, plot_list=None):
+        """
+        Return the list of the record simulated
+        Parameters:
+            none
+        Returns:
+            none
+        """
+        return self.species_name_inverse, [(x[0], x[1]) for x in self.record]
+
+    def show_simulate(self, initial, stop_time, list_plot):
         """
         Simulate and show the graph
         Parameters:
@@ -261,4 +273,4 @@ class reaction_system(object):
             none
         """
         self.simulate(initial, stop_time)
-        self.show_record(list)
+        self.show_record(list_plot)
