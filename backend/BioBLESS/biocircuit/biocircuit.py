@@ -1,19 +1,69 @@
-#!/usr/bin/env python
-""""""
+"""Functions to create circuit and calculate scores.
+
+There are 4 most useful functions: string2expr(), create_circuit(),
+circuit_score(), api_circuit()
+
+Examples
+--------
+Create some biocircuits and calculate their scores
+
+>>> from biocircuit import string2expr, create_circuit
+>>> from biocircuit import circuit_score, api_circuit
+>>> from biogate import d_gate
+>>> expr = string2expr('10110101')
+>>> circuit = create_circuit(l)
+>>> scores = circuit_score(G, d_gate)
+>>> api_for_front = api_circuit(G, scores)
+"""
 __author__ = 'E-Neo <e-neo@qq.com>'
 
 # Maybe pyeda is better in the future, but pyeda contains some
 # bugs by far(0.28.0). Espresso Algorithm is better than Q-M
 # Algorithm
 import qm
+
 import numpy as np
 import networkx as nx
 
 
 def string2truthtable(string):
-    """Convert string to truthtable.
+    """Convert string to truthtable which qm can recognize.
 
+    Parameters
+    ----------
+    string : string
+        A string of zeros and ones representing a truthtable.
 
+    Returns
+    -------
+    ones : list
+        Iterable of integer minterms.
+
+    zeros : list
+        Iterable of integer maxterms.
+
+    dc : list
+        Iterable of integers specifying don't-care terms
+
+    Examples
+    --------
+    A truthtable:
+    |---+---+---+-----|------+-------+----|
+    | A | B | C | out | ones | zeros | dc |
+    |---+---+---+-----|------+-------+----|
+    | 0 | 0 | 0 |  1  |  0   |       |    |
+    | 0 | 0 | 1 |  0  |      |   1   |    |
+    | 0 | 1 | 0 |  1  |  2   |       |    |
+    | 0 | 1 | 1 |  1  |  3   |       |    |
+    | 1 | 0 | 0 |  0  |      |   4   |    |
+    | 1 | 0 | 1 |  1  |  5   |       |    |
+    | 1 | 1 | 0 |  0  |      |   6   |    |
+    | 1 | 1 | 1 |  -  |      |       | 7  |
+    |---+---+---+-----|------+-------+----|
+    string = '1011010-'
+    ones = [0, 2, 3, 5]
+    zeros = [1, 4, 6]
+    dc = [7]
     """
     ones = []
     zeros = []
@@ -29,13 +79,36 @@ def string2truthtable(string):
 
 
 def string2expr(string):
-    """Convert string to Boolean expression."""
+    """Compute minimal two-level sum-of-products form.
+
+    Parameters
+    ----------
+    string : string
+        A string of zeros and ones representing a truthtable.
+
+    Returns
+    -------
+    expr : list
+        Minimal two-level SOP form.
+    """
     f_tt = string2truthtable(string)
-    return qm.qm(f_tt[0], f_tt[1], f_tt[2])
+    expr = qm.qm(f_tt[0], f_tt[1], f_tt[2])
+    return expr
 
 
 def get_gate_not(expr):
-    """circuitet the index of not gates."""
+    """Get the index of not gates.
+
+    Parameters
+    ----------
+    expr : list
+        Minimal two-level SOP form.
+
+    Returns
+    -------
+    not_list : list
+        Index of the not gates in the Boolean expression.
+    """
     not_list = []
     for i in range(len(expr)):
         for j in expr:
@@ -46,9 +119,27 @@ def get_gate_not(expr):
 
 
 def get_node_num(expr):
-    """circuitet the number of nodes.
+    """Get the number of nodes.
 
-    return a tuple: (var_num, not_num, and_num, or_num)"""
+    Parameters
+    ----------
+    expr : list
+        Minimal two-level SOP form.
+
+    Returns
+    -------
+    var_num : int
+        Number of input variables.
+
+    not_num : int
+        Number of not gates.
+
+    and_num : int
+        Number of and gates.
+
+    or_num : int
+        Number of or gates.
+    """
     var_num = len(expr[0])
     not_num = len(get_gate_not(expr))
     and_num = 0
@@ -59,10 +150,23 @@ def get_node_num(expr):
 
 
 def create_circuit(expr):
-    """Create a logic circuit from a Boolean expression
+    """Create a logic circuit from a Boolean expression.
 
-    return a networkx.Dicircuitraph"""
-    circuit = nx.Dicircuitraph()
+    Parameters
+    ----------
+    expr : list
+        Minimal two-level SOP form.
+
+    Returns
+    -------
+    circuit : DiGraph
+        inputs: v1, v2, v3, ...
+        not: not0, not1, ...
+        and: and0, and1, ...
+        or: or0, or1, ...
+        output: out
+    """
+    circuit = nx.DiGraph()
     not_list = get_gate_not(expr)
     edges = []
     node_num = get_node_num(expr)
@@ -95,24 +199,57 @@ def create_circuit(expr):
 
 
 def calc_score(l_gate, d_gate):
-    """return a score"""
+    """Return a score.
+
+    Parameters
+    ----------
+    l_gate : list
+        A list of the nodes of the biocircuit.
+
+    d_gate : dict
+        A dict of biogates and their 4 parameters. It should be
+        stored in the file biogate.py. It looks like:
+        {'not': {'NOT0': (0, 3, 0, 1), 'NOT1': (1, 2, 1, 0), ...}, ...}
+
+    Returns
+    -------
+    score : float
+        The score of the biocircuit.
+    """
     para = np.array([0, 0, 0, 0])
     for i in l_gate:
         if i[0] == 'N':
-            t = d_gate['not'][i]
+            tmp = d_gate['not'][i]
         elif i[0] == 'A':
-            t = d_gate['and'][i]
+            tmp = d_gate['and'][i]
         elif i[0] == 'O':
-            t = d_gate['or'][i]
-        para += np.array(t)
-    s = 2**(para[0]-1) + 2**(para[1]-1) + para[2] + para[3]
-    return s
+            tmp = d_gate['or'][i]
+        para += np.array(tmp)
+    score = 2**(para[0]-1) + 2**(para[1]-1) + para[2] + para[3]
+    return score
 
 
-# d_gate = {'not': {'NOT0': (0, 3, 0, 1), 'NOT1': (1, 2, 1, 0), ...}, ...}
 def circuit_score(circuit, d_gate):
-    """return scores of the circuit
+    """Return scores of the circuit.
 
+    Parameters
+    ----------
+    circuit : DiGraph
+        inputs: v1, v2, v3, ...
+        not: not0, not1, ...
+        and: and0, and1, ...
+        or: or0, or1, ...
+        output: out
+
+    d_gate : dict
+        A dict of biogates and their 4 parameters. It should be
+        stored in the file biogate.py.
+
+    Returns
+    -------
+    gate : dict
+        It looks like:
+        {'score': 2.5, 'gate': {'v0': ''}}
     """
     n_gate = circuit.nodes()
     n_gate.pop(n_gate.index('out'))
@@ -129,12 +266,12 @@ def circuit_score(circuit, d_gate):
         result = bio_and
     elif n_gate[0][0] == 'o':
         result = bio_or
-    for n in range(1, len(n_gate)):
-        if  n_gate[n][0] == 'n':
+    for k in range(1, len(n_gate)):
+        if  n_gate[k][0] == 'n':
             result = [[i, j] for i in result for j in bio_not]
-        elif n_gate[n][0] == 'a':
+        elif n_gate[k][0] == 'a':
             result = [[i, j] for i in result for j in bio_and]
-        elif n_gate[n][0] == 'o':
+        elif n_gate[k][0] == 'o':
             result = [[i, j] for i in result for j in bio_or]
     flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
     gate = []
@@ -146,7 +283,27 @@ def circuit_score(circuit, d_gate):
 
 
 def api_circuit(circuit, gate):
-    """api for front"""
+    """Api for front.
+
+    Parameters
+    ----------
+    circuit : graph
+        inputs: v1, v2, v3, ...
+        not: not0, not1, ...
+        and: and0, and1, ...
+        or: or0, or1, ...
+        output: out
+
+    gate : dict
+        It looks like:
+        {'score': 2.5, 'gate': {'v0': ''}}
+
+    Returns
+    -------
+    graph : list
+        A list of dicts, each dicts looks like:
+        {'nodes': [], 'arcs': {'from': 0, 'out': 1}, 'score': 2.5}
+    """
     l_node = circuit.nodes()
     l_node.pop(l_node.index('out'))
     no_such_list = []
