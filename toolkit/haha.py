@@ -55,7 +55,7 @@ def point2line(G, t):
     return H.nodes()
 
 
-def line_distence(l1, l2):
+def line_distance(l1, l2):
     """return the distence between two lines"""
     d_min = np.linalg.norm(np.array(l1[0]) - np.array(l2[0]))
     for i in l1:
