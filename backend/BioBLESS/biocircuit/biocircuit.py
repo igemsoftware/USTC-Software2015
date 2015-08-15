@@ -7,9 +7,6 @@ Examples
 --------
 Create some biocircuits and calculate their scores
 
->>> from biocircuit import string2expr, create_circuit
->>> from biocircuit import circuit_score, api_circuit
->>> from biogate import d_gate
 >>> expr = string2expr('10110101')
 >>> circuit = create_circuit(expr)
 >>> scores = circuit_score(circuit, d_gate)
@@ -311,9 +308,9 @@ def api_circuit(circuit, gate):
         if i[0] == 'v':
             no_such_list.append(l_node.pop(l_node.index(i)))
     graph = []
-    l = [i for i in no_such_list]
-    l.append('out')
-    l.extend([i for i in l_node])
+    l_dic = [i for i in no_such_list]
+    l_dic.append('out')
+    l_dic.extend([i for i in l_node])
     for i in gate:
         arcs = []
         nodes = [i.replace('v', 'INPUT') for i in no_such_list]
@@ -321,6 +318,7 @@ def api_circuit(circuit, gate):
         for j in range(len(l_node)):
             nodes.append(i['gate'][l_node[j]])
         for j in circuit.edges():
-            arcs.append({'from': l.index(j[0]), 'to': l.index(j[1])})
+            arcs.append({'from': l_dic.index(j[0]), 'to': l_dic.index(j[1])})
         graph.append({'nodes': nodes, 'arcs': arcs, 'score': i['score']})
+    graph = sorted(graph, key=lambda x: x['score'])
     return graph
