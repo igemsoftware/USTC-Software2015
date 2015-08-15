@@ -322,4 +322,9 @@ def api_circuit(circuit, gate):
             arcs.append({'from': l_dic.index(j[0]), 'to': l_dic.index(j[1])})
         graph.append({'nodes': nodes, 'arcs': arcs, 'score': i['score']})
     graph = sorted(graph, key=lambda x: x['score'])
+    if len(graph) > 10:
+        tmp = []
+        for i in range(0, len(graph), len(graph) // 10):
+            tmp.append(graph[i])
+        graph = tmp
     return graph
