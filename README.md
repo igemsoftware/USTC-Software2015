@@ -28,11 +28,13 @@
 
 ### Unit Test
 you could run
+```
     ./manage.py test BioBLESS
+```
 for unit test
 
 ### Rest API doc
-    in the URI `/docs`
+in the URI `/docs`
 
 ---
 # Frontend
