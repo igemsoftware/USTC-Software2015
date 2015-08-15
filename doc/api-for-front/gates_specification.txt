@@ -2,42 +2,42 @@
 
 {
 
-//gate selection & inputs & output
-"nodes": ["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT0", ...],
+    //gate selection & inputs & output
+    "nodes": ["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT0", ...],
 
-//connection status
-"arcs": [
+        //connection status
+        "arcs": [
         {"from": 0, "to": 1},
         {"from": 4, "to": 3},
         ...
-],
+        ],
 
-"score": float, // back -> front
-"system_parameter":
-{
-    "key":float,
-
-}
-
-"simulation_parameters": [
-    {
-        "e1": {
-            "(name1)": float,
-            "(name2)": float,
-            ...
-        },
-        "e2": ...,
-        "device_parameter":{
+        "score": float, // back -> front
+        "system_parameter":
+        {
             "key":float,
 
         }
-        "lizhi":{"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
-    },
-    {...},
-    null,
-    {...},
-    null,
-    ...
-] // front -> end
+
+        "simulation_parameters": [
+        {
+            "e1": {
+                "(name1)": float,
+                "(name2)": float,
+                ...
+            },
+            "e2": ...,
+            "device_parameter":{
+                "key":float,
+
+            }
+            "lizhi":{"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
+        },
+        {...},
+        null,
+        {...},
+        null,
+        ...
+        ] // front -> end
 
 }

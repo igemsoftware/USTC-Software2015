@@ -26,13 +26,12 @@ BioBLESS.init = function() {
         }else
             setTimeout(next, 50);
     };
+	BioBLESS.stage.fps = new PIXI.Text("FPS: " + fps);
+	BioBLESS.stage.fps.x = BioBLESS.width - 120;
+	BioBLESS.stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {
-        var fps_obj = new PIXI.Text("FPS: " + fps);
-        fps_obj.x = 150;
-        fps_obj.y = 30;
-        BioBLESS.stage.removeChild(BioBLESS.stage.fps);
-        BioBLESS.stage.fps = fps_obj;
-        BioBLESS.stage.addChild(fps_obj);
+        BioBLESS.stage.fps.text = "FPS: " + fps;
+        BioBLESS.stage.addChild(BioBLESS.stage.fps);
     }, 1000);
     setTimeout(next, 1);
     
@@ -79,27 +78,13 @@ BioBLESS.init = function() {
         var d = 0;
         //var x = 1;
         e = e || window.event;
-        
         if(e.wheelDelta){//IE/Opera/Chrome
             d = e.wheelDelta;
         }else if(e.detail){//Firefox
             d = e.detail;
         }
-
-        if(BioBLESS.get_current_plugin_stage() === null)
-            return;
-        if(d > 0){
-            if(BioBLESS.get_current_plugin_stage().movable_stage._scale > 3)
-                return;
-            BioBLESS.get_current_plugin_stage().movable_stage._scale *= 1.1;
-        
-        }else{
-            if(BioBLESS.get_current_plugin_stage().movable_stage._scale < 0.1)
-                return;
-            BioBLESS.get_current_plugin_stage().movable_stage._scale /= 1.1;
-        }
+        BioBLESS.scroll_function(d);
     };
-    /*注册事件*/
     if(document.addEventListener){
         document.addEventListener('DOMMouseScroll',scrollFunc,false);
     }//W3C
@@ -108,4 +93,6 @@ BioBLESS.init = function() {
     BioBLESS.prepare_navigation();
     BioBLESS.stage.addChild(BioBLESS.navigation);
     BioBLESS.stage.addChild(BioBLESS.navigation_title);
+	
+	
 };

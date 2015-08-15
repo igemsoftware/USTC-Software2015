@@ -78,6 +78,8 @@ this.prepare = function(devices, n){
 	this._index = n;
 	this.input = [];
 	this.input_num = 0;
+	this.up_height_input_num = [];
+	this.down_height_input_num = [];
 	for(i = 0; i < devices[n].input.id.length; i++){
 		this.input[i] = {};
 		this.input[i].to_dev_index = [];
@@ -174,7 +176,7 @@ this.line_analysis = function(devices, n){
 */ 
 this.height_analysis = function(devices, n){
 	var i, j, k, l, Num, s;//备用变量
-	this.protein_height = new Array(this.parts_num);//蛋白质节点的相对高度,0表示该主线节点不生成蛋白质
+	this.protein_height = [];//蛋白质节点的相对高度,0表示该主线节点不生成蛋白质
 	for(i = 0; i < this.parts_num; i++)
 	    this.protein_height[i] = 0;
 	for(Num = 1; Num < this.parts_num; Num++){
@@ -326,10 +328,10 @@ this.draw = function(devices, n){
     var texture = PIXI.Texture.fromImage("/misc/test.png");
 	
 	var parts = new Array();
-	var BBAs = new Array();
+	/*var BBAs = new Array();
 	for(i = 0; i < devices[n].posloc.length; i++){
 		BBAs[this.to_part[devices[n].posloc[i].l1][parseInt(devices[n].posloc[i].from.substring(1)) - 1]] = new PIXI.Graphics();
-	};
+	};*/
 	var graphics = new PIXI.Graphics();
 	
 	graphics.lineStyle(8, 0x00ff55, 1);
@@ -340,7 +342,7 @@ this.draw = function(devices, n){
 			parts[this.to_part[i][j]] = BioBLESS.IDdraw.drawElement(this.get_id());
 			parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
 			parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
-			if(BBAs[this.to_part[i][j]]){
+			/*if(BBAs[this.to_part[i][j]]){
 			    BBAs[this.to_part[i][j]].lineStyle(0);
 				BBAs[this.to_part[i][j]].beginFill(0x00ffff);
 				BBAs[this.to_part[i][j]].drawRect(parts[this.to_part[i][j]].position.x + nodeW, this.stage_h / 2.0 - 5, 50, 10);
@@ -350,7 +352,7 @@ this.draw = function(devices, n){
 				BBAs[this.to_part[i][j]].on('mousedown', function(){
 					    alert("");
 				    });
-			};
+			};*/
 		};
 		Num += devices[n].lines.id[i].length;
 		graphics.lineTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
@@ -432,37 +434,45 @@ this.draw = function(devices, n){
             parts[k].protein.Text = new PIXI.Text(devices[n].map[i].id1);
 			parts[k].protein.Text.anchor.x = 0.5;
 			parts[k].protein.Text.anchor.y = 0.5;
+			var height = this.protein_height[k];
+			var input_num;
+			if(height > 0){
+				input_num = this.up_height_input_num;
+			}else{
+				input_num = this.down_height_input_num;
+				height = 0 - height;
+			};
+			if(input_num[height] === undefined)
+			    input_num[height] = 0;
+			var ind2 = input_num[height]++ * 10;
+			
 			if(k < l){
 				graphics.moveTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
-				graphics.lineTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind);
+				graphics.lineTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind + ind2);
 				if(devices[n].map[i].type == 'inh'){
 					graphics.moveTo(parts[k].protein.position.x + nodeW + 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
 					graphics.lineTo(parts[k].protein.position.x + nodeW + 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
 				}else{
-					graphics.moveTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 7);
-					graphics.lineTo(parts[k].protein.position.x + nodeW + 17, parts[k].protein.position.y + nodeH / 2.0 + 18);
-					graphics.lineTo(parts[k].protein.position.x + nodeW + 33, parts[k].protein.position.y + nodeH / 2.0 + 18);
+					this.draw_arrow(graphics, 6, parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 7, "up");
 				}
 				
 				
 				
 				parts[k].protein.Text.position.x = parts[k].protein.position.x + nodeW + 25;
-				parts[k].protein.Text.position.y =  parts[k].protein.position.y + nodeH / 2.0 + 55 - ind;
+				parts[k].protein.Text.position.y =  parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
 				
 			}else{
 				graphics.moveTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
-				graphics.lineTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind);
+				graphics.lineTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind + ind2);
 				if(devices[n].map[i].type == 'inh'){
 					graphics.moveTo(parts[k].protein.position.x - 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
 					graphics.lineTo(parts[k].protein.position.x - 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
 				}else{
-					graphics.moveTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 7);
-					graphics.lineTo(parts[k].protein.position.x - 17, parts[k].protein.position.y + nodeH / 2.0 + 18);
-					graphics.lineTo(parts[k].protein.position.x - 33, parts[k].protein.position.y + nodeH / 2.0 + 18);
+					this.draw_arrow(graphics, 6, parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 7, "up");
 				}
 				
 				parts[k].protein.Text.position.x = parts[k].protein.position.x - 25;
-				parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind;
+				parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
 			};
 			
 			for(var p = 0; p < devices[n].input.id.length; p++){
@@ -474,6 +484,11 @@ this.draw = function(devices, n){
 		}else{
 			for(j = 0; j < devices[n].input.id.length; j++){
 				if(devices[n].input.id[j] === devices[n].map[i].id1){
+					var height = 0;
+			        var input_num = this.up_height_input_num;
+			        if(input_num[height] === undefined)
+			            input_num[height] = 0;
+			        var ind2 = input_num[height]++ * 10;
 					k = parseInt(devices[n].map[i].id2.substring(1)) - 1;
 					l = nodeW / (this.part[k].downIndegree + this.part[k].downOutdegree + 1);
 					var p = 50;
@@ -482,9 +497,9 @@ this.draw = function(devices, n){
 			        parts[k].Text.anchor.x = 0.5;
 			        parts[k].Text.anchor.y = 0.5;
 					parts[k].Text.position.x = parts[k].position.x + this.part[k].downLine * l;
-					parts[k].Text.position.y = parts[k].position.y + nodeH + 55 - p;
+					parts[k].Text.position.y = parts[k].position.y + nodeH + 55 - p + ind2;
 					graphics.moveTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15);
-					graphics.lineTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 40 - p);
+					graphics.lineTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 40 - p + ind2);
 					if(devices[n].map[i].type == 'inh'){
 						graphics.moveTo(parts[k].position.x + this.part[k].downLine * l - 6, parts[k].position.y + nodeH + 8 - ind - 15);
 						graphics.lineTo(parts[k].position.x + this.part[k].downLine * l + 6, parts[k].position.y + nodeH + 8 - ind - 15);
@@ -506,14 +521,15 @@ this.draw = function(devices, n){
 	};
 	
 	
-	
+	graphics.lineStyle(4, 0x000000, 1);
+	graphics.drawRoundedRect(10, 70, this.stage_w - 30, this.stage_h - 250, 50);
 	
 	
 	
 	this.stage.addChild(graphics);
 	for(i = 0; i < this.parts_num; i++){
-		if(BBAs[i])
-		    this.stage.addChild(BBAs[i]);
+		/*if(BBAs[i])
+		    this.stage.addChild(BBAs[i]);*/
 		this.stage.addChild(parts[i]);
 		if(parts[i].protein){
 		    this.stage.addChild(parts[i].protein);
@@ -540,10 +556,7 @@ this.draw = function(devices, n){
 BioBLESS.device.devs_analysis = function(devices){
 	var i, j, k, l, temp;
 	this.devs = [];
-	for(i = 0; i < devices.length; i++){
-		this.devs[i] = new dev();
-		this.devs[i].draw(devices, i);
-	};
+	
 	
 	var gates = this.gates.responseJSON;
 	var g = [];
@@ -557,34 +570,24 @@ BioBLESS.device.devs_analysis = function(devices){
 		if(j === devices.length)
 		    alert("Error - 1002!");
 	};
+	for(i = 0; i < gates.nodes.length; i++){
+		this.devs[i] = new dev();
+		this.devs[i].draw(devices, g[i]);
+		var index_button = BioBLESS.home.create_textbutton(i.toString(), 100, 30, 0x00ffff);
+		index_button.x = 50;
+		index_button.y = 100;
+		this.devs[i].stage.addChild(index_button);
+	};
 	for(i = 0; i < gates.arcs.length; i++){
 		var from = gates.arcs[i].from;
 		var to = gates.arcs[i].to;
-		this.devs[g[from]].output[0].to_dev_index[this.devs[g[from]].output[0].to_dev_index.length] = g[to];
-		this.devs[g[from]].output[0].to_dev_input_index[this.devs[g[from]].output[0].to_dev_input_index.length] = this.devs[g[to]].input_num;
-		this.devs[g[to]].input[this.devs[g[to]].input_num].to_dev_index[0] = g[from];
-		this.devs[g[to]].input[this.devs[g[to]].input_num].to_dev_output_index[0] = 0;
-		this.devs[g[to]].input_num++;
+		this.devs[from].output[0].to_dev_index[this.devs[from].output[0].to_dev_index.length] = to;
+		this.devs[from].output[0].to_dev_input_index[this.devs[from].output[0].to_dev_input_index.length] = this.devs[to].input_num;
+		this.devs[to].input[this.devs[to].input_num].to_dev_index[0] = from;
+		this.devs[to].input[this.devs[to].input_num].to_dev_output_index[0] = 0;
+		this.devs[to].input_num++;
 	}
 	
-	
-	
-	
-	
-	/*for(i = 0; i < devices.length; i++){
-		for(j = 0; j < devices[i].output.length; j++){
-			for(k = 0; k < devices.length; k++){
-				for(l = 0; l < devices[k].input.id.length; l++){
-					if(devices[i].lines.options[0][(parseInt(devices[i].output[j].substring(1)) - 1)] === devices[k].input.options[0][l]){
-						this.devs[k].input[l].to_dev_index[this.devs[k].input[l].to_dev_index.length] = i;
-						this.devs[k].input[l].to_dev_output_index[this.devs[k].input[l].to_dev_index.length - 1] = j;
-						this.devs[i].output[j].to_dev_index[this.devs[i].output[j].to_dev_index.length] = k;
-						this.devs[i].output[j].to_dev_input_index[this.devs[i].output[j].to_dev_index.length - 1] = l;
-					};
-				};
-			};
-		};
-	};*/
 	this.poi = [];
 	this.poi[0] = [];
 	for(i = 0; i < devices.length; i++){
@@ -626,19 +629,20 @@ BioBLESS.device.devs_analysis = function(devices){
 			if(this.row[i].width < this.poi[i][j].stage_w)
 			    this.row[i].width = this.poi[i][j].stage_w;
 		};
+		this.row[i].width += 200;
 		if(this.devs_height < this.row[i].node_height * this.poi[i].length)
 		    this.devs_height = this.row[i].node_height * this.poi[i].length;
 	};
 	var x = 0;
 	for(i = 0; i < this.row.length; i++){
 		for(j = 0; j < this.poi[i].length; j++){
-			this.poi[i][j].stage.position.x = x + j % 2 * 20;
+			this.poi[i][j].stage.position.x = x + j % 4 * 10;
 			this.poi[i][j].stage.position.y = (j + 1) / (this.poi[i].length + 1) * this.devs_height - this.poi[i][j].stage_h / 2;
 			this.stage.movable_stage.addChild(this.poi[i][j].stage);
 		};
 		x += this.row[i].width;
 	};
-	this.devs_width = x;
+	this.devs_width = x - 200;
 };
 BioBLESS.device.draw_lines_between_devices = function(){
 	var i, j, k, l, temp;
@@ -680,10 +684,6 @@ BioBLESS.device.draw_lines_between_devices = function(){
 					graphic.lineTo(input_x - 4, input_y + 18);
 					graphic.lineTo(input_x + 4, input_y + 18);
 				}
-				
-				
-				
-				
 				}
 				this.stage.movable_stage.addChild(graphic);
 			};

@@ -1,5 +1,130 @@
 [
     { 
+        "id": "AND0",
+        "input": [
+        	["p100"], ["p200"]
+        ],
+        "output": ["p3"],
+        "parts": { 
+	    "id": ["d1", "d2", "d3", "d4"],
+	    "type": {
+		"d1": "Promoter",
+		"d2": "RBS",
+		"d3": "Coding",
+		"d4": "Terminator",
+	    }
+        },
+         "map": [    
+	    {
+		"id":"e1",
+		"id1":"d3",
+		"id2":"p3",
+		"type":"trans",
+		"params":{
+		    "trans1": 0.01,
+		    "trans2": 0.5,
+		    "decay1": 0.1,
+		    "decay2": 0.05
+		}
+	    }, 
+	    {
+		"id":"e2",
+		"id1":"p100",
+		"id2":"d2",
+		"type":"act",
+		"params":{
+		    "reg":20
+		}
+	    },
+	     {
+		"id":"e3",
+		"id1":"p100",
+		"id2":"d2",
+		"type":"act",
+		"params":{
+		    "reg": 20
+		}
+	    }
+        ],
+        "type":{ 
+	    "type": null, 
+	    "function": null, 
+	    "chassis": null, 
+	    "standard": null, 
+	    "contributor": null 
+        }
+    },
+        
+        
+        
+        
+        { 
+        "id": "AND1",
+        "input": [
+        	["p100"], ["p200"]
+        ],
+        "output": ["p3"],
+        "parts": { 
+	    "id": ["d1", "d2", "d3", "d4"],
+	    "type": {
+		"d1": "Promoter",
+		"d2": "RBS",
+		"d3": "Coding",
+		"d4": "Terminator",
+	    }
+        }, 
+         "map": [    
+	    {
+		"id":"e1",
+		"id1":"d3",
+		"id2":"p3",
+		"type":"trans",
+		"params":{
+		    "trans1": 0.01,
+		    "trans2": 0.5,
+		    "decay1": 0.1,
+		    "decay2": 0.05
+		}
+	    }, 
+	    {
+		"id":"e2",
+		"id1":"p100",
+		"id2":"d1",
+		"type":"act",
+		"params":{
+		    "reg":20
+		}
+	    }, 
+	    {
+		"id":"e3",
+		"id1":"p100",
+		"id2":"d2",
+		"type":"act",
+		"params":{
+		    "reg": 20
+		}
+	    }
+        ],
+        "type":{ 
+	    "type": null, 
+	    "function": null, 
+	    "chassis": null, 
+	    "standard": null, 
+	    "contributor": null 
+        }
+    },
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    { 
         "id": "NOT6",
         "input": ["p100"],
         "output": ["p7"], 
@@ -66,7 +191,7 @@
 	],
 	"output":[
 	    "p10"
-	]
+	],
         "parts": { 
 	    "id":[
 		["d1", "d2", "d3", "d4"],
@@ -155,17 +280,17 @@
         "id": "NOT5",
 	"input":[
 	    "p100"
-	]
+	],
 	"output":[
 	    "p10"
-	]
+	],
         "parts": { 
 	    "id":[
 		["d1", "d2", "d3", "d4"],
 		["d5", "d6", "d7"],
 		["d8", "d9", "d10", "d11"]
 	    ],
-	    "type":[
+	    "type":{
 		"d1": "Promoter",
 		"d2": "RBS",
 		"d3": "Coding",
@@ -177,7 +302,7 @@
 		"d9": "RBS",
 		"d10": "Coding",
 		"d11": "Terminator"
-	    ]
+	    }
 	},  
         "map": [    
 	    {"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, 
@@ -200,7 +325,7 @@
 	    "inverter": false 
         }, 
         "type": { 
-	    "type": null
+	    "type": null,
 	    "function": "", 
 	    "chassis": "", 
 	    "standard": "", 
