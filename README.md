@@ -20,14 +20,17 @@
 + **matplotlib** for plotting
 + **networkx** for graph
 + you could just use `pip install -r requirements.txt` to install all the dependency.
+
 ### Install
     ./manage.py migrate
     ./manage.py loaddata parts
     ./manage.py runserver
+
 ### Unit Test
 you could run
     ./manage.py test BioBLESS
 for unit test
+
 ### Rest API doc
     in the URI `/docs`
 
