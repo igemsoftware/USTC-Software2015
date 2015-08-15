@@ -318,7 +318,7 @@ def api_circuit(circuit, gate):
     l_dic.extend([i for i in l_node])
     for i in gate:
         arcs = []
-        nodes = [i.replace('v', 'INPUT') for i in no_such_list]
+        nodes = [x.replace('v', 'INPUT') for x in no_such_list]
         nodes.append('OUT')
         for j in range(len(l_node)):
             nodes.append(i['gate'][l_node[j]])
