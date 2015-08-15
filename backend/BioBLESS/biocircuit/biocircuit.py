@@ -9,7 +9,8 @@ Create some biocircuits and calculate their scores
 
 >>> expr = string2expr('10110101')
 >>> circuit = create_circuit(expr)
->>> scores = circuit_score(circuit, d_gate)
+>>> import biocircuit.biogate as gate
+>>> scores = circuit_score(circuit, gate.d_gate)
 >>> api_for_front = api_circuit(circuit, scores)
 """
 __author__ = 'E-Neo <e-neo@qq.com>'
