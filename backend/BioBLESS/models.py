@@ -1,7 +1,7 @@
 """
 This is the model for the parts table
 """
-__auther__ = 'ctyi'
+__author__ = 'ctyi'
 from django.db import models
 
 
@@ -11,8 +11,8 @@ class Parts(models.Model):
     """
 
     uid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=15,db_index=True)
-    id = models.IntegerField(unique=True,db_index=True)
+    name = models.CharField(max_length=15, db_index=True)
+    id = models.IntegerField(unique=True, db_index=True)
     type = models.CharField(max_length=25)
     description = models.CharField(max_length=150)
     nickname = models.CharField(max_length=15)
@@ -22,5 +22,6 @@ class Parts(models.Model):
     entered_time = models.CharField(max_length=15)
     sequence = models.CharField(max_length=68000)
     author = models.CharField(max_length=300)
+
     def __unicode__(self):
         return self.name

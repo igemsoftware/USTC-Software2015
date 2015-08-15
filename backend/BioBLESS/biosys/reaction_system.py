@@ -11,7 +11,7 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
-import numpy, scipy, scipy.misc, scipy.stats, pylab
+import numpy, scipy.misc, pylab
 
 
 class reaction_system(object):
@@ -102,7 +102,12 @@ class reaction_system(object):
         """
 
         def itemfreq(temp):
-            return numpy.array([]) if len(temp) == 0 else scipy.stats.itemfreq(temp)
+            if len(temp) == 0:
+                return numpy.array([])
+            else:
+                items, inv = numpy.unique(temp, return_inverse=True)
+                freq = numpy.bincount(inv)
+                return numpy.array([items, freq]).T
 
         self.reactions = numpy.array(reaction)
         self.reactant, self.product, self.constant = self.reactions.transpose()
@@ -212,7 +217,7 @@ class reaction_system(object):
                 if isinstance(single_init, list):
                     current[self.species_name_inverse[single_init[0]]] = single_init[1]
 
-        current = numpy.array([0] * self.species_number)
+        current = numpy.zeros(self.species_number)  # numpy.array([0] * self.species_number)
         initialize(self.species)
         initialize(initial)
         time = 0
