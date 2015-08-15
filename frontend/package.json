@@ -1,0 +1,22 @@
+{
+    "name": "BioBLESS",
+    "version": "0.0.2",
+    "description": "Biological Boolean Logic Evaluation & Systematization based on Simulation",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ustc2015/frontend"
+    },
+    "license": "UNLICENSED",
+    "devDependencies": {
+        "jsdoc": "3.x",
+        "jshint": "2.x",
+        "mocha-phantomjs": "3.x",
+        "uglify-js": "2.x"
+    },
+    "scripts": {
+        "build": "uglifyjs -c -o bin/biobless.min.js src/header/*.js src/*.js src/footer/*.js",
+        "build-doc": "jsdoc -r src -d doc",
+        "pretest": "jshint src && npm run build",
+        "test": "mocha-phantomjs test/index.html"
+    }
+}
