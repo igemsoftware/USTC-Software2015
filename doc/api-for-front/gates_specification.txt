@@ -15,7 +15,7 @@
 "score": float, // back -> front
 
 "lizhi": [
-    {"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
+    {"d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
     {...},
     null,
     {...},
