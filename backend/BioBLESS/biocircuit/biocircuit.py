@@ -9,7 +9,8 @@ Create some biocircuits and calculate their scores
 
 >>> expr = string2expr('10110101')
 >>> circuit = create_circuit(expr)
->>> scores = circuit_score(circuit, d_gate)
+>>> import biocircuit.biogate as gate
+>>> scores = circuit_score(circuit, gate.d_gate)
 >>> api_for_front = api_circuit(circuit, scores)
 """
 __author__ = 'E-Neo <e-neo@qq.com>'
@@ -214,6 +215,7 @@ def calc_score(l_gate, d_gate):
         The score of the biocircuit.
     """
     para = np.array([0, 0, 0, 0])
+    tmp = (0, 0, 0, 0)
     for i in l_gate:
         if i[0] == 'N':
             tmp = d_gate['not'][i]
@@ -250,9 +252,12 @@ def circuit_score(circuit, d_gate):
     """
     n_gate = circuit.nodes()
     n_gate.pop(n_gate.index('out'))
+    tmp = []
     for i in n_gate:
         if i[0] == 'v':
-            n_gate.pop(n_gate.index(i))
+            tmp.append(i)
+    for i in tmp:
+        n_gate.remove(i)
     bio_not = list(d_gate['not'].keys())
     bio_and = list(d_gate['and'].keys())
     bio_or = list(d_gate['or'].keys())
@@ -306,14 +311,16 @@ def api_circuit(circuit, gate):
     no_such_list = []
     for i in l_node:
         if i[0] == 'v':
-            no_such_list.append(l_node.pop(l_node.index(i)))
+            no_such_list.append(i)
+    for i in no_such_list:
+        l_node.remove(i)
     graph = []
     l_dic = [i for i in no_such_list]
     l_dic.append('out')
     l_dic.extend([i for i in l_node])
     for i in gate:
         arcs = []
-        nodes = [i.replace('v', 'INPUT') for i in no_such_list]
+        nodes = [x.replace('v', 'INPUT') for x in no_such_list]
         nodes.append('OUT')
         for j in range(len(l_node)):
             nodes.append(i['gate'][l_node[j]])
