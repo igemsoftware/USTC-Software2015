@@ -59,7 +59,7 @@
         
         
         { 
-        "id": "AND0",
+        "id": "AND1",
         "input": [
         	["p100"], ["p200"]
         ],
@@ -191,7 +191,7 @@
 	],
 	"output":[
 	    "p10"
-	]
+	],
         "parts": { 
 	    "id":[
 		["d1", "d2", "d3", "d4"],
@@ -280,17 +280,17 @@
         "id": "NOT5",
 	"input":[
 	    "p100"
-	]
+	],
 	"output":[
 	    "p10"
-	]
+	],
         "parts": { 
 	    "id":[
 		["d1", "d2", "d3", "d4"],
 		["d5", "d6", "d7"],
 		["d8", "d9", "d10", "d11"]
 	    ],
-	    "type":[
+	    "type":{
 		"d1": "Promoter",
 		"d2": "RBS",
 		"d3": "Coding",
@@ -302,7 +302,7 @@
 		"d9": "RBS",
 		"d10": "Coding",
 		"d11": "Terminator"
-	    ]
+	    }
 	},  
         "map": [    
 	    {"id":"e1", "id1":"d3", "id2":"p3", "type":"trans"}, 
@@ -325,7 +325,7 @@
 	    "inverter": false 
         }, 
         "type": { 
-	    "type": null
+	    "type": null,
 	    "function": "", 
 	    "chassis": "", 
 	    "standard": "", 
