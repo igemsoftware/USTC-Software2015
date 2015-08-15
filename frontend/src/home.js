@@ -2,8 +2,9 @@
  * This js works as BioBLESS.home's drawing function
  * @auther USTC-software frontend
  * @auther needsay
- * @aythor ubrok.h
+ * @aythor Ubrok
  * @since 2015-8-12
+ * @version 0.3.1
  */
 BioBLESS.home = {};
 /** 
@@ -173,9 +174,35 @@ BioBLESS.home.onDragMove_e = function() {
                 hRect = this.parent.position.y + this.parent.input_1.position.y - yRect;
                 this.parent.input_1.Lines[i][0].clear();
                 this.parent.input_1.Lines[i][0].beginFill(0x000000, 1);
-                this.parent.input_1.Lines[i][0].drawRect(xRect, yRect, 3, hRect/2);
-                this.parent.input_1.Lines[i][0].drawRect(xRect, yRect + hRect/2, wRect, 3);
-                this.parent.input_1.Lines[i][0].drawRect(xRect + wRect, yRect + hRect/2, 3, hRect/2);
+                this.parent.input_1.Lines[i][0].lineStyle(0, 0x000000, 1);
+                this.parent.input_1.Lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
+                this.parent.input_1.Lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_1.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_1.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
+                this.parent.input_1.Lines[i][0].endFill();
+                this.parent.input_1.Lines[i][0].lineStyle(3, 0x000000, 1);
+                this.parent.input_1.Lines[i][0].moveTo(xRect, yRect + 1.5);
+                this.parent.input_1.Lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_1.Lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_1.Lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+                this.parent.input_1.Lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
+                this.parent.input_1.Lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+                this.parent.input_1.Lines[i][0].beginFill(0, 0);
+                this.parent.input_1.Lines[i][0].lineStyle(0, 0, 0);
+                // if(hRect > 0){
+                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
+                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+                // }
+                // else{
+                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+                // }
+                if(wRect > 0){
+                    this.parent.input_1.Lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+                }
+                else{
+                    this.parent.input_1.Lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+                }
                 this.parent.input_1.Lines[i][0].endFill();
             }
         }
@@ -193,9 +220,35 @@ BioBLESS.home.onDragMove_e = function() {
                 hRect = this.parent.position.y + this.parent.input_2.position.y - yRect;
                 this.parent.input_2.Lines[i][0].clear();
                 this.parent.input_2.Lines[i][0].beginFill(0x000000, 1);
-                this.parent.input_2.Lines[i][0].drawRect(xRect, yRect, 3, hRect/2);
-                this.parent.input_2.Lines[i][0].drawRect(xRect, yRect + hRect/2, wRect, 3);
-                this.parent.input_2.Lines[i][0].drawRect(xRect + wRect, yRect + hRect/2, 3, hRect/2);
+                this.parent.input_2.Lines[i][0].lineStyle(0, 0x000000, 1);
+                this.parent.input_2.Lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
+                this.parent.input_2.Lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_2.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_2.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
+                this.parent.input_2.Lines[i][0].endFill();
+                this.parent.input_2.Lines[i][0].lineStyle(3, 0x000000, 1);
+                this.parent.input_2.Lines[i][0].moveTo(xRect, yRect + 1.5);
+                this.parent.input_2.Lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_2.Lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_2.Lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+                this.parent.input_2.Lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
+                this.parent.input_2.Lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+                this.parent.input_2.Lines[i][0].beginFill(0, 0);
+                this.parent.input_2.Lines[i][0].lineStyle(0, 0, 0);
+                // if(hRect > 0){
+                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
+                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+                // }
+                // else{
+                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+                // }
+                if(wRect > 0){
+                    this.parent.input_2.Lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+                }
+                else{
+                    this.parent.input_2.Lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+                }
                 this.parent.input_2.Lines[i][0].endFill();
             }
         }
@@ -213,9 +266,35 @@ BioBLESS.home.onDragMove_e = function() {
                 hRect = this.parent.position.y + this.parent.output.position.y - yRect;
                 this.parent.output.Lines[i][0].clear();
                 this.parent.output.Lines[i][0].beginFill(0x000000, 1);
-                this.parent.output.Lines[i][0].drawRect(xRect, yRect, 3, hRect/2);
-                this.parent.output.Lines[i][0].drawRect(xRect, yRect + hRect/2, wRect, 3);
-                this.parent.output.Lines[i][0].drawRect(xRect + wRect, yRect + hRect/2, 3, hRect/2);
+                this.parent.output.Lines[i][0].lineStyle(0, 0x000000, 1);
+                this.parent.output.Lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
+                this.parent.output.Lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.output.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.output.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
+                this.parent.output.Lines[i][0].endFill();
+                this.parent.output.Lines[i][0].lineStyle(3, 0x000000, 1);
+                this.parent.output.Lines[i][0].moveTo(xRect, yRect + 1.5);
+                this.parent.output.Lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.output.Lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.output.Lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+                this.parent.output.Lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
+                this.parent.output.Lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+                this.parent.output.Lines[i][0].beginFill(0, 0);
+                this.parent.output.Lines[i][0].lineStyle(0, 0, 0);
+                // if(hRect > 0){
+                //     this.parent.output.Lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
+                //     this.parent.output.Lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+                // }
+                // else{
+                //     this.parent.output.Lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+                //     this.parent.output.Lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+                // }
+                if(wRect > 0){
+                    this.parent.output.Lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+                }
+                else{
+                    this.parent.output.Lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+                }
                 this.parent.output.Lines[i][0].endFill();
             }
         }
@@ -258,6 +337,9 @@ BioBLESS.home.onDrawLineUp = function(event){
         this.Lines[this.counts] = drawPart;
         this.counts ++;
         drawPart[0].mother = this;
+        drawPart[0].on('mouseover', BioBLESS.home.IsHerWorkCreate)
+                   .on('mouseout', BioBLESS.home.IsHerWorkDelete)
+                   .on('click', BioBLESS.home.IsHerWorkRight);
     }
 };
 /**
@@ -272,14 +354,98 @@ BioBLESS.home.onDrawLineMove = function(event){
             var newPosition =  event.data.getLocalPosition(this.parent.parent);
             var wRect = newPosition.x - xRect;
             var hRect = newPosition.y - yRect;
+            drawPart[0].IsHerWork = new PIXI.Graphics();
+            drawPart[0].IsHerWork.father = drawPart[0];
             drawPart[0].clear();
             drawPart[0].beginFill(0x000000, 1);
-            drawPart[0].drawRect(xRect, yRect, 3, hRect/2);
-            drawPart[0].drawRect(xRect, yRect + hRect/2, wRect, 3);
-            drawPart[0].drawRect(xRect + wRect, yRect + hRect/2, 3, hRect/2);
+            drawPart[0].lineStyle(0, 0x000000, 1);
+            drawPart[0].drawCircle(xRect, yRect + 1.5, 1.5);
+            drawPart[0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+            drawPart[0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
             drawPart[0].endFill();
+            drawPart[0].lineStyle(3, 0x000000, 1);
+            drawPart[0].moveTo(xRect, yRect + 1.5);
+            drawPart[0].lineTo(xRect, yRect + hRect/2 + 1.5);
+            drawPart[0].moveTo(xRect, yRect + hRect/2 + 1.5);
+            drawPart[0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+            drawPart[0].moveTo(xRect + wRect, yRect + hRect/2);
+            drawPart[0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+            drawPart[0].beginFill(0, 0);
+            drawPart[0].lineStyle(0, 0, 0);
+            // if(hRect > 0){
+            //     drawPart[0].drawRect(xRect - 1, yRect, 5, hRect/2);
+            //     drawPart[0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+            // }
+            // else{
+            //     drawPart[0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+            //     drawPart[0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+            // }
+            if(wRect > 0){
+                drawPart[0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+            }
+            else{
+                drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+            }
+            drawPart[0].endFill();
+            drawPart[0].interactive = true;
+            drawPart[0].IsHerWork.interactive = true;
+            drawPart[0].IsHerWork.buttonMode = true;
             drawPart[0].father.parent.parent.addChild(drawPart[0]);
     }
+};
+
+/**
+ * IsHerWorkCreate means to create a button on its line
+ * @function
+ * @param {event} mouseover the line
+ */
+BioBLESS.home.IsHerWorkCreate = function(event) {
+    var xRect = this.father.parent.position.x + this.father.position.x;
+    var yRect = this.father.parent.position.y + this.father.position.y;
+    var wRect = this.mother.parent.position.x + this.mother.position.y - xRect;
+    var hRect = this.mother.parent.position.y + this.mother.position.y - yRect;
+    this.IsHerWork.clear();
+    this.IsHerWork.position.x = xRect + wRect/2;
+    this.IsHerWork.position.y = yRect + hRect/2;
+    this.IsHerWork.beginFill(0x345678, 0.3);
+    this.IsHerWork.drawCircle(0, 0, 20);
+    this.IsHerWork.lineStyle(4, 0xffff00, 0.3);
+    this.IsHerWork.moveTo(-8, 0);
+    this.IsHerWork.lineTo(8, 0);
+    this.IsHerWork.endFill();
+    this.IsHerWork.on('mouseover', BioBLESS.home.IsHerWorkUP);
+                  // .on('click', BioBLESS.home.IsHerWorkRight)
+                  // .on('mouseout', BioBLESS.home.IsHerWorKDOWN);
+    this.father.parent.parent.addChild(this.IsHerWork);
+};
+
+/**
+ * IsHerWorkRight is the function to delete itself as well as the button
+ * @function
+ * @param {event} caused by users
+ */
+BioBLESS.home.IsHerWorkRight = function(event) {
+    this.father.parent.parent.removeChild(this);
+    this.father.parent.parent.removeChild(this.IsHerWork);
+};
+
+/**
+ * Just Kidding
+ * @function
+ * @param {event} caused by users
+ */
+BioBLESS.home.IsHerWorkUP = function(event) {
+    this.father.father.parent.parent.addChild(this.father);
+    this.father.buttonMode = true;
+};
+
+// BioBLESS.home.IsHerWorkDown = function() {
+//     SHEisWorking = false;
+//     this.father.father.parent.parent.removeChild(this);
+// };
+
+BioBLESS.home.IsHerWorkDelete = function() {
+        this.father.parent.parent.removeChild(this.IsHerWork);
 };
 
 /**
@@ -334,34 +500,34 @@ BioBLESS.home.draw = function(devices){
             BioBLESS.home.elements[BioBLESS.home.elements.length - 1].graphics.buttonMode = true;
             BioBLESS.home.elements[BioBLESS.home.elements.length - 1].Index = this.Index;
             BioBLESS.home.elements[BioBLESS.home.elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
-                    .on('touchstart', that.onDragStart_e)
-                    .on('mouseup', that.onDragEnd_e)
-                    .on('mouseupoutside', that.onDragEnd_e)
-                    .on('touchend', that.onDragEnd_e)
-                    .on('touchendoutside', that.onDragEnd_e)
-                    .on('mousemove', that.onDragMove_e)
-                    .on('touchmove', that.onDragMove_e);
+                                                                              .on('touchstart', that.onDragStart_e)
+                                                                              .on('mouseup', that.onDragEnd_e)
+                                                                              .on('mouseupoutside', that.onDragEnd_e)
+                                                                              .on('touchend', that.onDragEnd_e)
+                                                                              .on('touchendoutside', that.onDragEnd_e)
+                                                                              .on('mousemove', that.onDragMove_e)
+                                                                              .on('touchmove', that.onDragMove_e);
 
             BioBLESS.home.elements[BioBLESS.home.elements.length - 1].output.interactive = true;
             BioBLESS.home.elements[BioBLESS.home.elements.length - 1].output.buttonMode = true;
             BioBLESS.home.elements[BioBLESS.home.elements.length - 1].output.on('mousedown', that.onDrawLineUp)
-    	        .on('touchstart', that.onDrawLineUp)
-    	        .on('mousemove', that.onDrawLineMove)
-    	        .on('touchmove', that.onDrawLineMove);
+    	                                                                    .on('touchstart', that.onDrawLineUp)
+    	                                                                    .on('mousemove', that.onDrawLineMove)
+    	                                                                    .on('touchmove', that.onDrawLineMove);
                 
 			BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_2.interactive = true;
 			BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_2.buttonMode = true;
 			BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_2.on('mousedown', that.onDrawLineUp)
-			    .on('touchstart', that.onDrawLineUp)
-			    .on('mousemove', that.onDrawLineMove)
-			    .on('touchmove', that.onDrawLineMove);
+			                                                                 .on('touchstart', that.onDrawLineUp)
+			                                                                 .on('mousemove', that.onDrawLineMove)
+			                                                                 .on('touchmove', that.onDrawLineMove);
                 
         	BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_1.interactive = true;
         	BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_1.buttonMode = true;
         	BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_1.on('mousedown', that.onDrawLineUp)
-        	    .on('touchstart', that.onDrawLineUp)
-        	    .on('mousemove', that.onDrawLineMove)
-        	    .on('touchmove', that.onDrawLineMove);
+        	                                                                 .on('touchstart', that.onDrawLineUp)
+        	                                                                 .on('mousemove', that.onDrawLineMove)
+        	                                                                 .on('touchmove', that.onDrawLineMove);
             that.stage.movable_stage.addChild(BioBLESS.home.elements[BioBLESS.home.elements.length - 1]);
     	}
     	this.position.x = this.startX;
@@ -393,8 +559,6 @@ BioBLESS.home.draw = function(devices){
      * @type {PIXI.Graphics}
      */
     that.plusobj = new PIXI.Graphics();
-    that.plusobj.beginFill(0x123456, 0.5);
-    that.plusobj.drawCircle(w - 60, 50, 30);
     that.plusobj.beginFill(0x345678, 1);
     that.plusobj.drawCircle(0, 0, 30);
     that.plusobj.endFill();
@@ -455,6 +619,3 @@ BioBLESS.home.draw = function(devices){
 };
 var a=$.getJSON("../misc/devices.json");
 setTimeout(function(){BioBLESS.home.draw(a.responseJSON);},1000);
-            
-        
-        
