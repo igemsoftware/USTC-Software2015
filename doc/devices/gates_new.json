@@ -203,6 +203,112 @@
 	    "contributor": null 
         }
     },
+    {
+    	"id": "AND2",
+    	"input": ["p100","p200"],
+    	"output": ["p8"],
+    	"parts": {
+    		"id": ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9"],
+    		"type": {
+                	"d1": "Promoter",
+		        "d2": "RBS",
+	        	"d3": "Coding",
+	        	"d4": "Coding",
+	        	"d5": "Terminator",
+	        	"d6": "Promoter",
+	        	"d7": "RBS",
+	        	"d8": "Coding",
+	        	"d9": "Terminator"
+    		}
+    	},
+    	"map": [
+    		{
+		"id":"e1",
+		"id1":"d3",
+		"id2":"p3",
+		"type":"trans",
+		"params":{
+		    "trans1": 0.01,
+		    "trans2": 0.5,
+		    "decay1": 0.1,
+		    "decay2": 0.05
+		    }
+	        }, 
+	        {
+		"id":"e2",
+		"id1":"d4",
+		"id2":"p4",
+		"type":"trans",
+		"params":{
+		    "trans1": 0.01,
+		    "trans2": 0.5,
+		    "decay1": 0.1,
+		    "decay2": 0.05
+		    }
+		},
+		{
+		"id":"e3",
+		"id1":"p3",
+		"id2":"d6",
+		"type":"inh",
+		"params":{
+		    "reg":20
+		    }
+		},
+		{
+		"id":"e4",
+		"id1":"p4",
+		"id2":"d6",
+		"type":"inh",
+		"params":{
+		    "reg":20
+		    }
+		},
+		{
+		"id":"e5",
+		"id1":"d8",
+		"id2":"p8",
+		"type":"trans",
+		"params":{
+		    "trans1": 0.01,
+		    "trans2": 0.5,
+		    "decay1": 0.1,
+		    "decay2": 0.05
+		    }
+		},
+		{
+		"id":"e6",
+		"id1":"p100",
+		"id2":"e3",
+		"type":"inh",
+		"params":{
+		    "reg":20
+		    }
+		},
+		{
+		"id":"e7",
+		"id1":"p200",
+		"id2":"e4",
+		"type":"inh",
+		"params":{
+		    "reg":20
+		    }
+		}
+    	],
+    	"type":{ 
+	    "type": null, 
+	    "function": null, 
+	    "chassis": null, 
+	    "standard": null, 
+	    "contributor": null 
+        }
+    }
+]
+    		
+    		
+    	
+   
+    }
    
 //this is the split line. above is just added up
    
