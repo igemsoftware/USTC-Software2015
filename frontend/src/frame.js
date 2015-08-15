@@ -11,6 +11,22 @@
 BioBLESS.get_current_plugin_stage = function() {
     return BioBLESS.plugin_stage;
 };
+BioBLESS.zoom_function = function(d){
+	if(BioBLESS.get_current_plugin_stage() === null)
+        return;
+    if(d > 0){
+        if(BioBLESS.get_current_plugin_stage().movable_stage._scale > 3)
+            return;
+        BioBLESS.get_current_plugin_stage().movable_stage._scale *= 1.1;
+    
+    }else{
+        if(BioBLESS.get_current_plugin_stage().movable_stage._scale < 0.1)
+            return;
+        BioBLESS.get_current_plugin_stage().movable_stage._scale /= 1.1;
+    }
+};
+
+BioBLESS.scroll_function = BioBLESS.zoom_function;
 BioBLESS.animation = [];
 /** 
 * @description add animation
