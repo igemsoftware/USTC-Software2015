@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 import BioBLESS.views.parts
 import BioBLESS.views.biocircuit
+import BioBLESS.views.views
 from BioBLESS.biosys.test_samples import test_reaction_system_sample, test_parts_system_sample
 
 urlpatterns = [
     url(r'^$', include('home.urls')),
-    url(r'^aplusb/(\d+)/(\d+)/$', BioBLESS.views),
+    url(r'^aplusb/(\d+)/(\d+)/$', BioBLESS.views.views.aplusb),
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^parts/', BioBLESS.views.parts.PartsView.as_view()),
     # biosys

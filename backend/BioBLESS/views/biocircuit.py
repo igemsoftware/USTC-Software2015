@@ -10,6 +10,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import ParseError
 import BioBLESS.biocircuit.biocircuit as biocircuit
 import BioBLESS.biocircuit.biogate as biogate
 
@@ -27,7 +28,12 @@ class BiocircuitView(APIView):
         request: GET /biocircuit/ID
         response: json api_circuit
         """
-        print expr
+        digit_count = 0
+        for char1 in range(0, len(expr)):
+            if expr[char1] == '0' or expr[char1] == '1':
+                digit_count += 1
+        if digit_count < 2:
+            raise ParseError(detail="At least two digits are required.")
         expr_from_back = biocircuit.string2expr(expr)
         circuit_from_back = biocircuit.create_circuit(expr_from_back)
         scores_from_back = biocircuit.circuit_score(circuit_from_back, biogate.d_gate)
