@@ -33,6 +33,19 @@ you could run
 ```
 for unit test
 
+### Backend code doc
+Please install sphinx package for python.
+For example:
+```
+pip install sphinx
+```
+you could run
+```
+    ./doc_build/gendoc.sh (under *nix/macos)
+    doc_build\gendoc.cmd (under windows)
+```
+   Then you can open doc_build/doc/html/index.html to view the doc
+
 ### Rest API doc
 in the URI `/docs`
 
