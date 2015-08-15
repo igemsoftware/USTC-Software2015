@@ -7,6 +7,7 @@ Examples
 --------
 Create some biocircuits and calculate their scores
 
+>>> from biogate import d_gate
 >>> expr = string2expr('10110101')
 >>> circuit = create_circuit(expr)
 >>> import biocircuit.biogate as gate
@@ -215,6 +216,7 @@ def calc_score(l_gate, d_gate):
         The score of the biocircuit.
     """
     para = np.array([0, 0, 0, 0])
+    tmp = (0, 0, 0, 0)
     for i in l_gate:
         if i[0] == 'N':
             tmp = d_gate['not'][i]
@@ -307,7 +309,9 @@ def api_circuit(circuit, gate):
     no_such_list = []
     for i in l_node:
         if i[0] == 'v':
-            no_such_list.append(l_node.pop(l_node.index(i)))
+            no_such_list.append(i)
+    for i in no_such_list:
+        l_node.remove(i)
     graph = []
     l_dic = [i for i in no_such_list]
     l_dic.append('out')
