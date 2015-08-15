@@ -13,15 +13,11 @@
 ],
 
 "score": float, // back -> front
+"system_parameter":
+{
+    "key":float,
 
-"lizhi": [
-    {"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
-    {...},
-    null,
-    {...},
-    null,
-    ...
-], // front -> end
+}
 
 "simulation_parameters": [
     {
@@ -30,7 +26,12 @@
             "(name2)": float,
             ...
         },
-        "e2": ...
+        "e2": ...,
+        "device_parameter":{
+            "key":float,
+
+        }
+        "lizhi":{"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
     },
     {...},
     null,
