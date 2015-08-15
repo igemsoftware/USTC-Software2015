@@ -7,7 +7,6 @@ Examples
 --------
 Create some biocircuits and calculate their scores
 
->>> from biogate import d_gate
 >>> expr = string2expr('10110101')
 >>> circuit = create_circuit(expr)
 >>> import biocircuit.biogate as gate
@@ -253,9 +252,12 @@ def circuit_score(circuit, d_gate):
     """
     n_gate = circuit.nodes()
     n_gate.pop(n_gate.index('out'))
+    tmp = []
     for i in n_gate:
         if i[0] == 'v':
-            n_gate.pop(n_gate.index(i))
+            tmp.append(i)
+    for i in tmp:
+        n_gate.remove(i)
     bio_not = list(d_gate['not'].keys())
     bio_and = list(d_gate['and'].keys())
     bio_or = list(d_gate['or'].keys())
