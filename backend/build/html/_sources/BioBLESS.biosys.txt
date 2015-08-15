@@ -12,6 +12,14 @@ BioBLESS.biosys.devices_system module
     :undoc-members:
     :show-inheritance:
 
+BioBLESS.biosys.optimize_test module
+------------------------------------
+
+.. automodule:: BioBLESS.biosys.optimize_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 BioBLESS.biosys.parts_system module
 -----------------------------------
 
