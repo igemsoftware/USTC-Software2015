@@ -3,7 +3,9 @@ This is the model for the parts table
 """
 __auther__ = 'ctyi'
 from django.db import models
-class parts(models.Model):
+
+
+class Parts(models.Model):
     """
     This is the parts database
     """
