@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>BioBLESS.biosys.reaction_system &mdash; BioBLESS 0.3.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.3.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="BioBLESS 0.3.6 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for BioBLESS.biosys.reaction_system</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The package about the reactions system and simulations</span>
+<span class="sd">Data structure:</span>
+<span class="sd">System:[reactions,species_name]</span>
+<span class="sd">Reactions:[[[reactant,...],[product,...],constant,...]</span>
+<span class="sd">Simulation structure:[[initial,...],stop_time]</span>
+<span class="sd">Show structure:[species_to_show]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Trumpet&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">scipy</span><span class="o">,</span> <span class="nn">scipy.misc</span><span class="o">,</span> <span class="nn">scipy.stats</span><span class="o">,</span> <span class="nn">pylab</span>
+
+
+<div class="viewcode-block" id="reaction_system"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system">[docs]</a><span class="k">class</span> <span class="nc">reaction_system</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">species_name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">reactions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">reactant</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">constant</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">species_name_inverse</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">reactant_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">product_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">species_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show the number of the species in this parts system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            none</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int:the number of the species</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reaction_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show the number of the reactions in this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            none</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int:the number of the reactions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="p">)</span>
+
+<div class="viewcode-block" id="reaction_system.set_species_name"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.set_species_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_species_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speciesname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set all the species and their name in this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the list of the names of species</span>
+<span class="sd">        Returns</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="n">species</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">species</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">species</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">species</span> <span class="o">=</span> <span class="n">speciesname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">species_name</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">choice</span><span class="p">,</span> <span class="n">speciesname</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="p">[</span><span class="n">name_temp</span><span class="p">]:</span> <span class="n">name_temp</span> <span class="k">for</span> <span class="n">name_temp</span> <span class="ow">in</span>
+                                     <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="p">))}</span>
+</div>
+<div class="viewcode-block" id="reaction_system.add_species_name"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.add_species_name">[docs]</a>    <span class="k">def</span> <span class="nf">add_species_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namestring</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add one species into the system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            the name of the species to be added</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">species_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">species_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">namestring</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_species_name</span><span class="p">(</span><span class="n">species_temp</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="reaction_system.del_species_name"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.del_species_name">[docs]</a>    <span class="k">def</span> <span class="nf">del_species_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namestring</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delele one species from the system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            the name of the species to be deleted</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">species_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">species_temp</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">namestring</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_species_name</span><span class="p">(</span><span class="n">species_temp</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="reaction_system.set_reactions"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.set_reactions">[docs]</a>    <span class="k">def</span> <span class="nf">set_reactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reaction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set all the reactions in this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the list of the reactions</span>
+<span class="sd">                the format of one reaction is a list : [[reactant,...],[product,...],constant]</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">itemfreq</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">itemfreq</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">reaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactant</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reactant</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactant_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">itemfreq</span><span class="p">,</span> <span class="p">(</span>
+            <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">temp1</span><span class="p">:</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">temp2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span><span class="p">[</span><span class="n">temp2</span><span class="p">],</span> <span class="n">temp1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactant</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">product_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">itemfreq</span><span class="p">,</span> <span class="p">(</span>
+            <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">temp1</span><span class="p">:</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">temp2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span><span class="p">[</span><span class="n">temp2</span><span class="p">],</span> <span class="n">temp1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">)))</span>
+</div>
+<div class="viewcode-block" id="reaction_system.add_reaction"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.add_reaction">[docs]</a>    <span class="k">def</span> <span class="nf">add_reaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reaction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add one reaction into this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the data of the reaction to be added</span>
+<span class="sd">                looking for help(set_reactions) to find the format of this list </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reaction_temp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">reactant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">reaction_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_reactions</span><span class="p">(</span><span class="n">reaction_temp</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="reaction_system.del_reaction"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.del_reaction">[docs]</a>    <span class="k">def</span> <span class="nf">del_reaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reaction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete one reaction into this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the data of the reaction to be deleted</span>
+<span class="sd">                looking for help(set_reactions) to find the format of this list </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reaction_temp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">reactant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">reaction_temp</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">reaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_reactions</span><span class="p">(</span><span class="n">reaction_temp</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">show_species</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print the names of all the species in this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            none</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">print_temp</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">single_species</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="p">:</span>
+            <span class="n">print_temp</span> <span class="o">+=</span> <span class="n">single_species</span> <span class="o">+</span> <span class="s">&quot; &quot;</span>
+        <span class="k">print</span> <span class="n">print_temp</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">show_reaction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print the data of all the reactions the  in this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            none</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;reactant</span><span class="se">\t\t</span><span class="s">product</span><span class="se">\t\t</span><span class="s">constant&quot;</span>
+        <span class="k">for</span> <span class="n">single_reaction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
+            <span class="n">print_temp</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">reactant</span> <span class="ow">in</span> <span class="n">single_reaction</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">print_temp</span> <span class="o">+=</span> <span class="n">reactant</span> <span class="o">+</span> <span class="s">&quot; &quot;</span>
+            <span class="n">print_temp</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\t\t</span><span class="s">&quot;</span>
+            <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">single_reaction</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">print_temp</span> <span class="o">+=</span> <span class="n">product</span> <span class="o">+</span> <span class="s">&quot; &quot;</span>
+            <span class="n">print_temp</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\t\t</span><span class="s">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">single_reaction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">print</span> <span class="n">print_temp</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reactions</span><span class="p">,</span> <span class="n">speciesname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Init this system</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the data of the reactions in this system</span>
+<span class="sd">                looking for help(set_reactions) to find the format of this list</span>
+<span class="sd">            list:the name of all the species in this system</span>
+<span class="sd">        Returns</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_species_name</span><span class="p">(</span><span class="n">speciesname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_reactions</span><span class="p">(</span><span class="n">reactions</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">(</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">reactant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">other</span><span class="o">.</span><span class="n">reactant</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">constant</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">species_name</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">species_name</span><span class="o">.</span><span class="n">tolist</span><span class="p">())))</span>
+
+<div class="viewcode-block" id="reaction_system.simulate"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">stop_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate after given species initial number and stoptime</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the number of the species at t=0</span>
+<span class="sd">            real:the time to stop the simualtion</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list:the record of the simulation</span>
+<span class="sd">                the format of the list is : [[time,[species current number,...]],...]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">intensity</span><span class="p">(</span><span class="n">single_reactant</span><span class="p">,</span> <span class="n">current</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">species_temp</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">current</span><span class="p">[</span><span class="n">species_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">species_temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                                   <span class="n">single_reactant</span><span class="p">))</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">intensity_list</span><span class="p">(</span><span class="n">reactant</span><span class="p">,</span> <span class="n">current</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">single_reactant</span><span class="p">:</span> <span class="n">intensity</span><span class="p">(</span><span class="n">single_reactant</span><span class="p">,</span> <span class="n">current</span><span class="p">),</span> <span class="n">reactant</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">init_list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">single_init</span> <span class="ow">in</span> <span class="n">init_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">single_init</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">current</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span><span class="p">[</span><span class="n">single_init</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">single_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">current</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_number</span><span class="p">)</span>
+        <span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">species</span><span class="p">)</span>
+        <span class="n">initialize</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="p">[[</span><span class="n">time</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">tolist</span><span class="p">()]]</span>
+        <span class="n">reaction_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reaction_number</span>
+        <span class="k">while</span> <span class="n">time</span> <span class="o">&lt;</span> <span class="n">stop_time</span><span class="p">:</span>
+            <span class="n">intensities</span> <span class="o">=</span> <span class="n">intensity_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reactant_data</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span>
+            <span class="n">possibility</span> <span class="o">=</span> <span class="n">intensities</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span>
+            <span class="n">possibility_sum</span> <span class="o">=</span> <span class="n">possibility</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">possibility_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">delta_time</span> <span class="o">=</span> <span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span> <span class="o">/</span> <span class="n">possibility_sum</span>
+            <span class="n">next_reaction</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reaction_number</span><span class="p">),</span>
+                                                <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="n">possibility_sum</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">possibility</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">species_temp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactant_data</span><span class="p">[</span><span class="n">next_reaction</span><span class="p">]:</span>
+                <span class="n">current</span><span class="p">[</span><span class="n">species_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-=</span> <span class="n">species_temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">species_temp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">product_data</span><span class="p">[</span><span class="n">next_reaction</span><span class="p">]:</span>
+                <span class="n">current</span><span class="p">[</span><span class="n">species_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">species_temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">time</span> <span class="o">+=</span> <span class="n">delta_time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">time</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span>
+</div>
+<div class="viewcode-block" id="reaction_system.show_record"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.show_record">[docs]</a>    <span class="k">def</span> <span class="nf">show_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_list</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show the graph of the record simulated</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            none</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span><span class="p">[</span><span class="n">single_species</span><span class="p">]</span> <span class="k">for</span> <span class="n">single_species</span> <span class="ow">in</span> <span class="n">plot_list</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">plot_list</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">plot_list</span><span class="p">:</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">species</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">])</span>
+        <span class="c"># !!! TODO: Something error HERE, pylab can only show once !!!</span>
+        <span class="c"># pylab.ion()</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">record_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_list</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the list of the record simulated</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            none</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_name_inverse</span><span class="p">,</span> <span class="p">[(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="p">]</span>
+
+<div class="viewcode-block" id="reaction_system.show_simulate"><a class="viewcode-back" href="../../../BioBLESS.biosys.html#BioBLESS.biosys.reaction_system.reaction_system.show_simulate">[docs]</a>    <span class="k">def</span> <span class="nf">show_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">stop_time</span><span class="p">,</span> <span class="n">list_plot</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate and show the graph</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            list:the number of the species at t=0</span>
+<span class="sd">            real:the time to stop the simualtion</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">stop_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_record</span><span class="p">(</span><span class="n">list_plot</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, USTC 2015.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

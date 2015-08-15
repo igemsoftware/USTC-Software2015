@@ -1,0 +1,9 @@
+name		status		id		type		description		sequence
+Promoter	A		-1		Promoter	Promoter		""
+RBS		A		-2		RBS		RBS			""
+Coding		A		-3		Coding		Coding			""
+Terminator	A 		-4		Terminator	Terminator		""
+Protein		A		-5		Protein		Protein			""
+mRNA		A		-6		mRNA		mRNA			""
+sRNA		A		-7		sRNA		sRNA			""
+Chemical	A		-8		Chemical	Chemical		""

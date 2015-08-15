@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+__author__ = 'E-Neo <e-neo@qq.com>'
+
 import os
 import re
 import time
@@ -20,19 +22,19 @@ def get_All_Parts():
 
     return "All_Parts"
 
-    
+
 def get_parts_name(All_Parts):
     ""
     pattern = re.compile(r'>(\w+)')
     parts = pattern.findall(All_Parts)
     partfp = open('parts_name', 'w')
-    
+
     for part in parts:
         partfp.write(part + '\n')
-        
+
     partfp.write('\n%d\n' % len(parts))
     partfp.close()
-    
+
     logfp = open('log', 'a')
     logfp.write(time.strftime("%Y-%m-%d %H:%M:%S\n"))
     logfp.write("Get parts_name\n\n")
@@ -46,12 +48,12 @@ def get_Part_html(parts):
     os.mkdir('Parts')
     count = 0
     logfp = open('log', 'a')
-    
+
     for part in parts:
         logfp.write(time.strftime("%Y-%m-%d %H:%M:%S\n"))
         try:
-            url = "http://parts.igem.org/Part:%s" % part
-            os.system("wget -q -O Parts/%s.html %s" % (part, url))
+            url = "http://parts.igem.org/cgi/xml/part.cgi?part=%s" % part
+            os.system("wget -q -O Parts/%s.xml %s" % (part, url))
             count = count + 1
             logfp.write("Get %s [%d]\n\n" % (part, count))
         except:

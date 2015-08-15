@@ -1,0 +1,52 @@
+//一个json，是个数组    每一个id都是全局唯一的
+{
+"nodes":[
+{
+    "id": int,
+    "name": "string",
+    "icon": {
+        "text": "≥1",
+        "inverter": false
+    },
+    "type": {
+        "type": null,
+        "function": "string",
+        "chassis": "string",
+        "standard": "string",
+        "contributor": "string"
+    },
+    "parts": {
+        "id":[["d1", "d2", ...], ["d6, "d7", ...], ...],
+        "options":
+        [
+        {"d1":"string", "d2":"string", ...},
+          .....
+        ]
+    },
+    "input": {
+        "id":["p100", "p200", ...],
+        "options":[{"p100":"xxx", "p200":"xxx", ...}, ...]
+    },
+    "output": ["p5", ...],
+    "map": [    //所有的id为一个字符加一个无符号数   p代表蛋白质 e代表反应 d代表dna
+        {"id":"e1", "id1":"d1", "id2":"p1", "type":"trans"},
+        {"id":"e2", "id1":"p1", "id2":"d4", "type":"inh"},
+        {"id":"e3", "id1":"p100", "id2":"e2", "type":"inh"},
+        ...
+    ],
+
+    "optional":{
+    "posloc": [    
+        {"from":"NOT COMPLETE", "to":"NOT COMPLETE"},
+        ...
+    ]
+    }
+},
+...
+],
+    "arcs":[
+        {nodeid_from: nodeid_to, nodeport_from, nodeport_to, }........
+    ]
+
+}
+

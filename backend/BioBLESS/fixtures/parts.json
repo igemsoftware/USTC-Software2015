@@ -1,0 +1,32 @@
+[
+  {
+    "model": "BioBLESS.parts",
+    "fields": {
+      "name": "BBa_K103011",
+      "id": "11984",
+      "type": "Coding",
+      "description": "linker module g_s_g",
+      "sequence": "ggatctgga"
+    }
+  },
+  {
+    "model": "BioBLESS.parts",
+    "fields": {
+      "name": "BBa_K103015",
+      "id": "11988",
+      "type": "RBS",
+      "description": "consensus RBS",
+      "sequence": "aggagg"
+    }
+  },
+  {
+    "model": "BioBLESS.parts",
+    "fields": {
+      "name": "BBa_K104003",
+      "id": "15131",
+      "type": "RBS",
+      "description": "RBS_spaR",
+      "sequence": "agggggccg"
+    }
+  }
+]

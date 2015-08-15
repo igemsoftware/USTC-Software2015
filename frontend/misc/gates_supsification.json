@@ -1,0 +1,4 @@
+﻿{
+    "nodes":["OR","NOR","NOT","OR1","NOR1","NOT1","NOT2"],
+    "arcs":[{"from":0,"to":2},{"from":1,"to":2},{"from":3,"to":5},{"from":4,"to":5},{"from":5,"to":6},{"from":2,"to":6}]
+}

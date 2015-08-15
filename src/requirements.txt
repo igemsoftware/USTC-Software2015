@@ -1,5 +1,0 @@
-django
-simplejson
-pylint-django
-coverage
-networkx
