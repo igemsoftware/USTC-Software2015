@@ -19,7 +19,6 @@ import BioBLESS.views.parts
 import BioBLESS.views.views
 from BioBLESS.biosys.test_samples import test_reaction_system_sample, test_parts_system_sample
 
-
 urlpatterns = [
     url(r'^$', include('home.urls')),
     url(r'^aplusb/(\d+)/(\d+)/$', BioBLESS.views.views.aplusb),
