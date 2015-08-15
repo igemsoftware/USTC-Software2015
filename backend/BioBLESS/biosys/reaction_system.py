@@ -183,13 +183,6 @@ class reaction_system(object):
         self.set_species_name(speciesname)
         self.set_reactions(reactions)
 
-<<<<<<< HEAD
-    def __add__(self,other):
-        return reaction_system(numpy.array([self.reactant,self.product,self.constant]).transpose().tolist()+numpy.array([other.reactant,other.product,other.constant]).transpose().tolist(),list(set(self.species_name.tolist()+other.species_name.tolist())))
-    
-    def simulate(self,initial,stop_time):
-        '''
-=======
     def __add__(self, other):
         return self.__class__(
             numpy.array([self.reactant, self.product, self.constant]).transpose().tolist() + numpy.array(
@@ -198,7 +191,6 @@ class reaction_system(object):
 
     def simulate(self, initial, stop_time):
         """
->>>>>>> 6986389594632bfa0e64712648950ce1b3c8dad4
         Simulate after given species initial number and stoptime
         Parameters:
             list:the number of the species at t=0
