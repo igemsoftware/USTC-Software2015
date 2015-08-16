@@ -31,7 +31,7 @@
                 "key":float,
 
             }
-            "lizhi":{"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
+            "lizhi":{"d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
         },
         {...},
         null,
