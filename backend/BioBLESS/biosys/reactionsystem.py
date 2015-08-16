@@ -13,7 +13,13 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
-import numpy  # pylab
+import numpy
+
+try:
+    import pylab
+except Exception, e:
+    pass
+
 from biopy import itemfreq, comb
 
 
@@ -103,9 +109,6 @@ class ReactionSystem(object):
         Returns:
             none
         """
-
-
-
         self.reactions = numpy.array(reaction)
         self.reactant, self.product, self.constant = self.reactions.transpose()
         self.reactant = numpy.array(self.reactant)
@@ -222,13 +225,13 @@ class ReactionSystem(object):
         reaction_number = self.reaction_number
         while time < stop_time:
             intensities = intensity_list(self.reactant_data, current)
-            possibility = intensities * self.constant
+            possibility = numpy.array(intensities * self.constant, numpy.float64)
             possibility_sum = possibility.sum()
             if possibility_sum == 0:
                 break
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
             next_reaction = numpy.random.choice(numpy.arange(reaction_number),
-                                                p=[i / possibility_sum for i in possibility])
+                                                p=possibility / possibility_sum)
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp[0]] -= species_temp[1]
             for species_temp in self.product_data[next_reaction]:
@@ -248,11 +251,11 @@ class ReactionSystem(object):
         plot_list = [self.species_name_inverse[single_species] for single_species in plot_list] \
             if plot_list else self.species_name_inverse.values()
 
-        # for species in plot_list:
-        #     pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
+        for species in plot_list:
+            pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         # # !!! TODO: Something error HERE, pylab can only show once !!!
         # # pylab.ion()
-        # pylab.show()
+        pylab.show()
 
     @property
     def record_list(self, plot_list=None):

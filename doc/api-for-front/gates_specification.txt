@@ -3,7 +3,7 @@
 {
 
     //gate selection & inputs & output
-    "nodes": ["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT0", ...],
+    "nodes": ["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT", ...],
 
         //connection status
         "arcs": [
@@ -31,7 +31,7 @@
                 "key":float,
 
             }
-            "lizhi":{"id": 0, "d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
+            "lizhi":{"d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
         },
         {...},
         null,
