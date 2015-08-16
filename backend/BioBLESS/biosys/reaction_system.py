@@ -3,10 +3,12 @@
 """
 The package about the reactions system and simulations
 Data structure:
+
 System:[reactions,species_name]
 Reactions:[[[reactant,...],[product,...],constant,...]
 Simulation structure:[[initial,...],stop_time]
 Show structure:[species_to_show]
+
 """
 
 __author__ = "Trumpet"
@@ -101,13 +103,7 @@ class reaction_system(object):
             none
         """
 
-        def itemfreq(temp):
-            if len(temp) == 0:
-                return numpy.array([])
-            else:
-                items, inv = numpy.unique(temp, return_inverse=True)
-                freq = numpy.bincount(inv)
-                return numpy.array([items, freq]).T
+
 
         self.reactions = numpy.array(reaction)
         self.reactant, self.product, self.constant = self.reactions.transpose()
