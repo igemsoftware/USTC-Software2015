@@ -1,6 +1,6 @@
 __author__ = 'zsy95_000'
 
-from reaction_system import reaction_system
+from reactionsystem import ReactionSystem
 from parts_system import parts_system
 from django.http import HttpResponse
 
@@ -11,7 +11,7 @@ def test_reaction_system_sample(request):
     :param request:
     :return:
     """
-    A = reaction_system([[["a"], ["b"], 1], [["b"], ["c"], 1]], [["a", 1000], "b", "c"])
+    A = ReactionSystem([[["a"], ["b"], 1], [["b"], ["c"], 1]], [["a", 1000], "b", "c"])
     A.show_simulate([], 10, ["a", "b", "c"])
     A.show_species
     A.del_species_name("c")
@@ -45,12 +45,14 @@ def test_parts_system_sample(request):
     :param request:
     :return:
     """
-    A = parts_system(["a", "b", ["c", 10]], [[["a"], ["b"], 1, [[["c", 1]], []]]])
-    A.show_simulate([["a", 100]], 100, ["a", "b"])
-    B = parts_system([["a", 100], ["b", 100], ["c", 100], "ap", "bp", "cp"],
-                     [[["b"], ["bp", "b"], 1, [[["cp", 10]], []]], [["a"], ["ap", "a"], 1, [[["bp", 10]], []]],
-                      [["c"], ["cp", "c"], 1, [[["ap", 10]], []]], [["ap"], [], 1, [[], []]], [["bp"], [], 1, [[], []]],
-                      [["cp"], [], 1, [[], []]]])
-    print "waiting"
-    B.show_simulate([], 100, ["ap", "bp", "cp"])
+    #!/usr/bin/env python
+    #A=parts_system(["a","b",["c",10]],[[["a"],["b"],1,[[["c",1]],[]]]])
+    #A.show_simulate([["a",100]],100,["a","b"])
+    import datetime
+    t = datetime.datetime.now()
+    B=parts_system([["a",100],["b",100],["c",100],"ap","bp","cp"],[[["b"],["bp","b"],0.01,[[["cp",10]],[]]],[["a"],["ap","a"],0.01,[[["bp",10]],[]]],[["c"],["cp","c"],0.01,[[["ap",10]],[]]],[["ap"],[],0.01,[[],[]]],[["bp"],[],0.01,[[],[]]],[["cp"],[],0.01,[[],[]]]])
+    B.simulate([], 10000)
+    print str(datetime.datetime.now() - t)
+
+    B.show_record(["ap","bp","cp"])
     return HttpResponse("Done")

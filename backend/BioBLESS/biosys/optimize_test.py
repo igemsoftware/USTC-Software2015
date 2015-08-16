@@ -3,6 +3,7 @@ __author__ = 'zsy95_000'
 import datetime
 import numpy
 
+
 print 'Create array'
 t = datetime.datetime.now()
 arr2 = range(10000000)
