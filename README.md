@@ -12,16 +12,44 @@
 
 + `backend` Root of django
 + `backend/BioBLESS` Functional codes
-+ `backend/test` Test case
++  Test cases are in the `backend/BioBLESS` directory
 
 ### Dependency
 + **django** for website
 + **numpy & scipy** for calculation
 + **matplotlib** for plotting
 + **networkx** for graph
++ you could just use `pip install -r requirements.txt` to install all the dependency.
+
+### Install
+    ./manage.py migrate
+    ./manage.py loaddata parts
+    ./manage.py runserver
+
+### Unit Test
+you could run
+```
+    ./manage.py test BioBLESS
+```
+for unit test
+
+### Backend code doc
+Please install sphinx package for python.
+For example:
+```
+pip install sphinx
+```
+you could run
+```
+    ./doc_build/gendoc.sh (under *nix/macos)
+    doc_build\gendoc.cmd (under windows)
+```
+   Then you can open doc_build/doc/html/index.html to view the doc
+
+### Rest API doc
+in the URI `/docs`
 
 ---
-
 # Frontend
 
 + jQuery-2.1.4:

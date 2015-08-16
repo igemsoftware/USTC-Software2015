@@ -3,18 +3,27 @@
 """
 The package about the reactions system and simulations
 Data structure:
+
 System:[reactions,species_name]
 Reactions:[[[reactant,...],[product,...],constant,...]
 Simulation structure:[[initial,...],stop_time]
 Show structure:[species_to_show]
+
 """
 
 __author__ = "Trumpet"
 
-import numpy, scipy, scipy.misc, scipy.stats, pylab
+import numpy
+
+try:
+    import pylab
+except Exception, e:
+    pass
+
+from biopy import itemfreq, comb
 
 
-class reaction_system(object):
+class ReactionSystem(object):
     species_name = []
     reactions = []
     reactant = []
@@ -100,10 +109,6 @@ class reaction_system(object):
         Returns:
             none
         """
-
-        def itemfreq(temp):
-            return numpy.array([]) if len(temp) == 0 else scipy.stats.itemfreq(temp)
-
         self.reactions = numpy.array(reaction)
         self.reactant, self.product, self.constant = self.reactions.transpose()
         self.reactant = numpy.array(self.reactant)
@@ -201,7 +206,7 @@ class reaction_system(object):
         """
 
         def intensity(single_reactant, current):
-            return numpy.array(map(lambda species_temp: scipy.misc.comb(current[species_temp[0]], species_temp[1]),
+            return numpy.array(map(lambda species_temp: comb[current[species_temp[0]], species_temp[1]],
                                    single_reactant)).prod()
 
         def intensity_list(reactant, current):
@@ -212,7 +217,7 @@ class reaction_system(object):
                 if isinstance(single_init, list):
                     current[self.species_name_inverse[single_init[0]]] = single_init[1]
 
-        current = numpy.array([0] * self.species_number)
+        current = numpy.zeros(self.species_number)  # numpy.array([0] * self.species_number)
         initialize(self.species)
         initialize(initial)
         time = 0
@@ -220,13 +225,13 @@ class reaction_system(object):
         reaction_number = self.reaction_number
         while time < stop_time:
             intensities = intensity_list(self.reactant_data, current)
-            possibility = intensities * self.constant
+            possibility = numpy.array(intensities * self.constant, numpy.float64)
             possibility_sum = possibility.sum()
             if possibility_sum == 0:
                 break
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
             next_reaction = numpy.random.choice(numpy.arange(reaction_number),
-                                                p=[i / possibility_sum for i in possibility])
+                                                p=possibility / possibility_sum)
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp[0]] -= species_temp[1]
             for species_temp in self.product_data[next_reaction]:
@@ -248,8 +253,8 @@ class reaction_system(object):
 
         for species in plot_list:
             pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
-        # !!! TODO: Something error HERE, pylab can only show once !!!
-        # pylab.ion()
+        # # !!! TODO: Something error HERE, pylab can only show once !!!
+        # # pylab.ion()
         pylab.show()
 
     @property

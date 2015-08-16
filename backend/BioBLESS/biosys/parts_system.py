@@ -11,10 +11,10 @@ catalytic:[[+],[-]]
 
 __author__ = "Trumpet"
 
-from reaction_system import reaction_system
+from reactionsystem import ReactionSystem
 
 
-class parts_system(reaction_system):
+class parts_system(ReactionSystem):
 
     def __init__(self, species, effect):
         self.set_species_and_effect(species, effect)

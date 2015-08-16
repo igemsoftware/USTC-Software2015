@@ -40,3 +40,4 @@ class PartsView(APIView):
         response_dict['status'] = "SUCCESS"
         response_dict['data'] = response_total
         return Response(response_dict)
+

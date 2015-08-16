@@ -2,7 +2,7 @@
 * @author needsay
 * @constructor BioBLESS.device 
 * @description the class of devices 
-* @version 0.2.3
+* @version 0.3.1
 */ 
 BioBLESS.device = {};
 /** 
@@ -80,7 +80,7 @@ this.prepare = function(devices, n){
 	this.input_num = 0;
 	this.up_height_input_num = [];
 	this.down_height_input_num = [];
-	for(i = 0; i < devices[n].input.id.length; i++){
+	for(i = 0; i < devices[n].input.length; i++){
 		this.input[i] = {};
 		this.input[i].to_dev_index = [];
 		this.input[i].to_dev_output_index = [];
@@ -97,26 +97,18 @@ this.prepare = function(devices, n){
 	
 	
 	
-	this.lines_num = devices[n].lines.id.length;//主线数
+	this.lines_num = devices[n].parts.id.length;//主线数
 	this.parts_num = 0;//主线上总结点数
 	this.part_to_line = new Array();//part序号到其所在主线序号的映射
 	this.to_part = new Array();
-	this.is_dna = new Array();//用于指示第i条主线的第j个节点是否是DNA
 	for(i = 0; i < this.lines_num; i++){
 		this.to_part[i] = new Array();
-		this.is_dna[i] = new Array();
-		for(j = 0; j < devices[n].lines.id[i].length; j++){
+		for(j = 0; j < devices[n].parts.id[i].length; j++){
 		    this.part_to_line[this.parts_num + j] = i;
 			this.to_part[i][j] = this.parts_num + j;
-			this.is_dna[i][j] = false;
 		};
-	    this.parts_num = this.parts_num + devices[n].lines.id[i].length;
+	    this.parts_num = this.parts_num + devices[n].parts.id[i].length;
 	};//计算总结点数
-	for(i = 0; i < devices[n].map.length; i++){
-		if(devices[n].map[i].id1[0] == 'd'){
-			this.is_dna[this.part_to_line[parseInt(devices[n].map[i].id1.substring(1)) - 1]][parseInt(devices[n].map[i].id1.substring(1)) - 1] = true;
-		};
-	};
 };
 
 /** 
@@ -126,8 +118,6 @@ this.prepare = function(devices, n){
 */ 
 this.line_analysis = function(devices, n){
 	var i, j, k, l, Num, s;//备用变量
-	
-	
 	this.is_line = new Array();//用于指示是否有支线从第i个节点经蛋白质连接到到第j个节点
 	this.line_type = new Array();//用于指示从节点i到节点j的线末端的类型
 	for(i = 0; i < this.parts_num; i++){
@@ -138,35 +128,28 @@ this.line_analysis = function(devices, n){
 			this.line_type[i][j] = null;
 		};
 	};
-	Num = 0;
-	for(i = 0; i < this.lines_num; i++){
-		for(j = 0; j < devices[n].lines.id[i].length; j++){
-			if(this.is_dna[i][j]){
-				var end = -1;
-				for(k = 0; k < devices[n].map.length; k++){
-					if(devices[n].map[k].id1[0] == 'd' && parseInt(devices[n].map[k].id1.substring(1)) - 1 == this.to_part[i][j]){
-						for(l = 0; l < devices[n].map.length; l++){
-							if(devices[n].map[l].id1 == devices[n].map[k].id2){
-								end = parseInt(devices[n].map[l].id2.substring(1)) - 1;
-								s = devices[n].map[l].type;
-							};
-						};
-					};
+	var end, start;
+	for(k = 0; k < devices[n].map.length; k++){
+		if(devices[n].map[k].id1[0] === 'd'){
+			start = parseInt(devices[n].map[k].id1.substring(1)) - 1;
+			end = -1;
+			for(l = 0; l < devices[n].map.length; l++){
+				if(devices[n].map[l].id1 === devices[n].map[k].id2){
+					end = parseInt(devices[n].map[l].id2.substring(1)) - 1;
+					s = devices[n].map[l].type;
+					break;
 				};
-				if(end == -1){
-					alert("Error - 1000!");
-					return;
-				};
-				
-				this.is_line[Num + j][end] = true;
-				this.line_type[Num + j][end] = s;
 			};
+			if(end == -1){
+		        this.is_line[start][start] = true;
+	            this.line_type[start][start] = s;
+			}else{
+				this.is_line[start][end] = true;
+	            this.line_type[start][end] = s;
+			};
+			
 		};
-		Num = Num + this.lines_num;	
-	};//计算this.is_line与this.line_type
-	for(i = 0; i < devices[n].output.length; i++){
-		this.is_line[parseInt(devices[n].output[i].substring(1)) - 1][parseInt(devices[n].output[i].substring(1)) - 1] = true;
-	};
+	};	
 	
 };
 /** 
@@ -280,8 +263,8 @@ this.part_analysis = function(devices, n){
 	};
 	for(i = 0; i < devices[n].map.length; i++){
 		if(devices[n].map[i].id2[0] !== 'e'){
-			for(j = 0; j < devices[n].input.id.length; j++){
-				if(devices[n].input.id[j] === devices[n].map[i].id1){
+			for(j = 0; j < devices[n].input.length; j++){
+				if(devices[n].input[j] === devices[n].map[i].id1){
 					k = parseInt(devices[n].map[i].id2.substring(1)) - 1;
 					this.part[k].downIndegree += 1;
 					break;
@@ -307,6 +290,7 @@ this.draw_protein = function(){
 	return graphic;
 };
 this.draw = function(devices, n){
+	if(n >= 0){
 	if(!devices[n]){
 		alert("Error!");
 		return;
@@ -320,7 +304,7 @@ this.draw = function(devices, n){
 	//////////////////////////////////////////////////数据处理
 	
 	this.stage_h = floorDis * (this.protein_heightest - this.protein_lowest + 4);
-	this.stage_w = nodeDis * (this.parts_num + 3);
+	this.stage_w = nodeDis * (this.parts_num + this.lines_num + 1);
 	
     
     
@@ -338,7 +322,7 @@ this.draw = function(devices, n){
 	Num = 0;
 	for(i = 0; i < this.lines_num; i++){
 		graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
-		for(j = 0; j < devices[n].lines.id[i].length; j++){
+		for(j = 0; j < devices[n].parts.id[i].length; j++){
 			parts[this.to_part[i][j]] = BioBLESS.IDdraw.drawElement(this.get_id());
 			parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
 			parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
@@ -354,7 +338,7 @@ this.draw = function(devices, n){
 				    });
 			};*/
 		};
-		Num += devices[n].lines.id[i].length;
+		Num += devices[n].parts.id[i].length;
 		graphics.lineTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
 		graphics.moveTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
 		graphics.lineTo((Num + i + 1) * nodeDis - 11, this.stage_h / 2.0 - 8);
@@ -411,26 +395,27 @@ this.draw = function(devices, n){
 	for(j = 0; j < devices[n].output.length; j++){
 		i = parseInt(devices[n].output[j].substring(1)) - 1;
 		this.part[i].upLine++;
-		k = nodeW / (this.part[i].upIndegree + this.part[i].upOutdegree + 1);
 		parts[i].protein = this.draw_protein();
 		parts[i].protein.position.x = parts[i].position.x;
 		parts[i].protein.position.y = parts[i].position.y - this.protein_height[i] * floorDis;
-		if(this.part[i].upLine > 1){
+		if(this.part[i].upIndegree + this.part[i].upOutdegree > 1){
+			k = nodeW / (this.part[i].upIndegree + this.part[i].upOutdegree + 1);
 		    this.draw_line(graphics, parts[i].position.x + k * this.part[i].upLine, parts[i].position.y + ind, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + (nodeH + floorDis) / 2, true);
 		    this.draw_line(graphics, parts[i].position.x + k * this.part[i].upLine, parts[i].protein.position.y + (nodeH + floorDis) / 2, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, false);
 		}else{
-			graphics.moveTo(parts[i].position.x + k * this.part[i].upLine, parts[i].position.y + ind);
+			graphics.moveTo(parts[i].position.x + nodeW / 2, parts[i].position.y + ind);
 			graphics.lineTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12);
 		}
 		this.draw_arrow(graphics, 6, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, "up");
 	};//绘制有关蛋白质节点的支路
 	
-	
+	graphics.lineStyle(6, 0xffff00, 1);
 	for(i = 0; i < devices[n].map.length; i++){
 		if(devices[n].map[i].id2[0] == 'e'){
 			Num = parseInt(devices[n].map[i].id2.substring(1)) - 1;
 			k = parseInt(devices[n].map[Num].id1.substring(1)) - 1;
 			l = parseInt(devices[n].map[Num].id2.substring(1)) - 1;
+			
             parts[k].protein.Text = new PIXI.Text(devices[n].map[i].id1);
 			parts[k].protein.Text.anchor.x = 0.5;
 			parts[k].protein.Text.anchor.y = 0.5;
@@ -475,29 +460,32 @@ this.draw = function(devices, n){
 				parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
 			};
 			
-			for(var p = 0; p < devices[n].input.id.length; p++){
-				if(devices[n].input.options[0][p] === devices[n].map[i].id1){
+			for(var p = 0; p < devices[n].input.length; p++){
+				if(devices[n].input[p] === devices[n].map[i].id1){
 					this.input[p].x[this.input[p].x.length] = parts[k].protein.Text.position.x;
 					this.input[p].y[this.input[p].y.length] = parts[k].protein.Text.position.y;
 				}
 			};
 		}else{
-			for(j = 0; j < devices[n].input.id.length; j++){
-				if(devices[n].input.id[j] === devices[n].map[i].id1){
+			for(j = 0; j < devices[n].input.length; j++){
+				if(devices[n].input[j] === devices[n].map[i].id1){
 					var height = 0;
 			        var input_num = this.up_height_input_num;
 			        if(input_num[height] === undefined)
 			            input_num[height] = 0;
-			        var ind2 = input_num[height]++ * 10;
+			        var ind2 = input_num[height]++ * 30;
 					k = parseInt(devices[n].map[i].id2.substring(1)) - 1;
 					l = nodeW / (this.part[k].downIndegree + this.part[k].downOutdegree + 1);
 					var p = 50;
 					this.part[k].downLine++;
-					parts[k].Text = new PIXI.Text(devices[n].map[i].id1);
-			        parts[k].Text.anchor.x = 0.5;
-			        parts[k].Text.anchor.y = 0.5;
-					parts[k].Text.position.x = parts[k].position.x + this.part[k].downLine * l;
-					parts[k].Text.position.y = parts[k].position.y + nodeH + 55 - p + ind2;
+					if(parts[k].Text === undefined)
+					    parts[k].Text = [];
+				    var t = parts[k].Text.length;
+					parts[k].Text[t] = new PIXI.Text(devices[n].map[i].id1);
+			        parts[k].Text[t].anchor.x = 0.5;
+			        parts[k].Text[t].anchor.y = 0.5;
+					parts[k].Text[t].position.x = parts[k].position.x + this.part[k].downLine * l;
+					parts[k].Text[t].position.y = parts[k].position.y + nodeH + 55 - p + ind2;
 					graphics.moveTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15);
 					graphics.lineTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 40 - p + ind2);
 					if(devices[n].map[i].type == 'inh'){
@@ -507,8 +495,8 @@ this.draw = function(devices, n){
 						this.draw_arrow(graphics, 6, parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15, "up");
 					};
 					
-					this.input[j].x[this.input[j].x.length] = parts[k].Text.position.x;
-					this.input[j].y[this.input[j].y.length] = parts[k].Text.position.y;
+					this.input[j].x[this.input[j].x.length] = parts[k].Text[t].position.x;
+					this.input[j].y[this.input[j].y.length] = parts[k].Text[t].position.y;
 					break;
 				};
 			};
@@ -533,18 +521,58 @@ this.draw = function(devices, n){
 		this.stage.addChild(parts[i]);
 		if(parts[i].protein){
 		    this.stage.addChild(parts[i].protein);
-			if(parts[i].protein.Text){
-				this.stage.addChild(parts[i].protein.Text);
-			};
 		};
-		if(parts[i].Text)
-		    this.stage.addChild(parts[i].Text);
 	};
-	
+	}else if(n === -1){
+		var output = BioBLESS.device.create_textbutton("OUT", 100, 40, 0x0000ff);
+		this.stage_h = 100;
+		this.stage_w = 1000;
+		output.x = 450;
+		this.stage.addChild(output);
+		this.chosen = false;
+	    this.input = [];
+	    this.input_num = 0;
+		this.input[0] = {};
+		this.input[0].to_dev_index = [];
+		this.input[0].to_dev_output_index = [];
+		this.input[0].x = [500];
+		this.input[0].y = [40];
+	    this.output = [];
+	    this.output_num = 0;
+	}else{
+		var input = BioBLESS.device.create_textbutton("INPUT " + (0 - n - 1).toString(), 150, 40, 0x0000ff);
+		this.stage_h = 100;
+		this.stage_w = 1000;
+		input.x = 425;
+		this.stage.addChild(input);
+		this.chosen = false;
+	    this.input = [];
+	    this.input_num = 0;
+	    this.output = [];
+	    this.output_num = 0;
+		this.output[0] = {};
+		this.output[0].to_dev_index = [];
+		this.output[0].to_dev_input_index = [];
+		this.output[0].x = 525;
+		this.output[0].y = -30;
+	};
 	
 	
 };//绘制函数
 
+this.show_input = function(){
+	for(i = 0; i < this.parts_num; i++){
+		if(parts[i].protein){
+			if(parts[i].protein.Text){
+				this.stage.addChild(parts[i].protein.Text);
+			};
+		};
+		if(parts[i].Text){
+			for(j = 0; j < parts[i].Text.length; j++)
+		        this.stage.addChild(parts[i].Text[j]);
+		}
+	};
+};
 
 };
 
@@ -562,17 +590,25 @@ BioBLESS.device.devs_analysis = function(devices){
 	var g = [];
 	for(i = 0; i < gates.nodes.length; i++){
 		for(j = 0; j < devices.length; j++){
-			if(gates.nodes[i] === devices[j].name){
+			if(gates.nodes[i] === devices[j].id){
 				g[i] = j;
 				break;
 			}
 		};
-		if(j === devices.length)
-		    alert("Error - 1002!");
+		if(j === devices.length){
+			if(gates.nodes[i][0] === "O"){
+				g[i] = -1;
+			}else if(gates.nodes[i][0] === "I"){
+				g[i] = -2 - parseInt(gates.nodes[i].substring(5));
+			}else alert("Error - 1002");
+		}
+		    
 	};
+	var j = 0;
 	for(i = 0; i < gates.nodes.length; i++){
 		this.devs[i] = new dev();
 		this.devs[i].draw(devices, g[i]);
+		if(g[i] < 0) continue;
 		var index_button = BioBLESS.home.create_textbutton(i.toString(), 100, 30, 0x00ffff);
 		index_button.x = 50;
 		index_button.y = 100;
@@ -581,19 +617,28 @@ BioBLESS.device.devs_analysis = function(devices){
 	for(i = 0; i < gates.arcs.length; i++){
 		var from = gates.arcs[i].from;
 		var to = gates.arcs[i].to;
+		
 		this.devs[from].output[0].to_dev_index[this.devs[from].output[0].to_dev_index.length] = to;
 		this.devs[from].output[0].to_dev_input_index[this.devs[from].output[0].to_dev_input_index.length] = this.devs[to].input_num;
 		this.devs[to].input[this.devs[to].input_num].to_dev_index[0] = from;
 		this.devs[to].input[this.devs[to].input_num].to_dev_output_index[0] = 0;
 		this.devs[to].input_num++;
+		
 	}
 	
 	this.poi = [];
 	this.poi[0] = [];
-	for(i = 0; i < devices.length; i++){
-		for(j = 0; j < devices[i].input.id.length; j++){
+	for(i = 0; i < this.devs.length; i++){
+		if(this.devs[i].input.length === 0){
+			this.poi[0][this.poi[0].length] = this.devs[i];
+			this.devs[i].chosen = true;
+		}
+	};
+	this.poi[1] = [];
+	for(i = 0; i < this.devs.length; i++){
+		for(j = 0; j < this.devs[i].input.length; j++){
 			if(this.devs[i].input[j].to_dev_index.length === 0){
-					this.poi[0][this.poi[0].length] = this.devs[i];
+				this.poi[1][this.poi[1].length] = this.devs[i];
 				this.devs[i].chosen = true;
 				break;
 			}
@@ -601,14 +646,14 @@ BioBLESS.device.devs_analysis = function(devices){
 	};
 	i = 0;
 	while(this.poi[i].length > 0){
-		this.poi[i + 1] = [];
+		if(this.poi[i + 1] === undefined)
+		    this.poi[i + 1] = [];
 		for(j = 0; j < this.poi[i].length; j++){
 			for(k = 0; k < this.poi[i][j].output.length; k++){
 				for(l = 0; l < this.poi[i][j].output[k].to_dev_index.length; l++){
     				if(this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen === false){
 	     				this.poi[i + 1][this.poi[i + 1].length] = this.devs[this.poi[i][j].output[k].to_dev_index[l]];
 		    			this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen = true;
-						break;
 			    	}
 			    }
 			};
@@ -636,13 +681,15 @@ BioBLESS.device.devs_analysis = function(devices){
 	var x = 0;
 	for(i = 0; i < this.row.length; i++){
 		for(j = 0; j < this.poi[i].length; j++){
-			this.poi[i][j].stage.position.x = x + j % 4 * 10;
+			this.poi[i][j].stage.position.x = x + j % 4 * 10 + (this.row[i].width -this.poi[i][j].stage_w) / 2 ;
 			this.poi[i][j].stage.position.y = (j + 1) / (this.poi[i].length + 1) * this.devs_height - this.poi[i][j].stage_h / 2;
 			this.stage.movable_stage.addChild(this.poi[i][j].stage);
 		};
 		x += this.row[i].width;
 	};
 	this.devs_width = x - 200;
+	
+	
 };
 BioBLESS.device.draw_lines_between_devices = function(){
 	var i, j, k, l, temp;
@@ -667,10 +714,10 @@ BioBLESS.device.draw_lines_between_devices = function(){
 					graphic.moveTo(output_x + nodeW + 25, input_y + 30);
 					graphic.lineTo(input_x, input_y + 30);
 					graphic.moveTo(input_x, input_y + 33);
-					graphic.lineTo(input_x, input_y + 13);
-					graphic.moveTo(input_x, input_y + 13);
-					graphic.lineTo(input_x - 4, input_y + 18);
-					graphic.lineTo(input_x + 4, input_y + 18);
+					graphic.lineTo(input_x, input_y + 13 - 30);
+					//graphic.moveTo(input_x, input_y + 13);
+					//graphic.lineTo(input_x - 4, input_y + 18);
+					//graphic.lineTo(input_x + 4, input_y + 18);
 				}else{
 					graphic.moveTo(output_x, output_y + nodeH / 2);
 					graphic.lineTo(output_x - 28, output_y + nodeH / 2);
@@ -679,17 +726,36 @@ BioBLESS.device.draw_lines_between_devices = function(){
 					graphic.moveTo(output_x - 25, input_y + 30);
 					graphic.lineTo(input_x, input_y + 30);
 					graphic.moveTo(input_x, input_y + 33);
-					graphic.lineTo(input_x, input_y + 13);
-					graphic.moveTo(input_x, input_y + 13);
-					graphic.lineTo(input_x - 4, input_y + 18);
-					graphic.lineTo(input_x + 4, input_y + 18);
+					graphic.lineTo(input_x, input_y + 13 - 30);
+					//graphic.moveTo(input_x, input_y + 13);
+					//graphic.lineTo(input_x - 4, input_y + 18);
+					//graphic.lineTo(input_x + 4, input_y + 18);
 				}
 				}
 				this.stage.movable_stage.addChild(graphic);
 			};
 		};
 	};
+    this.stage.movable_stage.addChild(this.poi[this.poi.length - 2][0].stage);
+};
 
+BioBLESS.device.create_textbutton = function(t, w, h, color){
+	var button = new PIXI.Container();
+	button.background = new PIXI.Graphics();
+	button.text = new PIXI.Text(t);
+	
+	button.background.beginFill(color, 1);
+	button.background.drawRoundedRect(0, 0, w, h, h / 5);
+	button.background.endFill();
+	
+	button.text.anchor.x = 0.5;
+	button.text.anchor.y = 0.5;
+	button.text.x = w / 2;
+	button.text.y = h / 2;
+	
+	button.addChild(button.background);
+	button.addChild(button.text);
+	return button;
 };
 /** 
 * @description draw one device or the whole devices
@@ -703,32 +769,23 @@ BioBLESS.device.draw = function(devices, n){
 		var i, j, k, l, temp;
 		this.devs_analysis(devices);
 		this.draw_lines_between_devices();
-		
-		
-		
-		
 		var t1 = this.row[0].width / this.devs_width;
 		var t2 = BioBLESS.height / this.devs_height;
 		this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (t1 < t2)? t1 : t2;
 		this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2)) / 2; 
 		this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * ((t1 < t2)? t1 : t2)) / 2; 
 		
-	}else{
+	}else if(n >= 0){
 	    this.stage.movable_stage._scale = 1;
-	
-	
-	
 		var w = BioBLESS.width;
 		var device = new dev();
 		device.draw(devices, n);
-	
-	
 		this.stage.movable_stage.addChild(device.stage);
 		var moveX = w / 2 - (this.parts_num + this.lines_num + 1) * 90 + 25;
 		if(moveX > 0)
 		    this.stage.movable_stage.position.x = moveX;
 		
-	};
+	}
 	this.stage.addChild(this.stage.movable_stage);
 	return this.stage;
 }

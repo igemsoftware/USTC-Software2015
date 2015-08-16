@@ -1,320 +1,516 @@
-            [{
-            "id": 0,
-                   "name": "OR",
-                  "icon":  "or",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,"p600",0,"p700"]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p100", "p200"],
-                       "options":[["p100", "p200"]]
-                   },
-                  "output":["p7"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p100", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p200", "id2":"e5", "type":"inh"},
-					{"id":"e7", "id1":"d1", "id2":"p1", "type":"trans"},
-                    {"id":"e8", "id1":"p1", "id2":"d2", "type":""}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
+[
+    {
+        "id": "OR0",
+        "input": [
+            "p100",
+            "p200"
+        ],
+        "output": [
+            "p7"
+        ],
+        "parts": {
+            "id": [
+                [
+                    "d1",
+                    "d2",
+                    "d3",
+                    "d4"
+                ],
+                [
+                    "d5",
+                    "d6",
+                    "d7",
+                    "d8"
+                ]
+            ],
+            "type": {
+                "d1": "Promoter",
+                "d2": "RBS",
+                "d3": "Coding",
+                "d4": "Terminator",
+                "d5": "Promoter",
+                "d6": "RBS",
+                "d7": "Coding",
+                "d8": "Terminator"
+            }
+        },
+        "map": [
+            {
+                "id": "e1",
+                "id1": "d3",
+                "id2": "p3",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
             },
-			{
-            "id": 0,
-                   "name": "NOR",
-                  "icon":  "nor",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,0,0,"p700"]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p400", "p500"],
-                       "options":[["p400", "p500"]]
-                   },
-                  "output":["p5"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p400", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p500", "id2":"e5", "type":"inh"},
-					{"id":"e7", "id1":"d1", "id2":"p1", "type":"trans"},
-                    {"id":"e8", "id1":"p1", "id2":"d5", "type":"inh"}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
+            {
+                "id": "e2",
+                "id1": "p100",
+                "id2": "d1",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
             },
-			{
-            "id": 0,
-                   "name": "NOT",
-                  "icon":  "not",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,0,0,0]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p600", "p700"],
-                       "options":[["p600", "p700"]]
-                   },
-                  "output":["p5"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p600", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p700", "id2":"d6", "type":"inh"},
-					{"id":"e7", "id1":"p600", "id2":"e5", "type":""}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
+            {
+                "id": "e3",
+                "id1": "p200",
+                "id2": "d1",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
             },
-			{
-            "id": 0,
-                   "name": "OR1",
-                  "icon":  "or",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,"p600",0,"p700"]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p100", "p200"],
-                       "options":[["p100", "p200"]]
-                   },
-                  "output":["p7"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p100", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p200", "id2":"e5", "type":"inh"},
-					{"id":"e7", "id1":"d1", "id2":"p1", "type":"trans"},
-                    {"id":"e8", "id1":"p1", "id2":"d2", "type":""}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
+            {
+                "id": "e4",
+                "id1": "p3",
+                "id2": "d5",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
             },
-			{
-            "id": 0,
-                   "name": "NOR1",
-                  "icon":  "nor",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,0,0,"p700"]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p400", "p500"],
-                       "options":[["p400", "p500"]]
-                   },
-                  "output":["p5"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p400", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p500", "id2":"e5", "type":"inh"},
-					{"id":"e7", "id1":"d1", "id2":"p1", "type":"trans"},
-                    {"id":"e8", "id1":"p1", "id2":"d5", "type":"inh"}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
+            {
+                "id": "e5",
+                "id1": "d7",
+                "id2": "p7",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            }
+        ],
+        "type": {
+            "type": null,
+            "function": null,
+            "chassis": null,
+            "standard": null,
+            "contributor": null
+        }
+    },
+    {
+        "id": "AND0",
+        "input": [
+            "p100",
+            "p200"
+        ],
+        "output": [
+            "p3"
+        ],
+        "parts": {
+            "id": [
+                ["d1",
+                "d2",
+                "d3",
+                "d4"]
+            ],
+            "type": {
+                "d1": "Promoter",
+                "d2": "RBS",
+                "d3": "Coding",
+                "d4": "Terminator"
+            }
+        },
+        "map": [
+            {
+                "id": "e1",
+                "id1": "d3",
+                "id2": "p3",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
             },
-			{
-            "id": 0,
-                   "name": "NOT1",
-                  "icon":  "not",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,0,0,0]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p600", "p700"],
-                       "options":[["p600", "p700"]]
-                   },
-                  "output":["p5"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p600", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p700", "id2":"d6", "type":"inh"},
-					{"id":"e7", "id1":"p600", "id2":"e5", "type":""}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
+            {
+                "id": "e2",
+                "id1": "p100",
+                "id2": "d2",
+                "type": "act",
+                "params": {
+                    "reg": 20
+                }
             },
-			{
-            "id": 0,
-                   "name": "NOT2",
-                  "icon":  "not",
-                
-                  "type": 
-                {
-                       "type": null,
-                       "function": "",
-                    "chassis":"",
-                      "standard":"",
-                      "contributor":""
-                  },
-                
-                  "lines":
-                {
-                       "id":[["d1", "d2", "d3", "d4", "d5"],["d6", "d7"]],
-                       "options":[[0,0,0,0,0,0,0]]
-                  }
-                ,
-                
-                  "input":
-                {
-                       "id":["p600", "p700"],
-                       "options":[["p600", "p700"]]
-                   },
-                  "output":["p5"],
-              
-                  "map":
-                [ 
-                    {"id":"e1", "id1":"d2", "id2":"p2", "type":"trans"},
-                     {"id":"e2", "id1":"p2", "id2":"d4", "type":"inh"},
-                     {"id":"e3", "id1":"p600", "id2":"e2", "type":"inh"},
-                    {"id":"e4", "id1":"d3", "id2":"p3", "type":"trans"},
-                    {"id":"e5", "id1":"p3", "id2":"d6", "type":"inh"},
-                    {"id":"e6", "id1":"p700", "id2":"d6", "type":"inh"},
-					{"id":"e7", "id1":"p600", "id2":"e5", "type":""}
-                    
-                  ],
-                
-                   "posloc":
-                  [
-                      {"from":"d2", "to":"d3", "l1":0, "l2":0}
-                  ]   
-            }]
-
+            {
+                "id": "e3",
+                "id1": "p200",
+                "id2": "d1",
+                "type": "act",
+                "params": {
+                    "reg": 20
+                }
+            }
+        ],
+        "type": {
+            "type": null,
+            "function": null,
+            "chassis": null,
+            "standard": null,
+            "contributor": null
+        }
+    },
+    {
+        "id": "AND1",
+        "input": [
+            "p100",
+            "p200"
+        ],
+        "output": [
+            "p3"
+        ],
+        "parts": {
+            "id": [
+                ["d1",
+                "d2",
+                "d3",
+                "d4"]
+            ],
+            "type": {
+                "d1": "Promoter",
+                "d2": "RBS",
+                "d3": "Coding",
+                "d4": "Terminator"
+            }
+        },
+        "map": [
+            {
+                "id": "e1",
+                "id1": "d3",
+                "id2": "p3",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e2",
+                "id1": "p100",
+                "id2": "d1",
+                "type": "act",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e3",
+                "id1": "p100",
+                "id2": "d2",
+                "type": "act",
+                "params": {
+                    "reg": 20
+                }
+            }
+        ],
+        "type": {
+            "type": null,
+            "function": null,
+            "chassis": null,
+            "standard": null,
+            "contributor": null
+        }
+    },
+    {
+        "id": "AND2",
+        "input": [
+            "p100",
+            "p200"
+        ],
+        "output": [
+            "p8"
+        ],
+        "parts": {
+            "id": [
+                ["d1",
+                "d2",
+                "d3",
+                "d4",
+                "d5",
+                "d6",
+                "d7",
+                "d8",
+                "d9"]
+            ],
+            "type": {
+                "d1": "Promoter",
+                "d2": "RBS",
+                "d3": "Coding",
+                "d4": "Coding",
+                "d5": "Terminator",
+                "d6": "Promoter",
+                "d7": "RBS",
+                "d8": "Coding",
+                "d9": "Terminator"
+            }
+        },
+        "map": [
+            {
+                "id": "e1",
+                "id1": "d3",
+                "id2": "p3",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e2",
+                "id1": "d4",
+                "id2": "p4",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e3",
+                "id1": "p3",
+                "id2": "d6",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e4",
+                "id1": "p4",
+                "id2": "d6",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e5",
+                "id1": "d8",
+                "id2": "p8",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e6",
+                "id1": "p100",
+                "id2": "e3",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e7",
+                "id1": "p200",
+                "id2": "e4",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            }
+        ],
+        "type": {
+            "type": null,
+            "function": null,
+            "chassis": null,
+            "standard": null,
+            "contributor": null
+        }
+    },
+    {
+        "id": "NOT6",
+        "input": [
+            "p100"
+        ],
+        "output": [
+            "p7"
+        ],
+        "parts": {
+            "id": [
+                [
+                    "d1",
+                    "d2",
+                    "d3",
+                    "d4"
+                ],
+                [
+                    "d5",
+                    "d6",
+                    "d7",
+                    "d8"
+                ]
+            ],
+            "type": {
+                "d1": "Promoter",
+                "d2": "RBS",
+                "d3": "Coding",
+                "d4": "Terminator",
+                "d5": "Promoter",
+                "d6": "RBS",
+                "d7": "Coding",
+                "d8": "Terminator"
+            }
+        },
+        "map": [
+            {
+                "id": "e1",
+                "id1": "d3",
+                "id2": "p3",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e2",
+                "id1": "p3",
+                "id2": "d5",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e3",
+                "id1": "p100",
+                "id2": "d2",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            }
+        ],
+        "type": {
+            "type": null,
+            "function": null,
+            "chassis": null,
+            "standard": null,
+            "contributor": null
+        }
+    },
+    {
+        "id": "NOT7",
+        "input": [
+            "p100"
+        ],
+        "output": [
+            "p10"
+        ],
+        "parts": {
+            "id": [
+                [
+                    "d1",
+                    "d2",
+                    "d3",
+                    "d4"
+                ],
+                [
+                    "d5",
+                    "d6",
+                    "d7"
+                ],
+                [
+                    "d8",
+                    "d9",
+                    "d10",
+                    "d11"
+                ]
+            ],
+            "type": {
+                "d1": "Promoter",
+                "d2": "RBS",
+                "d3": "Coding",
+                "d4": "Terminator",
+                "d5": "Promoter",
+                "d6": "sRNA",
+                "d7": "Terminator",
+                "d8": "Promoter",
+                "d9": "RBS",
+                "d10": "Coding",
+                "d11": "Terminator"
+            }
+        },
+        "map": [
+            {
+                "id": "e1",
+                "id1": "d3",
+                "id2": "p3",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e2",
+                "id1": "p3",
+                "id2": "d5",
+                "type": "act",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e3",
+                "id1": "d6",
+                "id2": "p6",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e4",
+                "id1": "p6",
+                "id2": "d9",
+                "type": "lock",
+                "params": {
+                    "reg": 20
+                }
+            },
+            {
+                "id": "e5",
+                "id1": "p100",
+                "id2": "d2",
+                "type": "inh",
+                "params": {
+                    "reg": 20
+                }
+            }
+        ],
+        "type": {
+            "type": null,
+            "function": null,
+            "chassis": null,
+            "standard": null,
+            "contributor": null
+        }
+    }
+]
