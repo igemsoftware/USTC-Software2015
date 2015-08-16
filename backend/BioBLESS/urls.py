@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 import BioBLESS.views.parts
 import BioBLESS.views.biocircuit
 import BioBLESS.views.views
+import BioBLESS.views.simulate
 from BioBLESS.biosys.test_samples import test_reaction_system_sample, test_parts_system_sample
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     url(r'^biosys/test-parts-system-sample/$', test_parts_system_sample),
     url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^biocircuit/(.+)/$', BioBLESS.views.biocircuit.BiocircuitView.as_view()),
+    url(r'^simulate/$', BioBLESS.views.simulate)
 ]
