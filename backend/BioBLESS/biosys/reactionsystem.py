@@ -13,10 +13,11 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
-import numpy, scipy.misc, pylab
+import numpy  # pylab
+from biopy import itemfreq, comb
 
 
-class reaction_system(object):
+class ReactionSystem(object):
     species_name = []
     reactions = []
     reactant = []
@@ -202,7 +203,7 @@ class reaction_system(object):
         """
 
         def intensity(single_reactant, current):
-            return numpy.array(map(lambda species_temp: scipy.misc.comb(current[species_temp[0]], species_temp[1]),
+            return numpy.array(map(lambda species_temp: comb[current[species_temp[0]], species_temp[1]],
                                    single_reactant)).prod()
 
         def intensity_list(reactant, current):
@@ -247,11 +248,11 @@ class reaction_system(object):
         plot_list = [self.species_name_inverse[single_species] for single_species in plot_list] \
             if plot_list else self.species_name_inverse.values()
 
-        for species in plot_list:
-            pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
-        # !!! TODO: Something error HERE, pylab can only show once !!!
-        # pylab.ion()
-        pylab.show()
+        # for species in plot_list:
+        #     pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
+        # # !!! TODO: Something error HERE, pylab can only show once !!!
+        # # pylab.ion()
+        # pylab.show()
 
     @property
     def record_list(self, plot_list=None):

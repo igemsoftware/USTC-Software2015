@@ -1,8 +1,10 @@
 __author__ = 'zsy95_000'
 import numpy
 
-comb = numpy.zeros((1000, 1000))
-for i in xrange(1000):
+size = 1001
+
+comb = numpy.zeros((size, size))
+for i in xrange(size):
     comb[i, 0] = 1
     comb[i, i] = 1
     for j in xrange(1, i):
