@@ -3,7 +3,7 @@
 {
 
     //gate selection & inputs & output
-    "nodes": ["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT0", ...],
+    "nodes": ["NOT2", "NOT0", "OUTPUT", "AND3", "INPUT", ...],
 
         //connection status
         "arcs": [
