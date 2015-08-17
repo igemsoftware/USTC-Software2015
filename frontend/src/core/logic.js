@@ -1,8 +1,8 @@
 ﻿/**
  * This js works as BioBLESS.logic's drawing function
- * @auther USTC-software frontend
- * @auther needsay
- * @aythor Ubrok
+ * @author USTC-software frontend
+ * @author needsay
+ * @author Ubrok
  * @since 2015-8-12
  */
 /** 
