@@ -473,12 +473,9 @@ BioBLESS.logic.onDragMove = function() {
  * draw function works for renderng the whole homepage.<br>
  * @function
  * @param devices caused by users
- * @return BioBLESS.stage PIXI.Container
  */
 BioBLESS.logic.draw = function(devices){
     BioBLESS.logic.stage.movable_stage._scale = 1;
-    var w = BioBLESS.width;
-    var h = BioBLESS.height;
     var that = BioBLESS.logic;
     BioBLESS.logic.elements = [];
     /**
@@ -535,9 +532,9 @@ BioBLESS.logic.draw = function(devices){
     for(var i = 0; i < devices.length; i++){
         that._logicGates[i] = BioBLESS.logic.DrawGate(devices[i]);
         that.logicGates[i] = BioBLESS.logic.DrawGate(devices[i]);
-        that._logicGates[i].position.x = w - 195;
+        that._logicGates[i].position.x = BioBLESS.width - 195;
         that._logicGates[i].position.y = 140 + i * 100;
-        that.logicGates[i].position.x = w - 195;
+        that.logicGates[i].position.x = BioBLESS.width - 195;
         that.logicGates[i].position.y = 140 + i * 100;
         that.logicGates[i].interactive = true;
         that.logicGates[i].buttonMode = true;
@@ -560,10 +557,10 @@ BioBLESS.logic.draw = function(devices){
     that.plusobj.drawCircle(0, 0, 30);
     that.plusobj.endFill();
     that.plusobj.lineStyle(3, 0xffff00, 1);
-    that.plusobj.moveTo(w - 75, 50);
-    that.plusobj.lineTo(w - 45, 50);
-    that.plusobj.moveTo(w - 60, 35);
-    that.plusobj.lineTo(w - 60, 65);
+    that.plusobj.moveTo(BioBLESS.width - 75, 50);
+    that.plusobj.lineTo(BioBLESS.width - 45, 50);
+    that.plusobj.moveTo(BioBLESS.width - 60, 35);
+    that.plusobj.lineTo(BioBLESS.width - 60, 65);
     that.plusobj.moveTo(-15, 0);
     that.plusobj.lineTo(15, 0);
     that.plusobj.moveTo(0, -15);
@@ -571,7 +568,7 @@ BioBLESS.logic.draw = function(devices){
     that.plusobj.interactive = true;
     that.plusobj.buttonMode = true;
     that.plusobj.condition = 0;
-    that.plusobj.position.x = w - 60;
+    that.plusobj.position.x = BioBLESS.width - 60;
     that.plusobj.position.y = 50;
     /**
      * list is a exhibition to show logicgates  
@@ -579,21 +576,20 @@ BioBLESS.logic.draw = function(devices){
      */
     that.list = new PIXI.Graphics();
     that.list.beginFill(0x897897, 0.5);
-    that.list.drawRoundedRect(w - 220, 110, 200, h - 130, 20);
+    that.list.drawRoundedRect(BioBLESS.width - 220, 110, 200, BioBLESS.height - 130, 20);
     that.list.endFill();
     var added = false;
     that.plusobj.on('mousedown', function() {
         if(added){
             that.stage.removeChild(that.list);
-            for(var i = 0; i < devices.length; i++){
+            for(var i = 0; i < devices.length; i++) {
                 that.stage.removeChild(that._logicGates[i]);
                 that.stage.removeChild(that.logicGates[i]);
             };
             that.plusobj.condition = 0;
-        }
-        else{
+        } else {
             that.stage.addChild(that.list);
-            for(var i = 0; i < devices.length; i++){
+            for(var i = 0; i < devices.length; i++) {
                 that.stage.addChild(that._logicGates[i]);
                 that.stage.addChild(that.logicGates[i]);
             }
@@ -608,10 +604,8 @@ BioBLESS.logic.draw = function(devices){
         else{
             BioBLESS.logic.plusobj.rotation = 0.7854 * BioBLESS.logic.plusobj.condition;
         }
-    });              
+    });
     BioBLESS.logic.stage.addChild(BioBLESS.logic.stage.movable_stage);
     BioBLESS.logic.stage.addChild(that.plusobj);
-        
-    return BioBLESS.stage;
 };
 $.getJSON("misc/devices.json", function(data) {BioBLESS.logic.draw(data);});

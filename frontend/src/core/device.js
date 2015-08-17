@@ -98,10 +98,10 @@ this.prepare = function(devices, n){
 	
 	this.lines_num = devices[n].parts.id.length;//主线数
 	this.parts_num = 0;//主线上总结点数
-	this.part_to_line = new Array();//part序号到其所在主线序号的映射
-	this.to_part = new Array();
+	this.part_to_line = [];//part序号到其所在主线序号的映射
+	this.to_part = [];
 	for(i = 0; i < this.lines_num; i++){
-		this.to_part[i] = new Array();
+		this.to_part[i] = [];
 		for(j = 0; j < devices[n].parts.id[i].length; j++){
 		    this.part_to_line[this.parts_num + j] = i;
 			this.to_part[i][j] = this.parts_num + j;
@@ -117,11 +117,11 @@ this.prepare = function(devices, n){
 */ 
 this.line_analysis = function(devices, n){
 	var i, j, k, l, Num, s;//备用变量
-	this.is_line = new Array();//用于指示是否有支线从第i个节点经蛋白质连接到到第j个节点
-	this.line_type = new Array();//用于指示从节点i到节点j的线末端的类型
+	this.is_line = [];//用于指示是否有支线从第i个节点经蛋白质连接到到第j个节点
+	this.line_type = [];//用于指示从节点i到节点j的线末端的类型
 	for(i = 0; i < this.parts_num; i++){
-	    this.is_line[i] = new Array();
-		this.line_type[i] = new Array();
+	    this.is_line[i] = [];
+		this.line_type[i] = [];
 		for(j = 0; j < this.parts_num; j++){
 		    this.is_line[i][j] = false;
 			this.line_type[i][j] = null;
@@ -232,7 +232,7 @@ this.height_analysis = function(devices, n){
 */ 
 this.part_analysis = function(devices, n){
 	var i, j, k, l, Num, s;//备用变量
-	this.part = new Array();
+	this.part = [];
     for(i = 0; i < this.parts_num; i++){
 		this.part[i] = function(){};
     	this.part[i].upIndegree = 0;//上入度
@@ -310,8 +310,8 @@ this.draw = function(devices, n){
     
     var texture = PIXI.Texture.fromImage("misc/test.png");
 	
-	var parts = new Array();
-	/*var BBAs = new Array();
+	var parts = [];
+	/*var BBAs = [];
 	for(i = 0; i < devices[n].posloc.length; i++){
 		BBAs[this.to_part[devices[n].posloc[i].l1][parseInt(devices[n].posloc[i].from.substring(1)) - 1]] = new PIXI.Graphics();
 	};*/

@@ -18,7 +18,7 @@ BioBLESS.init = function() {
         render(animate);
     };
     render(animate);
-    BioBLESS.stage.addChild(BioBLESS.logic.stage);
+    setTimeout(function(){BioBLESS.stage.addChild(BioBLESS.logic.stage);}, 1);
     BioBLESS.plugin_stage = BioBLESS.logic.stage;
     BioBLESS.stage.fps = new PIXI.Text("FPS: " + fps);
     BioBLESS.stage.fps.x = BioBLESS.width - 120;
