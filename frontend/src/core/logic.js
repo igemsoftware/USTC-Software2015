@@ -1,24 +1,22 @@
 ﻿/**
- * This js works as BioBLESS.home's drawing function
- * @auther USTC-software frontend
- * @auther needsay
- * @aythor Ubrok
+ * This js works as BioBLESS.logic's drawing function
+ * @author USTC-software frontend
+ * @author needsay
+ * @author Ubrok
  * @since 2015-8-12
- * @version 0.3.1
  */
-BioBLESS.home = {};
 /** 
  * @description {PIXI.Container} the stage of the home page
  */ 
-BioBLESS.home.stage = new PIXI.Container();
+BioBLESS.logic.stage = new PIXI.Container();
 /** 
  * @description {PIXI.Container} the movable stage
  */ 
-BioBLESS.home.stage.movable_stage = new PIXI.Container();
+BioBLESS.logic.stage.movable_stage = new PIXI.Container();
 /** 
  * @description {Num} used for controling stage scale in scale animation
  */ 
-BioBLESS.home.stage.movable_stage._scale = 1;
+BioBLESS.logic.stage.movable_stage._scale = 1;
 /**
  * DrawGate function works for preparing the svg of logicgate
  * @function
@@ -26,14 +24,14 @@ BioBLESS.home.stage.movable_stage._scale = 1;
  * @return {element} PIXI.Graphics
  */
 
-BioBLESS.home.DrawGate = function(device){
+BioBLESS.logic.DrawGate = function(device){
     /**
      * element is a stage to draw the gate
      * @type {PIXI.Graphics}
      */
         var element = new PIXI.Container();
         element.graphics = new PIXI.Graphics();
-        element.title = new PIXI.Text(device.name);
+        element.title = new PIXI.Text(device.id);
         element.input_1 = new PIXI.Graphics();
         element.input_1.Lines = [];
         element.input_1.counts = 0;
@@ -63,7 +61,8 @@ BioBLESS.home.DrawGate = function(device){
         element.output.beginFill(0, 0);
         element.output.drawRect(-30, -1, 30, 5);
         element.output.endFill();
-        switch(device.icon){
+        switch(device.id){
+            default: // For development use.
             case "XOR":
             case "AND":
             case "xor":
@@ -106,8 +105,6 @@ BioBLESS.home.DrawGate = function(device){
                 element.input_2.position.y = 51;
                 element.input_2.endFill();
                 break;
-            default:
-                alert("Error - 1001!");
         }
         element.addChild(element.graphics);
         element.addChild(element.input_1);
@@ -123,19 +120,16 @@ var waitForDoubleClick = false;
  * @function
  * @param {event} cause by users
  */
-BioBLESS.home.onDragStart_e = function(event) {
+BioBLESS.logic.onDragStart_e = function(event) {
     if(waitForDoubleClick){
-        var a=$.getJSON("/misc/devices.json");
-		BioBLESS.device.get_gates_supsification();
+        BioBLESS.device.get_gates_supsification();
         var that = this;
-        var next = function() {
-            if(a.responseJSON && BioBLESS.device.gates.responseJSON){
-                BioBLESS.device.draw(a.responseJSON, that.parent.Index);
+        $.getJSON("misc/devices.json", function(data) {
+            if(data && BioBLESS.device.gates){
+                BioBLESS.device.draw(data, that.parent.Index);
                 BioBLESS.change_stage(BioBLESS.device);
-            }else
-                setTimeout(next, 50);
-        };
-        setTimeout(next, 50);
+            }
+        });
         return;
     }else{
         waitForDoubleClick = true;
@@ -151,15 +145,15 @@ BioBLESS.home.onDragStart_e = function(event) {
  * onDragMove_e makes element to keep draging and handles the lines
  * @function
  */
-BioBLESS.home.onDragMove_e = function() {
+BioBLESS.logic.onDragMove_e = function() {
     if(this.dragging) {
         var newPosition = this.data.getLocalPosition(this.parent.parent);
         this.parent.position.x = newPosition.x - 75;
         this.parent.position.y = newPosition.y - 35;
-    	var xRect;
-    	var yRect;
-    	var wRect;
-    	var hRect;
+        var xRect;
+        var yRect;
+        var wRect;
+        var hRect;
         if(this.parent.input_1.Connection){
             for(var i = 0; i < this.parent.input_1.counts; i++){
                 if(this.parent.input_1.Lines[i][0].father === this.parent.input_1){
@@ -305,7 +299,7 @@ BioBLESS.home.onDragMove_e = function() {
  * onDragEnd_e makes element to end draging
  * @function
  */
-BioBLESS.home.onDragEnd_e = function() {
+BioBLESS.logic.onDragEnd_e = function() {
     this.alpha = 1;
     this.dragging = false;
     this.data = null;
@@ -319,7 +313,7 @@ var drawPart;
  * @function
  * @param  event caused by users
  */
-BioBLESS.home.onDrawLineUp = function(event){
+BioBLESS.logic.onDrawLineUp = function(event){
     waitFordrawBegin = !waitFordrawBegin;
     if(waitFordrawBegin){
         this.Lines[this.counts] = [];
@@ -337,9 +331,9 @@ BioBLESS.home.onDrawLineUp = function(event){
         this.Lines[this.counts] = drawPart;
         this.counts ++;
         drawPart[0].mother = this;
-        drawPart[0].on('mouseover', BioBLESS.home.IsHerWorkCreate)
-                   .on('mouseout', BioBLESS.home.IsHerWorkDelete)
-                   .on('click', BioBLESS.home.IsHerWorkRight);
+        drawPart[0].on('mouseover', BioBLESS.logic.IsHerWorkCreate)
+                   .on('mouseout', BioBLESS.logic.IsHerWorkDelete)
+                   .on('click', BioBLESS.logic.IsHerWorkRight);
     }
 };
 /**
@@ -347,7 +341,7 @@ BioBLESS.home.onDrawLineUp = function(event){
  * @function
  * @param  event caused by users
  */
-BioBLESS.home.onDrawLineMove = function(event){
+BioBLESS.logic.onDrawLineMove = function(event){
     if(moving){
             var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
             var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
@@ -399,7 +393,7 @@ BioBLESS.home.onDrawLineMove = function(event){
  * @function
  * @param {event} mouseover the line
  */
-BioBLESS.home.IsHerWorkCreate = function(event) {
+BioBLESS.logic.IsHerWorkCreate = function(event) {
     var xRect = this.father.parent.position.x + this.father.position.x;
     var yRect = this.father.parent.position.y + this.father.position.y;
     var wRect = this.mother.parent.position.x + this.mother.position.y - xRect;
@@ -413,9 +407,9 @@ BioBLESS.home.IsHerWorkCreate = function(event) {
     this.IsHerWork.moveTo(-8, 0);
     this.IsHerWork.lineTo(8, 0);
     this.IsHerWork.endFill();
-    this.IsHerWork.on('mouseover', BioBLESS.home.IsHerWorkUP);
-                  // .on('click', BioBLESS.home.IsHerWorkRight)
-                  // .on('mouseout', BioBLESS.home.IsHerWorKDOWN);
+    this.IsHerWork.on('mouseover', BioBLESS.logic.IsHerWorkUP);
+                  // .on('click', BioBLESS.logic.IsHerWorkRight)
+                  // .on('mouseout', BioBLESS.logic.IsHerWorKDOWN);
     this.father.parent.parent.addChild(this.IsHerWork);
 };
 
@@ -424,7 +418,7 @@ BioBLESS.home.IsHerWorkCreate = function(event) {
  * @function
  * @param {event} caused by users
  */
-BioBLESS.home.IsHerWorkRight = function(event) {
+BioBLESS.logic.IsHerWorkRight = function(event) {
     this.father.parent.parent.removeChild(this);
     this.father.parent.parent.removeChild(this.IsHerWork);
 };
@@ -434,17 +428,17 @@ BioBLESS.home.IsHerWorkRight = function(event) {
  * @function
  * @param {event} caused by users
  */
-BioBLESS.home.IsHerWorkUP = function(event) {
+BioBLESS.logic.IsHerWorkUP = function(event) {
     this.father.father.parent.parent.addChild(this.father);
     this.father.buttonMode = true;
 };
 
-// BioBLESS.home.IsHerWorkDown = function() {
+// BioBLESS.logic.IsHerWorkDown = function() {
 //     SHEisWorking = false;
 //     this.father.father.parent.parent.removeChild(this);
 // };
 
-BioBLESS.home.IsHerWorkDelete = function() {
+BioBLESS.logic.IsHerWorkDelete = function() {
         this.father.parent.parent.removeChild(this.IsHerWork);
 };
 
@@ -452,7 +446,7 @@ BioBLESS.home.IsHerWorkDelete = function() {
  * onDragStart makes element could be dragged from list
  * @function
  */
-BioBLESS.home.onDragStart = function(event) {
+BioBLESS.logic.onDragStart = function(event) {
     this.data = event.data;
     this.alpha = 0.5;
     this.dragging = true;
@@ -463,12 +457,12 @@ BioBLESS.home.onDragStart = function(event) {
  * onDragMove makes element to move
  * @function
  */
-BioBLESS.home.onDragMove = function() {
+BioBLESS.logic.onDragMove = function() {
     if(this.dragging) {
         var newPosition = this.data.getLocalPosition(this.parent);
         this.position.x = newPosition.x - 75;
         this.position.y = newPosition.y - 35;
-        this.childPosition = this.data.getLocalPosition(BioBLESS.home.stage.movable_stage);
+        this.childPosition = this.data.getLocalPosition(BioBLESS.logic.stage.movable_stage);
     }
 };
 
@@ -476,30 +470,27 @@ BioBLESS.home.onDragMove = function() {
  * draw function works for renderng the whole homepage.<br>
  * @function
  * @param devices caused by users
- * @return BioBLESS.stage PIXI.Container
  */
-BioBLESS.home.draw = function(devices){
-    BioBLESS.home.stage.movable_stage._scale = 1;
-    var w = BioBLESS.width;
-    var h = BioBLESS.height;
-    var that = BioBLESS.home;
-    BioBLESS.home.elements = [];
+BioBLESS.logic.draw = function(devices){
+    BioBLESS.logic.stage.movable_stage._scale = 1;
+    var that = BioBLESS.logic;
+    BioBLESS.logic.elements = [];
     /**
      * onDragEnd makes element to end draging
      * @function
      */
-	BioBLESS.home.onDragEnd = function() {
+    BioBLESS.logic.onDragEnd = function() {
         this.alpha = 1;
         this.dragging = false;
         this.data = null;
-        if(!(this.position.x + 75 >= BioBLESS.width - 220 && this.position.x + 75 <= BioBLESS.width - 20 && this.position.y >= 110 && this.position.y <= h - 20)){
-            BioBLESS.home.elements[BioBLESS.home.elements.length] = BioBLESS.home.DrawGate(devices[this.Index]);
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].position.x = this.childPosition.x - 75;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].position.y = this.childPosition.y - 35;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].graphics.interactive = true;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].graphics.buttonMode = true;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].Index = this.Index;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
+        if(!(this.position.x + 75 >= BioBLESS.width - 220 && this.position.x + 75 <= BioBLESS.width - 20 && this.position.y >= 110 && this.position.y <= BioBLESS.height - 20)){
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.DrawGate(devices[this.Index]);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = this.childPosition.x - 75;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = this.childPosition.y - 35;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.buttonMode = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].Index = this.Index;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
                                                                               .on('touchstart', that.onDragStart_e)
                                                                               .on('mouseup', that.onDragEnd_e)
                                                                               .on('mouseupoutside', that.onDragEnd_e)
@@ -508,39 +499,39 @@ BioBLESS.home.draw = function(devices){
                                                                               .on('mousemove', that.onDragMove_e)
                                                                               .on('touchmove', that.onDragMove_e);
 
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].output.interactive = true;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].output.buttonMode = true;
-            BioBLESS.home.elements[BioBLESS.home.elements.length - 1].output.on('mousedown', that.onDrawLineUp)
-    	                                                                    .on('touchstart', that.onDrawLineUp)
-    	                                                                    .on('mousemove', that.onDrawLineMove)
-    	                                                                    .on('touchmove', that.onDrawLineMove);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.interactive = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.buttonMode = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.on('mousedown', that.onDrawLineUp)
+                                                                            .on('touchstart', that.onDrawLineUp)
+                                                                            .on('mousemove', that.onDrawLineMove)
+                                                                            .on('touchmove', that.onDrawLineMove);
                 
-			BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_2.interactive = true;
-			BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_2.buttonMode = true;
-			BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_2.on('mousedown', that.onDrawLineUp)
-			                                                                 .on('touchstart', that.onDrawLineUp)
-			                                                                 .on('mousemove', that.onDrawLineMove)
-			                                                                 .on('touchmove', that.onDrawLineMove);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.interactive = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.buttonMode = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.on('mousedown', that.onDrawLineUp)
+                                                                             .on('touchstart', that.onDrawLineUp)
+                                                                             .on('mousemove', that.onDrawLineMove)
+                                                                             .on('touchmove', that.onDrawLineMove);
                 
-        	BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_1.interactive = true;
-        	BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_1.buttonMode = true;
-        	BioBLESS.home.elements[BioBLESS.home.elements.length - 1].input_1.on('mousedown', that.onDrawLineUp)
-        	                                                                 .on('touchstart', that.onDrawLineUp)
-        	                                                                 .on('mousemove', that.onDrawLineMove)
-        	                                                                 .on('touchmove', that.onDrawLineMove);
-            that.stage.movable_stage.addChild(BioBLESS.home.elements[BioBLESS.home.elements.length - 1]);
-    	}
-    	this.position.x = this.startX;
-    	this.position.y = this.startY; 
-	};
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.interactive = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.buttonMode = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.on('mousedown', that.onDrawLineUp)
+                                                                             .on('touchstart', that.onDrawLineUp)
+                                                                             .on('mousemove', that.onDrawLineMove)
+                                                                             .on('touchmove', that.onDrawLineMove);
+            that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
+        }
+        this.position.x = this.startX;
+        this.position.y = this.startY; 
+    };
     that._logicGates = [];
     that.logicGates = [];
     for(var i = 0; i < devices.length; i++){
-        that._logicGates[i] = BioBLESS.home.DrawGate(devices[i]);
-        that.logicGates[i] = BioBLESS.home.DrawGate(devices[i]);
-        that._logicGates[i].position.x = w - 195;
+        that._logicGates[i] = BioBLESS.logic.DrawGate(devices[i]);
+        that.logicGates[i] = BioBLESS.logic.DrawGate(devices[i]);
+        that._logicGates[i].position.x = BioBLESS.width - 195;
         that._logicGates[i].position.y = 140 + i * 100;
-        that.logicGates[i].position.x = w - 195;
+        that.logicGates[i].position.x = BioBLESS.width - 195;
         that.logicGates[i].position.y = 140 + i * 100;
         that.logicGates[i].interactive = true;
         that.logicGates[i].buttonMode = true;
@@ -563,10 +554,10 @@ BioBLESS.home.draw = function(devices){
     that.plusobj.drawCircle(0, 0, 30);
     that.plusobj.endFill();
     that.plusobj.lineStyle(3, 0xffff00, 1);
-    that.plusobj.moveTo(w - 75, 50);
-    that.plusobj.lineTo(w - 45, 50);
-    that.plusobj.moveTo(w - 60, 35);
-    that.plusobj.lineTo(w - 60, 65);
+    that.plusobj.moveTo(BioBLESS.width - 75, 50);
+    that.plusobj.lineTo(BioBLESS.width - 45, 50);
+    that.plusobj.moveTo(BioBLESS.width - 60, 35);
+    that.plusobj.lineTo(BioBLESS.width - 60, 65);
     that.plusobj.moveTo(-15, 0);
     that.plusobj.lineTo(15, 0);
     that.plusobj.moveTo(0, -15);
@@ -574,7 +565,7 @@ BioBLESS.home.draw = function(devices){
     that.plusobj.interactive = true;
     that.plusobj.buttonMode = true;
     that.plusobj.condition = 0;
-    that.plusobj.position.x = w - 60;
+    that.plusobj.position.x = BioBLESS.width - 60;
     that.plusobj.position.y = 50;
     /**
      * list is a exhibition to show logicgates  
@@ -582,40 +573,36 @@ BioBLESS.home.draw = function(devices){
      */
     that.list = new PIXI.Graphics();
     that.list.beginFill(0x897897, 0.5);
-    that.list.drawRoundedRect(w - 220, 110, 200, h - 130, 20);
+    that.list.drawRoundedRect(BioBLESS.width - 220, 110, 200, BioBLESS.height - 130, 20);
     that.list.endFill();
     var added = false;
     that.plusobj.on('mousedown', function() {
         if(added){
             that.stage.removeChild(that.list);
-			for(var i = 0; i < devices.length; i++){
+            for(var i = 0; i < devices.length; i++) {
                 that.stage.removeChild(that._logicGates[i]);
                 that.stage.removeChild(that.logicGates[i]);
             };
             that.plusobj.condition = 0;
-        }
-        else{
+        } else {
             that.stage.addChild(that.list);
-            for(var i = 0; i < devices.length; i++){
-            	that.stage.addChild(that._logicGates[i]);
-            	that.stage.addChild(that.logicGates[i]);
+            for(var i = 0; i < devices.length; i++) {
+                that.stage.addChild(that._logicGates[i]);
+                that.stage.addChild(that.logicGates[i]);
             }
             that.plusobj.condition = 1;
-		}
+        }
         added = !added;
     });
-    BioBLESS.animation[BioBLESS.animation.length] = function(){
-        if(Math.abs(BioBLESS.home.plusobj.rotation - 0.7854 * BioBLESS.home.plusobj.condition) > 0.01){
-            BioBLESS.home.plusobj.rotation -= (BioBLESS.home.plusobj.rotation - 0.7854 * BioBLESS.home.plusobj.condition) * 0.15;
+    BioBLESS.add_animate_hook(function(){
+        if(Math.abs(BioBLESS.logic.plusobj.rotation - 0.7854 * BioBLESS.logic.plusobj.condition) > 0.01){
+            BioBLESS.logic.plusobj.rotation -= (BioBLESS.logic.plusobj.rotation - 0.7854 * BioBLESS.logic.plusobj.condition) * 0.15;
         }
         else{
-            BioBLESS.home.plusobj.rotation = 0.7854 * BioBLESS.home.plusobj.condition;
+            BioBLESS.logic.plusobj.rotation = 0.7854 * BioBLESS.logic.plusobj.condition;
         }
-    };              
-    BioBLESS.home.stage.addChild(BioBLESS.home.stage.movable_stage);
-    BioBLESS.home.stage.addChild(that.plusobj);
-        
-    return BioBLESS.stage;
+    });
+    BioBLESS.logic.stage.addChild(BioBLESS.logic.stage.movable_stage);
+    BioBLESS.logic.stage.addChild(that.plusobj);
 };
-var a=$.getJSON("../misc/devices.json");
-setTimeout(function(){BioBLESS.home.draw(a.responseJSON);},1000);
+$.getJSON("misc/devices.json", function(data) {BioBLESS.logic.draw(data);});

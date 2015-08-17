@@ -1,4 +1,3 @@
-BioBLESS.plugins = ["home", "device", "simulator"];
 BioBLESS.init = function() {
     BioBLESS.width = $('body').width();
     BioBLESS.height = $('body').height();
@@ -11,29 +10,23 @@ BioBLESS.init = function() {
     var fps = 0;
     var render = requestAnimationFrame;
     var animate = function(now) {
+        for(var i in BioBLESS.animate_hook)
+            BioBLESS.animate_hook[i]();
         renderer.render(BioBLESS.stage);
         fps = Math.floor(1000 / (now - prev_time));
         prev_time = now;
-        for(var i = 0; i < BioBLESS.animation.length; i++)
-            BioBLESS.animation[i]();
         render(animate);
     };
     render(animate);
-    var next = function() {
-        if(BioBLESS.home){
-            BioBLESS.stage.addChild(BioBLESS.home.stage);
-            BioBLESS.plugin_stage = BioBLESS.home.stage;
-        }else
-            setTimeout(next, 50);
-    };
-	BioBLESS.stage.fps = new PIXI.Text("FPS: " + fps);
-	BioBLESS.stage.fps.x = BioBLESS.width - 120;
-	BioBLESS.stage.fps.y = BioBLESS.height - 30;
+    setTimeout(function(){BioBLESS.stage.addChild(BioBLESS.logic.stage);}, 1);
+    BioBLESS.plugin_stage = BioBLESS.logic.stage;
+    BioBLESS.stage.fps = new PIXI.Text("FPS: " + fps);
+    BioBLESS.stage.fps.x = BioBLESS.width - 120;
+    BioBLESS.stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {
         BioBLESS.stage.fps.text = "FPS: " + fps;
         BioBLESS.stage.addChild(BioBLESS.stage.fps);
     }, 1000);
-    setTimeout(next, 1);
     
     onDragStart_d = function(event) {
         if(!BioBLESS.get_current_plugin_stage())
@@ -93,6 +86,4 @@ BioBLESS.init = function() {
     BioBLESS.prepare_navigation();
     BioBLESS.stage.addChild(BioBLESS.navigation);
     BioBLESS.stage.addChild(BioBLESS.navigation_title);
-	
-	
 };
