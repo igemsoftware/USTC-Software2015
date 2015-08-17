@@ -5,53 +5,53 @@ BioBLESS.init = function() {
     if(!renderer)
         return;
     document.body.appendChild(renderer.view);
-    BioBLESS.stage = new PIXI.Container();
+    BioBLESS.base_stage = new PIXI.Container();
     var prev_time = 0;
     var fps = 0;
     var render = requestAnimationFrame;
     var animate = function(now) {
         for(var i in BioBLESS.animate_hook)
             BioBLESS.animate_hook[i]();
-        renderer.render(BioBLESS.stage);
+        renderer.render(BioBLESS.base_stage);
         fps = Math.floor(1000 / (now - prev_time));
         prev_time = now;
         render(animate);
     };
     render(animate);
-    setTimeout(function(){BioBLESS.stage.addChild(BioBLESS.logic.stage);}, 1);
-    BioBLESS.plugin_stage = BioBLESS.logic.stage;
-    BioBLESS.stage.fps = new PIXI.Text("FPS: " + fps);
-    BioBLESS.stage.fps.x = BioBLESS.width - 120;
-    BioBLESS.stage.fps.y = BioBLESS.height - 30;
+    setTimeout(function(){BioBLESS.base_stage.addChild(BioBLESS.logic.stage);}, 1);
+    BioBLESS.stage = BioBLESS.logic.stage;
+    BioBLESS.base_stage.fps = new PIXI.Text("FPS: " + fps);
+    BioBLESS.base_stage.fps.x = BioBLESS.width - 120;
+    BioBLESS.base_stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {
-        BioBLESS.stage.fps.text = "FPS: " + fps;
-        BioBLESS.stage.addChild(BioBLESS.stage.fps);
+        BioBLESS.base_stage.fps.text = "FPS: " + fps;
+        BioBLESS.base_stage.addChild(BioBLESS.base_stage.fps);
     }, 1000);
     
     onDragStart_d = function(event) {
-        if(!BioBLESS.get_current_plugin_stage())
+        if(!BioBLESS.stage)
             return;
         this.data = event.data;
         this.dragging = true;
         var startPosition = this.data.getLocalPosition(this.parent);
         this.startX = startPosition.x;
         this.startY = startPosition.y;
-        BioBLESS.get_current_plugin_stage().movable_stage.startX = BioBLESS.get_current_plugin_stage().movable_stage.position.x;
-        BioBLESS.get_current_plugin_stage().movable_stage.startY = BioBLESS.get_current_plugin_stage().movable_stage.position.y;
+        BioBLESS.stage.movable_stage.startX = BioBLESS.stage.movable_stage.position.x;
+        BioBLESS.stage.movable_stage.startY = BioBLESS.stage.movable_stage.position.y;
     };
     onDragEnd_d = function() {
         this.dragging = false;
         this.data = null;
     };
     onDragMove_d = function(event) {
-        if(!BioBLESS.get_current_plugin_stage())
+        if(!BioBLESS.stage)
             return;
         if(this.dragging) {
             var newPosition = this.data.getLocalPosition(this.parent);
-            BioBLESS.get_current_plugin_stage().movable_stage.position.x = newPosition.x - this.startX + BioBLESS.get_current_plugin_stage().movable_stage.startX;
-            BioBLESS.get_current_plugin_stage().movable_stage.position.y = newPosition.y - this.startY + BioBLESS.get_current_plugin_stage().movable_stage.startY;
+            BioBLESS.stage.movable_stage.position.x = newPosition.x - this.startX + BioBLESS.stage.movable_stage.startX;
+            BioBLESS.stage.movable_stage.position.y = newPosition.y - this.startY + BioBLESS.stage.movable_stage.startY;
         }
-        BioBLESS.get_current_plugin_stage().movable_stage.inPosition = event.data.getLocalPosition(BioBLESS.get_current_plugin_stage().movable_stage);
+        BioBLESS.stage.movable_stage.inPosition = event.data.getLocalPosition(BioBLESS.stage.movable_stage);
     };
     var dragArea = new PIXI.Graphics();
         dragArea.beginFill(0, 0);
@@ -65,7 +65,7 @@ BioBLESS.init = function() {
                 .on('touchendoutside', onDragEnd_d)
                 .on('mousemove', onDragMove_d)
                 .on('touchmove', onDragMove_d);
-    BioBLESS.stage.addChild(dragArea);
+    BioBLESS.base_stage.addChild(dragArea);
     
     var scrollFunc=function(e){
         var d = 0;
@@ -84,6 +84,6 @@ BioBLESS.init = function() {
     window.onmousewheel=document.onmousewheel=scrollFunc;//IE/Opera/Chrome/Safari
     
     BioBLESS.prepare_navigation();
-    BioBLESS.stage.addChild(BioBLESS.navigation);
-    BioBLESS.stage.addChild(BioBLESS.navigation_title);
+    BioBLESS.base_stage.addChild(BioBLESS.navigation);
+    BioBLESS.base_stage.addChild(BioBLESS.navigation_title);
 };

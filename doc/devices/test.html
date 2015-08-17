@@ -31,9 +31,11 @@
         });
         describe('json[i]', function() {
             it('should be a proper object. (If this fails, the json is incompatible with our API.)', function() {
-                for(var i = 0; i < json.length; i++) {
+                for(var i in json) {
                     json[i].should.contain.all.keys(['id', 'input', 'output', 'parts', 'map']);
                     json[i].input.should.be.instanceof(Array);
+                    for(var j in json[i].input)
+                        json[i].input[j].should.not.be.instanceof(Array);
                     json[i].output.should.be.instanceof(Array);
                     json[i].output.length.should.equal(1);
                     json[i].parts.should.contain.all.keys(['id', 'type']);
