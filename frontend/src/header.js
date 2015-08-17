@@ -4,7 +4,9 @@
 BioBLESS = {
     animate_hook : [],
     logic : {},
-    device : {},
+    gene_network : {},
     simulation : {},
-    analysis : {}
+    analysis : {},
+    dna : {},
+    device : {}
 };
