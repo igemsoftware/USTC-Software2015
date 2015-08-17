@@ -81,7 +81,7 @@ BioBLESS.logic.DrawGate = function(device){
                 break;
             case "NOT":
             case "not":
-                element.input_1.beginFill(0x000000, 1); ;
+                element.input_1.beginFill(0x000000, 1);
                 element.input_1.drawRect(0, 0, 30, 3);
                 element.input_1.position.x = 0;
                 element.input_1.position.y = 34;
@@ -582,7 +582,7 @@ BioBLESS.logic.draw = function(devices){
             for(var i = 0; i < devices.length; i++) {
                 that.stage.removeChild(that._logicGates[i]);
                 that.stage.removeChild(that.logicGates[i]);
-            };
+            }
             that.plusobj.condition = 0;
         } else {
             that.stage.addChild(that.list);

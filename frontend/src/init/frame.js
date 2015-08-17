@@ -45,7 +45,7 @@ BioBLESS.delete_animate_hook = function(ani){
             BioBLESS.animate_hook.splice(i, 1);
             return true;
         }
-    };
+    }
     return false;
 };
 BioBLESS.scroll_animation = function(){
@@ -138,9 +138,9 @@ BioBLESS.prepare_navigation = function(){
         this.navigation.addChild(BioBLESS.navigation.button[v]);
         this.navigation.addChild(BioBLESS.navigation.button[v].title);
     }
-    for(var j = 0; j < BioBLESS.navigation.button.length; j++){
-        BioBLESS.navigation.button[j].interactive = true;
-        BioBLESS.navigation.button[j].buttonMode = true;
+    for(var w = 0; w < BioBLESS.navigation.button.length; w++){
+        BioBLESS.navigation.button[w].interactive = true;
+        BioBLESS.navigation.button[w].buttonMode = true;
     }
 };
 /** 

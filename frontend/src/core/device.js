@@ -55,7 +55,7 @@ this.draw_line = function(graphic, start_x, start_y, end_x, end_y, mode){
 		graphic.lineTo(end_x, end_y);
 		graphic.lineTo(end_x, start_y);
 	}
-}
+};
 this.draw_arrow = function(graphic, scale, x, y, mode){
 	switch(mode){
 		case "down":
@@ -70,7 +70,7 @@ this.draw_arrow = function(graphic, scale, x, y, mode){
 			break;
 			
 	}
-}
+};
 this.prepare = function(devices, n){
 	var i, j, k, l, Num, s;//备用变量
 	this.chosen = false;
@@ -85,17 +85,16 @@ this.prepare = function(devices, n){
 		this.input[i].to_dev_output_index = [];
 		this.input[i].x = [];
 		this.input[i].y = [];
-	};
+	}
 	this.output = [];
 	this.output_num = 0;
 	for(i = 0; i < devices[n].output.length; i++){
 		this.output[i] = {};
 		this.output[i].to_dev_index = [];
 		this.output[i].to_dev_input_index = [];
-	};
-	
-	
-	
+	}
+
+
 	this.lines_num = devices[n].parts.id.length;//主线数
 	this.parts_num = 0;//主线上总结点数
 	this.part_to_line = [];//part序号到其所在主线序号的映射
@@ -105,9 +104,9 @@ this.prepare = function(devices, n){
 		for(j = 0; j < devices[n].parts.id[i].length; j++){
 		    this.part_to_line[this.parts_num + j] = i;
 			this.to_part[i][j] = this.parts_num + j;
-		};
+		}
 	    this.parts_num = this.parts_num + devices[n].parts.id[i].length;
-	};//计算总结点数
+	}//计算总结点数
 };
 
 /** 
@@ -125,8 +124,8 @@ this.line_analysis = function(devices, n){
 		for(j = 0; j < this.parts_num; j++){
 		    this.is_line[i][j] = false;
 			this.line_type[i][j] = null;
-		};
-	};
+		}
+	}
 	var end, start;
 	for(k = 0; k < devices[n].map.length; k++){
 		if(devices[n].map[k].id1[0] === 'd'){
@@ -137,18 +136,17 @@ this.line_analysis = function(devices, n){
 					end = parseInt(devices[n].map[l].id2.substring(1)) - 1;
 					s = devices[n].map[l].type;
 					break;
-				};
-			};
+				}
+			}
 			if(end == -1){
 		        this.is_line[start][start] = true;
 	            this.line_type[start][start] = s;
 			}else{
 				this.is_line[start][end] = true;
 	            this.line_type[start][end] = s;
-			};
-			
-		};
-	};	
+			}
+		}
+	}
 	
 };
 /** 
@@ -170,59 +168,57 @@ this.height_analysis = function(devices, n){
 					for(k = i; k < j; k++){
 						if(++this.part[k].up_max_height > l)
 						    l = this.part[k].up_max_height;
-					};
+					}
 					for(k = i; k <= j; k++){
 					    this.part[k].up_max_height = l;
-				    };
+				    }
 				}else{
 					l = 0;
 					for(k = i; k < j; k++){
 						if(--this.part[k].down_max_height < l)
 						    l = this.part[k].down_max_height;
-					};
+					}
 					for(k = i; k <= j; k++){
 					    this.part[k].down_max_height = l;
-				    };
-				};
+				    }
+				}
 				this.protein_height[i] = l;
-				
-				
-			};
+			}
 			if(this.is_line[j][i]){
 				if(this.part_to_line[i] == this.part_to_line[j]){
 					l = 0;
 					for(k = i + 1; k <= j; k++){
 						if(++this.part[k].up_max_height > l)
 						    l = this.part[k].up_max_height;
-					};
+					}
 					for(k = i; k <= j; k++){
 					    this.part[k].up_max_height = l;
-				    };
+				    }
 				}else{
 					l = 0;
 					for(k = i + 1; k <= j; k++){
 						if(--this.part[k].down_max_height < l)
 						    l = this.part[k].down_max_height;
-					};
+					}
 					for(k = i; k <= j; k++){
 					    this.part[k].down_max_height = l;
-				    };
-				};
+				    }
+				}
 				this.protein_height[j] = l;
-				
-			};
-		};
+			}
+		}
 		
-	};//计算this.protein_height
+	}//计算this.protein_height
 	for(i = 0; i < devices[n].output.length; i++){
 		j = parseInt(devices[n].output[i].substring(1)) - 1;
 		this.protein_height[j] = ++this.part[j].up_max_height;
 	}
-	this.protein_heightest = 0, this.protein_lowest = 0;//蛋白质节点的最大高度与最低高度
+	this.protein_heightest = 0;
+    this.protein_lowest = 0;//蛋白质节点的最大高度与最低高度
 	for(i = 0; i < this.parts_num; i++){
 		if(this.protein_height[i] > this.protein_heightest) this.protein_heightest = this.protein_height[i];
 		if(this.protein_height[i] < this.protein_lowest) this.protein_lowest = this.protein_height[i];
-	};
+	}
 };
 
 /** 
@@ -257,9 +253,9 @@ this.part_analysis = function(devices, n){
 			        this.part[i].downOutdegree += 1;
    			    if(this.is_line[j][i])
     		        this.part[i].downIndegree += 1;
-	        };
-    	};
-	};
+	        }
+    	}
+	}
 	for(i = 0; i < devices[n].map.length; i++){
 		if(devices[n].map[i].id2[0] !== 'e'){
 			for(j = 0; j < devices[n].input.length; j++){
@@ -280,7 +276,7 @@ this.part_analysis = function(devices, n){
 var id = ["00000167","00000057","00000316","00000139","00000141","00000627","10000001","00001957","00001956","00001955","00000296","00005850","00001687"];
 this.get_id = function(){
 	return id[svg_index++ % 13];
-}
+};
 
 this.draw_protein = function(){
 	var graphic = new PIXI.Graphics();
@@ -293,7 +289,7 @@ this.draw = function(devices, n){
 	if(!devices[n]){
 		alert("Error!");
 		return;
-	};
+	}
 	this.prepare(devices, n);
 	this.line_analysis(devices, n);
 	this.part_analysis(devices, n);
@@ -336,13 +332,13 @@ this.draw = function(devices, n){
 					    alert("");
 				    });
 			};*/
-		};
+		}
 		Num += devices[n].parts.id[i].length;
 		graphics.lineTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
 		graphics.moveTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
 		graphics.lineTo((Num + i + 1) * nodeDis - 11, this.stage_h / 2.0 - 8);
 		graphics.lineTo((Num + i + 1) * nodeDis - 11, this.stage_h / 2.0 + 8);
-	};//绘制主线上的part
+	}//绘制主线上的part
 	
 	var ind = 15;
 	graphics.lineStyle(4, 0xff3300, 1);
@@ -368,7 +364,7 @@ this.draw = function(devices, n){
 						graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 6, parts[j].position.y - 7 + ind + 5);
 					}else{
 						this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 5 + ind + 5, "down");
-					};
+					}
 				}else{
 					this.part[i].downLine++;
 					this.part[j].downLine++;
@@ -385,12 +381,11 @@ this.draw = function(devices, n){
 						graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 6, parts[j].position.y + nodeH + 7 - ind - 15);
 					}else{
 						this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5 - ind - 15, "up");
-					};
-				};
-				
-			};
-		};
-	};
+					}
+				}
+			}
+		}
+	}
 	for(j = 0; j < devices[n].output.length; j++){
 		i = parseInt(devices[n].output[j].substring(1)) - 1;
 		this.part[i].upLine++;
@@ -406,7 +401,7 @@ this.draw = function(devices, n){
 			graphics.lineTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12);
 		}
 		this.draw_arrow(graphics, 6, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, "up");
-	};//绘制有关蛋白质节点的支路
+	}//绘制有关蛋白质节点的支路
 	
 	graphics.lineStyle(6, 0xffff00, 1);
 	for(i = 0; i < devices[n].map.length; i++){
@@ -425,7 +420,7 @@ this.draw = function(devices, n){
 			}else{
 				input_num = this.down_height_input_num;
 				height = 0 - height;
-			};
+			}
 			if(input_num[height] === undefined)
 			    input_num[height] = 0;
 			var ind2 = input_num[height]++ * 10;
@@ -457,14 +452,14 @@ this.draw = function(devices, n){
 				
 				parts[k].protein.Text.position.x = parts[k].protein.position.x - 25;
 				parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
-			};
+			}
 			
 			for(var p = 0; p < devices[n].input.length; p++){
 				if(devices[n].input[p] === devices[n].map[i].id1){
 					this.input[p].x[this.input[p].x.length] = parts[k].protein.Text.position.x;
 					this.input[p].y[this.input[p].y.length] = parts[k].protein.Text.position.y;
 				}
-			};
+			}
 		}else{
 			for(j = 0; j < devices[n].input.length; j++){
 				if(devices[n].input[j] === devices[n].map[i].id1){
