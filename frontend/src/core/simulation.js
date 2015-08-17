@@ -1,9 +1,7 @@
-﻿!function() {
-var simulator_obj = function() {
-this.stage = new PIXI.Container();
-this.stage.movable_stage = new PIXI.Container();
-this.stage.movable_stage._scale = 1;
-this.draw = function(_nodes){
+﻿BioBLESS.simulation.stage = new PIXI.Container();
+BioBLESS.simulation.stage.movable_stage = new PIXI.Container();
+BioBLESS.simulation.stage.movable_stage._scale = 1;
+BioBLESS.simulation.draw = function(_nodes){
     this.stage.movable_stage._scale = 1;
     var nodes = function(){};
     nodes.t = _nodes.t;
@@ -139,8 +137,4 @@ this.draw = function(_nodes){
     return this.stage;
 };
 
-var b=$.getJSON("misc/simulator.json");
-setTimeout(function(){BioBLESS.simulation.draw(b.responseJSON);},1000);
-};
-BioBLESS.simulation = new simulator_obj();
-}();
+$.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});

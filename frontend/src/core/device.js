@@ -23,7 +23,7 @@ BioBLESS.device.stage.movable_stage = new PIXI.Container();
 BioBLESS.device.stage.movable_stage._scale = 1;
 
 BioBLESS.device.get_gates_supsification = function(){
-	this.gates = $.getJSON("misc/gates_supsification.json");
+    $.getJSON("misc/gates_supsification.json", function(data) {BioBLESS.device.gates = data;});
 };
 /** 
 * @author needsay
@@ -584,27 +584,25 @@ BioBLESS.device.devs_analysis = function(devices){
 	var i, j, k, l, temp;
 	this.devs = [];
 	
-	
-	var gates = this.gates.responseJSON;
 	var g = [];
-	for(i = 0; i < gates.nodes.length; i++){
+	for(i = 0; i < this.gates.nodes.length; i++){
 		for(j = 0; j < devices.length; j++){
-			if(gates.nodes[i] === devices[j].id){
+			if(this.gates.nodes[i] === devices[j].id){
 				g[i] = j;
 				break;
 			}
 		};
 		if(j === devices.length){
-			if(gates.nodes[i][0] === "O"){
+			if(this.gates.nodes[i][0] === "O"){
 				g[i] = -1;
-			}else if(gates.nodes[i][0] === "I"){
-				g[i] = -2 - parseInt(gates.nodes[i].substring(5));
+			}else if(this.gates.nodes[i][0] === "I"){
+				g[i] = -2 - parseInt(this.gates.nodes[i].substring(5));
 			}else alert("Error - 1002");
 		}
 		    
 	};
 	var j = 0;
-	for(i = 0; i < gates.nodes.length; i++){
+	for(i = 0; i < this.gates.nodes.length; i++){
 		this.devs[i] = new dev();
 		this.devs[i].draw(devices, g[i]);
 		if(g[i] < 0) continue;
@@ -613,9 +611,9 @@ BioBLESS.device.devs_analysis = function(devices){
 		index_button.y = 100;
 		this.devs[i].stage.addChild(index_button);
 	};
-	for(i = 0; i < gates.arcs.length; i++){
-		var from = gates.arcs[i].from;
-		var to = gates.arcs[i].to;
+	for(i = 0; i < this.gates.arcs.length; i++){
+		var from = this.gates.arcs[i].from;
+		var to = this.gates.arcs[i].to;
 		
 		this.devs[from].output[0].to_dev_index[this.devs[from].output[0].to_dev_index.length] = to;
 		this.devs[from].output[0].to_dev_input_index[this.devs[from].output[0].to_dev_input_index.length] = this.devs[to].input_num;

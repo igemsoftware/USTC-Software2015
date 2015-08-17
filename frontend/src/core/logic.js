@@ -122,17 +122,14 @@ var waitForDoubleClick = false;
  */
 BioBLESS.logic.onDragStart_e = function(event) {
     if(waitForDoubleClick){
-        var a=$.getJSON("misc/devices.json");
         BioBLESS.device.get_gates_supsification();
         var that = this;
-        var next = function() {
-            if(a.responseJSON && BioBLESS.device.gates.responseJSON){
-                BioBLESS.device.draw(a.responseJSON, that.parent.Index);
+        $.getJSON("misc/devices.json", function(data) {
+            if(data && BioBLESS.device.gates){
+                BioBLESS.device.draw(data, that.parent.Index);
                 BioBLESS.change_stage(BioBLESS.device);
-            }else
-                setTimeout(next, 50);
-        };
-        setTimeout(next, 50);
+            }
+        });
         return;
     }else{
         waitForDoubleClick = true;
@@ -486,7 +483,7 @@ BioBLESS.logic.draw = function(devices){
         this.alpha = 1;
         this.dragging = false;
         this.data = null;
-        if(!(this.position.x + 75 >= BioBLESS.width - 220 && this.position.x + 75 <= BioBLESS.width - 20 && this.position.y >= 110 && this.position.y <= h - 20)){
+        if(!(this.position.x + 75 >= BioBLESS.width - 220 && this.position.x + 75 <= BioBLESS.width - 20 && this.position.y >= 110 && this.position.y <= BioBLESS.height - 20)){
             BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.DrawGate(devices[this.Index]);
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = this.childPosition.x - 75;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = this.childPosition.y - 35;
