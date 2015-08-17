@@ -304,9 +304,10 @@ def api_circuit(circuit, gate):
     -------
     graph : list
         A list of dicts, each dicts looks like:
-        {'nodes': [], 'arcs': {'from': 0, 'out': 1}, 'score': 2.5}
+        {'nodes': [], 'arcs': {'from': 0, 'to': 1}, 'score': 2.5}
     """
     l_node = circuit.nodes()
+    edges = [i for i in circuit.edges() if i[1] != 'out']
     l_node.pop(l_node.index('out'))
     no_such_list = []
     for i in l_node:
@@ -316,15 +317,13 @@ def api_circuit(circuit, gate):
         l_node.remove(i)
     graph = []
     l_dic = [i for i in no_such_list]
-    l_dic.append('out')
     l_dic.extend([i for i in l_node])
     for i in gate:
         arcs = []
         nodes = [x[0].replace('v', 'INPUT') for x in no_such_list]
-        nodes.append('OUT')
         for j in range(len(l_node)):
             nodes.append(i['gate'][l_node[j]])
-        for j in circuit.edges():
+        for j in edges:
             arcs.append({'from': l_dic.index(j[0]), 'to': l_dic.index(j[1])})
         graph.append({'nodes': nodes, 'arcs': arcs, 'score': i['score']})
     graph = sorted(graph, key=lambda x: x['score'])
