@@ -2,9 +2,8 @@
 * @author needsay
 * @constructor BioBLESS.device 
 * @description the class of devices 
-* @version 0.3.1
 */ 
-BioBLESS.device = {};
+!function() {
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors
 */ 
@@ -24,7 +23,7 @@ BioBLESS.device.stage.movable_stage = new PIXI.Container();
 BioBLESS.device.stage.movable_stage._scale = 1;
 
 BioBLESS.device.get_gates_supsification = function(){
-	this.gates = $.getJSON("/misc/gates_supsification.json");
+	this.gates = $.getJSON("misc/gates_supsification.json");
 };
 /** 
 * @author needsay
@@ -309,7 +308,7 @@ this.draw = function(devices, n){
     
     
     
-    var texture = PIXI.Texture.fromImage("/misc/test.png");
+    var texture = PIXI.Texture.fromImage("misc/test.png");
 	
 	var parts = new Array();
 	/*var BBAs = new Array();
@@ -609,7 +608,7 @@ BioBLESS.device.devs_analysis = function(devices){
 		this.devs[i] = new dev();
 		this.devs[i].draw(devices, g[i]);
 		if(g[i] < 0) continue;
-		var index_button = BioBLESS.home.create_textbutton(i.toString(), 100, 30, 0x00ffff);
+		var index_button = BioBLESS.device.create_textbutton(i.toString(), 100, 30, 0x00ffff);
 		index_button.x = 50;
 		index_button.y = 100;
 		this.devs[i].stage.addChild(index_button);
@@ -791,3 +790,4 @@ BioBLESS.device.draw = function(devices, n){
 }
 
 
+}();

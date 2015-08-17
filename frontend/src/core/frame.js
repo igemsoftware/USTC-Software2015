@@ -1,7 +1,6 @@
 /** 
 * @author USTC-software
 * @description the frame
-* @version 0.2.1
 */ 
 
 /** 
@@ -12,7 +11,7 @@ BioBLESS.get_current_plugin_stage = function() {
     return BioBLESS.plugin_stage;
 };
 BioBLESS.zoom_function = function(d){
-	if(BioBLESS.get_current_plugin_stage() === null)
+    if(BioBLESS.get_current_plugin_stage() === null)
         return;
     if(d > 0){
         if(BioBLESS.get_current_plugin_stage().movable_stage._scale > 3)
@@ -27,28 +26,27 @@ BioBLESS.zoom_function = function(d){
 };
 
 BioBLESS.scroll_function = BioBLESS.zoom_function;
-BioBLESS.animation = [];
 /** 
-* @description add animation
+* @description add animate hook
 * @param {function} animation function
 */ 
-BioBLESS.add_animation = function(ani){
-	if(ani !== undefined)
-	    BioBLESS.animation[BioBLESS.animation.length] = ani;
+BioBLESS.add_animate_hook = function(ani){
+    if(ani)
+        BioBLESS.animate_hook[BioBLESS.animate_hook.length] = ani;
 };
 /** 
-* @description delete animation
+* @description delete animate hook
 * @param {function} animation function
 * @return {Bool} if succes to delete, return true, or return false
 */ 
-BioBLESS.delete_animation = function(ani){
-	for(i = 0; i < BioBLESS.animation.length; i++){
-		if(BioBLESS.animation[i] == ani){
-			BioBLESS.animation.splice(i, 1);
-			return true;
-		}
-	};
-	return false;
+BioBLESS.delete_animate_hook = function(ani){
+    for(i = 0; i < BioBLESS.animate_hook.length; i++){
+        if(BioBLESS.animate_hook[i] === ani){
+            BioBLESS.animate_hook.splice(i, 1);
+            return true;
+        }
+    };
+    return false;
 };
 BioBLESS.scroll_animation = function(){
     if(BioBLESS.get_current_plugin_stage() !== undefined){
@@ -66,12 +64,12 @@ BioBLESS.scroll_animation = function(){
             BioBLESS.get_current_plugin_stage().movable_stage.scale.x = BioBLESS.get_current_plugin_stage().movable_stage.scale.y = BioBLESS.get_current_plugin_stage().movable_stage._scale;
     }
 };
-BioBLESS.add_animation(BioBLESS.scroll_animation);
+BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 
 
 BioBLESS.prepare_navigation_title = function(){
-	
-	this.navigation_title = new PIXI.Container();
+    
+    this.navigation_title = new PIXI.Container();
     var background2 = new PIXI.Graphics();
     background2.beginFill(0x000000, 1);
     background2.lineStyle(0);
@@ -79,31 +77,31 @@ BioBLESS.prepare_navigation_title = function(){
     background2.endFill();
     background2.lineStyle(3, 0xffffff, 1);
     background2.drawCircle(60, 60, 50);
-	background2.lineStyle(1, 0xffffff, 0.8);
-	background2.moveTo(12, 120);
-	background2.lineTo(108, 120);
+    background2.lineStyle(1, 0xffffff, 0.8);
+    background2.moveTo(12, 120);
+    background2.lineTo(108, 120);
     var title = new PIXI.Text('BioBLESS', {fill: "#ffffff"});
     title.position.y = 60;
     title.position.x = 60;
-	title.anchor.x = 0.5;
-	title.anchor.y = 0.5;
-	title.scale.x = title.scale.y = 0.7;
+    title.anchor.x = 0.5;
+    title.anchor.y = 0.5;
+    title.scale.x = title.scale.y = 0.7;
     this.navigation_title.addChild(background2);
     this.navigation_title.addChild(title);
 };
 BioBLESS.prepare_navigation = function(){
-	BioBLESS.prepare_navigation_title();
-	var navigation_button = ["home","device","simulator","","",""];
-	BioBLESS.navigation = new PIXI.Container();
-	var button_width = 120;
-	var button_dis = (BioBLESS.height) / (navigation_button.length + 1);
-	if(button_dis < 120){
-	    button_dis = 120;
-		BioBLESS.navigation.h = button_dis * (navigation_button.length + 1);
-		this.navigation_title.scale.x = this.navigation_title.scale.y =  BioBLESS.height / BioBLESS.navigation.h;
-		this.navigation.scale.x = this.navigation.scale.y = BioBLESS.height / BioBLESS.navigation.h;
-	}else
-	    BioBLESS.navigation.h = BioBLESS.height;
+    BioBLESS.prepare_navigation_title();
+    var navigation_button = ["logic","device","simulation","analysis","dna"];
+    BioBLESS.navigation = new PIXI.Container();
+    var button_width = 120;
+    var button_dis = (BioBLESS.height) / (navigation_button.length + 1);
+    if(button_dis < 120){
+        button_dis = 120;
+        BioBLESS.navigation.h = button_dis * (navigation_button.length + 1);
+        this.navigation_title.scale.x = this.navigation_title.scale.y =  BioBLESS.height / BioBLESS.navigation.h;
+        this.navigation.scale.x = this.navigation.scale.y = BioBLESS.height / BioBLESS.navigation.h;
+    }else
+        BioBLESS.navigation.h = BioBLESS.height;
     BioBLESS.navigation.condition = 0;
     BioBLESS.navigation.w = 120;
     var background = new PIXI.Graphics();
@@ -111,9 +109,9 @@ BioBLESS.prepare_navigation = function(){
     background.lineStyle(0);
     background.drawRect(0, 0, this.navigation.w, this.navigation.h);
     background.endFill();
-	BioBLESS.navigation.button = [];
+    BioBLESS.navigation.button = [];
     var onmousedown_obj = function() {
-		if(BioBLESS[this.t] !== undefined)
+        if(BioBLESS[this.t] !== undefined)
              BioBLESS.change_stage(BioBLESS[this.t]);
     };
     for(var i = 1; i < navigation_button.length + 1; i++){
@@ -152,21 +150,21 @@ BioBLESS.prepare_navigation = function(){
 * @return {PIXI.Graphics} textarea
 */ 
 BioBLESS.create_textarea = function(w, h){
-	var id = "I_";
-	id += Math.random().toString(36).substr(2);
-	var graphics = new PIXI.Graphics();
-	graphics.w = w;
-	graphics.h = h;
-	graphics.beginFill(0x0000ff, 1);
-	graphics.drawRoundedRect(0, 0, w, h, h / 5);
-	graphics.endFill();
-	graphics.input = document.createElement(id);
-	graphics.input.id = id;
-	graphics.input.type = "textarea";
-	graphics.input.style.width = (w - 2 * h / 5 - 4).toString() + "px";
-	graphics.input.style.height = (h - 2 * h / 5 - 6).toString() + "px";
-	graphics.input.style.position = "absolute";
-	return graphics;
+    var id = "I_";
+    id += Math.random().toString(36).substr(2);
+    var graphics = new PIXI.Graphics();
+    graphics.w = w;
+    graphics.h = h;
+    graphics.beginFill(0x0000ff, 1);
+    graphics.drawRoundedRect(0, 0, w, h, h / 5);
+    graphics.endFill();
+    graphics.input = document.createElement(id);
+    graphics.input.id = id;
+    graphics.input.type = "textarea";
+    graphics.input.style.width = (w - 2 * h / 5 - 4).toString() + "px";
+    graphics.input.style.height = (h - 2 * h / 5 - 6).toString() + "px";
+    graphics.input.style.position = "absolute";
+    return graphics;
 };
 /** 
 * @description change the position of textarea
@@ -175,10 +173,10 @@ BioBLESS.create_textarea = function(w, h){
 * @param {Num} animation y
 */ 
 BioBLESS.change_textarea_position = function(textarea, x, y){
-	textarea.position.x = x;
-	textarea.position.y = y;
-	textarea.input.style.left = (x + textarea.h / 5).toString() + "px";
-	textarea.input.style.top = (y + textarea.h / 5).toString() + "px";
+    textarea.position.x = x;
+    textarea.position.y = y;
+    textarea.input.style.left = (x + textarea.h / 5).toString() + "px";
+    textarea.input.style.top = (y + textarea.h / 5).toString() + "px";
 };
 /** 
 * @description show textarea
@@ -186,8 +184,8 @@ BioBLESS.change_textarea_position = function(textarea, x, y){
 * @param {PIXI.Graphics} textarea
 */ 
 BioBLESS.show_textarea = function(stage, textarea){
-	stage.addChild(textarea);
-	$("body").append(textarea.input);
+    stage.addChild(textarea);
+    $("body").append(textarea.input);
 };
 /** 
 * @description delete textarea
@@ -195,7 +193,7 @@ BioBLESS.show_textarea = function(stage, textarea){
 * @param {PIXI.Graphics} textarea
 */ 
 BioBLESS.delete_textarea = function(stage, textarea){
-	stage.removeChild(textarea);
+    stage.removeChild(textarea);
     $(textarea.input.id).remove();
 };
 

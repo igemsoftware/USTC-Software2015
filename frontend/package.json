@@ -14,7 +14,7 @@
         "uglify-js": "2.x"
     },
     "scripts": {
-        "build": "uglifyjs -c -o bin/biobless.min.js src/header/*.js src/*.js src/footer/*.js",
+        "build": "uglifyjs -c -o bin/biobless.min.js src/header.js src/*/*.js src/footer.js",
         "build-doc": "jsdoc -r src -d doc",
         "pretest": "jshint src && npm run build",
         "test": "mocha-phantomjs test/index.html"

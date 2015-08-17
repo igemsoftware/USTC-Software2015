@@ -1,4 +1,4 @@
-﻿(function(){
+﻿!function() {
 var simulator_obj = function() {
 this.stage = new PIXI.Container();
 this.stage.movable_stage = new PIXI.Container();
@@ -139,8 +139,8 @@ this.draw = function(_nodes){
     return this.stage;
 };
 
-var b=$.getJSON("../misc/simulator.json");
-setTimeout(function(){BioBLESS.simulator.draw(b.responseJSON);},1000);
+var b=$.getJSON("misc/simulator.json");
+setTimeout(function(){BioBLESS.simulation.draw(b.responseJSON);},1000);
 };
-BioBLESS.simulator = new simulator_obj();
-})();
+BioBLESS.simulation = new simulator_obj();
+}();
