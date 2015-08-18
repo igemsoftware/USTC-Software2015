@@ -8,5 +8,5 @@ BioBLESS = {
     simulation : {},
     analysis : {},
     dna : {},
-    device : {}
+    utils : {}
 };

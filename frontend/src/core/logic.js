@@ -188,12 +188,12 @@ var waitForDoubleClick = false;
  */
 BioBLESS.logic.onDragStart_e = function(event) {
     if(waitForDoubleClick){
-        BioBLESS.device.get_gates_supsification();
+        BioBLESS.gene_network.get_gates_supsification();
         var that = this;
         $.getJSON("misc/devices.json", function(data) {
-            if(data && BioBLESS.device.gates){
-                BioBLESS.device.draw(data, that.parent.Index);
-                BioBLESS.change_stage(BioBLESS.device);
+            if(data && BioBLESS.gene_network.gates){
+                BioBLESS.gene_network.draw(data, that.parent.Index);
+                BioBLESS.change_stage(BioBLESS.gene_network);
             }
         });
         return;
@@ -672,4 +672,3 @@ BioBLESS.logic.draw = function(devices){
     BioBLESS.logic.stage.addChild(BioBLESS.logic.stage.movable_stage);
     BioBLESS.logic.stage.addChild(that.plusobj);
 };
-$.getJSON("misc/devices.json", function(data) {BioBLESS.logic.draw(data);});
