@@ -6,7 +6,6 @@ class BioSystem(object):
         l_nodes = [i for i in spec['nodes']]
         for i in range(len(l_nodes)):
             l_input = [j for j in spec['arcs'] if j['to'] == i]
-            if l_node[i] != 'INPUT':
                 devices.append(DeviceSystem(lizhi[l_nodes[i]], spec).as_reaction_system(str(i), l_input, str(i)))
 
     def __lizhi_to_dict(self, lizhi):
