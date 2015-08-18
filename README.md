@@ -52,36 +52,25 @@ in the URI `/docs`
 ---
 # Frontend
 
-+ jQuery-2.1.4:
+[jQuery-2.1.4](https://jquery.com/download/) License: MIT
 
-URL: https://jquery.com/download/ License: MIT
-
-+ Pixi.js-3.0.7:
-
-URL: https://github.com/GoodBoyDigital/pixi.js License: MIT
+[Pixi.js-3.0.7](https://github.com/GoodBoyDigital/pixi.js) License: MIT
 
 ### Build
-
-+ npm install
-
-+ npm run build
-
+```
+$ npm install
+$ npm run build
+```
 ### Documentations
-
-npm run build-doc
-
+```
+$ npm run build-doc
+```
 ### Unit Test
 
-mocha-2.2.5:
+[mocha-2.2.5](https://www.npmjs.com/package/mocha) License: MIT
 
-URL: https://www.npmjs.com/package/mocha License: MIT
+[chai-3.2.0](https://github.com/chaijs/chai) License: MIT
 
-chai-3.2.0:
-
-URL: https://github.com/chaijs/chai License: MIT
-
-npm test
-
-
-
-
+```
+$ npm test
+```
