@@ -1,7 +1,4 @@
-﻿BioBLESS.simulation.stage = new PIXI.Container();
-BioBLESS.simulation.stage.movable_stage = new PIXI.Container();
-BioBLESS.simulation.stage.movable_stage._scale = 1;
-BioBLESS.simulation.draw = function(_nodes){
+﻿BioBLESS.simulation.draw = function(_nodes){
     this.stage.movable_stage._scale = 1;
     var nodes = function(){};
     nodes.t = _nodes.t;
@@ -137,4 +134,3 @@ BioBLESS.simulation.draw = function(_nodes){
     return this.stage;
 };
 
-$.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});

@@ -324,7 +324,7 @@ BioBLESS.IDdraw.drawElement = function(icon){
             graphics.endFill();
             break;
         default:
-            alert("Error - 1001!");
+            throw new Error("Not Found");
     }
     return graphics;
 };
