@@ -64,4 +64,5 @@ BioBLESS.simulation.stage = BioBLESS.utils.init_stage();
         return false;
     });
 $.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
+BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 };

@@ -38,7 +38,6 @@ BioBLESS.scroll_animation = function(){
             BioBLESS.stage.movable_stage.scale.x = BioBLESS.stage.movable_stage.scale.y = BioBLESS.stage.movable_stage._scale;
     }
 };
-BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 
 
 BioBLESS.prepare_navigation_title = function(){
