@@ -5,8 +5,10 @@ URI:/simulate
 method:POST
 """
 __author__ = 'ctyi'
-
-import BioBLESS.biosys.System as System
+try:
+    import BioBLESS.biosys.BioSystem as Biosystem
+except BaseException as error:
+    pass
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
