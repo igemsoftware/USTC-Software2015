@@ -30,5 +30,6 @@ urlpatterns = [
     # biosys
     url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^biocircuit/(.+)/$', BioBLESS.views.biocircuit.BiocircuitView.as_view()),
+                  url(r'^sleep/$', BioBLESS.views.views.sleep),
     url(r'^simulate/$', BioBLESS.views.simulate)
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
