@@ -5,29 +5,41 @@
  * @author Ubrok
  * @since 2015-8-12
  */
+/**
+ * Circuit is a data structure communicate between frontend and backend
+ */
 BioBLESS.logic.Circuit = {
     "nodes": [],
     "arcs": [],
     "mark": []
 };
 
+/**
+ * CircuitAddGate is the function to add the structure based on element 
+ * @param {type} element
+ */
 BioBLESS.logic.CircuitAddGate = function(type) {
     if(type === "not"){
         BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = type;
         BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
-        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 1,"to":BioBLESS.logic.Circuit.nodes.length - 0};
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 0, "to":BioBLESS.logic.Circuit.nodes.length - 1};
         BioBLESS.logic.Circuit.mark[BioBLESS.logic.Circuit.mark.length] = BioBLESS.logic.Circuit.nodes.length - 1;
     }
     else{
         BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = type;
         BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
         BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
-        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 2, "to":BioBLESS.logic.Circuit.nodes.length - 1};
-        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 2, "to":BioBLESS.logic.Circuit.nodes.length - 0};
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 1, "to":BioBLESS.logic.Circuit.nodes.length - 2};
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 0, "to":BioBLESS.logic.Circuit.nodes.length - 2};
         BioBLESS.logic.Circuit.mark[BioBLESS.logic.Circuit.mark.length] = BioBLESS.logic.Circuit.nodes.length - 2;
     }
 };
 
+/**
+ * CircuitAddLine is the function to add the structure based on line
+ * @param {mama} line.mother or line.father
+ * @param {papa} line.mother or line.father
+ */
 BioBLESS.logic.CircuitAddLine = function(mama, papa) {
     var i,j;
     var m,d;
@@ -36,41 +48,210 @@ BioBLESS.logic.CircuitAddLine = function(mama, papa) {
             i = k;
         }
         if(papa.parent === BioBLESS.logic.elements[k]){
-        	j = k;
+            j = k;
+        }
+    }//确定线父母的家长是哪个节点
+    if(mama === mama.parent.input_1 || mama === mama.parent.input_2){
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.arcs[k].to] === BioBLESS.logic.Circuit.mark[i]){
+                if(BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.arcs[k].from] === "INPUT"){
+                    m = BioBLESS.logic.Circuit.arcs[k].from;
+                    break;
+                }
+            }
         }
     }
-    if(mama === mama.parent.input_1){
-        m = 1;
-    }
-    else if(mama === mama.parent.output){
-        m = 0;
+    else{
+        m = null;
+    }//确定线母亲是哪一个接口
+    if(papa === papa.parent.input_1 || papa === papa.parent.input_2){
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.arcs[k].to] === BioBLESS.logic.Circuit.mark[j]){
+                if(BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.arcs[k].from] === "INPUT"){
+                    d = BioBLESS.logic.Circuit.arcs[k].from;
+                    break;
+                }
+            }
+        }
     }
     else{
-        m = 2;
-    }
-    if(papa === papa.parent.input_1){
-        d = 1;
-    }
-    else if(papa === papa.parent.output){
-        d = 0;
-    }
-    else{
-        d = 2;
-    }
-    if(m !== 0){
-        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[i] + m] = "0";
-    }
-    if(d !== 0){
-        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[j] + d] = "0";
-    }
-    if(m ===0){
-        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[j]], "to":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[i]]};
-    }
-    if(d === 0){
-        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[i]], "to":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[j]]};
-    }
+        d = null;
+    }//确定线父亲是哪一个接口
 
+    if(m !== null && d !== null){
+        BioBLESS.logic.Circuit.nodes.splice(d, 1);
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from === d){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                break;
+            }
+        }
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from > d){
+                BioBLESS.logic.Circuit.arcs[k].from -= 1;
+            }
+            if(BioBLESS.logic.Circuit.arcs[k].to > d){
+                BioBLESS.logic.Circuit.arcs[k].to -= 1;
+            }
+        }
+        for(var k = 0; k < BioBLESS.logic.Circuit.mark.length; k++){
+            if(BioBLESS.logic.Circuit.mark[k] > d){
+                BioBLESS.logic.Circuit.mark[k] -= 1;
+            }
+        }
+        if(m > d){
+            m -= 1;
+        }
+        if(i > d){
+            i -= 1;
+        }
+        if(j > d){
+            j -= 1;
+        }
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.mark[j], "to":m};//反过来，表达为外来节点的INPUT连接该节点
+    }//INPUT----INPUT
+    else if(m !== null && d ===null){
+       BioBLESS.logic.Circuit.nodes.splice(m, 1);
+       for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from === m){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                break;
+            }
+        }
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from > m){
+                BioBLESS.logic.Circuit.arcs[k].from -= 1;
+            }
+            if(BioBLESS.logic.Circuit.arcs[k].to > m){
+                BioBLESS.logic.Circuit.arcs[k].to -= 1;
+            }
+        }
+        for(var k = 0; k < BioBLESS.logic.Circuit.mark.length; k++){
+            if(BioBLESS.logic.Circuit.mark[k] > m){
+                BioBLESS.logic.Circuit.mark[k] -= 1;
+            }
+        }
+        if(i > m){
+            i -= 1;
+        }
+        if(j > m){
+            j -= 1;
+        }
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.mark[j], "to":BioBLESS.logic.Circuit.mark[i]};
+    }// papa's OUTPUT----mama's INPUT
+    else if(m === null && d !==null){
+       BioBLESS.logic.Circuit.nodes.splice(d, 1);
+       for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from === d){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                break;
+            }
+        }
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from > d){
+                BioBLESS.logic.Circuit.arcs[k].from -= 1;
+            }
+            if(BioBLESS.logic.Circuit.arcs[k].to > d){
+                BioBLESS.logic.Circuit.arcs[k].to -= 1;
+            }
+        }
+        for(var k = 0; k < BioBLESS.logic.Circuit.mark.length; k++){
+            if(BioBLESS.logic.Circuit.mark[k] > d){
+                BioBLESS.logic.Circuit.mark[k] -= 1;
+            }
+        }
+        if(i > d){
+            i -= 1;
+        }
+        if(j > d){
+            j -= 1;
+        }
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.mark[i], "to":BioBLESS.logic.Circuit.mark[j]};
+    }// mama's OUTPUT----papa's INPUT
+    else{
+        alert("CreateLine error");
+    }// OUTPUT----OUTPUT error.
 };
+
+/**
+ * CircuitDeleteLine is the function to remove structure based on line
+ * @param {mama} line.mother or line.father
+ * @param {papa} line.mother or line.father
+ */
+BioBLESS.logic.CircuitDeleteLine = function(mama, papa) {
+    var i,j;
+    var m,d;
+    for(var k = 0; k < BioBLESS.logic.elements.length; k++){
+        if(mama.parent === BioBLESS.logic.elements[k]){
+            i = k;
+        }
+        if(papa.parent === BioBLESS.logic.elements[k]){
+            j = k;
+        }
+    }//确定线父母的家长是哪个节点
+    if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k].from === BioBLESS.logic.Circuit.mark[i] && BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.arcs[k].to] === "INPUT"){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+                BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.arcs.length - 1, "to":BioBLESS.logic.Circuit.mark[i]};
+                break;
+            }
+            if(BioBLESS.logic.Circuit.arcs[k].from === BioBLESS.logic.Circuit.mark[j] && BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.arcs[k].to] === "INPUT"){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+                BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.arcs.length - 1, "to":BioBLESS.logic.Circuit.mark[j]};
+                break;
+            }
+        }
+    }//INPUT----INPUT
+    else if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.output){
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k] === {"from":BioBLESS.logic.Circuit.mark[j], "to":BioBLESS.logic.Circuit.mark[i]){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+                BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.arcs.length - 1, "to":BioBLESS.logic.Circuit.mark[i]};
+                break;
+            }
+        }
+    }// papa's OUTPUT----mama's INPUT
+    else if((mama === mama.parent.output) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
+        for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
+            if(BioBLESS.logic.Circuit.arcs[k] === {"from":BioBLESS.logic.Circuit.mark[i], "to":BioBLESS.logic.Circuit.mark[j]){
+                BioBLESS.logic.Circuit.arcs.splice(k, 1);
+                BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+                BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.arcs.length - 1, "to":BioBLESS.logic.Circuit.mark[j]};
+                break;
+            }
+        }
+    }// mama's OUTPUT----papa's INPUT
+    else{
+        alert("Deleteline error!");
+    }// OUTPUT----OUTPUT error.
+};
+
+/**
+ * CircuitDeleteElement is the function to remove structure based on element
+ * @param {device} element
+ */
+BioBLESS.logic.CircuitDeleteElement = function(device) {
+    if(device.parent.input_1.Connection === true){
+        for(var k = 0; k < device.input_1.counts; k++){
+            BioBLESS.logic.CircuitDeleteLine(device.parent.input_1.lines[k][0].mother, device.parent.input_1.lines[k][0].father);
+        }
+    }
+    if(device.parent.input_2.Connection === true){
+        for(var k = 0; k < device.input_2.counts; k++){
+            BioBLESS.logic.CircuitDeleteLine(device.parent.input_2.lines[k][0].mother, device.parent.input_2.lines[k][0].father);
+        }
+    }
+    if(device.parent.output.Connection === true){
+        for(var k = 0; k < device.output.counts; k++){
+            BioBLESS.logic.CircuitDeleteLine(device.parent.output.lines[k][0].mother, device.parent.output.lines[k][0].father);
+        }
+    }
+};
+
 /**
  * DrawGate function works for preparing the svg of logicgate
  * @function
@@ -439,6 +620,7 @@ BioBLESS.logic.onDrawLineMove = function(event){
             drawPart[0].IsHerWork.interactive = true;
             drawPart[0].IsHerWork.buttonMode = true;
             drawPart[0].father.parent.parent.addChild(drawPart[0]);
+            BioBLESS.logic.CreateLine(drawPart[0].mother, drawPart[0].father);
     }
 };
 
@@ -475,6 +657,7 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
 BioBLESS.logic.IsHerWorkRight = function(event) {
     this.father.parent.parent.removeChild(this);
     this.father.parent.parent.removeChild(this.IsHerWork);
+     BioBLESS.logic.CircuitDeleteLine(this.mother, this.father);//delete
 };
 
 /**
