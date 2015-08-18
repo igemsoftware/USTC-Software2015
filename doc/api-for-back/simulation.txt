@@ -31,7 +31,7 @@ class BioSystem():
 			* name them
 			* link to each other
 		"""
-        devices[n]= DeviceSystem(ID, json["INPUT"], dict["simulation_parameters"][n] ).as_reaction_system(dict[])
+        devices[n]= DeviceSystem(json["INPUT"], dict["simulation_parameters"][n] ).as_reaction_system(ID, InPut, OutPut)
 
 	def lizhi_to_dict(list):
 		return dict
