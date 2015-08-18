@@ -31,18 +31,18 @@ class BioSystem():
 			* name them
 			* link to each other
 		"""
-        devices[n]= Device(ID, json["INPUT"], dict["simulation_parameters"][n] ).as_reaction_system(dict[])
+        devices[n]= DeviceSystem(ID, json["INPUT"], dict["simulation_parameters"][n] ).as_reaction_system(dict[])
 
 	def lizhi_to_dict(list):
 		return dict
 
     def simualte(record=[0,current]):
 		[[time,{species:current,...}],...]  #species = str(0..len(nodes)) -> front
-			
+
 ##########################################################################
-class Device():
+class DeviceSystem():
     def __init__(json["NOT0"](描述门的逻辑结构), dict（描述门的基本参数）):
-        
+
     def as_reaction_system(ID, [Input,..], [OutPut]):
         return ReactionSystem()
 

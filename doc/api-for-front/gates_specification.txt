@@ -28,7 +28,9 @@
             },
             "e2": ...,
             "device_parameter":{
-                "key":float,
+                dna_initial:[
+                    dna_chain_1_initial,...
+                ]
 
             }
             "lizhi":{"d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
