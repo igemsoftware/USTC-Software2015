@@ -274,6 +274,15 @@ this.part_analysis = function(devices, n){
 * @param {Num} the index of the device you want to draw
 */ 
 var id = ["00000167","00000057","00000316","00000139","00000141","00000627","10000001","00001957","00001956","00001955","00000296","00005850","00001687"];
+/*
+ * Promoter - 0000167
+ * RBS - 0000139
+ * Coding - 0000316
+ * Terminator - 0000141
+ * sRNA
+ * (RNA)
+ * (Protein)
+ */
 this.get_id = function(){
 	return id[svg_index++ % 13];
 };
