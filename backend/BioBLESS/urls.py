@@ -21,7 +21,6 @@ import BioBLESS.views.biocircuit
 import BioBLESS.views.views
 import BioBLESS.views.simulate
 from django.views.generic.base import RedirectView
-from BioBLESS.biosys.test_samples import test_reaction_system_sample, test_parts_system_sample
 
 urlpatterns = [
                   url(r'^$', RedirectView.as_view(url='/BioBLESS/')),
@@ -29,8 +28,6 @@ urlpatterns = [
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^parts/', BioBLESS.views.parts.PartsView.as_view()),
     # biosys
-    url(r'^biosys/test-reaction-system-sample/$', test_reaction_system_sample),
-    url(r'^biosys/test-parts-system-sample/$', test_parts_system_sample),
     url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^biocircuit/(.+)/$', BioBLESS.views.biocircuit.BiocircuitView.as_view()),
     url(r'^simulate/$', BioBLESS.views.simulate)
