@@ -71,18 +71,6 @@ BioBLESS.logic.CircuitAddLine = function(mama, papa) {
     }
 
 };
-/** 
- * @description {PIXI.Container} the stage of the home page
- */ 
-BioBLESS.logic.stage = new PIXI.Container();
-/** 
- * @description {PIXI.Container} the movable stage
- */ 
-BioBLESS.logic.stage.movable_stage = new PIXI.Container();
-/** 
- * @description {Num} used for controling stage scale in scale animation
- */ 
-BioBLESS.logic.stage.movable_stage._scale = 1;
 /**
  * DrawGate function works for preparing the svg of logicgate
  * @function

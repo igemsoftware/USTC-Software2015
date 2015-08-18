@@ -9,18 +9,6 @@
 */ 
 var nodeH = 100, nodeW = 50, nodeDis = 100, floorDis = 135;
 var svg_index = 0;
-/** 
-* @description {PIXI.Container} the stage of the whole devices
-*/ 
-BioBLESS.gene_network.stage = new PIXI.Container();
-/** 
-* @description {PIXI.Container} the movable stage
-*/ 
-BioBLESS.gene_network.stage.movable_stage = new PIXI.Container();
-/** 
-* @description {Num} used for controling stage scale in scale animation
-*/ 
-BioBLESS.gene_network.stage.movable_stage._scale = 1;
 
 BioBLESS.gene_network.get_gates_supsification = function(){
     $.getJSON("misc/gates_supsification.json", function(data) {BioBLESS.gene_network.gates = data;});

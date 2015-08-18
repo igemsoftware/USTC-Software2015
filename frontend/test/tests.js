@@ -1,4 +1,7 @@
-$(function() {$('canvas').hide();});
+BioBLESS.add_animate_hook(function() {
+    $("canvas").hide();
+    return false;
+});
 describe('window', function() {
     it('should have property jQuery', function() {
         window.should.have.property('jQuery');
@@ -13,10 +16,8 @@ describe('window', function() {
 describe('BioBLESS', function() {
     it('should have property init', function() {
         BioBLESS.should.have.property('init');
-        BioBLESS.IDdraw.drawElement("0000000").should.have.property('PIXI.Graphics');
+    });
+    it('should have proper IDdraw', function() {
+        BioBLESS.IDdraw.drawElement("10000000").should.be.instanceof(PIXI.Graphics);
     });
 });
-//chai should 
-//
-
-

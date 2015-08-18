@@ -25,6 +25,9 @@ BioBLESS.init = function() {
         render(animate);
     };
     render(animate);
+BioBLESS.logic.stage = BioBLESS.utils.init_stage();
+BioBLESS.gene_network.stage = BioBLESS.utils.init_stage();
+BioBLESS.simulation.stage = BioBLESS.utils.init_stage();
     BioBLESS.stage = BioBLESS.logic.stage;
     BioBLESS.base_stage.static_stage = new PIXI.Container();
     BioBLESS.base_stage.addChild(BioBLESS.base_stage.static_stage);
@@ -60,4 +63,5 @@ BioBLESS.init = function() {
         }
         return false;
     });
+$.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
 };
