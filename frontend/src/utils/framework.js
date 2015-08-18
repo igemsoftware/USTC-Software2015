@@ -40,6 +40,7 @@ BioBLESS.scroll_animation = function(){
 };
 
 
+
 BioBLESS.prepare_navigation_title = function(){
     
     this.navigation_title = new PIXI.Container();
@@ -64,7 +65,7 @@ BioBLESS.prepare_navigation_title = function(){
 };
 BioBLESS.prepare_navigation = function(){
     BioBLESS.prepare_navigation_title();
-    var navigation_button = ["logic","gene_network","simulation","analysis","dna"];
+    var navigation_button = ["logic","gene network","simulation","analysis","dna"];
     BioBLESS.navigation = new PIXI.Container();
     var button_width = 120;
     var button_dis = (BioBLESS.height) / (navigation_button.length + 1);
@@ -98,8 +99,8 @@ BioBLESS.prepare_navigation = function(){
         BioBLESS.navigation.button[j].title.anchor.x = 0.5;
         BioBLESS.navigation.button[j].title.anchor.y = 0.5;
         if(navigation_button[j].length > 7){
-            BioBLESS.navigation.button[j].title.scale.x *= 7 / navigation_button[j].length;
-            BioBLESS.navigation.button[j].title.scale.y *= 7 / navigation_button[j].length;
+            BioBLESS.navigation.button[j].title.scale.x *= 6.5 / navigation_button[j].length;
+            BioBLESS.navigation.button[j].title.scale.y *= 6.5 / navigation_button[j].length;
         }
         BioBLESS.navigation.button[j].title.position.x = 60;
         BioBLESS.navigation.button[j].title.position.y = i * button_dis + 60;

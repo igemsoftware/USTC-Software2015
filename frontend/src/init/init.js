@@ -47,7 +47,8 @@ BioBLESS.simulation.stage = BioBLESS.utils.init_stage();
             d = e.wheelDelta;
         else if(e.detail) //Firefox
             d = e.detail;
-        BioBLESS.zoom_function(d);
+		if(BioBLESS.scroll_function !== undefined)
+            BioBLESS.scroll_function(d);
     };
     if(document.addEventListener) //W3C
         document.addEventListener('DOMMouseScroll', scroll_func, false);
@@ -63,6 +64,7 @@ BioBLESS.simulation.stage = BioBLESS.utils.init_stage();
         }
         return false;
     });
-$.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
-BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
+    $.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
+    BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
+	BioBLESS.scroll_function = BioBLESS.zoom_function;
 };
