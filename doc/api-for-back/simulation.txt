@@ -20,18 +20,18 @@ show_record:
         [species,...]
 
 show_simulate=simulate+show_record
-
+#TODO simulate(+record),initial,add
 ##########################################################################
 class BioSystem():
-    def __init__(dict, json=lizhi):
-		lizhi_to_dict(lizhi)
+    def __init__(dict(从前端得到的参数和逻辑结构), json（内置在系统中的描述门的list）):
+    lizhi_to_dict(lizhi)
 
-		"""
+    """
 			* get a list of node
 			* name them
 			* link to each other
 		"""
-        devices= Device(json[]).as_reaction_system(dict[])
+        devices[n]= Device(ID, json["INPUT"], dict["simulation_parameters"][n] ).as_reaction_system(dict[])
 
 	def lizhi_to_dict(list):
 		return dict
@@ -41,7 +41,8 @@ class BioSystem():
 			
 ##########################################################################
 class Device():
-    def __init__(json)
-	def as_reaction_system([Input,..], [OutPut])
-		return ReactionSystem()
+    def __init__(json["NOT0"](描述门的逻辑结构), dict（描述门的基本参数）):
+        
+    def as_reaction_system(ID, [Input,..], [OutPut]):
+        return ReactionSystem()
 

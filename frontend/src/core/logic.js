@@ -5,6 +5,72 @@
  * @author Ubrok
  * @since 2015-8-12
  */
+BioBLESS.logic.Circuit = {
+    "nodes": [],
+    "arcs": [],
+    "mark": []
+};
+
+BioBLESS.logic.CircuitAddGate = function(type) {
+    if(type === "not"){
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = type;
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 1,"to":BioBLESS.logic.Circuit.nodes.length - 0};
+        BioBLESS.logic.Circuit.mark[BioBLESS.logic.Circuit.mark.length] = BioBLESS.logic.Circuit.nodes.length - 1;
+    }
+    else{
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = type;
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 2, "to":BioBLESS.logic.Circuit.nodes.length - 1};
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes.length - 2, "to":BioBLESS.logic.Circuit.nodes.length - 0};
+        BioBLESS.logic.Circuit.mark[BioBLESS.logic.Circuit.mark.length] = BioBLESS.logic.Circuit.nodes.length - 2;
+    }
+};
+
+BioBLESS.logic.CircuitAddLine = function(mama, papa) {
+    var i,j;
+    var m,d;
+    for(var k = 0;k < BioBLESS.logic.elements.length;k++){
+        if(mama.parent === BioBLESS.logic.elements[k]){
+            i = k;
+        }
+        if(papa.parent === BioBLESS.logic.elements[k]){
+        	j = k;
+        }
+    }
+    if(mama === mama.parent.input_1){
+        m = 1;
+    }
+    else if(mama === mama.parent.output){
+        m = 0;
+    }
+    else{
+        m = 2;
+    }
+    if(papa === papa.parent.input_1){
+        d = 1;
+    }
+    else if(papa === papa.parent.output){
+        d = 0;
+    }
+    else{
+        d = 2;
+    }
+    if(m !== 0){
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[i] + m] = "0";
+    }
+    if(d !== 0){
+        BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[j] + d] = "0";
+    }
+    if(m ===0){
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[j]], "to":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[i]]};
+    }
+    if(d === 0){
+        BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[i]], "to":BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.mark[j]]};
+    }
+
+};
 /** 
  * @description {PIXI.Container} the stage of the home page
  */ 
@@ -491,39 +557,40 @@ BioBLESS.logic.draw = function(devices){
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.buttonMode = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].Index = this.Index;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
-                                                                              .on('touchstart', that.onDragStart_e)
-                                                                              .on('mouseup', that.onDragEnd_e)
-                                                                              .on('mouseupoutside', that.onDragEnd_e)
-                                                                              .on('touchend', that.onDragEnd_e)
-                                                                              .on('touchendoutside', that.onDragEnd_e)
-                                                                              .on('mousemove', that.onDragMove_e)
-                                                                              .on('touchmove', that.onDragMove_e);
+                                                                                .on('touchstart', that.onDragStart_e)
+                                                                                .on('mouseup', that.onDragEnd_e)
+                                                                                .on('mouseupoutside', that.onDragEnd_e)
+                                                                                .on('touchend', that.onDragEnd_e)
+                                                                                .on('touchendoutside', that.onDragEnd_e)
+                                                                                .on('mousemove', that.onDragMove_e)
+                                                                                .on('touchmove', that.onDragMove_e);
 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.buttonMode = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.on('mousedown', that.onDrawLineUp)
-                                                                            .on('touchstart', that.onDrawLineUp)
-                                                                            .on('mousemove', that.onDrawLineMove)
-                                                                            .on('touchmove', that.onDrawLineMove);
+                                                                              .on('touchstart', that.onDrawLineUp)
+                                                                              .on('mousemove', that.onDrawLineMove)
+                                                                              .on('touchmove', that.onDrawLineMove);
                 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.buttonMode = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.on('mousedown', that.onDrawLineUp)
-                                                                             .on('touchstart', that.onDrawLineUp)
-                                                                             .on('mousemove', that.onDrawLineMove)
-                                                                             .on('touchmove', that.onDrawLineMove);
+                                                                               .on('touchstart', that.onDrawLineUp)
+                                                                               .on('mousemove', that.onDrawLineMove)
+                                                                               .on('touchmove', that.onDrawLineMove);
                 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.buttonMode = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.on('mousedown', that.onDrawLineUp)
-                                                                             .on('touchstart', that.onDrawLineUp)
-                                                                             .on('mousemove', that.onDrawLineMove)
-                                                                             .on('touchmove', that.onDrawLineMove);
+                                                                               .on('touchstart', that.onDrawLineUp)
+                                                                               .on('mousemove', that.onDrawLineMove)
+                                                                               .on('touchmove', that.onDrawLineMove);
             that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
         }
         this.position.x = this.startX;
         this.position.y = this.startY; 
     };
+
     that._logicGates = [];
     that.logicGates = [];
     for(var i = 0; i < devices.length; i++){
