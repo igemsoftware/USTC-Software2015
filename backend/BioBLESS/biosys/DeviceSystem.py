@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 class DeviceSystem(object):
-    def __init__(logi, data)
+    def __init__(self,logi, data):
         '''
-            找需要的物质input,coding,sRNA
+            find sub needed : input,coding,sRNA
             trans(coding/sRNA)
             act,inh,lock,key,rep
 
@@ -38,13 +38,13 @@ class DeviceSystem(object):
         def find_in_map(tmp = 0, **kw):
             for single_map in range(tmp,len(map)):
                 try:
-                    if map[single_map][kw.keys[0]]=kw.values[0]:
+                    if map[single_map][kw.keys[0]]==kw.values[0]:
                         return single_map
                 except:
                     pass
             return -1
         protein=select(parts_type,"Promoter")
-        sRNA=select(parts_type[,"sRNA")
+        sRNA=select(parts_type,"sRNA")
         species=get_species(protein,["d","r","p"])+get_species(sRNA,["d","r"])
         reaction=[]
         for single in protein+sRNA :
@@ -52,7 +52,7 @@ class DeviceSystem(object):
             st=str(single_p)
             parts_type[single]
             maper=find_in_map(id1="d"+st)
-            single_data=data["simulation_parameters"][maps[maper]["id"]]
+            single_data=data[maps[maper]["id"]]
             single_reaction=[
                 [["d"+st],["m"+st],single_data["trans1"]],
                 [["m"+st],["d"+st,"r"+st],single_data["trans1"]],
@@ -69,7 +69,7 @@ class DeviceSystem(object):
                 pro=coding_find_last(single_p, reg_sub)
                 tmp=find_in_map(id2="d"+str(pro))
                 while(tmp!=-1):
-                    reg_data=data["simulation_parameters"][maps[tmp]["id"]]
+                    reg_data=data[maps[tmp]["id"]]
                     reg_pro=maps[tmp]["id1"]
                     if maps[tmp]["type"]==("inh" if reg_sub=="Promoter" else "lock"):
                         single_reaction.append(
@@ -81,21 +81,21 @@ class DeviceSystem(object):
                         if reg_sub=="Promoter":
                             temp=find_in_map(id2="e"+str(tmp))
                             while(temp!=-1):
-                                rep_data=data["simulation_parameters"][maps[temp]["id"]]
+                                rep_data=data[maps[temp]["id"]]
                                 rep_pro=maps[tmp]["id1"]
                                 single_reaction.append(
                                     [[rep_pro,"n"+st],["m"+st,reg_pro,rep_pro],rep_data["reg"]]
                                 )
-                                temp=find(id2="e"+str(tmp),temp+1)
+                                temp=find_in_map(temp+1,id2="e"+str(tmp))
                     else:
                         single_reaction.append(
                             [[reg_pro,"d"+st],[reg_pro,"d"+st,"r"+st],reg_data["reg"]]
                         )
-                    tmp=find_in_map(id2="d"+str(pro),tmp+1)
+                    tmp=find_in_map(tmp+1,id2="d"+str(pro))
             reaction+=single_reaction
         self.species=species
         self.reaction=reaction
-    def as_reaction_system(ID,InPut,OutPut):
+    def get_reaction(self,ID,InPut,OutPut):
         def add_str(list,ID):
             for sig in list:
                 if isinstance(sig,list):

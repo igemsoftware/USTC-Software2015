@@ -1,17 +1,22 @@
 class BioSystem(object):
     # lizhi = simplejson.loads()
-    def __init__(self, spec, lizhi):
-        d_lizhi = self.__lizhi_to_dict(lizhi)
-        devices = []
-        l_nodes = [i for i in spec['nodes']]
-        for i in range(len(l_nodes)):
-            l_input = [j for j in spec['arcs'] if j['to'] == i]
-                devices.append(DeviceSystem(lizhi[l_nodes[i]], spec).as_reaction_system(str(i), l_input, str(i)))
-
-    def __lizhi_to_dict(self, lizhi):
-        d_lizhi = {}
-        for i in lizhi:
-            d_lizhi[i['id']] = i
-        return d_lizhi
-
+    def __init__(self, logi=lizhi,system_data):
+        self.time=system_data["system_parameter"]["time"]
+        logi = {single_lizhi["id"]:single_lizhi for single_lizhi in lizhi}
+        nodes=system_data["nodes"]
+        devices = [DeviceSystem(
+            logi[nodes[i]],
+            system_data["simulation_parameters"][i]
+        ).get_reaction(
+            str(i),
+            [str(j["from"]) for j in system_data["arcs"] if j["to"]==i],
+            str(i)
+        )
+            for i in range(len(nodes))]
+        reaction=devices[0]
+        for i in range(1,len(nodes)):
+            reaction+=devices[i]
+        
     def simulate(self, record=[0, current]):
+        reaction.simulate([],self.time)
+        return reaction

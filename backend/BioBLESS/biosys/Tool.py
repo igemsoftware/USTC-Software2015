@@ -11,8 +11,9 @@ for i in xrange(size):
     for j in xrange(1, i):
         comb[i, j] = comb[i - 1, j - 1] + comb[i - 1, j]
 
-# def comb(N, k):
-#     return numpy.arange(N - k + 1, N + 1).prod() / numpy.arange(1, k + 1).prod()
+
+#def comb(N, k):
+#    return numpy.arange(N - k + 1, N + 1).prod() / numpy.arange(1, k + 1).prod()
 
 
 def itemfreq(temp):

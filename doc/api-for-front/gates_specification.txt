@@ -16,7 +16,7 @@
         "system_parameter":
         {
             "key":float,
-
+	    "time":float
         }
 
         "simulation_parameters": [
@@ -28,17 +28,15 @@
             },
             "e2": ...,
             "device_parameter":{
-                dna_initial:[
-                    dna_chain_1_initial,...
-                ]
-
-            }
+		"initial": [
+		    int, int, int...
+	        ]
+		// "intial": [int]
+	    }
             "lizhi":{"d1": int, "d2": int, ..., "p100": int, "p200": int, ...},
         },
         {...},
-        null,
         {...},
-        null,
         ...
         ] // front -> end
 
