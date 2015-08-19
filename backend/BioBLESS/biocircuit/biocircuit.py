@@ -22,6 +22,7 @@ import qm
 
 import numpy as np
 import networkx as nx
+import simplejson
 
 
 def string2truthtable(string):
@@ -285,7 +286,7 @@ def circuit_score(circuit, d_gate):
 
 
 def api_circuit(circuit, gate):
-    """Api for front.
+    """API for front.
 
     Parameters
     ----------
@@ -333,3 +334,24 @@ def api_circuit(circuit, gate):
             tmp.append(graph[i])
         graph = tmp
     return graph
+
+def get_score_from_front(f_json, d_gate):
+    """Calculate score of circuit from front end.
+
+    Parameters
+    ----------
+    f_json : string
+        json include information of nodes and something else
+
+    d_gate : dict
+        A dict of biogates and their 4 parameters. It should be
+        stored in the file biogate.py.
+
+    Returns
+    -------
+    score : float
+        The score of the biocircuit.
+    """
+    d_front = simplejson.loads(f_json)
+    score = calc_score(d_front['nodes'], d_gate)
+    return score
