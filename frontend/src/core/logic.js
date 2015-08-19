@@ -205,9 +205,9 @@ BioBLESS.logic.CircuitDeleteLine = function(mama, papa) {
             }
         }
     }//INPUT----INPUT
-    else if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.output){
+    else if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.output)){
         for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
-            if(BioBLESS.logic.Circuit.arcs[k] === {"from":BioBLESS.logic.Circuit.mark[j], "to":BioBLESS.logic.Circuit.mark[i]){
+            if(BioBLESS.logic.Circuit.arcs[k] === {"from":BioBLESS.logic.Circuit.mark[j], "to":BioBLESS.logic.Circuit.mark[i]}){
                 BioBLESS.logic.Circuit.arcs.splice(k, 1);
                 BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
                 BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.arcs.length - 1, "to":BioBLESS.logic.Circuit.mark[i]};
@@ -217,7 +217,7 @@ BioBLESS.logic.CircuitDeleteLine = function(mama, papa) {
     }// papa's OUTPUT----mama's INPUT
     else if((mama === mama.parent.output) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(var k = 0; k < BioBLESS.logic.Circuit.arcs.length; k++){
-            if(BioBLESS.logic.Circuit.arcs[k] === {"from":BioBLESS.logic.Circuit.mark[i], "to":BioBLESS.logic.Circuit.mark[j]){
+            if(BioBLESS.logic.Circuit.arcs[k] === {"from":BioBLESS.logic.Circuit.mark[i], "to":BioBLESS.logic.Circuit.mark[j]}){
                 BioBLESS.logic.Circuit.arcs.splice(k, 1);
                 BioBLESS.logic.Circuit.nodes[BioBLESS.logic.Circuit.nodes.length] = "INPUT";
                 BioBLESS.logic.Circuit.arcs[BioBLESS.logic.Circuit.arcs.length] = {"from":BioBLESS.logic.Circuit.arcs.length - 1, "to":BioBLESS.logic.Circuit.mark[j]};
