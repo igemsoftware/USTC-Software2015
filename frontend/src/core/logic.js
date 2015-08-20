@@ -728,7 +728,7 @@ BioBLESS.logic.IsHerWorkRight = function(event) {
 };
 
 /**
- * IsHerWorkUp is the function 
+ * IsHerWorkUp is the function to turn on the button
  * @function
  * @param {event} caused by users
  */
@@ -737,23 +737,31 @@ BioBLESS.logic.IsHerWorkUp = function(event) {
     this.father.SHEisWorking = true;
 };
 
+/**
+ * IsHerWorkDown is the function to turn off the button
+ */
 BioBLESS.logic.IsHerWorkDown = function() {
     this.father.SHEisWorking = false;
 };
 
-
-
+/**
+ * lineWaitforKey is the function  to detect keypress for the line
+ * @param {event}
+ */
 BioBLESS.logic.lineWaitforKey = function(event) {
-    var that = this;
+    var currkey;
     that.keypress = function(e) {
+        var e = e || event;
         var currkey = e.keyCode || e.which || e.charCode;
-        if(currkey ==== 46){
+    };
+    that.keypress;
+    switch(currkey){
+        case 46: //delete
             that.father.parent.parent.removeChild(that);
             that.father.parent.parent.removeChild(that.IsHerWork);
             BioBLESS.logic.circuitDeleteLine(that.father, that.mother);
+            break;
         }
-    };
-    that.keypress;
 };
 
 
@@ -807,31 +815,43 @@ BioBLESS.logic.IsHisWorkDown = function() {
     this.parent.HEisWorking = false;
 };
 
-BioBLESS.logic.elementWaitforKey = function(event) {
-    var that = this;
-    that.keypress = function(e){
-        var currkey = e.keyCode || e.which || e.charCode;
-        if(currkey === 46){
-                that.parent.removeChild(that);
-                that.parent.parent.removeChild(that.parent);
-                if(that.parent.input_1.Connection === true){
-                for(var k = 0; k < that.parent.input_1.counts; k++){
-   	                that.parent.parent.removeChild(that.parent.input_1.lines[k][0]);
-                }
-            }
-            if(that.parent.input_2.Connection === true){
-                for(var k = 0; k < that.parent.input_2.counts; k++){
-                    that.parent.parent.removeChild(that.parent.input_2.lines[k][0]);
-                }
-            }
-            if(that.parent.output.Connection === true){
-                for(var k = 0; k < that.parent.output.counts; k++){
-                     that.parent.parent.removeChild(that.parent.output.lines[k][0]);
-                 }
-            }
-            BioBLESS.logic.circuitDeleteElement(that.parent.graphics);
-        }
+var BioBLESS.logic.CopyTarget;
+
+BioBLESS.logic.elementWaitforKey = function() {
+    var currkey;
+    this.keydown = function(e){
+        e = e || event;
+        currkey = e.keyCode || e.which || e.charCode;
     };
+    this.keypress;
+    switch(currkey){
+        case 46: //delete
+            this.parent.removeChild(this);
+            this.parent.parent.removeChild(this.parent);
+            if(this.parent.input_1.Connection === true){
+                for(var k = 0; k < this.parent.input_1.counts; k++){
+   	                this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
+                }
+            }
+            if(this.parent.input_2.Connection === true){
+                for(var k = 0; k < this.parent.input_2.counts; k++){
+                    this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
+                }
+            }
+            if(this.parent.output.Connection === true){
+                for(var k = 0; k < this.parent.output.counts; k++){
+                     this.parent.parent.removeChild(this.parent.output.lines[k][0]);
+                }
+            }
+            BioBLESS.logic.circuitDeleteElement(this.parent.graphics);
+            break;
+        case 17: //Control_L
+        	this.keydown;
+        	break;
+    }
+    if(currkey === 67){
+        BioBLESS.logic.CopyTarget = this.parent.type;
+    }
 };
 
 
@@ -1133,6 +1153,7 @@ BioBLESS.logic.draw = function(devices){
 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].IsHisWork.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].IsHisWork.buttonMode = true;
+            BioBLESS.logic.circuitAddGate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type);
             that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
         }
         this.position.x = this.startX;
