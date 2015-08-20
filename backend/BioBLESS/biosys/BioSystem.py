@@ -18,10 +18,20 @@ class BioSystem(object):
             str(i)
         )
             for i in range(len(nodes))]
+        #for temp in devices:
+        #    print temp.species
         reaction=devices[0]
         for i in range(1,len(nodes)):
             reaction+=devices[i]
-        
-    def simulate(self ):
-        reaction.simulate([],self.time)
-        return reaction
+        self.reaction=reaction
+
+    def simulate(self):
+        try:
+            self.reaction.simulate([],self.time)
+        except:
+            pass
+        print self.reaction.species
+        #self.reaction.show_species()
+        self.reaction.show_reaction()
+        self.reaction.show_record()
+        return self.reaction

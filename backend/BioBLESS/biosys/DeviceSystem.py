@@ -18,6 +18,14 @@ class DeviceSystem(object):
                 |-lock
 
         '''
+        if logi["id"]=="INPUT":
+            self.species=[[logi["parts"]["id"][0][0],data["device_parameter"]["initial"][0]]]
+            self.reaction=[]
+            self.logi=logi
+            self.data=data
+        else:
+            self.set_device(logi,data)
+    def set_device(self, logi, data):
         #parts_type=logi["parts"]["type"].values()
         parts_type=[logi["parts"]["type"]["d"+str(i+1)] for i in range(len(logi["parts"]["type"]))]
         maps=logi["map"]
@@ -133,7 +141,7 @@ class DeviceSystem(object):
         add_str(species,ID)
         add_str(reaction,ID)
         [replace_str(species,ID+logi["input"][i],InPut[i]) for i in range(len(InPut))]
-        [replace_str(species,ID+logi["output"][i],OutPut[i]) for i in range(len(InPut))]
+        [replace_str(species,ID+logi["output"][i],OutPut[i]) for i in range(len(OutPut))]
         [replace_str(reaction,ID+logi["input"][i],InPut[i]) for i in range(len(InPut))]
-        [replace_str(reaction,ID+logi["output"][i],OutPut[i]) for i in range(len(InPut))]
+        [replace_str(reaction,ID+logi["output"][i],OutPut[i]) for i in range(len(OutPut))]
         return ReactionSystem(reaction,species)
