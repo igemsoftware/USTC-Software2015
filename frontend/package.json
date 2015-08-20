@@ -16,7 +16,7 @@
     "scripts": {
         "build": "uglifyjs -c -o bin/biobless.min.js src/header.js src/*/*.js src/footer.js",
         "build-doc": "jsdoc -r src -d doc",
-        "pretest": "jshint src && npm run build",
+        "pretest": "jshint src --exclude src/lib && npm run build",
         "test": "mocha-phantomjs test/index.html"
     }
 }
