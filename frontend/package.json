@@ -1,6 +1,6 @@
 {
     "name": "BioBLESS",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Biological Boolean Logic Evaluation & Systematization based on Simulation",
     "repository": {
         "type": "git",
@@ -14,9 +14,11 @@
         "uglify-js": "2.x"
     },
     "scripts": {
-        "build": "uglifyjs -c -o bin/biobless.min.js src/header.js src/*/*.js src/footer.js",
+        "build": "npm run build-js; cat src/header.html biobless.min.js src/footer.html >index.html; npm run del-js",
+        "build-js": "uglifyjs -c -o biobless.min.js src/header.js src/*/*.js src/footer.js",
+        "del-js": "rm -f biobless.min.js",
         "build-doc": "jsdoc -r src -d doc",
-        "pretest": "jshint src --exclude src/lib && npm run build",
-        "test": "mocha-phantomjs test/index.html"
+        "pretest": "jshint src --exclude src/lib && npm run build-js",
+        "test": "mocha-phantomjs test/index.html; npm run del-js"
     }
 }
