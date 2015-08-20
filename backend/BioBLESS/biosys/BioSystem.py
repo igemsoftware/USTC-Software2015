@@ -1,6 +1,11 @@
+#!/usr/bin/env python
+
+from DeviceSystem import DeviceSystem
+from lizhi import lizhi
+
 class BioSystem(object):
     # lizhi = simplejson.loads()
-    def __init__(self, logi=lizhi,system_data):
+    def __init__(self, system_data, logi=lizhi):
         self.time=system_data["system_parameter"]["time"]
         logi = {single_lizhi["id"]:single_lizhi for single_lizhi in lizhi}
         nodes=system_data["nodes"]
@@ -17,6 +22,6 @@ class BioSystem(object):
         for i in range(1,len(nodes)):
             reaction+=devices[i]
         
-    def simulate(self, record=[0, current]):
+    def simulate(self ):
         reaction.simulate([],self.time)
         return reaction

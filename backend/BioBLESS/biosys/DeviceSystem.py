@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+from ReactionSystem import ReactionSystem
+
 class DeviceSystem(object):
     def __init__(self,logi, data):
         '''
@@ -15,19 +18,20 @@ class DeviceSystem(object):
                 |-lock
 
         '''
-        parts_type=logi["parts"]["type"].values()
+        #parts_type=logi["parts"]["type"].values()
+        parts_type=[logi["parts"]["type"]["d"+str(i+1)] for i in range(len(logi["parts"]["type"]))]
         maps=logi["map"]
         def coding_find_last(tmp, str):
             while(parts_type[tmp]!=str):
                 tmp-=1
-            return tmp
+            return tmp+1
         def select(list,str):
             ans=[]
             tmp=0
             flag=True
             while(flag):
                 try:
-                    ans.append(list.index(str,tmp))
+                    ans.append(list.index(str,tmp)+1)
                     tmp=ans[-1]
                 except:
                     flag=False
@@ -36,20 +40,29 @@ class DeviceSystem(object):
             list=map(str,list)
             return [i+j for i in str_list for j in list]
         def find_in_map(tmp = 0, **kw):
-            for single_map in range(tmp,len(map)):
+            for single_map in range(tmp,len(maps)):
                 try:
-                    if map[single_map][kw.keys[0]]==kw.values[0]:
+                    if maps[single_map][kw.keys()[0]]==kw.values()[0]:
                         return single_map
                 except:
                     pass
             return -1
-        protein=select(parts_type,"Promoter")
+        protein=select(parts_type,"Coding")
         sRNA=select(parts_type,"sRNA")
-        species=get_species(protein,["d","r","p"])+get_species(sRNA,["d","r"])
+        species=get_species(protein,["d","m","r","p"])+get_species(sRNA,["d","m","r"])
+        initial=data["device_parameter"]["initial"]
+        for i in range(len(initial)):
+            for j in logi["parts"]["id"][i]:
+                if j[0]=="d":
+                    try:
+                        species[species.index(j)]=[j,initial[i]]
+                    except:
+                        pass
+        species+=logi["input"]
         reaction=[]
         for single in protein+sRNA :
-            ty=parts_type[single]
-            st=str(single_p)
+            ty=parts_type[single-1]
+            st=str(single)
             parts_type[single]
             maper=find_in_map(id1="d"+st)
             single_data=data[maps[maper]["id"]]
@@ -60,13 +73,13 @@ class DeviceSystem(object):
                 [["r"+st],["r"+st,"p"+st],single_data["trans2"]],
                 [["p"+st],[],single_data["decay2"]],
 
-            ] if ty=="coding" else [
+            ] if ty=="Coding" else [
                 [["d"+st],["m"+st],single_data["trans1"]],
                 [["m"+st],["d"+st,"r"+st],single_data["trans1"]],
                 [["r"+st],[],single_data["decay1"]],
             ]
             for reg_sub in ["Promoter","RBS"]:
-                pro=coding_find_last(single_p, reg_sub)
+                pro=coding_find_last(single, reg_sub)
                 tmp=find_in_map(id2="d"+str(pro))
                 while(tmp!=-1):
                     reg_data=data[maps[tmp]["id"]]
@@ -76,8 +89,10 @@ class DeviceSystem(object):
                             [[reg_pro,"m"+st],["n"+st],reg_data["reg"]]
                         )
                         single_reaction.append(
-                            [["n"+st],[reg_data,"d"+st],reg_data["reg"]]
+                            [["n"+st],[reg_pro,"d"+st],reg_data["reg"]]
                         )
+                        if not("n"+st in species):
+                            species.append("n"+st)
                         if reg_sub=="Promoter":
                             temp=find_in_map(id2="e"+str(tmp))
                             while(temp!=-1):
@@ -95,25 +110,30 @@ class DeviceSystem(object):
             reaction+=single_reaction
         self.species=species
         self.reaction=reaction
+        self.logi=logi
+        self.data=data
     def get_reaction(self,ID,InPut,OutPut):
-        def add_str(list,ID):
-            for sig in list:
+        def add_str(li,ID):
+            for sig in li:
                 if isinstance(sig,list):
                     add_str(sig,ID)
-            for sig in range(len(list)):
-                if isisntance(list[sig],str):
-                    list[sig]=ID+list[sig]
-        def replace_str(list,st1,st2):
-            for sig in list:
+            for sig in range(len(li)):
+                if isinstance(li[sig],str):
+                    li[sig]=ID+li[sig]
+        def replace_str(li,st1,st2):
+            for sig in li:
                 if isinstance(sig,list):
-                    add_str(sig,st1,st2)
-            for sig in range(len(list)):
-                if list[sig]==st1:
-                    list[sig]=st2
+                    replace_str(sig,st1,st2)
+            for sig in range(len(li)):
+                if li[sig]==st1:
+                    li[sig]=st2
         species=self.species
         reaction=self.reaction
+        logi=self.logi
         add_str(species,ID)
         add_str(reaction,ID)
-        [replace_str(spcies,ID+logi["input"][i],InPut[i]) for i in range(len(InPut))]
-        [replace_str(spcies,ID+logi["output"][i],OutPut[i]) for i in range(len(InPut))]
-        return ReactionSystem(species,reaction)
+        [replace_str(species,ID+logi["input"][i],InPut[i]) for i in range(len(InPut))]
+        [replace_str(species,ID+logi["output"][i],OutPut[i]) for i in range(len(InPut))]
+        [replace_str(reaction,ID+logi["input"][i],InPut[i]) for i in range(len(InPut))]
+        [replace_str(reaction,ID+logi["output"][i],OutPut[i]) for i in range(len(InPut))]
+        return ReactionSystem(reaction,species)
