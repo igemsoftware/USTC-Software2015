@@ -359,12 +359,10 @@ BioBLESS.logic.onDragStart_e = function(event) {
     if(waitForDoubleClick){
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
-        $.getJSON("misc/devices.json", function(data) {
-            if(data && BioBLESS.gene_network.gates){
-                BioBLESS.gene_network.draw(data, that.parent.Index);
-                BioBLESS.change_stage(BioBLESS.gene_network);
-            }
-        });
+        if(BioBLESS.gates && BioBLESS.gene_network.gates){
+            BioBLESS.gene_network.draw(BioBLESS.gates, that.parent.Index);
+            BioBLESS.change_stage(BioBLESS.gene_network);
+        }
         return;
     }else{
         waitForDoubleClick = true;
