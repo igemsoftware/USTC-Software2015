@@ -4,20 +4,64 @@
 The package about the reactions system and simulations
 Data structure:
 
-System:[reactions,species_name]
+System:[reactions,species]
+species:[species_name,initial]|species_name
 Reactions:[[[reactant,...],[product,...],constant,...]
-Simulation structure:[[initial,...],stop_time]
+Simulation structure:[[[species,initial],...],stop_time]
 Show structure:[species_to_show]
-
 """
-
-__author__ = "Trumpet"
 
 import numpy
 
+size = 1001
 
-from Tool import itemfreq, comb
+comb = numpy.zeros((size, size))
+for i in xrange(size):
+    comb[i, 0] = 1
+    comb[i, i] = 1
+    for j in xrange(1, i):
+        comb[i, j] = comb[i - 1, j - 1] + comb[i - 1, j]
 
+def itemfreq(temp):
+    if len(temp) == 0:
+        return numpy.array([])
+    else:
+        items, inv = numpy.unique(temp, return_inverse=True)
+        freq = numpy.bincount(inv)
+        return numpy.array([items, freq]).T
+
+def transpose(temp):
+    if len(temp)==0:
+        return numpy.array([[],[],[]])
+    else:
+        return temp.transpose()
+
+def choice(species):
+    if isinstance(species, list):
+        return species[0]
+    else:
+        return species
+
+def intensity(single_reactant, current):
+    return numpy.array(map(lambda species_temp: comb[current[species_temp[0]], species_temp[1]],
+        single_reactant)).prod()
+
+def intensity_list(reactant, current):
+    return numpy.array(map(lambda single_reactant: intensity(single_reactant, current), reactant))
+
+def initialize(init_list, current, species_name_inverse):
+    for single_init in init_list:
+        if isinstance(single_init, list):
+            if single_init[1] != 0:
+                current[species_name_inverse[single_init[0]]] = single_init[1]
+    return current
+
+################################################################
+try:
+    import pylab
+except:
+    pass
+################################################################
 
 class ReactionSystem(object):
 
@@ -43,7 +87,7 @@ class ReactionSystem(object):
         """
         return len(self.reactions)
 
-    def set_species_name(self, speciesname):
+    def set_species_name(self, species):
         """
         Set all the species and their name in this system
         Parameters:
@@ -51,18 +95,11 @@ class ReactionSystem(object):
         Returns
             none
         """
-
-        def choice(species):
-            if isinstance(species, list):
-                return species[0]
-            else:
-                return species
-
-        self.species = speciesname
-        self.species_name = numpy.array(map(choice, speciesname))
+        self.species = species
+        self.species_name = numpy.array(map(choice, species))
         self.species_name_inverse = {self.species_name[name_temp]: name_temp for name_temp in
                                      range(len(self.species_name))}
-
+    
     def add_species_name(self, namestring):
         """
         Add one species into the system
@@ -97,7 +134,7 @@ class ReactionSystem(object):
             none
         """
         self.reactions = numpy.array(reaction)
-        self.reactant, self.product, self.constant = self.reactions.transpose()
+        self.reactant, self.product, self.constant = transpose(self.reactions)
         self.reactant = numpy.array(self.reactant)
         self.product = numpy.array(self.product)
         self.constant = numpy.array(self.constant)
@@ -113,7 +150,7 @@ class ReactionSystem(object):
             list:the data of the reaction to be added
                 looking for help(set_reactions) to find the format of this list 
         """
-        reaction_temp = numpy.array([self.reactant, self.product, self.constant]).transpose().tolist()
+        reaction_temp = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist()
         reaction_temp.append(reaction)
         self.set_reactions(reaction_temp)
 
@@ -124,11 +161,10 @@ class ReactionSystem(object):
             list:the data of the reaction to be deleted
                 looking for help(set_reactions) to find the format of this list 
         """
-        reaction_temp = numpy.array([self.reactant, self.product, self.constant]).transpose().tolist()
+        reaction_temp = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist()
         reaction_temp.remove(reaction)
         self.set_reactions(reaction_temp)
 
-    @property
     def show_species(self):
         """
         Print the names of all the species in this system
@@ -142,7 +178,6 @@ class ReactionSystem(object):
             print_temp += single_species + " "
         print print_temp
 
-    @property
     def show_reaction(self):
         """
         Print the data of all the reactions the  in this system
@@ -162,7 +197,7 @@ class ReactionSystem(object):
             print_temp += "\t\t" + str(single_reaction[2])
             print print_temp
 
-    def __init__(self, reactions, speciesname):
+    def __init__(self, reactions, species):
         """
         Init this system
         Parameters:
@@ -172,14 +207,20 @@ class ReactionSystem(object):
         Returns
             none
         """
-        self.set_species_name(speciesname)
+        self.set_species_name(species)
         self.set_reactions(reactions)
 
     def __add__(self, other):
-        return self.__class__(
-            numpy.array([self.reactant, self.product, self.constant]).transpose().tolist() + numpy.array(
-                [other.reactant, other.product, other.constant]).transpose().tolist(),
-            list(set(self.species_name.tolist() + other.species_name.tolist())))
+        reaction = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist() + transpose(numpy.array(
+                [other.reactant, other.product, other.constant])).tolist()
+        species_name = list(set(self.species_name.tolist() + other.species_name.tolist()))
+        current = numpy.zeros(len(species_name))
+        species_name_inverse = {species_name[name_temp]: name_temp for name_temp in
+                                     range(len(species_name))}
+        current = initialize(self.species, current, species_name_inverse)
+        current = initialize(other.species, current, species_name_inverse)
+        current=current.tolist()
+        return self.__class__(reaction,numpy.array([species_name, current]).transpose().tolist())
 
     def simulate(self, initial, stop_time):
         """
@@ -191,22 +232,9 @@ class ReactionSystem(object):
             list:the record of the simulation
                 the format of the list is : [[time,[species current number,...]],...]
         """
-
-        def intensity(single_reactant, current):
-            return numpy.array(map(lambda species_temp: comb[current[species_temp[0]], species_temp[1]],
-                                   single_reactant)).prod()
-
-        def intensity_list(reactant, current):
-            return numpy.array(map(lambda single_reactant: intensity(single_reactant, current), reactant))
-
-        def initialize(init_list):
-            for single_init in init_list:
-                if isinstance(single_init, list):
-                    current[self.species_name_inverse[single_init[0]]] = single_init[1]
-
         current = numpy.zeros(self.species_number)  # numpy.array([0] * self.species_number)
-        initialize(self.species)
-        initialize(initial)
+        current = initialize(self.species, current, self.species_name_inverse)
+        current = initialize(initial, current, self.species_name_inverse)
         time = 0
         self.record = [[time, current.tolist()]]
         reaction_number = self.reaction_number
@@ -226,6 +254,8 @@ class ReactionSystem(object):
             time += delta_time
             self.record.append([time + 0, current.tolist()])
         return self.record
+
+################################################################
 
     def show_record(self, plot_list=None):
         """
@@ -267,3 +297,4 @@ class ReactionSystem(object):
         """
         self.simulate(initial, stop_time)
         self.show_record(list_plot)
+
