@@ -366,7 +366,7 @@ def garbage(graph, d_lizhi):
             d_map = {}
             for k in d_lizhi[j]['map']:
                 d_map[k['id']] = k['params']
-                d_map['device_parameter'] = {'initial': [20 for x in range(chain)]}
-                i['simulation_parameters'].append(d_map)
+            d_map['device_parameter'] = {'initial': [20 for x in range(chain)]}
+            i['simulation_parameters'].append(d_map)
         l_zh.append(i)
-        return l_zh
+    return l_zh
