@@ -81,12 +81,6 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
     if(m !== null && d !== null){
         BioBLESS.logic.circuit.nodes.splice(d, 1);
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === d){
-                BioBLESS.logic.circuit.arcs.splice(k, 1);
-                break;
-            }
-        }
-        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k].from > d){
                 BioBLESS.logic.circuit.arcs[k].from -= 1;
             }
@@ -102,23 +96,17 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
         if(m > d){
             m -= 1;
         }
-        if(i > d){
-            i -= 1;
-        }
-        if(j > d){
-            j -= 1;
-        }
-        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.mark[j], "to":m};//反过来，表达为外来节点的INPUT连接该节点
-    }//INPUT----INPUT
-    else if(m !== null && d ===null){
-       BioBLESS.logic.circuit.nodes.splice(m, 1);
-       for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === m){
+        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
+            if(BioBLESS.logic.circuit.arcs[k] === {"from":d, "to":BioBLESS.logic.circuit.mark[j]}){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
         }
-        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
+        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":m, "to":BioBLESS.logic.circuit.mark[j]};
+    }//INPUT----INPUT
+    else if(m !== null && d ===null){
+       	BioBLESS.logic.circuit.nodes.splice(m, 1);
+       	for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k].from > m){
                 BioBLESS.logic.circuit.arcs[k].from -= 1;
             }
@@ -131,22 +119,16 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
                 BioBLESS.logic.circuit.mark[k] -= 1;
             }
         }
-        if(i > m){
-            i -= 1;
-        }
-        if(j > m){
-            j -= 1;
-        }
-        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.mark[j], "to":BioBLESS.logic.circuit.mark[i]};
-    }// papa's OUTPUT----mama's INPUT
-    else if(m === null && d !==null){
-       BioBLESS.logic.circuit.nodes.splice(d, 1);
        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === d){
+            if(BioBLESS.logic.circuit.arcs[k] === {"from":m, "to":BioBLESS.logic.circuit.mark[i]}){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
         }
+        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.mark[j], "to":BioBLESS.logic.circuit.mark[i]};
+    }// papa's OUTPUT--->mama's INPUT
+    else if(m === null && d !==null){
+        BioBLESS.logic.circuit.nodes.splice(d, 1);
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k].from > d){
                 BioBLESS.logic.circuit.arcs[k].from -= 1;
@@ -160,14 +142,14 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
                 BioBLESS.logic.circuit.mark[k] -= 1;
             }
         }
-        if(i > d){
-            i -= 1;
-        }
-        if(j > d){
-            j -= 1;
+        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
+            if(BioBLESS.logic.circuit.arcs[k] === {"from":d, "to":BioBLESS.logic.circuit.mark[j]}){
+                BioBLESS.logic.circuit.arcs.splice(k, 1);
+                break;
+            }
         }
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.mark[i], "to":BioBLESS.logic.circuit.mark[j]};
-    }// mama's OUTPUT----papa's INPUT
+    }// mama's OUTPUT--->papa's INPUT
     else{
         alert("CreateLine error");
     }// OUTPUT----OUTPUT error.
@@ -191,17 +173,14 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
     }//确定线父母的家长是哪个节点
     if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.circuit.mark[i] && BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].to] === "INPUT"){
-                BioBLESS.logic.circuit.arcs.splice(k, 1);
-                BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[i]};
-                break;
-            }
-            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.circuit.mark[j] && BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].to] === "INPUT"){
-                BioBLESS.logic.circuit.arcs.splice(k, 1);
-                BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[j]};
-                break;
+            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i] && BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
+                for(var l = 0;l < BioBLESS.logic.circuit.arcs.length; l++){
+                    if(BioBLESS.logic.circuit.arcs[l].to === BioBLESS.logic.circuit.mark[j] && BioBLESS.logic.circuit.arcs[l].from === BioBLESS.logic.circuit.arcs[k].from){
+                        BioBLESS.logic.circuit.arcs.splice(l, 1);
+                        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
+                        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[j]};
+                    }
+                }
             }
         }
     }//INPUT----INPUT
@@ -214,7 +193,7 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
                 break;
             }
         }
-    }// papa's OUTPUT----mama's INPUT
+    }// papa's OUTPUT--->mama's INPUT
     else if((mama === mama.parent.output) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k] === {"from":BioBLESS.logic.circuit.mark[i], "to":BioBLESS.logic.circuit.mark[j]}){
@@ -224,7 +203,7 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
                 break;
             }
         }
-    }// mama's OUTPUT----papa's INPUT
+    }// mama's OUTPUT--->papa's INPUT
     else{
         alert("Deleteline error!");
     }// OUTPUT----OUTPUT error.
@@ -235,24 +214,24 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
  * @param {device} element
  */
 BioBLESS.logic.circuitDeleteElement = function(device) {
-    if(device.parent.input_1.Connection === true){
+    if(device.input_1.connection === true){
         for(var k = 0; k < device.input_1.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(device.parent.input_1.lines[k][0].mother, device.parent.input_1.lines[k][0].father);
+            BioBLESS.logic.circuitDeleteLine(device.input_1.lines[k][0].mother, device.input_1.lines[k][0].father);
         }
     }
-    if(device.parent.input_2.Connection === true){
+    if(device.input_2.connection === true){
         for(var k = 0; k < device.input_2.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(device.parent.input_2.lines[k][0].mother, device.parent.input_2.lines[k][0].father);
+            BioBLESS.logic.circuitDeleteLine(device.input_2.lines[k][0].mother, device.input_2.lines[k][0].father);
         }
     }
-    if(device.parent.output.Connection === true){
+    if(device.output.connection === true){
         for(var k = 0; k < device.output.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(device.parent.output.lines[k][0].mother, device.parent.output.lines[k][0].father);
+            BioBLESS.logic.circuitDeleteLine(device.output.lines[k][0].mother, device.output.lines[k][0].father);
         }
     }
     var i;
     for(i = 0; i < BioBLESS.logic.elements.length; i++){
-        if(BioBLESS.logic.elements[i] === device.parent){
+        if(BioBLESS.logic.elements[i] === device){
         	break;
         }
     }
@@ -317,15 +296,15 @@ BioBLESS.logic.DrawGate = function(device){
         element.input_1 = new PIXI.Graphics();
         element.input_1.lines = [];
         element.input_1.counts = 0;
-        element.input_1.Connection = false;
+        element.input_1.connection = false;
         element.input_2 = new PIXI.Graphics();
         element.input_2.lines = [];
         element.input_2.counts = 0;
-        element.input_2.Connection = false;
+        element.input_2.connection = false;
         element.output = new PIXI.Graphics();
         element.output.lines = [];
         element.output.counts = 0;
-        element.output.Connection = false;
+        element.output.connection = false;
         element.title.anchor.x = element.title.anchor.y = 0.5;
         element.title.position.x = 75;
         element.title.position.y = 35;
@@ -457,7 +436,7 @@ BioBLESS.logic.onDragMove_e = function() {
         var yRect;
         var wRect;
         var hRect;
-        if(this.parent.input_1.Connection){
+        if(this.parent.input_1.connection){
             for(var i = 0; i < this.parent.input_1.counts; i++){
                 if(this.parent.input_1.lines[i][0].father === this.parent.input_1){
                     xRect = this.parent.input_1.lines[i][0].mother.position.x + this.parent.input_1.lines[i][0].mother.parent.position.x;
@@ -503,7 +482,7 @@ BioBLESS.logic.onDragMove_e = function() {
                 this.parent.input_1.lines[i][0].endFill();
             }
         }
-        if(this.parent.input_2.Connection){
+        if(this.parent.input_2.connection){
             for(var i = 0; i < this.parent.input_2.counts; i++){
                 if(this.parent.input_2.lines[i][0].father === this.parent.input_2){
                     xRect = this.parent.input_2.lines[i][0].mother.position.x + this.parent.input_2.lines[i][0].mother.parent.position.x;
@@ -549,7 +528,7 @@ BioBLESS.logic.onDragMove_e = function() {
                 this.parent.input_2.lines[i][0].endFill();
             }
         }
-        if(this.parent.output.Connection){
+        if(this.parent.output.connection){
             for(var i = 0; i < this.parent.output.counts; i++){
                 if(this.parent.output.lines[i][0].father === this.parent.output){
                     xRect = this.parent.output.lines[i][0].mother.position.x + this.parent.output.lines[i][0].mother.parent.position.x;
@@ -622,14 +601,14 @@ BioBLESS.logic.onDrawLineUp = function(event){
         this.lines[this.counts] = [];
         drawPart = this.lines[this.counts];
         this.counts ++;
-        this.Connection = true;
+        this.connection = true;
         moving = true;
         drawPart[0] = new PIXI.Graphics();
         drawPart[0].father = this;
     }
     else{
         moving = false;
-        this.Connection = true;
+        this.connection = true;
         this.lines[this.counts] = [];
         this.lines[this.counts] = drawPart;
         this.counts ++;
@@ -801,17 +780,17 @@ BioBLESS.logic.IsHisWorkDelete = function() {
 BioBLESS.logic.IsHisWorkRight = function(event) {
 	
     
-    if(this.parent.input_1.Connection === true){
+    if(this.parent.input_1.connection === true){
         for(var k = 0; k < this.parent.input_1.counts; k++){
             this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
         }
     }
-    if(this.parent.input_2.Connection === true){
+    if(this.parent.input_2.connection === true){
         for(var k = 0; k < this.parent.input_2.counts; k++){
             this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
         }
     }
-    if(this.parent.output.Connection === true){
+    if(this.parent.output.connection === true){
         for(var k = 0; k < this.parent.output.counts; k++){
             this.parent.parent.removeChild(this.parent.output.lines[k][0]);
         }
@@ -841,17 +820,17 @@ BioBLESS.logic.elementWaitforKey = function() {
         case 46: //delete
             this.parent.removeChild(this);
             this.parent.parent.removeChild(this.parent);
-            if(this.parent.input_1.Connection === true){
+            if(this.parent.input_1.connection === true){
                 for(var k = 0; k < this.parent.input_1.counts; k++){
    	                this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
                 }
             }
-            if(this.parent.input_2.Connection === true){
+            if(this.parent.input_2.connection === true){
                 for(var k = 0; k < this.parent.input_2.counts; k++){
                     this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
                 }
             }
-            if(this.parent.output.Connection === true){
+            if(this.parent.output.connection === true){
                 for(var k = 0; k < this.parent.output.counts; k++){
                      this.parent.parent.removeChild(this.parent.output.lines[k][0]);
                 }
@@ -1131,25 +1110,26 @@ BioBLESS.logic.create_abcd = function(){
 BioBLESS.logic.circuit = function(){
 	this.stage = new PIXI.Container();
 	this.draw_lines_between_gates = function(){
-	var i, j, k, l, temp;
-	for(i = 0; i < this.devs.length; i++){
-		for(j = 0; j < this.devs[i].output.length; j++){
-			for(l = 0; l < this.devs[i].output[j].to_dev_index.length; l++){
-			if(this.devs[i].output[j].to_dev_index !== undefined){
-				var graphic = new PIXI.Graphics();
-				graphic.lineStyle(6, 0xffff00, 1);
-				var input_dev =  this.devs[this.devs[i].output[j].to_dev_index[l]];
-				var input_x = input_dev.position.x + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x;
-				var input_y = input_dev.position.y + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].y;
-				var output_x = this.devs[i].position.x + this.devs[i].output[j].x;
-				var output_y = this.devs[i].position.y + this.devs[i].output[j].y;
-				graphic.moveTo(input_x, input_y);
-				graphic.lineTo(output_x, output_y);
-				this.stage.addChild(graphic);
-			};
-			}
-		};
-	};
+	    var i, j, k, l, temp;
+	    for(i = 0; i < this.devs.length; i++){
+	    	for(j = 0; j < this.devs[i].output.length; j++){
+	    		for(l = 0; l < this.devs[i].output[j].to_dev_index.length; l++){
+	    		    if(this.devs[i].output[j].to_dev_index !== undefined){
+	    		    	var graphic = new PIXI.Graphics();
+	    		    	graphic.lineStyle(6, 0xffff00, 1);
+	    		    	var input_dev =  this.devs[this.devs[i].output[j].to_dev_index[l]];
+	    		    	var input_x = input_dev.position.x + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x;
+	    		    	var input_y = input_dev.position.y + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].y;
+	    		    	var output_x = this.devs[i].position.x + this.devs[i].output[j].x;
+	    		    	var output_y = this.devs[i].position.y + this.devs[i].output[j].y;
+	    		    	graphic.moveTo(input_x, input_y);
+	    		    	graphic.lineTo(output_x, output_y);
+	    		    	this.stage.addChild(graphic);
+	    		    }
+	    		}
+	    	}
+	    }
+    }
 };
 
 
