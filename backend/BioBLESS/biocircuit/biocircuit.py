@@ -355,3 +355,18 @@ def get_score_from_front(f_json, d_gate):
     d_front = simplejson.loads(f_json)
     score = calc_score(d_front['nodes'], d_gate)
     return score
+
+def garbage(graph, d_lizhi):
+    l_zh = []
+    for i in graph:
+        i['system_parameter'] = {'time': 100}
+        i['simulation_parameters'] = []
+        for j in i['nodes']:
+            chain = len(d_lizhi[j]['parts']['id'])
+            d_map = {}
+            for k in d_lizhi[j]['map']:
+                d_map[k['id']] = k['params']
+                d_map['device_parameter'] = {'initial': [20 for x in range(chain)]}
+                i['simulation_parameters'].append(d_map)
+        l_zh.append(i)
+        return l_zh
