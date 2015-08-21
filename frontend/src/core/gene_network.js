@@ -296,9 +296,7 @@ this.draw = function(devices, n){
     
     
     
-    var texture = PIXI.Texture.fromImage("/misc/test.png");
-	
-	var parts = new Array();
+	var parts = [];
 	/*var BBAs = new Array();
 	for(i = 0; i < devices[n].posloc.length; i++){
 		BBAs[this.to_part[devices[n].posloc[i].l1][parseInt(devices[n].posloc[i].from.substring(1)) - 1]] = new PIXI.Graphics();
