@@ -815,8 +815,6 @@ BioBLESS.logic.IsHisWorkDown = function() {
     this.parent.HEisWorking = false;
 };
 
-var BioBLESS.logic.CopyTarget;
-
 BioBLESS.logic.elementWaitforKey = function() {
     var currkey;
     this.keydown = function(e){

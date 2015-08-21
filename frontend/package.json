@@ -16,9 +16,12 @@
     "scripts": {
         "build": "npm run build-js; cat src/header.html biobless.min.js src/footer.html >index.html; npm run del-js",
         "build-js": "uglifyjs -c -o biobless.min.js src/header.js src/*/*.js src/footer.js",
-        "del-js": "rm -f biobless.min.js",
         "build-doc": "jsdoc -r src -d doc",
-        "pretest": "jshint src --exclude src/lib && npm run build-js",
-        "test": "mocha-phantomjs test/index.html; npm run del-js"
+        "build-test": "npm run build-js; uglifyjs -c -o biobless.test.js test/lib/*.js biobless.min.js test/framework/header.js test/tests.js test/framework/footer.js; npm run del-js",
+        "del-js": "rm -f biobless.min.js",
+        "del-test": "rm -f biobless.test.js",
+        "pretest": "npm run build-test; cat test/framework/header.html test/lib/mocha.css test/framework/middle.html biobless.test.js test/framework/footer.html >test.html; npm run del-test",
+        "test": "jshint src --exclude src/lib && mocha-phantomjs test/index.html",
+        "posttest": "rm -f test.html"
     }
 }
