@@ -3,12 +3,13 @@
 from DeviceSystem import DeviceSystem
 from lizhi import lizhi
 
+
 class BioSystem(object):
     # lizhi = simplejson.loads()
     def __init__(self, system_data, logi=lizhi):
         self.time=system_data["system_parameter"]["time"]
         logi = {single_lizhi["id"]:single_lizhi for single_lizhi in lizhi}
-        nodes=system_data["nodes"]
+        nodes = system_data["nodes"]
         devices = [DeviceSystem(
             logi[nodes[i]],
             system_data["simulation_parameters"][i]
