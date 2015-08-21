@@ -15,7 +15,6 @@ from reactionsystem import ReactionSystem
 
 
 class parts_system(ReactionSystem):
-
     def __init__(self, species, effect):
         self.set_species_and_effect(species, effect)
 
@@ -29,9 +28,12 @@ class parts_system(ReactionSystem):
             reactions.append([[effect_temp], single_effect[1], single_effect[2]])
             for single_catalytic_negative in single_effect[3][0]:
                 if single_catalytic_negative[0] in species:
-                    reactions.append([[single_catalytic_negative[0],effect_temp],single_effect[0]+[single_catalytic_negative[0]],single_catalytic_negative[1]])
+                    reactions.append(
+                        [[single_catalytic_negative[0], effect_temp], single_effect[0] + [single_catalytic_negative[0]],
+                         single_catalytic_negative[1]])
             for single_catalytic_positive in single_effect[3][1]:
                 if single_catalytic_positive[0] in species:
-                    reactions.append([single_effect[0]+[single_catalytic_positive[0]],single_effect[1]+[single_catalytic_positive[0]],single_catalytic_positive[1]])                
-                #reactions.append([[single_catalytic_positive[0],effect_temp],single_effect[1]+[single_catalytic_positive[0]],single_catalytic_positive[1]])
+                    reactions.append([single_effect[0] + [single_catalytic_positive[0]],
+                                      single_effect[1] + [single_catalytic_positive[0]], single_catalytic_positive[1]])
+                    # reactions.append([[single_catalytic_positive[0],effect_temp],single_effect[1]+[single_catalytic_positive[0]],single_catalytic_positive[1]])
         self.set_reactions(reactions)

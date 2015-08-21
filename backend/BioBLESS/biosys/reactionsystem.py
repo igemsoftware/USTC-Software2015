@@ -15,12 +15,10 @@ __author__ = "Trumpet"
 
 import numpy
 
-
 from Tool import itemfreq, comb
 
 
 class ReactionSystem(object):
-
     @property
     def species_number(self):
         """

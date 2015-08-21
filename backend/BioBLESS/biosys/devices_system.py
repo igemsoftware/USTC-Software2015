@@ -17,7 +17,6 @@ def find(*arg, **kw):
 #####################
 
 class and_1(parts_system):
-
     def __init__(self, promoter, RBS, coding, terminal, **reaction_constant):
         self.promoter = promoter
         self.RBS = RBS

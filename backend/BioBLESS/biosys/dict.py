@@ -1,53 +1,53 @@
-dict={
-    "nodes": ["NOT2","INPUT"],
-    "arcs":[
+dict = {
+    "nodes": ["NOT2", "INPUT"],
+    "arcs": [
         {"from": 1, "to": 0}
     ],
     "system_parameter":
-    {
-        "time": 10
-    },
+        {
+            "time": 10
+        },
     "simulation_parameters": [
-    {
-        "e1": {
-            "trans1": 0.01,
-            "trans2": 0.5,
-            "decay1": 0.1,
-            "decay2": 0.05
+        {
+            "e1": {
+                "trans1": 0.01,
+                "trans2": 0.5,
+                "decay1": 0.1,
+                "decay2": 0.05
+            },
+            "e2": {
+                "reg": 20
+            },
+            "e3": {
+                "trans1": 0.01,
+                "trans2": 0.5,
+                "decay1": 0.1,
+                "decay2": 0.05
+            },
+            "e4": {
+                "reg": 20
+            },
+            "e5": {
+                "reg": 20
+            },
+            "e6": {
+                "trans1": 0.01,
+                "trans2": 0.5,
+                "decay1": 0.1,
+                "decay2": 0.05
+            },
+            "device_parameter": {
+                "initial": [
+                    20, 20, 20
+                ]
+            }
         },
-        "e2": {
-            "reg": 20
-        },
-        "e3": {
-            "trans1": 0.01,
-            "trans2": 0.5,
-            "decay1": 0.1,
-            "decay2": 0.05
-        },
-        "e4": {
-            "reg": 20
-        },
-        "e5": {
-            "reg": 20
-        },
-        "e6": {
-            "trans1": 0.01,
-            "trans2": 0.5,
-            "decay1": 0.1,
-            "decay2": 0.05
-        },
-        "device_parameter": {
-            "initial":[
-                20,20,20
-            ]
+        {
+            "device_parameter": {
+                "initial": [
+                    1
+                ]
+            }
         }
-    },
-    {
-        "device_parameter": {
-            "initial":[
-                1
-            ]
-        }
-    }
     ]
 }
