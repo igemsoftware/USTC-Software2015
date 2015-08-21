@@ -307,7 +307,11 @@ BioBLESS.logic.DrawGate = function(device){
      * element is a stage to draw the gate
      * @type {PIXI.Graphics}
      */
-        var element = new PIXI.Container();
+        var icon = device.id;
+		var Regx = /^[0-9]*$/;
+		while(Regx.test(icon[icon.length - 1]))
+		    icon = icon.substring(0, icon.length - 1);
+		var element = new PIXI.Container();
         element.graphics = new PIXI.Graphics();
         element.title = new PIXI.Text(device.id);
         element.input_1 = new PIXI.Graphics();
@@ -325,7 +329,7 @@ BioBLESS.logic.DrawGate = function(device){
         element.title.anchor.x = element.title.anchor.y = 0.5;
         element.title.position.x = 75;
         element.title.position.y = 35;
-        element.type = device.icon;
+        element.type = icon;
         element.graphics.lineStyle(3, 0x000000, 1);
         element.graphics.beginFill(0, 0);
         element.graphics.drawRect(30, 0, 90, 70);
@@ -341,10 +345,13 @@ BioBLESS.logic.DrawGate = function(device){
         element.output.beginFill(0, 0);
         element.output.drawRect(-30, -1, 30, 5);
         element.output.endFill();
-        switch(device.id){
-            default: // For development use.
+        switch(icon){
+            default: 
+			    alert("Error - 1001!");
+				break;
             case "XOR":
             case "AND":
+			case "OR":
             case "xor":
             case "and":
             case "or":
@@ -379,6 +386,7 @@ BioBLESS.logic.DrawGate = function(device){
                 element.graphics.lineTo(120, 20);
                 break;
             case "NAND":
+			case "nand":
             case "NOR":
             case "nor":
             case "XNOR":
@@ -814,9 +822,6 @@ BioBLESS.logic.IsHisWorkUp = function(event) {
 BioBLESS.logic.IsHisWorkDown = function() {
     this.parent.HEisWorking = false;
 };
-
-var BioBLESS.logic.CopyTarget;
-
 BioBLESS.logic.elementWaitforKey = function() {
     var currkey;
     this.keydown = function(e){
