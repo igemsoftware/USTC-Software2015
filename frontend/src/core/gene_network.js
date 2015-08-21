@@ -296,7 +296,9 @@ this.draw = function(devices, n){
     
     
     
-	var parts = [];
+    var texture = PIXI.Texture.fromImage("/misc/test.png");
+	
+	var parts = new Array();
 	/*var BBAs = new Array();
 	for(i = 0; i < devices[n].posloc.length; i++){
 		BBAs[this.to_part[devices[n].posloc[i].l1][parseInt(devices[n].posloc[i].from.substring(1)) - 1]] = new PIXI.Graphics();
@@ -588,7 +590,6 @@ BioBLESS.gene_network.devs_analysis = function(devices){
 				g[i] = -2 - input_num++;
 			}else alert("Error - 1002");
 		}
-		    
 	};
 	var j = 0;
 	for(i = 0; i < gates.nodes.length; i++){
@@ -610,7 +611,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
 		this.devs[to].input_num++;
 	}
 	for(i = 0; i < gates.nodes.length; i++){
-		if(i !== 3 && this.devs[i].output[0].to_dev_index.length === 0){
+		if(this.devs[i].output[0] !== undefined && this.devs[i].output[0].to_dev_index.length === 0){
 			j = gates.nodes.length;
 			this.devs[j] = new dev();
 			this.devs[j].draw(devices, -1);
