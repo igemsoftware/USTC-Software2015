@@ -15,24 +15,11 @@ __author__ = "Trumpet"
 
 import numpy
 
-try:
-    import pylab
-except Exception, e:
-    pass
 
-from biopy import itemfreq, comb
+from Tool import itemfreq, comb
 
 
 class ReactionSystem(object):
-    species_name = []
-    reactions = []
-    reactant = []
-    product = []
-    constant = []
-    species_name_inverse = {}
-    reactant_data = []
-    product_data = []
-    record = []
 
     @property
     def species_number(self):
@@ -274,6 +261,7 @@ class ReactionSystem(object):
         Parameters:
             list:the number of the species at t=0
             real:the time to stop the simualtion
+            list:the species to show
         Returns:
             none
         """

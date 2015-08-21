@@ -1,6 +1,8 @@
 __author__ = 'zsy95_000'
 import numpy
 
+
+# TODO : Resize it !!!
 size = 1001
 
 comb = numpy.zeros((size, size))
