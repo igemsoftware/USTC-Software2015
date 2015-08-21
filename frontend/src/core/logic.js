@@ -315,15 +315,15 @@ BioBLESS.logic.DrawGate = function(device){
         element.graphics = new PIXI.Graphics();
         element.title = new PIXI.Text(device.id);
         element.input_1 = new PIXI.Graphics();
-        element.input_1.Lines = [];
+        element.input_1.lines = [];
         element.input_1.counts = 0;
         element.input_1.Connection = false;
         element.input_2 = new PIXI.Graphics();
-        element.input_2.Lines = [];
+        element.input_2.lines = [];
         element.input_2.counts = 0;
         element.input_2.Connection = false;
         element.output = new PIXI.Graphics();
-        element.output.Lines = [];
+        element.output.lines = [];
         element.output.counts = 0;
         element.output.Connection = false;
         element.title.anchor.x = element.title.anchor.y = 0.5;
@@ -459,140 +459,140 @@ BioBLESS.logic.onDragMove_e = function() {
         var hRect;
         if(this.parent.input_1.Connection){
             for(var i = 0; i < this.parent.input_1.counts; i++){
-                if(this.parent.input_1.Lines[i][0].father === this.parent.input_1){
-                    xRect = this.parent.input_1.Lines[i][0].mother.position.x + this.parent.input_1.Lines[i][0].mother.parent.position.x;
-                    yRect = this.parent.input_1.Lines[i][0].mother.position.y + this.parent.input_1.Lines[i][0].mother.parent.position.y;
+                if(this.parent.input_1.lines[i][0].father === this.parent.input_1){
+                    xRect = this.parent.input_1.lines[i][0].mother.position.x + this.parent.input_1.lines[i][0].mother.parent.position.x;
+                    yRect = this.parent.input_1.lines[i][0].mother.position.y + this.parent.input_1.lines[i][0].mother.parent.position.y;
                 }
                 else{
-                    xRect = this.parent.input_1.Lines[i][0].father.position.x + this.parent.input_1.Lines[i][0].father.parent.position.x;
-                    yRect = this.parent.input_1.Lines[i][0].father.position.y + this.parent.input_1.Lines[i][0].father.parent.position.y; 
+                    xRect = this.parent.input_1.lines[i][0].father.position.x + this.parent.input_1.lines[i][0].father.parent.position.x;
+                    yRect = this.parent.input_1.lines[i][0].father.position.y + this.parent.input_1.lines[i][0].father.parent.position.y; 
                 }
                 wRect = this.parent.position.x + this.parent.input_1.position.x - xRect;
                 hRect = this.parent.position.y + this.parent.input_1.position.y - yRect;
-                this.parent.input_1.Lines[i][0].clear();
-                this.parent.input_1.Lines[i][0].beginFill(0x000000, 1);
-                this.parent.input_1.Lines[i][0].lineStyle(0, 0x000000, 1);
-                this.parent.input_1.Lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
-                this.parent.input_1.Lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
-                this.parent.input_1.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
-                this.parent.input_1.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
-                this.parent.input_1.Lines[i][0].endFill();
-                this.parent.input_1.Lines[i][0].lineStyle(3, 0x000000, 1);
-                this.parent.input_1.Lines[i][0].moveTo(xRect, yRect + 1.5);
-                this.parent.input_1.Lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
-                this.parent.input_1.Lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
-                this.parent.input_1.Lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
-                this.parent.input_1.Lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
-                this.parent.input_1.Lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
-                this.parent.input_1.Lines[i][0].beginFill(0, 0);
-                this.parent.input_1.Lines[i][0].lineStyle(0, 0, 0);
+                this.parent.input_1.lines[i][0].clear();
+                this.parent.input_1.lines[i][0].beginFill(0x000000, 1);
+                this.parent.input_1.lines[i][0].lineStyle(0, 0x000000, 1);
+                this.parent.input_1.lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
+                this.parent.input_1.lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_1.lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_1.lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
+                this.parent.input_1.lines[i][0].endFill();
+                this.parent.input_1.lines[i][0].lineStyle(3, 0x000000, 1);
+                this.parent.input_1.lines[i][0].moveTo(xRect, yRect + 1.5);
+                this.parent.input_1.lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_1.lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_1.lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+                this.parent.input_1.lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
+                this.parent.input_1.lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+                this.parent.input_1.lines[i][0].beginFill(0, 0);
+                this.parent.input_1.lines[i][0].lineStyle(0, 0, 0);
                 // if(hRect > 0){
-                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
-                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+                //     this.parent.input_1.lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
+                //     this.parent.input_1.lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
                 // }
                 // else{
-                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
-                //     this.parent.input_1.Lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+                //     this.parent.input_1.lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+                //     this.parent.input_1.lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
                 // }
                 if(wRect > 0){
-                    this.parent.input_1.Lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+                    this.parent.input_1.lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
                 }
                 else{
-                    this.parent.input_1.Lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+                    this.parent.input_1.lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
                 }
-                this.parent.input_1.Lines[i][0].endFill();
+                this.parent.input_1.lines[i][0].endFill();
             }
         }
         if(this.parent.input_2.Connection){
             for(var i = 0; i < this.parent.input_2.counts; i++){
-                if(this.parent.input_2.Lines[i][0].father === this.parent.input_2){
-                    xRect = this.parent.input_2.Lines[i][0].mother.position.x + this.parent.input_2.Lines[i][0].mother.parent.position.x;
-                    yRect = this.parent.input_2.Lines[i][0].mother.position.y + this.parent.input_2.Lines[i][0].mother.parent.position.y;
+                if(this.parent.input_2.lines[i][0].father === this.parent.input_2){
+                    xRect = this.parent.input_2.lines[i][0].mother.position.x + this.parent.input_2.lines[i][0].mother.parent.position.x;
+                    yRect = this.parent.input_2.lines[i][0].mother.position.y + this.parent.input_2.lines[i][0].mother.parent.position.y;
                 }
                 else{
-                    xRect = this.parent.input_2.Lines[i][0].father.position.x + this.parent.input_2.Lines[i][0].father.parent.position.x;
-                    yRect = this.parent.input_2.Lines[i][0].father.position.y + this.parent.input_2.Lines[i][0].father.parent.position.y; 
+                    xRect = this.parent.input_2.lines[i][0].father.position.x + this.parent.input_2.lines[i][0].father.parent.position.x;
+                    yRect = this.parent.input_2.lines[i][0].father.position.y + this.parent.input_2.lines[i][0].father.parent.position.y; 
                 }
                 wRect = this.parent.position.x + this.parent.input_2.position.x - xRect;
                 hRect = this.parent.position.y + this.parent.input_2.position.y - yRect;
-                this.parent.input_2.Lines[i][0].clear();
-                this.parent.input_2.Lines[i][0].beginFill(0x000000, 1);
-                this.parent.input_2.Lines[i][0].lineStyle(0, 0x000000, 1);
-                this.parent.input_2.Lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
-                this.parent.input_2.Lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
-                this.parent.input_2.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
-                this.parent.input_2.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
-                this.parent.input_2.Lines[i][0].endFill();
-                this.parent.input_2.Lines[i][0].lineStyle(3, 0x000000, 1);
-                this.parent.input_2.Lines[i][0].moveTo(xRect, yRect + 1.5);
-                this.parent.input_2.Lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
-                this.parent.input_2.Lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
-                this.parent.input_2.Lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
-                this.parent.input_2.Lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
-                this.parent.input_2.Lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
-                this.parent.input_2.Lines[i][0].beginFill(0, 0);
-                this.parent.input_2.Lines[i][0].lineStyle(0, 0, 0);
+                this.parent.input_2.lines[i][0].clear();
+                this.parent.input_2.lines[i][0].beginFill(0x000000, 1);
+                this.parent.input_2.lines[i][0].lineStyle(0, 0x000000, 1);
+                this.parent.input_2.lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
+                this.parent.input_2.lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_2.lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.input_2.lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
+                this.parent.input_2.lines[i][0].endFill();
+                this.parent.input_2.lines[i][0].lineStyle(3, 0x000000, 1);
+                this.parent.input_2.lines[i][0].moveTo(xRect, yRect + 1.5);
+                this.parent.input_2.lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_2.lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.input_2.lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+                this.parent.input_2.lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
+                this.parent.input_2.lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+                this.parent.input_2.lines[i][0].beginFill(0, 0);
+                this.parent.input_2.lines[i][0].lineStyle(0, 0, 0);
                 // if(hRect > 0){
-                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
-                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+                //     this.parent.input_2.lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
+                //     this.parent.input_2.lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
                 // }
                 // else{
-                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
-                //     this.parent.input_2.Lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+                //     this.parent.input_2.lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+                //     this.parent.input_2.lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
                 // }
                 if(wRect > 0){
-                    this.parent.input_2.Lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+                    this.parent.input_2.lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
                 }
                 else{
-                    this.parent.input_2.Lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+                    this.parent.input_2.lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
                 }
-                this.parent.input_2.Lines[i][0].endFill();
+                this.parent.input_2.lines[i][0].endFill();
             }
         }
         if(this.parent.output.Connection){
             for(var i = 0; i < this.parent.output.counts; i++){
-                if(this.parent.output.Lines[i][0].father === this.parent.output){
-                    xRect = this.parent.output.Lines[i][0].mother.position.x + this.parent.output.Lines[i][0].mother.parent.position.x;
-                    yRect = this.parent.output.Lines[i][0].mother.position.y + this.parent.output.Lines[i][0].mother.parent.position.y;
+                if(this.parent.output.lines[i][0].father === this.parent.output){
+                    xRect = this.parent.output.lines[i][0].mother.position.x + this.parent.output.lines[i][0].mother.parent.position.x;
+                    yRect = this.parent.output.lines[i][0].mother.position.y + this.parent.output.lines[i][0].mother.parent.position.y;
                 }
                 else{
-                    xRect = this.parent.output.Lines[i][0].father.position.x + this.parent.output.Lines[i][0].father.parent.position.x;
-                    yRect = this.parent.output.Lines[i][0].father.position.y + this.parent.output.Lines[i][0].father.parent.position.y; 
+                    xRect = this.parent.output.lines[i][0].father.position.x + this.parent.output.lines[i][0].father.parent.position.x;
+                    yRect = this.parent.output.lines[i][0].father.position.y + this.parent.output.lines[i][0].father.parent.position.y; 
                 }
                 wRect = this.parent.position.x + this.parent.output.position.x - xRect;
                 hRect = this.parent.position.y + this.parent.output.position.y - yRect;
-                this.parent.output.Lines[i][0].clear();
-                this.parent.output.Lines[i][0].beginFill(0x000000, 1);
-                this.parent.output.Lines[i][0].lineStyle(0, 0x000000, 1);
-                this.parent.output.Lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
-                this.parent.output.Lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
-                this.parent.output.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
-                this.parent.output.Lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
-                this.parent.output.Lines[i][0].endFill();
-                this.parent.output.Lines[i][0].lineStyle(3, 0x000000, 1);
-                this.parent.output.Lines[i][0].moveTo(xRect, yRect + 1.5);
-                this.parent.output.Lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
-                this.parent.output.Lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
-                this.parent.output.Lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
-                this.parent.output.Lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
-                this.parent.output.Lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
-                this.parent.output.Lines[i][0].beginFill(0, 0);
-                this.parent.output.Lines[i][0].lineStyle(0, 0, 0);
+                this.parent.output.lines[i][0].clear();
+                this.parent.output.lines[i][0].beginFill(0x000000, 1);
+                this.parent.output.lines[i][0].lineStyle(0, 0x000000, 1);
+                this.parent.output.lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
+                this.parent.output.lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.output.lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+                this.parent.output.lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
+                this.parent.output.lines[i][0].endFill();
+                this.parent.output.lines[i][0].lineStyle(3, 0x000000, 1);
+                this.parent.output.lines[i][0].moveTo(xRect, yRect + 1.5);
+                this.parent.output.lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.output.lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
+                this.parent.output.lines[i][0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+                this.parent.output.lines[i][0].moveTo(xRect + wRect, yRect + hRect/2);
+                this.parent.output.lines[i][0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+                this.parent.output.lines[i][0].beginFill(0, 0);
+                this.parent.output.lines[i][0].lineStyle(0, 0, 0);
                 // if(hRect > 0){
-                //     this.parent.output.Lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
-                //     this.parent.output.Lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+                //     this.parent.output.lines[i][0].drawRect(xRect - 1, yRect, 5, hRect/2);
+                //     this.parent.output.lines[i][0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
                 // }
                 // else{
-                //     this.parent.output.Lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
-                //     this.parent.output.Lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+                //     this.parent.output.lines[i][0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+                //     this.parent.output.lines[i][0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
                 // }
                 if(wRect > 0){
-                    this.parent.output.Lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+                    this.parent.output.lines[i][0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
                 }
                 else{
-                    this.parent.output.Lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+                    this.parent.output.lines[i][0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
                 }
-                this.parent.output.Lines[i][0].endFill();
+                this.parent.output.lines[i][0].endFill();
             }
         }
     }
@@ -619,8 +619,8 @@ var drawPart;
 BioBLESS.logic.onDrawLineUp = function(event){
     waitFordrawBegin = !waitFordrawBegin;
     if(waitFordrawBegin){
-        this.Lines[this.counts] = [];
-        drawPart = this.Lines[this.counts];
+        this.lines[this.counts] = [];
+        drawPart = this.lines[this.counts];
         this.counts ++;
         this.Connection = true;
         moving = true;
@@ -630,8 +630,8 @@ BioBLESS.logic.onDrawLineUp = function(event){
     else{
         moving = false;
         this.Connection = true;
-        this.Lines[this.counts] = [];
-        this.Lines[this.counts] = drawPart;
+        this.lines[this.counts] = [];
+        this.lines[this.counts] = drawPart;
         this.counts ++;
         drawPart[0].mother = this;
         drawPart[0].on('mouseover', BioBLESS.logic.IsHerWorkCreate)
@@ -730,9 +730,11 @@ BioBLESS.logic.IsHerWorkDelete = function() {
  * @param {event} caused by users
  */
 BioBLESS.logic.IsHerWorkRight = function(event) {
-    this.father.parent.parent.removeChild(this);
-    this.father.parent.parent.removeChild(this.IsHerWork);
-    BioBLESS.logic.circuitDeleteLine(this.mother, this.father);//delete
+    
+    
+    BioBLESS.logic.circuitDeleteLine(this.father.mother, this.father.father);//delete
+	this.father.parent.parent.removeChild(this.IsHerWork);
+	this.father.parent.parent.removeChild(this);
 };
 
 /**
@@ -774,12 +776,14 @@ BioBLESS.logic.lineWaitforKey = function(event) {
 
 
 BioBLESS.logic.IsHisWorkCreate = function(event) {
+	this.parent.IsHisWork.clear();
     this.parent.IsHisWork.beginFill(0x345678, 0.5);
     this.parent.IsHisWork.drawCircle(75, 35, 20);
     this.parent.IsHisWork.endFill();
     this.parent.IsHisWork.lineStyle(4, 0xffff00, 1);
     this.parent.IsHisWork.moveTo(75 - 8, 35);
     this.parent.IsHisWork.lineTo(75 + 8, 35);
+	this.parent.IsHisWork.y = -65;
     this.parent.IsHisWork.on('mouseover', BioBLESS.logic.IsHisWorkUp)
                          .on('mouseout', BioBLESS.logic.IsHisWorkDown)
                          .on('click', BioBLESS.logic.IsHisWorkRight);
@@ -788,13 +792,15 @@ BioBLESS.logic.IsHisWorkCreate = function(event) {
 
 BioBLESS.logic.IsHisWorkDelete = function() {
     if(this.parent.HEisWorking === false){
-        this.parent.removeChild(this.parent.IsHisWork);
+		var that = this;
+		setTimeout(function(){that.parent.removeChild(that.parent.IsHisWork);}, 1500);
+        //this.parent.removeChild(this.parent.IsHisWork);
     }
 };
 
 BioBLESS.logic.IsHisWorkRight = function(event) {
-    this.parent.removeChild(this);
-    this.parent.parent.removeChild(this.parent);
+	
+    
     if(this.parent.input_1.Connection === true){
         for(var k = 0; k < this.parent.input_1.counts; k++){
             this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
@@ -810,7 +816,9 @@ BioBLESS.logic.IsHisWorkRight = function(event) {
             this.parent.parent.removeChild(this.parent.output.lines[k][0]);
         }
     }
-    BioBLESS.logic.circuitDeleteElement(this.parent.graphics);
+    BioBLESS.logic.circuitDeleteElement(this.parent);
+	this.parent.parent.removeChild(this.parent);
+    this.parent.removeChild(this);
 };
 
 
