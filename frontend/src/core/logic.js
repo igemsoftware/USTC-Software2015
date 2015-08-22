@@ -53,7 +53,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
     }//确定线父母的家长是哪个节点
     if(mama === mama.parent.input_1 || mama === mama.parent.input_2){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].to] === BioBLESS.logic.circuit.mark[i]){
+            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
                 if(BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
                     m = BioBLESS.logic.circuit.arcs[k].from;
                     break;
@@ -66,7 +66,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
     }//确定线母亲是哪一个接口
     if(papa === papa.parent.input_1 || papa === papa.parent.input_2){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].to] === BioBLESS.logic.circuit.mark[j]){
+            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
                 if(BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
                     d = BioBLESS.logic.circuit.arcs[k].from;
                     break;
@@ -97,7 +97,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
             m -= 1;
         }
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k] === {"from":d, "to":BioBLESS.logic.circuit.mark[j]}){
+            if(BioBLESS.logic.circuit.arcs[k].from === d && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
@@ -105,8 +105,8 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":m, "to":BioBLESS.logic.circuit.mark[j]};
     }//INPUT----INPUT
     else if(m !== null && d ===null){
-           BioBLESS.logic.circuit.nodes.splice(m, 1);
-           for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
+        BioBLESS.logic.circuit.nodes.splice(m, 1);
+        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k].from > m){
                 BioBLESS.logic.circuit.arcs[k].from -= 1;
             }
@@ -120,7 +120,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
             }
         }
        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k] === {"from":m, "to":BioBLESS.logic.circuit.mark[i]}){
+            if(BioBLESS.logic.circuit.arcs[k].from === m && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
@@ -143,7 +143,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
             }
         }
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k] === {"from":d, "to":BioBLESS.logic.circuit.mark[j]}){
+            if(BioBLESS.logic.circuit.arcs[k].from === d && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
@@ -196,7 +196,7 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
     }// papa's OUTPUT--->mama's INPUT
     else if((mama === mama.parent.output) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k] === {"from":BioBLESS.logic.circuit.mark[i], "to":BioBLESS.logic.circuit.mark[j]}){
+            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.circuit.mark[i] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
                 BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[j]};
@@ -612,6 +612,8 @@ BioBLESS.logic.onDrawLineUp = function(event){
         this.lines[this.counts] = [];
         this.lines[this.counts] = drawPart;
         this.counts ++;
+        drawPart[0].interactive = true;
+        drawPart[0].buttonMode = true;
         drawPart[0].mother = this;
         drawPart[0].on('mouseover', BioBLESS.logic.IsHerWorkCreate)
                    .on('mouseout', BioBLESS.logic.IsHerWorkDelete)
@@ -665,7 +667,6 @@ BioBLESS.logic.onDrawLineMove = function(event){
                 drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
             }
             drawPart[0].endFill();
-            drawPart[0].interactive = true;
             drawPart[0].IsHerWork.interactive = true;
             drawPart[0].IsHerWork.buttonMode = true;
             drawPart[0].father.parent.parent.addChild(drawPart[0]);
@@ -693,7 +694,7 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
     this.IsHerWork.endFill();
     this.IsHerWork.on('mouseover', BioBLESS.logic.IsHerWorkUp)
                   .on('click', BioBLESS.logic.IsHerWorkRight)
-                  .on('mouseout', BioBLESS.logic.IsHerWorkDOWN);
+                  .on('mouseout', BioBLESS.logic.IsherWorkDown);
     this.father.parent.parent.addChild(this.IsHerWork);
 };
 
@@ -724,8 +725,8 @@ BioBLESS.logic.IsHerWorkRight = function(event) {
     if(that.father.counts === 0){
         that.father.connection = false;
     }
-    that.parent.parent.removeChild(this);
-    that.parent.parent.removeChild(that);
+    that.mother.parent.parent.removeChild(this);
+    that.mother.parent.parent.removeChild(that);
 };
 
 /**
@@ -739,10 +740,10 @@ BioBLESS.logic.IsHerWorkUp = function(event) {
 };
 
 /**
- * IsHerWorkDOWN is the function to turn off the button
+ * IsherWorkDown is the function to turn off the button
  * @function
  */
-BioBLESS.logic.IsHerWorkDOWN = function() {
+BioBLESS.logic.IsherWorkDown = function() {
     this.father.SHEisWorking = false;
 };
 
