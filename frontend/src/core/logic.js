@@ -211,27 +211,27 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
 
 /**
  * circuitDeleteElement is the function to remove structure based on element
- * @param {device} element
+ * @param {thing} element
  */
-BioBLESS.logic.circuitDeleteElement = function(device) {
-    if(device.input_1.connection === true){
-        for(var k = 0; k < device.input_1.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(device.input_1.lines[k][0].mother, device.input_1.lines[k][0].father);
+BioBLESS.logic.circuitDeleteElement = function(thing) {
+    if(thing.input_1.connection === true){
+        for(var k = 0; k < thing.input_1.counts; k++){
+            BioBLESS.logic.circuitDeleteLine(thing.input_1.lines[k][0].mother, thing.input_1.lines[k][0].father);
         }
     }
-    if(device.input_2.connection === true){
-        for(var k = 0; k < device.input_2.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(device.input_2.lines[k][0].mother, device.input_2.lines[k][0].father);
+    if(thing.input_2.connection === true){
+        for(var k = 0; k < thing.input_2.counts; k++){
+            BioBLESS.logic.circuitDeleteLine(thing.input_2.lines[k][0].mother, thing.input_2.lines[k][0].father);
         }
     }
-    if(device.output.connection === true){
-        for(var k = 0; k < device.output.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(device.output.lines[k][0].mother, device.output.lines[k][0].father);
+    if(thing.output.connection === true){
+        for(var k = 0; k < thing.output.counts; k++){
+            BioBLESS.logic.circuitDeleteLine(thing.output.lines[k][0].mother, thing.output.lines[k][0].father);
         }
     }
     var i;
     for(i = 0; i < BioBLESS.logic.elements.length; i++){
-        if(BioBLESS.logic.elements[i] === device){
+        if(BioBLESS.logic.elements[i] === thing){
             break;
         }
     }
@@ -272,6 +272,7 @@ BioBLESS.logic.circuitDeleteElement = function(device) {
         }
     }
     BioBLESS.logic.elements.splice(i, 1);
+    return("OK");
 };
 
 /**
@@ -288,8 +289,9 @@ BioBLESS.logic.DrawGate = function(device){
      */
         var icon = device.id;
         var Regx = /^[0-9]*$/;
-        while(Regx.test(icon[icon.length - 1]))
+        while(Regx.test(icon[icon.length - 1])){
             icon = icon.substring(0, icon.length - 1);
+        }
         var element = new PIXI.Container();
         element.graphics = new PIXI.Graphics();
         element.title = new PIXI.Text(device.id);
@@ -314,7 +316,6 @@ BioBLESS.logic.DrawGate = function(device){
         element.graphics.drawRect(30, 0, 90, 70);
         element.graphics.endFill();
         element.IsHisWork = new PIXI.Graphics();
-        element.HEisWorking = false;
 
         element.output.beginFill(0x000000, 1);
         element.output.drawRect(0, 0, -30, 3);
@@ -397,6 +398,7 @@ BioBLESS.logic.DrawGate = function(device){
     };
 
 var waitForDoubleClick = false;
+
 /**
  * onDragStart_e makes element to be move-available
  * @function
@@ -635,7 +637,6 @@ BioBLESS.logic.onDrawLineMove = function(event){
             var hRect = newPosition.y - yRect;
             drawPart[0].IsHerWork = new PIXI.Graphics();
             drawPart[0].IsHerWork.father = drawPart[0];
-            drawPart[0].SHEisWorking = false;
             drawPart[0].clear();
             drawPart[0].beginFill(0x000000, 1);
             drawPart[0].lineStyle(0, 0x000000, 1);
@@ -688,14 +689,17 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
     this.IsHerWork.position.y = yRect + hRect/2 - 20;
     this.IsHerWork.beginFill(0x345678, 0.5);
     this.IsHerWork.drawCircle(0, 0, 20);
+    this.IsHerWork.endFill();
     this.IsHerWork.lineStyle(4, 0xffff00, 1);
     this.IsHerWork.moveTo(-8, 0);
     this.IsHerWork.lineTo(8, 0);
-    this.IsHerWork.endFill();
+    this.IsHerWork.alpha = 1;
     this.IsHerWork.on('mouseover', BioBLESS.logic.IsHerWorkUp)
                   .on('click', BioBLESS.logic.IsHerWorkRight)
                   .on('mouseout', BioBLESS.logic.IsherWorkDown);
     this.father.parent.parent.addChild(this.IsHerWork);
+    clearInterval(this.IsHerWork.her_animation);
+    clearTimeout(this.IsHerWork.herworkend);
 };
 
 /**
@@ -703,10 +707,9 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
  * @function
  */
 BioBLESS.logic.IsHerWorkDelete = function() {
-    if(this.SHEisWorking === false){
-        var that = this;
-        setTimeout(function(){that.father.parent.parent.removeChild(that.IsHerWork);}, 1500);
-    }
+    var that = this;
+    this.IsHerWork.her_animation = setInterval(function(){if(that.IsHerWork.alpha > 0){that.IsHerWork.alpha -= 0.05;}}, 100);        
+    this.IsHerWork.herworkend = setTimeout(function(){that.father.parent.parent.removeChild(that.IsHerWork);}, 2000);
 };
 
 /**
@@ -736,7 +739,9 @@ BioBLESS.logic.IsHerWorkRight = function(event) {
  */
 BioBLESS.logic.IsHerWorkUp = function(event) {
     this.father.father.parent.parent.addChild(this);
-    this.father.SHEisWorking = true;
+    this.alpha = 1;
+    clearInterval(this.her_animation);
+    clearTimeout(this.herworkend);
 };
 
 /**
@@ -744,7 +749,7 @@ BioBLESS.logic.IsHerWorkUp = function(event) {
  * @function
  */
 BioBLESS.logic.IsherWorkDown = function() {
-    this.father.SHEisWorking = false;
+
 };
 
 /**
@@ -790,10 +795,13 @@ BioBLESS.logic.IsHisWorkCreate = function(event) {
     this.parent.IsHisWork.moveTo(75 - 8, 35);
     this.parent.IsHisWork.lineTo(75 + 8, 35);
     this.parent.IsHisWork.y = -65;
+    this.parent.IsHisWork.alpha = 1;
     this.parent.IsHisWork.on('mouseover', BioBLESS.logic.IsHisWorkUp)
                          .on('mouseout', BioBLESS.logic.IsHisWorkDown)
                          .on('click', BioBLESS.logic.IsHisWorkRight);
     this.parent.addChild(this.parent.IsHisWork);
+    clearInterval(this.parent.IsHisWork.his_animation);
+    clearTimeout(this.parent.IsHisWork.hisworkend);
 };
 
 /**
@@ -801,10 +809,9 @@ BioBLESS.logic.IsHisWorkCreate = function(event) {
  * @function
  */
 BioBLESS.logic.IsHisWorkDelete = function() {
-    if(this.parent.HEisWorking === false){
-        var that = this;
-        setTimeout(function(){that.parent.removeChild(that.parent.IsHisWork);}, 1500);
-    }
+    var that = this;
+    this.parent.IsHisWork.his_animation = setInterval(function(){if(that.parent.IsHisWork.alpha > 0){that.parent.IsHisWork.alpha -= 0.05;}}, 100);
+    this.parent.IsHisWork.hisworkend = setTimeout(function(){that.parent.removeChild(that.parent.IsHisWork);}, 2000);
 };
 
 /**
@@ -813,30 +820,33 @@ BioBLESS.logic.IsHisWorkDelete = function() {
  * @param {event} caused by users
  */
 BioBLESS.logic.IsHisWorkRight = function(event) {
-    BioBLESS.logic.circuitDeleteElement(this.parent);
-    if(this.parent.input_1.connection === true){
-        for(var k = 0; k < this.parent.input_1.counts; k++){
-            this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
+	var ready;
+    ready = BioBLESS.logic.circuitDeleteElement(this.parent);
+    if(ready === "OK"){
+        if(this.parent.input_1.connection === true){
+            for(var k = 0; k < this.parent.input_1.counts; k++){
+                this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
+            }
+            this.parent.input_1.counts = 0;
+            this.parent.input_1.connection = false;
         }
-        this.parent.input_1.counts = 0;
-        this.parent.input_1.connection = false;
-    }
-    if(this.parent.input_2.connection === true){
-        for(var k = 0; k < this.parent.input_2.counts; k++){
-            this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
+        if(this.parent.input_2.connection === true){
+            for(var k = 0; k < this.parent.input_2.counts; k++){
+                this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
+            }
+            this.parent.input_2.counts = 0;
+            this.parent.input_2.connection = false;
         }
-        this.parent.input_2.counts = 0;
-        this.parent.input_2.connection = false;
-    }
-    if(this.parent.output.connection === true){
-        for(var k = 0; k < this.parent.output.counts; k++){
-            this.parent.parent.removeChild(this.parent.output.lines[k][0]);
+        if(this.parent.output.connection === true){
+            for(var k = 0; k < this.parent.output.counts; k++){
+                this.parent.parent.removeChild(this.parent.output.lines[k][0]);
+            }
+            this.parent.output.counts = 0;
+            this.parent.output.connection = false;
         }
-        this.parent.output.counts = 0;
-        this.parent.output.connection = false;
+        this.parent.parent.removeChild(this.parent);
+        this.parent.removeChild(this);
     }
-    this.parent.parent.removeChild(this.parent);
-    this.parent.removeChild(this);
 };
 
 
@@ -847,7 +857,9 @@ BioBLESS.logic.IsHisWorkRight = function(event) {
  */
 BioBLESS.logic.IsHisWorkUp = function(event) {
     this.parent.addChild(this);
-    this.parent.HEisWorking = true;
+    this.alpha = 1;
+    clearInterval(this.his_animation);
+    clearTimeout(this.hisworkend);
 };
 
 /**
@@ -855,7 +867,9 @@ BioBLESS.logic.IsHisWorkUp = function(event) {
  * @function
  */
 BioBLESS.logic.IsHisWorkDown = function() {
-    this.parent.HEisWorking = false;
+    // var that = this;
+    // this.his_animation2 = setInterval(function(){if(that.alpha > 0){that.alpha -= 0.05;}}, 100);
+    // this.hisworkend2 = setTimeout(function(){that.parent.removeChild(that);}, 2000);
 };
 
 /**
@@ -979,7 +993,7 @@ BioBLESS.logic.on_drag_e = function(){
 };
 
 BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
-     var stage = new PIXI.Container();
+    var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
     bg.lineStyle(2, 0x000000, 1);
     bg.beginFill(0x888888, 1);
@@ -1015,13 +1029,13 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         button.area_h = h;
         button.contain = contain;
         button.on('mousedown', BioBLESS.logic.on_drag_s)
-            .on('touchstart', BioBLESS.logic.on_drag_s)
-            .on('mouseup', BioBLESS.logic.on_drag_e)
-            .on('mouseupoutside', BioBLESS.logic.on_drag_e)
-            .on('touchend', BioBLESS.logic.on_drag_e)
-            .on('touchendoutside', BioBLESS.logic.on_drag_e)
-            .on('mousemove', BioBLESS.logic.on_drag_m)
-            .on('touchmove', BioBLESS.logic.on_drag_m);
+              .on('touchstart', BioBLESS.logic.on_drag_s)
+              .on('mouseup', BioBLESS.logic.on_drag_e)
+              .on('mouseupoutside', BioBLESS.logic.on_drag_e)
+              .on('touchend', BioBLESS.logic.on_drag_e)
+              .on('touchendoutside', BioBLESS.logic.on_drag_e)
+              .on('mousemove', BioBLESS.logic.on_drag_m)
+              .on('touchmove', BioBLESS.logic.on_drag_m);
         stage.addChild(button);
         mask.button = button;
         mask.contain = contain;
@@ -1032,29 +1046,29 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         this.position.y = y;
     };
     mask.interactive = true;
-	var that = mask;
-	if(contain_h > h){
-		stage.scroll_function = function(d){
-			if(d < 0){
-				that.contain.y -= 50;
-				if(that.contain.y < that.button.area_h - that.button.contain_h){
-					that.contain.y = that.button.area_h - that.button.contain_h;
-				}
-			}
-			else{
-				that.contain.y += 50;
-				if(that.contain.y > 0){
-					that.contain.y = 0;
-				}
-			}
-			var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
-			that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
-		}
-	}else{
-		stage.scroll_function = function(){};
-	};
+    var that = mask;
+    if(contain_h > h){
+        stage.scroll_function = function(d){
+            if(d < 0){
+                that.contain.y -= 50;
+                if(that.contain.y < that.button.area_h - that.button.contain_h){
+                    that.contain.y = that.button.area_h - that.button.contain_h;
+                }
+            }
+            else{
+                that.contain.y += 50;
+                if(that.contain.y > 0){
+                    that.contain.y = 0;
+                }
+            }
+            var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
+            that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
+        }
+    }
+    else{
+        stage.scroll_function = function(){};
+    }
     var on_mouse_over = function(event){
-		
         if(this.is_out){
             this.is_out = false;
             this.back_up = BioBLESS.scroll_function;
