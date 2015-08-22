@@ -27,11 +27,12 @@ class SimulateView(APIView):
         """
         try:
             input_from_back = Biosystem.BioSystem(request.data)
-            response_from_back = input_from_back.simulate().show_record()
+            response_from_back = input_from_back.simulate().record_list
         except BaseException as error:
+            #raise
             response = {}
             response["status"] = "failed"
             response["detail"] = error.message
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        assert isinstance(response_from_back, list)
-        return response_from_back
+        assert isinstance(response_from_back, tuple)
+        return Response(response_from_back)

@@ -33,6 +33,6 @@ class BioSystem(object):
             pass
         print self.reaction.species
         # self.reaction.show_species()
-        self.reaction.show_reaction()
-        self.reaction.show_record()
+        #self.reaction.show_reaction()
+        #self.reaction.show_record()
         return self.reaction
