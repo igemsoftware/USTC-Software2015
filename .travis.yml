@@ -25,6 +25,6 @@ script:
     - pwd
     - pylint --load-plugins pylint_django --errors-only BioBLESS
     - python manage.py migrate
-    - python manage.py test test
+    - python manage.py test BioBLESS
     - cd ../frontend
     - npm test
