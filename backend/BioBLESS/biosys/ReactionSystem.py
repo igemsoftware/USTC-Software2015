@@ -22,6 +22,7 @@ for i in xrange(size):
     for j in xrange(1, i):
         comb[i, j] = comb[i - 1, j - 1] + comb[i - 1, j]
 
+
 def itemfreq(temp):
     if len(temp) == 0:
         return numpy.array([])
@@ -30,11 +31,13 @@ def itemfreq(temp):
         freq = numpy.bincount(inv)
         return numpy.array([items, freq]).T
 
+
 def transpose(temp):
-    if len(temp)==0:
-        return numpy.array([[],[],[]])
+    if len(temp) == 0:
+        return numpy.array([[], [], []])
     else:
         return temp.transpose()
+
 
 def choice(species):
     if isinstance(species, list):
@@ -42,12 +45,15 @@ def choice(species):
     else:
         return species
 
+
 def intensity(single_reactant, current):
     return numpy.array(map(lambda species_temp: comb[current[species_temp[0]], species_temp[1]],
-        single_reactant)).prod()
+                           single_reactant)).prod()
+
 
 def intensity_list(reactant, current):
     return numpy.array(map(lambda single_reactant: intensity(single_reactant, current), reactant))
+
 
 def initialize(init_list, current, species_name_inverse):
     for single_init in init_list:
@@ -56,15 +62,17 @@ def initialize(init_list, current, species_name_inverse):
                 current[species_name_inverse[single_init[0]]] = single_init[1]
     return current
 
+
 ################################################################
 try:
     import pylab
 except:
     pass
+
+
 ################################################################
 
 class ReactionSystem(object):
-
     @property
     def species_number(self):
         """
@@ -99,7 +107,7 @@ class ReactionSystem(object):
         self.species_name = numpy.array(map(choice, species))
         self.species_name_inverse = {self.species_name[name_temp]: name_temp for name_temp in
                                      range(len(self.species_name))}
-    
+
     def add_species_name(self, namestring):
         """
         Add one species into the system
@@ -211,16 +219,17 @@ class ReactionSystem(object):
         self.set_reactions(reactions)
 
     def __add__(self, other):
-        reaction = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist() + transpose(numpy.array(
+        reaction = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist() + transpose(
+            numpy.array(
                 [other.reactant, other.product, other.constant])).tolist()
         species_name = list(set(self.species_name.tolist() + other.species_name.tolist()))
         current = numpy.zeros(len(species_name))
         species_name_inverse = {species_name[name_temp]: name_temp for name_temp in
-                                     range(len(species_name))}
+                                range(len(species_name))}
         current = initialize(self.species, current, species_name_inverse)
         current = initialize(other.species, current, species_name_inverse)
-        current=current.tolist()
-        return self.__class__(reaction,numpy.array([species_name, current]).transpose().tolist())
+        current = current.tolist()
+        return self.__class__(reaction, numpy.array([species_name, current]).transpose().tolist())
 
     def simulate(self, initial, stop_time):
         """
@@ -255,7 +264,7 @@ class ReactionSystem(object):
             self.record.append([time + 0, current.tolist()])
         return self.record
 
-################################################################
+    ################################################################
 
     def show_record(self, plot_list=None):
         """
@@ -297,4 +306,3 @@ class ReactionSystem(object):
         """
         self.simulate(initial, stop_time)
         self.show_record(list_plot)
-

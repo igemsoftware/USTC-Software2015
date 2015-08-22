@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-null=None
+null = None
 
-lizhi=[
+lizhi = [
     {
         "id": "INPUT",
         "input": [],
@@ -10,7 +10,7 @@ lizhi=[
         "parts": {
             "id": [["d1"]],
             "type": {"d1": "Input"}
-	},
+        },
         "map": [],
         "type": {}
     },
