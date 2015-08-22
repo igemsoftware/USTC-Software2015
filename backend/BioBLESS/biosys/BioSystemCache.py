@@ -1,5 +1,8 @@
 __author__ = 'zsy95_000'
 
+import json
+from BioSystemSamples import biosystem_sample1
+
 if __name__ == "__main__":
     # This shows True, for python will check the dict recurrently and ignore the order.
     dict1 = {"0": (3.1416, "0:T~1", {"0:T~2I0": 1, "b": 3.14}), "1": "c1"}
@@ -12,4 +15,7 @@ if __name__ == "__main__":
     # There never seems to be a hash. Nasty!
     print dict1.__hash__
 
+    print json.dumps(biosystem_sample1)
+    
+    # Emm... So I only have to exchange something, right?
 
