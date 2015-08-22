@@ -571,8 +571,7 @@ this.show_input = function(){
 BioBLESS.gene_network.devs_analysis = function(devices){
 	var i, j, k, l, temp;
 	this.devs = [];
-	
-	
+	this.devices = [];
 	var gates = this.gates;
 	var g = [];
 	var input_num = 0;
@@ -591,12 +590,14 @@ BioBLESS.gene_network.devs_analysis = function(devices){
 			}else alert("Error - 1002");
 		}
 	};
+	this.input_num = input_num;
 	var j = 0;
 	for(i = 0; i < gates.nodes.length; i++){
 		this.devs[i] = new dev();
 		this.devs[i].draw(devices, g[i]);
 		if(g[i] < 0) continue;
-		var index_button = BioBLESS.gene_network.create_textbutton(i.toString(), 100, 30, 0x00ffff);
+		this.devices[j] = devices[g[i]];
+		var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0x00ffff);
 		index_button.x = 50;
 		index_button.y = 100;
 		this.devs[i].stage.addChild(index_button);
@@ -743,6 +744,137 @@ BioBLESS.gene_network.create_textbutton = function(t, w, h, color){
 	button.addChild(button.text);
 	return button;
 };
+
+BioBLESS.gene_network.create_scroll_area = function(items, w){
+	var contain = new PIXI.Container();
+	var buttons = [];
+	var mouse_over = function(){
+		if(this.is_out){
+			this.is_out = false;
+			this.clear();
+			this.beginFill(0x555555, 1);
+			this.drawRect(0, 0, 260, 40);
+			this.endFill();
+			this.parent.addChild(this.parent.title);
+			this.back_up = BioBLESS.scroll_function;
+            BioBLESS.scroll_function = this.parent.parent.parent.scroll_function;
+		}
+	};
+	var mouse_out = function(){
+		if(!this.is_out){
+			this.is_out = true;
+			this.clear();
+			this.beginFill(0xffffff, 1);
+			this.drawRect(0, 0, 260, 40);
+			this.endFill();
+			this.parent.addChild(this.parent.title);
+            BioBLESS.scroll_function = this.back_up;
+		}
+	};
+	for(var i = 0; i < items.length; i++){
+		buttons[i] = new PIXI.Container();
+		var bg = new PIXI.Graphics();
+		bg.beginFill(0xffffff, 1);
+		bg.drawRect(0, 0, 260, 40);
+		bg.endFill();
+		bg.is_out = true;
+		bg.interactive = true;
+		bg.on("mouseover", mouse_over)
+		  .on("mouseout", mouse_out);
+		buttons[i].addChild(bg);
+		buttons[i].title = new PIXI.Text(items[i]);
+		buttons[i].title.x = 5;
+		buttons[i].title.y = 5;
+		buttons[i].addChild(buttons[i].title);
+		buttons[i].y = i * 40;
+		buttons[i].bg = bg;
+		contain.addChild(buttons[i]);
+	};
+	if(i >= 4)
+	    var scroll_area = BioBLESS.logic.create_scrollarea(contain, i * 40, w, 160);
+	else
+	    var scroll_area = BioBLESS.logic.create_scrollarea(contain, i * 40, w, i * 40);
+	scroll_area.buttons = buttons;
+	return scroll_area;
+};
+
+BioBLESS.gene_network.create_inputarea = function(device){
+};
+
+BioBLESS.gene_network.create_ijkl = function(){
+    var stage = new PIXI.Container();
+    var bg = new PIXI.Graphics();
+	var title = new PIXI.Text("System");
+    bg.beginFill(0x333333, 1);
+    bg.drawRect(0, 0, 300, BioBLESS.height);
+    bg.endFill();
+    stage.addChild(bg);
+	stage.x = BioBLESS.width - 300;
+	var title_bg = new PIXI.Graphics();
+	title_bg.beginFill(0xffffff, 1);
+	title_bg.drawRect(20, 30, 260, 40);
+	title_bg.endFill();
+	title_bg.interactive = true;
+	title_bg.buttonMode = true;
+	title_bg.is_view = false;
+	title_bg.on("click", function(){
+		if(this.is_view){
+			this.is_view = false;
+			this.parent.removeChild(this.scroll_area);
+		}else{
+			this.is_view = true;
+			var items = [];
+			items[0] = "System";
+			for(var i = 0; i < BioBLESS.gene_network.devices.length; i++){
+				items[i + 1] = "device " + i.toString();
+			}
+			this.scroll_area = BioBLESS.gene_network.create_scroll_area(items, 260);
+			this.scroll_area.x = 20;
+			this.scroll_area.y = 75;
+			this.scroll_area.alpha = 0.8;
+			var mask = new PIXI.Graphics();
+			mask.beginFill(0, 0);
+			mask.drawRect(0, 0, 260, 60);
+			mask.drawRect(0, 230, 260, 1000);
+			mask.endFill();
+			mask.y = -65;
+			mask.interactive = true;
+			this.scroll_area.addChild(mask);
+			this.parent.addChild(this.scroll_area);
+			this.parent.addChild(title_bg);
+			this.parent.addChild(title);
+			var buttons = this.scroll_area.buttons;
+			var that = this;
+			var on_click = function(){
+				title.text = items[this.i];
+				that.is_view = false;
+			    that.parent.removeChild(that.scroll_area);
+			};
+			for(var i = 0; i < buttons.length; i++){
+				buttons[i].bg.i = i;
+				buttons[i].bg.on("click", on_click);
+			};
+		}
+	});
+	stage.addChild(title_bg);
+	
+	
+	title.x = 25;
+	title.y = 35;
+	stage.addChild(title);
+	
+	var parameter = new PIXI.Text("Parameter:");
+	parameter.style.fill = "white";
+	parameter.x = 20;
+	parameter.y = 100;
+	stage.addChild(parameter);
+	
+	var contain = new PIXI.Container();
+	var time = new PIXI.Text("time:");
+	stage.inputarea = new PIXI.Container();
+	
+	return stage;
+}
 /** 
 * @description draw one device or the whole devices
 * @param {devices} the whole devices
@@ -770,9 +902,12 @@ BioBLESS.gene_network.draw = function(devices, n){
 		var moveX = w / 2 - (this.parts_num + this.lines_num + 1) * 90 + 25;
 		if(moveX > 0)
 		    this.stage.movable_stage.position.x = moveX;
-		
 	}
 	this.stage.addChild(this.stage.movable_stage);
+	
+	
+	var ijkl = BioBLESS.gene_network.create_ijkl();
+	this.stage.addChild(ijkl);
 	return this.stage;
 }
 

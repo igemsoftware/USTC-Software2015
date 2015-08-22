@@ -979,7 +979,7 @@ BioBLESS.logic.on_drag_e = function(){
 };
 
 BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
-    var stage = new PIXI.Container();
+     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
     bg.lineStyle(2, 0x000000, 1);
     bg.beginFill(0x888888, 1);
@@ -992,10 +992,8 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.endFill();
     mask.is_out = true;
     contain.mask = mask;
-    
-    
-    stage.addChild(contain);
     stage.addChild(mask);
+	stage.addChild(contain);
     if(contain_h > h){
         var line = new PIXI.Graphics();
         line.lineStyle(2, 0x000000, 0.5);
@@ -1033,33 +1031,34 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         this.position.x = x;
         this.position.y = y;
     };
-    
     mask.interactive = true;
-    var on_mouse_over = function(){
+	var that = mask;
+	if(contain_h > h){
+		stage.scroll_function = function(d){
+			if(d < 0){
+				that.contain.y -= 50;
+				if(that.contain.y < that.button.area_h - that.button.contain_h){
+					that.contain.y = that.button.area_h - that.button.contain_h;
+				}
+			}
+			else{
+				that.contain.y += 50;
+				if(that.contain.y > 0){
+					that.contain.y = 0;
+				}
+			}
+			var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
+			that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
+		}
+	}else{
+		stage.scroll_function = function(){};
+	};
+    var on_mouse_over = function(event){
+		
         if(this.is_out){
             this.is_out = false;
             this.back_up = BioBLESS.scroll_function;
-            if(this.contain === undefined){
-                BioBLESS.scroll_function = function(){};
-            }else{
-                var that = this;
-                BioBLESS.scroll_function = function(d){
-                    if(d < 0){
-                        that.contain.y -= 50;
-                        if(that.contain.y < that.button.area_h - that.button.contain_h){
-                            that.contain.y = that.button.area_h - that.button.contain_h;
-                        }
-                    }
-                    else{
-                        that.contain.y += 50;
-                        if(that.contain.y > 0){
-                            that.contain.y = 0;
-                        }
-                    }
-                    var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
-                    that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
-                };
-            }
+            BioBLESS.scroll_function = stage.scroll_function;
         }
     };
     var on_mouse_out = function(){
