@@ -1,4 +1,4 @@
-dict = {
+biosystem_sample1 = {
     "nodes": ["NOT2", "INPUT"],
     "arcs": [
         {"from": 1, "to": 0}
