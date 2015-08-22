@@ -406,7 +406,7 @@ BioBLESS.logic.onDragStart_e = function(event) {
     if(waitForDoubleClick){
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
-        $.getJSON("misc/devices.json", function(data) {
+        $.getJSON("misc/gates_supsification.json", function(data) {
             if(data && BioBLESS.gene_network.gates){
                 BioBLESS.gene_network.draw(data, that.parent.Index);
                 BioBLESS.change_stage(BioBLESS.gene_network);
@@ -1074,7 +1074,7 @@ BioBLESS.logic.create_abcd = function(){
 		OK.interactive = true;
 		OK.buttonMode = true;
 		var OK_function = function(){
-			var a = $.getJSON("/misc/gates_sup.json");
+			var a = $.getJSON("misc/gates_supsification.json");
 			var that = this;
             var next = function() {
                 if(a.responseJSON){
@@ -1250,7 +1250,6 @@ BioBLESS.logic.circuit = function(){
 	};
 	this.devs_width = x - 200;
 	this.draw_lines_between_gates();
-	};
 };
 BioBLESS.logic.craete_efgh = function(back_stage){
 	var stage = new PIXI.Container();
