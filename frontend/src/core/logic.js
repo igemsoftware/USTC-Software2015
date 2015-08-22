@@ -105,8 +105,8 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":m, "to":BioBLESS.logic.circuit.mark[j]};
     }//INPUT----INPUT
     else if(m !== null && d ===null){
-       	BioBLESS.logic.circuit.nodes.splice(m, 1);
-       	for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
+           BioBLESS.logic.circuit.nodes.splice(m, 1);
+           for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k].from > m){
                 BioBLESS.logic.circuit.arcs[k].from -= 1;
             }
@@ -232,7 +232,7 @@ BioBLESS.logic.circuitDeleteElement = function(device) {
     var i;
     for(i = 0; i < BioBLESS.logic.elements.length; i++){
         if(BioBLESS.logic.elements[i] === device){
-        	break;
+            break;
         }
     }
     for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
@@ -287,10 +287,10 @@ BioBLESS.logic.DrawGate = function(device){
      * @type {PIXI.Graphics}
      */
         var icon = device.id;
-		var Regx = /^[0-9]*$/;
-		while(Regx.test(icon[icon.length - 1]))
-		    icon = icon.substring(0, icon.length - 1);
-		var element = new PIXI.Container();
+        var Regx = /^[0-9]*$/;
+        while(Regx.test(icon[icon.length - 1]))
+            icon = icon.substring(0, icon.length - 1);
+        var element = new PIXI.Container();
         element.graphics = new PIXI.Graphics();
         element.title = new PIXI.Text(device.id);
         element.input_1 = new PIXI.Graphics();
@@ -326,11 +326,11 @@ BioBLESS.logic.DrawGate = function(device){
         element.output.endFill();
         switch(icon){
             default: 
-			    alert("Error - 1001!");
-				break;
+                alert("Error - 1001!");
+                break;
             case "XOR":
             case "AND":
-			case "OR":
+            case "OR":
             case "xor":
             case "and":
             case "or":
@@ -365,7 +365,7 @@ BioBLESS.logic.DrawGate = function(device){
                 element.graphics.lineTo(120, 20);
                 break;
             case "NAND":
-			case "nand":
+            case "nand":
             case "NOR":
             case "nor":
             case "XNOR":
@@ -406,7 +406,7 @@ BioBLESS.logic.onDragStart_e = function(event) {
     if(waitForDoubleClick){
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
-        $.getJSON("misc/devices.json", function(data) {
+        $.getJSON("misc/gates.json", function(data) {
             if(data && BioBLESS.gene_network.gates){
                 BioBLESS.gene_network.draw(data, that.parent.Index);
                 BioBLESS.change_stage(BioBLESS.gene_network);
@@ -704,10 +704,7 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
 BioBLESS.logic.IsHerWorkDelete = function() {
     if(this.SHEisWorking === false){
         var that = this;
-        for(var i = 0; i < 10; i++){
-            setTimeout(function(){that.IsHerWork.alpha -= 0.1;}, 500);
-        }
-        setTimeout(function(){this.father.parent.parent.removeChild(this.IsHerWork);}, 100);
+        setTimeout(function(){this.father.parent.parent.removeChild(this.IsHerWork);}, 1500);
     }
 };
 
@@ -784,7 +781,7 @@ BioBLESS.logic.lineWaitforKey = function(event) {
  * @param {event} mouseover the element.graphics
  */
 BioBLESS.logic.IsHisWorkCreate = function(event) {
-	this.parent.IsHisWork.clear();
+    this.parent.IsHisWork.clear();
     this.parent.IsHisWork.beginFill(0x345678, 0.5);
     this.parent.IsHisWork.drawCircle(75, 35, 20);
     this.parent.IsHisWork.endFill();
@@ -805,10 +802,7 @@ BioBLESS.logic.IsHisWorkCreate = function(event) {
 BioBLESS.logic.IsHisWorkDelete = function() {
     if(this.parent.HEisWorking === false){
         var that = this;
-        for(var i = 0; i < 10; i++){
-            setTimeout(function(){that.parent.IsHisWork.alpha -= 0.1;}, 500);
-        }
-        setTimeout(function(){that.parent.removeChild(that.parent.IsHisWork);}, 100);
+        setTimeout(function(){that.parent.removeChild(that.parent.IsHisWork);}, 1500);
     }
 };
 
@@ -1029,9 +1023,9 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
             .on('touchendoutside', BioBLESS.logic.on_drag_e)
             .on('mousemove', BioBLESS.logic.on_drag_m)
             .on('touchmove', BioBLESS.logic.on_drag_m);
-    	stage.addChild(button);
-    	mask.button = button;
-    	mask.contain = contain;
+        stage.addChild(button);
+        mask.button = button;
+        mask.contain = contain;
     }
     stage.contain = contain;
     stage.change_position = function(x, y){
@@ -1177,7 +1171,7 @@ BioBLESS.logic.create_abcd = function(){
     return stage;
 };
 
-BioBLESS.logic.circuit = function(){
+BioBLESS.logic.circuits = function(){
     this.stage = new PIXI.Container();
     this.draw_lines_between_gates = function(){
         var i, j, k, l, temp;
@@ -1199,134 +1193,138 @@ BioBLESS.logic.circuit = function(){
                 }
             }
         }
-    }
-};
-
-this.draw = function(gates) {
-    var i, j, k, l, temp;
-    this.devs = [];
-    for(i = 0; i < gates.nodes.length; i++){
-        var device = {};
-        device.id = gates.nodes[i];
-        var Regx = /^[0-9]*$/;
-        while(Regx.test(device.id[device.id.length - 1])){
-            device.id = device.id.substring(0, device.id.length - 1);
-        }
-        if(device.id === "INPUT"){
-            this.devs[i] = BioBLESS.gene_network.create_textbutton("INPUT", 150, 80, 0x0000ff);
-        }
-        else if(device.id === "OUT"){
-            this.devs[i] = BioBLESS.gene_network.create_textbutton("OUT", 100, 80, 0x0000ff);
-        }
-        else{
-            this.devs[i] = BioBLESS.logic.DrawGate(device);
-        }
-        this.devs[i].chosen = false;
-        this.devs[i].input = [];
-        this.devs[i].input_num = 0;
-        this.devs[i].output = [];
-        this.devs[i].output_num = 0;
-        this.devs[i].stage_h = 70;
-        this.devs[i].stage_w = 150;
-        if(device.id === "INPUT"){
-            this.devs[i].output[0] = {};
-            this.devs[i].output[0].x = 150;
-            this.devs[i].output[0].y = 35;
-        }
-        else if(device.id === "OUT"){
-            this.devs[i].input[0] = {};
-            this.devs[i].input[0].x = 0;
-            this.devs[i].input[0].y = 35;
-        }
-        else{
-            if(device.id === "NOT"){
+    };
+    this.draw = function(gates) {
+        var i, j, k, l, temp;
+        this.devs = [];
+        for(i = 0; i < gates.nodes.length; i++){
+            var device = {};
+            device.id = gates.nodes[i];
+            var Regx = /^[0-9]*$/;
+            while(Regx.test(device.id[device.id.length - 1])){
+                device.id = device.id.substring(0, device.id.length - 1);
+            }
+            if(device.id === "INPUT"){
+                this.devs[i] = BioBLESS.gene_network.create_textbutton("INPUT", 150, 80, 0x0000ff);
+            }
+            else if(device.id === "OUT"){
+                this.devs[i] = BioBLESS.gene_network.create_textbutton("OUT", 100, 80, 0x0000ff);
+            }
+            else{
+                this.devs[i] = BioBLESS.logic.DrawGate(device);
+            }
+			this.devs[i].id = gates.nodes[i];
+            this.devs[i].chosen = false;
+            this.devs[i].input = [];
+            this.devs[i].input_num = 0;
+            this.devs[i].output = [];
+            this.devs[i].output_num = 0;
+            this.devs[i].stage_h = 70;
+            this.devs[i].stage_w = 150;
+            if(device.id === "INPUT"){
+                this.devs[i].output[0] = {};
+                this.devs[i].output[0].x = 150;
+                this.devs[i].output[0].y = 35;
+            }
+            else if(device.id === "OUT"){
                 this.devs[i].input[0] = {};
                 this.devs[i].input[0].x = 0;
                 this.devs[i].input[0].y = 35;
             }
             else{
-                this.devs[i].input[0] = {};
-                this.devs[i].input[0].x = 0;
-                this.devs[i].input[0].y = 18;
-                this.devs[i].input[1] = {};
-                this.devs[i].input[1].x = 0;
-                this.devs[i].input[1].y = 52;
+                if(device.id === "NOT"){
+                    this.devs[i].input[0] = {};
+                    this.devs[i].input[0].x = 0;
+                    this.devs[i].input[0].y = 35;
+                }
+                else{
+                    this.devs[i].input[0] = {};
+                    this.devs[i].input[0].x = 0;
+                    this.devs[i].input[0].y = 18;
+                    this.devs[i].input[1] = {};
+                    this.devs[i].input[1].x = 0;
+                    this.devs[i].input[1].y = 52;
+                }
+                this.devs[i].output[0] = {};
+                this.devs[i].output[0].x = 150;
+                this.devs[i].output[0].y = 35;
             }
-            this.devs[i].output[0] = {};
-            this.devs[i].output[0].x = 150;
-            this.devs[i].output[0].y = 35;
+            if(this.devs[i].output[0] !== undefined){
+                this.devs[i].output[0].to_dev_index = [];
+                this.devs[i].output[0].to_dev_input_index = [];
+            }
         }
-        if(this.devs[i].output[0] !== undefined){
-        	this.devs[i].output[0].to_dev_index = [];
-        	this.devs[i].output[0].to_dev_input_index = [];
+        for(i = 0; i < gates.arcs.length; i++){
+            var from = gates.arcs[i].from;
+            var to = gates.arcs[i].to;
+            this.devs[from].output[0].to_dev_index[this.devs[from].output[0].to_dev_index.length] = to;
+            this.devs[from].output[0].to_dev_input_index[this.devs[from].output[0].to_dev_input_index.length] = this.devs[to].input_num;
+            this.devs[to].input[this.devs[to].input_num].to_dev_index = from;
+            this.devs[to].input[this.devs[to].input_num].to_dev_output_index = 0;
+            this.devs[to].input_num++;
         }
-    }
-    for(i = 0; i < gates.arcs.length; i++){
-        var from = gates.arcs[i].from;
-        var to = gates.arcs[i].to;
-        this.devs[from].output[0].to_dev_index[this.devs[from].output[0].to_dev_index.length] = to;
-        this.devs[from].output[0].to_dev_input_index[this.devs[from].output[0].to_dev_input_index.length] = this.devs[to].input_num;
-        this.devs[to].input[this.devs[to].input_num].to_dev_index = from;
-        this.devs[to].input[this.devs[to].input_num].to_dev_output_index = 0;
-        this.devs[to].input_num++;
-    }
-    for(i = 0; i < gates.nodes.length; i++){
-        if(this.devs[i].output[0] !== undefined && this.devs[i].output[0].to_dev_index.length === 0){
-            j = gates.nodes.length;
-            this.devs[j] = BioBLESS.gene_network.create_textbutton("OUT", 100, 80, 0x0000ff);
-            this.devs[i].output[0].to_dev_index[0] = j;
-            this.devs[i].output[0].to_dev_input_index[0] = 0;
-            this.devs[j].input[0].to_dev_index = i;
-            this.devs[j].input[0].to_dev_output_index = 0;
-            this.devs[j].input_num++;
+        for(i = 0; i < gates.nodes.length; i++){
+            if(this.devs[i].output[0] !== undefined && this.devs[i].output[0].to_dev_index.length === 0){
+                j = gates.nodes.length;
+                this.devs[j] = BioBLESS.gene_network.create_textbutton("OUT", 100, 80, 0x0000ff);
+                this.devs[i].output[0].to_dev_index[0] = j;
+                this.devs[i].output[0].to_dev_input_index[0] = 0;
+                this.devs[j].input[0].to_dev_index = i;
+                this.devs[j].input[0].to_dev_output_index = 0;
+                this.devs[j].input_num++;
+            }
         }
-    }
-    this.poi = [];
-    this.poi[0] = [];
-    for(i = 0; i < this.devs.length; i++){
-        if(this.devs[i].input.length === 0){
-            this.poi[0][this.poi[0].length] = this.devs[i];
-            this.devs[i].chosen = true;
+        this.poi = [];
+        this.poi[0] = [];
+        for(i = 0; i < this.devs.length; i++){
+            if(this.devs[i].input.length === 0){
+                this.poi[0][this.poi[0].length] = this.devs[i];
+                this.devs[i].chosen = true;
+            }
         }
-    }
-    i = 0;
-    while(this.poi[i].length > 0){
-        if(this.poi[i + 1] === undefined){
-            this.poi[i + 1] = [];
-        }
-        for(j = 0; j < this.poi[i].length; j++){
-            for(k = 0; k < this.poi[i][j].output.length; k++){
-                for(l = 0; l < this.poi[i][j].output[k].to_dev_index.length; l++){
-                    if(this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen === false){
-                        this.poi[i + 1][this.poi[i + 1].length] = this.devs[this.poi[i][j].output[k].to_dev_index[l]];
-                        this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen = true;
+        i = 0;
+        while(this.poi[i].length > 0){
+            if(this.poi[i + 1] === undefined){
+                this.poi[i + 1] = [];
+            }
+            for(j = 0; j < this.poi[i].length; j++){
+                for(k = 0; k < this.poi[i][j].output.length; k++){
+                    for(l = 0; l < this.poi[i][j].output[k].to_dev_index.length; l++){
+                        if(this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen === false){
+                            this.poi[i + 1][this.poi[i + 1].length] = this.devs[this.poi[i][j].output[k].to_dev_index[l]];
+                            this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen = true;
+                        }
                     }
                 }
             }
+            i++;
         }
-        i++;
-    }
-    this.row = [];
-    this.devs_height = 0;
-    this.devs_width = 0;
-    for(i = 0; i < this.poi.length - 1; i++){
-        this.row[i] = {};
-        this.row[i].width = 300;
-        if(this.devs_height < 140 * this.poi[i].length)
-            this.devs_height = 140 * this.poi[i].length;
-    }
-    var x = 0;
-    for(i = 0; i < this.row.length; i++){
-        for(j = 0; j < this.poi[i].length; j++){
-            this.poi[i][j].position.x = x + (this.row[i].width -this.poi[i][j].stage_w) / 2 ;
-            this.poi[i][j].position.y = (j + 1) / (this.poi[i].length + 1) * this.devs_height - this.poi[i][j].stage_h / 2;
-            this.stage.addChild(this.poi[i][j]);
+        this.row = [];
+        this.devs_height = 0;
+        this.devs_width = 0;
+        for(i = 0; i < this.poi.length - 1; i++){
+            this.row[i] = {};
+            this.row[i].width = 300;
+            if(this.devs_height < 140 * this.poi[i].length)
+                this.devs_height = 140 * this.poi[i].length;
         }
-        x += this.row[i].width;
-    }
-    this.devs_width = x - 200;
-    this.draw_lines_between_gates();    
+        var x = 0;
+        for(i = 0; i < this.row.length; i++){
+            for(j = 0; j < this.poi[i].length; j++){
+                this.poi[i][j].position.x = x + (this.row[i].width -this.poi[i][j].stage_w) / 2 ;
+                this.poi[i][j].position.y = (j + 1) / (this.poi[i].length + 1) * this.devs_height - this.poi[i][j].stage_h / 2;
+                this.stage.addChild(this.poi[i][j]);
+            }
+            x += this.row[i].width;
+        }
+        this.devs_width = x - 200;
+        this.draw_lines_between_gates();    
+    };
 };
+
+
+
+
 
 BioBLESS.logic.craete_efgh = function(back_stage) {
     var stage = new PIXI.Container();
@@ -1342,7 +1340,7 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     stage.addChild(BACK);
     BACK.interactive = true;
     BACK.buttonMode = true;
-    var BACK_function = function(){	
+    var BACK_function = function(){   
         this.parent.parent.addChild(back_stage);
         this.parent.parent.removeChild(this.parent);
     };
@@ -1352,7 +1350,7 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     var curcuits = [];
     var y = 0;
     for(var i = 0; i < BioBLESS.logic.gates_sup.length; i++){
-        curcuits[i] = new BioBLESS.logic.circuit();
+        curcuits[i] = new BioBLESS.logic.circuits();
         curcuits[i].draw(BioBLESS.logic.gates_sup[i]);
         curcuits[i].stage.y = y;
         curcuits[i].stage.scale.x = curcuits[i].stage.scale.y = 230 / curcuits[i].devs_width;
@@ -1493,11 +1491,11 @@ BioBLESS.logic.draw = function(devices){
         else{
             that.stage.addChild(that.list);
             for(var i = 0; i < devices.length; i++){
-            	that.stage.addChild(that._logicGates[i]);
-            	that.stage.addChild(that.logicGates[i]);
+                that.stage.addChild(that._logicGates[i]);
+                that.stage.addChild(that.logicGates[i]);
             }
             that.plusobj.condition = 1;
-		}
+        }
         added = !added;
     });
     BioBLESS.logic.plusobj_animation = function(){
