@@ -186,7 +186,7 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
     }//INPUT----INPUT
     else if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.output)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k] === {"from":BioBLESS.logic.circuit.mark[j], "to":BioBLESS.logic.circuit.mark[i]}){
+            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.circuit.mark[j] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
                 BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[i]};
@@ -693,7 +693,7 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
     this.IsHerWork.endFill();
     this.IsHerWork.on('mouseover', BioBLESS.logic.IsHerWorkUp)
                   .on('click', BioBLESS.logic.IsHerWorkRight)
-                  .on('mouseout', BioBLESS.logic.IsHerWorKDOWN);
+                  .on('mouseout', BioBLESS.logic.IsHerWorkDOWN);
     this.father.parent.parent.addChild(this.IsHerWork);
 };
 
@@ -704,7 +704,7 @@ BioBLESS.logic.IsHerWorkCreate = function(event) {
 BioBLESS.logic.IsHerWorkDelete = function() {
     if(this.SHEisWorking === false){
         var that = this;
-        setTimeout(function(){this.father.parent.parent.removeChild(this.IsHerWork);}, 1500);
+        setTimeout(function(){that.father.parent.parent.removeChild(that.IsHerWork);}, 1500);
     }
 };
 
@@ -725,7 +725,7 @@ BioBLESS.logic.IsHerWorkRight = function(event) {
         that.father.connection = false;
     }
     that.parent.parent.removeChild(this);
-    that.parent.parent.removeChild(this.father);
+    that.parent.parent.removeChild(that);
 };
 
 /**
@@ -739,10 +739,10 @@ BioBLESS.logic.IsHerWorkUp = function(event) {
 };
 
 /**
- * IsHerWorkDown is the function to turn off the button
+ * IsHerWorkDOWN is the function to turn off the button
  * @function
  */
-BioBLESS.logic.IsHerWorkDown = function() {
+BioBLESS.logic.IsHerWorkDOWN = function() {
     this.father.SHEisWorking = false;
 };
 
