@@ -628,7 +628,7 @@ BioBLESS.logic.on_draw_line_up = function(event){
         drawPart[0].on('mouseover', BioBLESS.logic.line_delete_button_create)
                    .on('mouseout', BioBLESS.logic.line_delete_button_remove)
                    .on('click', BioBLESS.logic.line_wait_for_key);
-        BioBLESS.logic.circuit_add_line(drawPart[0].mother, drawPart[0].father);     
+        BioBLESS.logic.circuit_add_line(drawPart[0].mother, drawPart[0].father);
     }
 };
 /**
@@ -805,8 +805,8 @@ BioBLESS.logic.gate_delete_buttonCreate = function(event) {
     this.parent.gate_delete_button.y = -65;
     this.parent.gate_delete_button.alpha = 1;
     this.parent.gate_delete_button.on('mouseover', BioBLESS.logic.gate_delete_button_up)
-                         .on('mouseout', BioBLESS.logic.gate_delete_button_down)
-                         .on('click', BioBLESS.logic.gate_delete_button_right);
+                                  .on('mouseout', BioBLESS.logic.gate_delete_button_down)
+                                  .on('click', BioBLESS.logic.gate_delete_button_right);
     this.parent.addChild(this.parent.gate_delete_button);
     clearInterval(this.parent.gate_delete_button.his_animation);
     clearTimeout(this.parent.gate_delete_button.his_workend);
@@ -1394,8 +1394,121 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     return stage;
 };
 
-BioBLESS.logic.circuit_draw_of_data = function() {
+BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
+    BioBLESS.logic.add_gate = function(){
+        BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate();
+        var i,j;
+        for(i in thing.poi){
+        	for(j in thing.poi[i]){
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing.poi[i][j].position.x;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing.poi[i][j].position.y;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].Index = this.Index;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.on('mousedown', that.on_drag_start_e)
+                                                                                    .on('touchstart', that.on_drag_start_e)
+                                                                                    .on('mouseup', that.on_drag_end_e)
+                                                                                    .on('mouseupoutside', that.on_drag_end_e)
+                                                                                    .on('touchend', that.on_drag_end_e)
+                                                                                    .on('touchendoutside', that.on_drag_end_e)
+                                                                                    .on('mousemove', that.on_drag_move_e)
+                                                                                    .on('touchmove', that.on_drag_move_e)
+                                                                                    .on('mouseover', that.gate_delete_buttonCreate)
+                                                                                    .on('mouseout', that.gate_delete_buttonDelete)
+                                                                                    .on('click', that.gate_wait_for_key);
+
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.on('mousedown', that.on_draw_line_up)
+                                                                                  .on('touchstart', that.on_draw_line_up)
+                                                                                  .on('mousemove', that.on_draw_line_move)
+                                                                                  .on('touchmove', that.on_draw_line_move);
+                
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.on('mousedown', that.on_draw_line_up)
+                                                                                   .on('touchstart', that.on_draw_line_up)
+                                                                                   .on('mousemove', that.on_draw_line_move)
+                                                                                   .on('touchmove', that.on_draw_line_move);
+                    
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.on('mousedown', that.on_draw_line_up)
+                                                                                   .on('touchstart', that.on_draw_line_up)
+                                                                                   .on('mousemove', that.on_draw_line_move)
+                                                                                   .on('touchmove', that.on_draw_line_move);
+
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
+                BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
+                that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
+            }
+        }
+    };
+
+    BioBLESS.logic.add_line = function(papa, mama) {
+        drawPart[0] = new PIXI.Graphics();
+        papa.lines[papa.counts] = [];
+        drawPart = papa.lines[papa.counts];
+        papa.counts ++;
+        papa.connection = true;
+        drawPart[0].father = papa;
+        mama.lines[mama.counts] = [];
+        mama.lines[mama.counts] = drawPart;
+        mama.counts ++;
+        mama.connection = true;
+        drawPart[0].mother = mama;
+        var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
+        var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
+        var wRect = drawPart[0].mother.position.x + drawPart[0].mother.parent.position.x - xRect;
+        var hRect = drawPart[0].mother.position.y + drawPart[0].mother.parent.position.y - yRect;
+        drawPart[0].line_delete_button = new PIXI.Graphics();
+        drawPart[0].line_delete_button.father = drawPart[0];
+        drawPart[0].clear();
+        drawPart[0].beginFill(0x000000, 1);
+        drawPart[0].lineStyle(0, 0x000000, 1);
+        drawPart[0].drawCircle(xRect, yRect + 1.5, 1.5);
+        drawPart[0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+        drawPart[0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+        drawPart[0].endFill();
+        drawPart[0].lineStyle(3, 0x000000, 1);
+        drawPart[0].moveTo(xRect, yRect + 1.5);
+        drawPart[0].lineTo(xRect, yRect + hRect/2 + 1.5);
+        drawPart[0].moveTo(xRect, yRect + hRect/2 + 1.5);
+        drawPart[0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+        drawPart[0].moveTo(xRect + wRect, yRect + hRect/2);
+        drawPart[0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+        drawPart[0].beginFill(0, 0);
+        drawPart[0].lineStyle(0, 0, 0);
+        // if(hRect > 0){
+        //     drawPart[0].drawRect(xRect - 1, yRect, 5, hRect/2);
+        //     drawPart[0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+        // }
+        // else{
+        //     drawPart[0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+        //     drawPart[0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+        // }
+        if(wRect > 0){
+            drawPart[0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+        }
+        else{
+            drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+        }
+        drawPart[0].endFill();
+        drawPart[0].line_delete_button.interactive = true;
+        drawPart[0].line_delete_button.buttonMode = true;
+        drawPart[0].interactive = true;
+        drawPart[0].buttonMode = true;
+        drawPart[0].father.parent.parent.addChild(drawPart[0]);
+        drawPart[0].on('mouseover', BioBLESS.logic.line_delete_button_create)
+                   .on('mouseout', BioBLESS.logic.line_delete_button_remove)
+                   .on('click', BioBLESS.logic.line_wait_for_key);
+        BioBLESS.logic.circuit_add_line(drawPart[0].mother, drawPart[0].father);
+    };
     
+    // for(){
+    //     BioBLESS.logic.add_line();
+    // };
 };
 
 
