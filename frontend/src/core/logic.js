@@ -1156,21 +1156,12 @@ BioBLESS.logic.create_abcd = function(){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
-            var a = $.getJSON("/misc/gates_sup.json");
-            var that = this;
-            var next = function() {
-                if(a.responseJSON){
-                     BioBLESS.logic.gates_sup = a.responseJSON;
-                    var new_stage = BioBLESS.logic.craete_efgh(that.parent);
+            $.getJSON("https://ustc.software/biocircuit/01000010/", function(data) {
+                    BioBLESS.logic.gates_sup = data;
+                    var new_stage = BioBLESS.logic.craete_efgh(this.parent);
                     that.parent.parent.addChild(new_stage);
-                    that.parent.parent.removeChild(that.parent);
-                }
-                else{
-                    setTimeout(next, 50);
-                }
-            };
-            setTimeout(next, 50);
-
+                    that.parent.parent.removeChild(this.parent);
+            }.bind(this));
         };
         OK.on("click", OK_function);
     }
