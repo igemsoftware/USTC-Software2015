@@ -31,6 +31,9 @@ var drag_start_func = function(event) {
                 .on('touchend', drag_end_func)
                 .on('touchendoutside', drag_end_func)
                 .on('mousemove', drag_move_func)
-                .on('touchmove', drag_move_func);
+                .on('touchmove', drag_move_func)
+                .on('mouseover', function(){
+                    BioBLESS.scroll_function = BioBLESS.zoom_function;
+                });
         return dragArea;
 };

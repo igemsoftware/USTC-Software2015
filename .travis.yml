@@ -23,7 +23,7 @@ install:
 script:
     - cd ../backend
     - pwd
-    - pylint --load-plugins pylint_django --errors-only BioBLESS
+    - ./pylint_test.sh
     - python manage.py migrate
     - python manage.py test BioBLESS
     - cd ../frontend
