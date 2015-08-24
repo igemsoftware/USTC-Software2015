@@ -825,7 +825,7 @@ BioBLESS.logic.IsHisWorkDelete = function() {
  * @param {event} caused by users
  */
 BioBLESS.logic.IsHisWorkRight = function(event) {
-	var ready;
+    var ready;
     ready = BioBLESS.logic.circuitDeleteElement(this.parent);
     if(ready === "OK"){
         if(this.parent.input_1.connection === true){
@@ -1012,7 +1012,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.is_out = true;
     contain.mask = mask;
     stage.addChild(mask);
-	stage.addChild(contain);
+    stage.addChild(contain);
     if(contain_h > h){
         var line = new PIXI.Graphics();
         line.lineStyle(2, 0x000000, 0.5);
@@ -1034,13 +1034,13 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         button.area_h = h;
         button.contain = contain;
         button.on('mousedown', BioBLESS.logic.on_drag_s)
-              .on('touchstart', BioBLESS.logic.on_drag_s)
-              .on('mouseup', BioBLESS.logic.on_drag_e)
-              .on('mouseupoutside', BioBLESS.logic.on_drag_e)
-              .on('touchend', BioBLESS.logic.on_drag_e)
-              .on('touchendoutside', BioBLESS.logic.on_drag_e)
-              .on('mousemove', BioBLESS.logic.on_drag_m)
-              .on('touchmove', BioBLESS.logic.on_drag_m);
+            .on('touchstart', BioBLESS.logic.on_drag_s)
+            .on('mouseup', BioBLESS.logic.on_drag_e)
+            .on('mouseupoutside', BioBLESS.logic.on_drag_e)
+            .on('touchend', BioBLESS.logic.on_drag_e)
+            .on('touchendoutside', BioBLESS.logic.on_drag_e)
+            .on('mousemove', BioBLESS.logic.on_drag_m)
+            .on('touchmove', BioBLESS.logic.on_drag_m);
         stage.addChild(button);
         mask.button = button;
         mask.contain = contain;
@@ -1053,6 +1053,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.interactive = true;
     var that = mask;
     if(contain_h > h){
+        stage.scroll_fun = function(){};
         stage.scroll_function = function(d){
             if(d < 0){
                 that.contain.y -= 50;
@@ -1068,12 +1069,13 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
             }
             var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
             that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
+            stage.scroll_fun(d);
         }
-    }
-    else{
+    }else{
         stage.scroll_function = function(){};
     }
     var on_mouse_over = function(event){
+        
         if(this.is_out){
             this.is_out = false;
             this.back_up = BioBLESS.scroll_function;
@@ -1223,7 +1225,7 @@ BioBLESS.logic.circuits = function(){
             else{
                 this.devs[i] = BioBLESS.logic.DrawGate(device);
             }
-			this.devs[i].id = gates.nodes[i];
+            this.devs[i].id = gates.nodes[i];
             this.devs[i].chosen = false;
             this.devs[i].input = [];
             this.devs[i].input_num = 0;
