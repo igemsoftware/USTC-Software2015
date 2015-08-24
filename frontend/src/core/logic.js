@@ -950,7 +950,10 @@ BioBLESS.logic.onDragMove = function() {
         this.childPosition = this.data.getLocalPosition(BioBLESS.logic.stage.movable_stage);
     }
 };
-
+/**
+ * create a button with text
+ * @function
+ */
 BioBLESS.logic.create_textbutton = function(t, w, h, color){
     var button = new PIXI.Container();
     button.background = new PIXI.Graphics();
@@ -996,7 +999,10 @@ BioBLESS.logic.on_drag_e = function(){
     this.dragging = false;
     this.data = null;
 };
-
+/**
+ * create a scroll area for truth table stage
+ * @function
+ */
 BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
@@ -1092,7 +1098,10 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.on("mouseout", on_mouse_out);
     return stage;
 };
-
+/**
+ * create the base stage of truth table
+ * @function
+ */
 BioBLESS.logic.create_abcd = function(){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
@@ -1182,7 +1191,10 @@ BioBLESS.logic.create_abcd = function(){
     };
     return stage;
 };
-
+/**
+ * a constructor can calculate circuits to picture
+ * @constructor
+ */
 BioBLESS.logic.circuits = function(){
     this.stage = new PIXI.Container();
     this.draw_lines_between_gates = function(){
@@ -1337,7 +1349,10 @@ BioBLESS.logic.circuits = function(){
 
 
 
-
+/**
+ * create the output stage of truth table
+ * @function
+ */
 BioBLESS.logic.craete_efgh = function(back_stage) {
     var stage = new PIXI.Container();
     stage.x = BioBLESS.width - 300;

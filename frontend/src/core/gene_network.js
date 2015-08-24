@@ -28,12 +28,11 @@ var dev = function(){
 */ 
 this.stage = new PIXI.Container();
 
-/** 
-* @description prepare something
-* @param {devices} the whole devices
-* @param {Num} the index of the device you want to draw
-*/ 
 
+/**
+ * draw a section of fold line
+ * @function
+ */
 this.draw_line = function(graphic, start_x, start_y, end_x, end_y, mode){
     if(mode === true){
         graphic.moveTo(start_x, start_y);
@@ -47,6 +46,10 @@ this.draw_line = function(graphic, start_x, start_y, end_x, end_y, mode){
         graphic.lineTo(end_x, start_y);
     }
 }
+/**
+ * onDragMove makes element to move
+ * @function
+ */
 this.draw_arrow = function(graphic, scale, x, y, mode){
     switch(mode){
         case "down":
@@ -62,6 +65,11 @@ this.draw_arrow = function(graphic, scale, x, y, mode){
             
     }
 }
+/** 
+* @description prepare something
+* @param {devices} the whole devices
+* @param {Num} the index of the device you want to draw
+*/ 
 this.prepare = function(devices, n){
     var i, j, k, l, Num, s;//备用变量
     this.chosen = false;
@@ -728,7 +736,10 @@ BioBLESS.gene_network.draw_lines_between_devices = function(){
     };
     this.stage.movable_stage.addChild(this.poi[this.poi.length - 2][0].stage);
 };
-
+/**
+ * create a textbutton for gene network page
+ * @function
+ */
 BioBLESS.gene_network.create_textbutton = function(t, w, h, color){
     var button = new PIXI.Container();
     button.background = new PIXI.Graphics();
@@ -747,7 +758,10 @@ BioBLESS.gene_network.create_textbutton = function(t, w, h, color){
     button.addChild(button.text);
     return button;
 };
-
+/**
+ * create a scroll area for input system
+ * @function
+ */
 BioBLESS.gene_network.create_scroll_area = function(items, w){
     var contain = new PIXI.Container();
     var buttons = [];
@@ -805,6 +819,10 @@ BioBLESS.gene_network.create_scroll_area = function(items, w){
     scroll_area.addChild(mask);
     return scroll_area;
 };
+/**
+ * create an input plugin
+ * @function
+ */
 BioBLESS.gene_network.create_textarea = function(w, h){
     var id = "I_";
     id += Math.random().toString(36).substr(2);
@@ -816,6 +834,10 @@ BioBLESS.gene_network.create_textarea = function(w, h){
     input.style.position = "absolute";
     return input;
 };
+/**
+ * create an inputitem
+ * @function
+ */
 BioBLESS.gene_network.create_inputitem = function(name, num, w){
     var stage = new PIXI.Container();
     stage.name = new PIXI.Text(name + ":");
@@ -889,6 +911,10 @@ BioBLESS.gene_network.create_inputitem = function(name, num, w){
     stage.addChild(click_area);
     return stage;
 };
+/**
+ * create an inputarea of device
+ * @function
+ */
 BioBLESS.gene_network.create_inputarea = function(device, index){
     var stage = new PIXI.Container();
     var title = new PIXI.Text("e1");
@@ -969,7 +995,10 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
     
     return stage;
 };
-
+/**
+ * create the base page of input system
+ * @function
+ */
 BioBLESS.gene_network.create_ijkl = function(){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
