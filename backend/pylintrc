@@ -1,2 +1,2 @@
 [TYPECHECK]
-ignored-modules = numpy
+ignored-modules = numpy,numpy.random
