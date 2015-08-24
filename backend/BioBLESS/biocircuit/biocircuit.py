@@ -102,6 +102,7 @@ def get_gate_not(expr):
     ----------
     expr : list
         Minimal two-level SOP form.
+#!/usr/bin/env python
 
     Returns
     -------
@@ -252,7 +253,7 @@ def circuit_score(circuit, d_gate):
         {'score': 2.5, 'gate': {'v0': ''}}
     """
     n_gate = circuit.nodes()
-    n_gate.pop(n_gate.index('out'))
+    n_gate.remove('out')
     tmp = []
     for i in n_gate:
         if i[0] == 'v':
