@@ -243,7 +243,8 @@ BioBLESS.logic.circuitDeleteElement = function(thing) {
         if(BioBLESS.logic.circuit.nodes[j] === "INPUT" && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
             BioBLESS.logic.circuit.nodes.splice(j, 1);
             BioBLESS.logic.circuit.arcs.splice(k, 1);
-            for(var m = 0; m < BioBLESS.logic.circuit.arcs.length; m++){
+            var m;
+            for(m in BioBLESS.logic.circuit.arcs){
                 if(BioBLESS.logic.circuit.arcs[m].from > j){
                     BioBLESS.logic.circuit.arcs[m].from -= 1;
                 }
@@ -251,11 +252,12 @@ BioBLESS.logic.circuitDeleteElement = function(thing) {
                     BioBLESS.logic.circuit.arcs[m].to -= 1;
                 }
             }
-            for(var m = 0; m < BioBLESS.logic.circuit.mark.length; m++){
+            for(m in BioBLESS.logic.circuit.mark){
                 if(BioBLESS.logic.circuit.mark[m] > j){
                     BioBLESS.logic.circuit.mark[m] -= 1;
                 }
             }
+            k--;
         }
     }
     var d = BioBLESS.logic.circuit.mark[i];
@@ -890,7 +892,7 @@ BioBLESS.logic.elementWaitforKey = function() {
     this.keypress;
     switch(currkey){
         case 46: //delete
-            BioBLESS.logic.circuitDeleteElement(this.parent);
+            //BioBLESS.logic.circuitDeleteElement(this.parent);
             if(this.parent.input_1.connection === true){
                 for(var k = 0; k < this.parent.input_1.counts; k++){
                     this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
