@@ -573,7 +573,22 @@ this.show_input = function(){
 };
 
 };
-
+/** 
+* @description clone object
+* @param {obj} the object you want to clone
+* @return {obj} the object which has been cloned
+*/ 
+BioBLESS.gene_network.clone = function(obj){
+    function Clone(){}
+    Clone.prototype = obj;
+    var o = new Clone();
+    for(var a in o){
+        if(typeof o[a] == "object") {
+            o[a] = BioBLESS.gene_network.clone(o[a]);
+        }
+    }
+    return o;
+}
 
 /** 
 * @description analyse the layout of the whole devices
@@ -607,7 +622,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
         this.devs[i] = new dev();
         this.devs[i].draw(devices, g[i]);
         if(g[i] < 0) continue;
-        this.devices[j] = devices[g[i]];
+        this.devices[j] = BioBLESS.gene_network.clone(devices[g[i]]);
         var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0x00ffff);
         index_button.x = 50;
         index_button.y = 100;
@@ -974,8 +989,9 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
             contain.addChild(inputitem);
             inputitem.i = i;
             inputitem.o = o;
+            inputitem.index = index;
             inputitem.change_value = function(value){
-                BioBLESS.gene_network.devices[index].map[inputitem.i].params[inputitem.o] = value;
+                BioBLESS.gene_network.devices[this.index].map[this.i].params[this.o] = value;
             };
         };
         stage.inputarea[i] = BioBLESS.logic.create_scrollarea(contain, j * 50, 260, BioBLESS.height - 310);
@@ -1080,13 +1096,15 @@ BioBLESS.gene_network.create_ijkl = function(){
     inputitem.change_value = function(value){
         BioBLESS.gene_network.system_parameters.time = value;
     };
+    var change_value = function(value){
+        BioBLESS.gene_network.system_parameters.input[this.i] = value;
+    };
     for(var i = 0; i < this.input_num; i++){
         inputitem = BioBLESS.gene_network.create_inputitem("input " + i.toString(), 0, 250);
         inputitem.y = 55 + i * 50;
         contain.addChild(inputitem);
-        inputitem.change_value = function(value){
-            BioBLESS.gene_network.system_parameters.input[i] = value;
-        };
+        inputitem.i = i;
+        inputitem.change_value = change_value;
     }
     stage.system_inputarea = BioBLESS.logic.create_scrollarea(contain, 60 + i * 50, 260, BioBLESS.height - 230);
     stage.system_inputarea.x = 20;
