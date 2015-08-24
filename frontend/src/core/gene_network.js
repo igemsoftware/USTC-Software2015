@@ -3,6 +3,9 @@
 * @constructor BioBLESS.gene_network 
 * @description the class of devices 
 */ 
+BioBLESS.gene_network.init = function() {
+    this.stage = BioBLESS.utils.init_stage();
+};
 (function() {
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors

@@ -1,4 +1,7 @@
-﻿BioBLESS.simulation.draw = function(_nodes){
+﻿BioBLESS.simulation.init = function() {
+    this.stage = BioBLESS.utils.init_stage();
+};
+BioBLESS.simulation.draw = function(_nodes){
     this.stage.movable_stage._scale = 1;
     var nodes = function(){};
     nodes.t = _nodes.t;

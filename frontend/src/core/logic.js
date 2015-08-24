@@ -5,6 +5,9 @@
  * @author Ubrok
  * @since 2015-8-12
  */
+BioBLESS.logic.init = function() {
+    this.stage = BioBLESS.utils.init_stage();
+};
 /**
  * circuit is a data structure communicate between frontend and backend
  */

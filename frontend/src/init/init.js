@@ -8,32 +8,30 @@ BioBLESS.init = function() {
     BioBLESS.base_stage = new PIXI.Container();
     var prev_time = 0;
     var fps = 0;
-    var render = window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        function(callback) {setTimeout(callback.bind(null, new Date().getTime()), 1000 / 60);};
     var animate = function(now) {
-        var exec_finish;
+        var hook_finish;
         for(var i in BioBLESS.animate_hook) {
-            exec_finish = BioBLESS.animate_hook[i]();
-            if(exec_finish)
+            hook_finish = BioBLESS.animate_hook[i]();
+            if(hook_finish)
                 BioBLESS.delete_animate_hook(BioBLESS.animate_hook[i]);
         }
         renderer.render(BioBLESS.base_stage);
         fps = Math.floor(1000 / (now - prev_time));
         prev_time = now;
-        render(animate);
+        requestAnimationFrame(animate);
     };
-    render(animate);
-BioBLESS.logic.stage = BioBLESS.utils.init_stage();
-BioBLESS.gene_network.stage = BioBLESS.utils.init_stage();
-BioBLESS.simulation.stage = BioBLESS.utils.init_stage();
+    requestAnimationFrame(animate);
+    BioBLESS.logic.init();
+    BioBLESS.gene_network.init();
+    BioBLESS.simulation.init();
+    BioBLESS.analysis.init();
+    BioBLESS.dna.init();
     BioBLESS.stage = BioBLESS.logic.stage;
     BioBLESS.base_stage.static_stage = new PIXI.Container();
     BioBLESS.base_stage.addChild(BioBLESS.base_stage.static_stage);
     BioBLESS.base_stage.addChild(BioBLESS.stage);
     BioBLESS.base_stage.static_stage.fps = new PIXI.Text("FPS: " + fps);
-    BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 120;
+    BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 400;
     BioBLESS.base_stage.static_stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {BioBLESS.base_stage.static_stage.fps.text = "FPS: " + fps;}, 1000);
 
@@ -65,6 +63,6 @@ BioBLESS.simulation.stage = BioBLESS.utils.init_stage();
         return false;
     });
     $.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
-    BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 	BioBLESS.scroll_function = BioBLESS.zoom_function;
+    BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 };
