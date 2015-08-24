@@ -1357,7 +1357,7 @@
         "id2": "p3",
         "type": "trans",
         "params": {
-          "trans1": 0.01,
+          "trans1": 0.001,
           "trans2": 0.5,
           "decay1": 0.1,
           "decay2": 0.05
@@ -1390,7 +1390,7 @@
         "id2": "d9",
         "type": "act",
         "params": {
-          "reg": 20
+          "reg": 0.1
         }
       },
       {
@@ -1399,7 +1399,7 @@
         "id2": "d2",
         "type": "act",
         "params": {
-          "reg": 20
+          "reg": 0.1
         }
       },
       {
