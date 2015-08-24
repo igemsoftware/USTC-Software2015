@@ -109,7 +109,7 @@ def get_gate_not(expr):
         Index of the not gates in the Boolean expression.
     """
     not_list = []
-    for i in range(len(expr)):
+    for i in range(len(expr[0])):
         for j in expr:
             if j[i] == '0':
                 not_list.append(i)
