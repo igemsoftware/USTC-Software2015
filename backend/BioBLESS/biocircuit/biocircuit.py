@@ -18,7 +18,7 @@ __author__ = 'E-Neo <e-neo@qq.com>'
 # Maybe pyeda is better in the future, but pyeda contains some
 # bugs by far(0.28.0). Espresso Algorithm is better than Q-M
 # Algorithm
-import qm
+import BioBLESS.biocircuit.qm
 
 import numpy as np
 import networkx as nx
@@ -91,7 +91,7 @@ def string2expr(string):
         Minimal two-level SOP form.
     """
     f_tt = string2truthtable(string)
-    expr = qm.qm(f_tt[0], f_tt[1], f_tt[2])
+    expr = BioBLESS.biocircuit.qm.qm(f_tt[0], f_tt[1], f_tt[2])
     return expr
 
 
@@ -329,13 +329,13 @@ def api_circuit(circuit, gate):
     return graph
 
 
-def get_score_from_front(f_json, d_gate):
+def get_score_from_front(d_json, d_gate):
     """Calculate score of circuit from front end.
 
     Parameters
     ----------
-    f_json : string
-        json include information of nodes and something else
+    d_json : dict
+        dict include information of nodes and something else
 
     d_gate : dict
         A dict of biogates and their 4 parameters. It should be
@@ -346,8 +346,7 @@ def get_score_from_front(f_json, d_gate):
     score : float
         The score of the biocircuit.
     """
-    d_front = simplejson.loads(f_json)
-    score = calc_score(d_front['nodes'], d_gate)
+    score = calc_score(d_json['nodes'], d_gate)
     return score
 
 
