@@ -96,8 +96,7 @@ class ReactionSystem(object):
         """
         self.species = species
         self.species_name = numpy.array(map(choice, species))
-        self.species_name_inverse = \
-        {self.species_name[name_temp]: name_temp for name_temp in range(len(self.species_name))}
+        self.species_name_inverse = {self.species_name[name_temp]: name_temp for name_temp in range(len(self.species_name))}
 
     def set_reactions(self, reaction):
         """
