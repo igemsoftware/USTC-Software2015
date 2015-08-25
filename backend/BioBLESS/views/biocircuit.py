@@ -11,6 +11,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
+from rest_framework import status
+
 
 import BioBLESS.biocircuit.biocircuit as biocircuit
 import BioBLESS.biocircuit.biogate as biogate
@@ -40,3 +42,33 @@ class BiocircuitView(APIView):
         scores_from_back = biocircuit.circuit_score(circuit_from_back, biogate.d_gate)
         response_dict = biocircuit.api_circuit(circuit_from_back, scores_from_back)
         return Response(response_dict)
+
+
+class ScoreView(APIView):
+    """This API could calc the score of a circuit
+
+    """
+    parser_classes = (JSONParser,)
+    renderer_classes = (JSONRenderer,)
+
+    def post(self, request):
+        """
+        request: POST /biocircuit/score/
+        Response: json
+                {
+                    status:"SUCCESS"
+                    score: float
+                }
+        """
+        try:
+            response_from_back = biocircuit.get_score_from_front(request, biogate.d_gate)
+            response = {}
+            response["status"] = "SUCCESS"
+            response["score"] = response_from_back
+            return Response(response)
+        except BaseException as error:
+            # raise
+            response = {}
+            response["status"] = "failed"
+            response["detail"] = error.message
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
