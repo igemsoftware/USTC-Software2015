@@ -1471,10 +1471,10 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
      * @param {thing_e} BioBLESS.logic.circuits
      */
     BioBLESS.logic.add_gate = function(thing_e){
-        BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate();
         var i,j,k,m;
         for(i = 1; i < thing_e.poi.length - 1; i++){
             for(j in thing_e.poi[i]){
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate(thing_e.poi[i][j]);
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing_e.poi[i][j].position.x;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing_e.poi[i][j].position.y;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
