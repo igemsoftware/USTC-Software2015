@@ -2,7 +2,7 @@
 
 null = None
 
-lizhi = [
+gates_data = [
     {
         "id": "INPUT",
         "input": [],
@@ -10,7 +10,7 @@ lizhi = [
         "parts": {
             "id": [["d1"]],
             "type": {"d1": "Input"}
-        },
+	},
         "map": [],
         "type": {}
     },
