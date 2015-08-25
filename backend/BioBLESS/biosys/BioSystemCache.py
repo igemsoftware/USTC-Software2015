@@ -3,7 +3,7 @@ __author__ = 'zsy95_000'
 import json
 import sys
 import os
-from BioSystemSamples import biosystem_sample1
+from test_data import system_data as biosystem_sample1
 
 
 def debug_info(addinfo=None):
