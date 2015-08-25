@@ -1,4 +1,4 @@
-[![Build Status](https://magnum.travis-ci.com/ustc2015/igem.svg?token=mKX17GB5mm6v1kppSB7o&branch=master)](https://magnum.travis-ci.com/ustc2015/igem)
+[![Build Status](https://travis-ci.org/igemsoftware/USTC-Software2015.svg?branch=master)](https://travis-ci.org/igemsoftware/USTC-Software2015)
 
 # BioBLESS - iGEM USTC Software 2015
 
