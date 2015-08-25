@@ -15,45 +15,36 @@ __author__ = 'Trumpet'
 from reaction_system import ReactionSystem
 from gates_data import gates_data
 
-class DeviceSystem(object):
-    """
-    device system
-    """
-    def __init__(self, logi, data):
-        '''
-            find sub needed : input,coding,sRNA
-            trans(coding/sRNA)
-            act,inh,lock,key,rep
-        '''
-        if logi["id"] == "INPUT":
-            self.species = [[logi["parts"]["id"][0][0], data["device_parameter"]["initial"][0]]]
-            self.reaction = []
-            self.logi = logi
-            self.data = data
-        else:
-            self.set_device(logi, data)
-    def set_device(self, logi, data):
-        #parts_type=logi["parts"]["type"].values()
-        parts_type = [logi["parts"]["type"]["d"+str(i+1)] for i in range(len(logi["parts"]["type"]))]
-        maps = logi["map"]
-        def coding_find_last(tmp, str):
-            while parts_type[tmp] != str:
+def dev_system(gates, data, nodes_id, input_sub, output_sub):
+    '''
+        find sub needed : input,coding,sRNA
+        trans(coding/sRNA)
+        act,inh,lock,key,rep
+    '''
+    if gates["id"] == "INPUT":
+        species = [[gates["parts"]["id"][0][0], data["device_parameter"]["initial"][0]]]
+        reaction = []
+        gates = gates
+        data = data
+    else:
+        def coding_find_last(tmp, string):
+            while parts_type[tmp] != string:
                 tmp -= 1
             return tmp + 1
-        def select(list, str):
+        def select(list_from, string):
             ans = []
             tmp = 0
             flag = True
             while flag:
                 try:
-                    ans.append(list.index(str, tmp) + 1)
+                    ans.append(list_from.index(string, tmp) + 1)
                     tmp = ans[-1]
-                except:
+                except ValueError:
                     flag = False
             return ans
-        def get_species(list, str_list):
-            list = map(str, list)
-            return [i + j for i in str_list for j in list]
+        def get_species(list_from, str_list):
+            list_from = map(str, list_from)
+            return [i + j for i in str_list for j in list_from]
         def find_in_map(tmp=0, **kw):
             for single_map in range(tmp, len(maps)):
                 try:
@@ -62,35 +53,39 @@ class DeviceSystem(object):
                 except:
                     pass
             return -1
+
+        parts_type = [gates["parts"]["type"]["d"+str(i+1)] for i in range(len(gates["parts"]["type"]))]
+        maps = gates["map"]
         protein = select(parts_type, "Coding")
-        sRNA = select(parts_type, "sRNA")
-        species = get_species(protein, ["d", "m", "r", "p"])+get_species(sRNA, ["d", "m", "r"])
+        s_rna = select(parts_type, "sRNA")
+        species = get_species(protein, ["d", "m", "r", "p"])+get_species(s_rna, ["d", "m", "r"])
         initial = data["device_parameter"]["initial"]
         for i in range(len(initial)):
-            for j in logi["parts"]["id"][i]:
+            for j in gates["parts"]["id"][i]:
                 if j[0] == "d":
                     try:
                         species[species.index(j)] = [j, initial[i]]
                     except:
                         pass
-        species += logi["input"]
+        species += gates["input"]
+
         reaction = []
-        for single in protein+sRNA:
-            ty = parts_type[single-1]
-            st = str(single)
+        for single in protein+s_rna:
+            part_type = parts_type[single-1]
+            part_id = str(single)
             parts_type[single]
-            maper = find_in_map(id1="d"+st)
+            maper = find_in_map(id1="d"+part_id)
             single_data = data[maps[maper]["id"]]
             single_reaction = [
-                [["d"+st], ["m"+st], single_data["trans1"]],
-                [["m"+st], ["d"+st, "r"+st], single_data["trans1"]],
-                [["r"+st], [], single_data["decay1"]],
-                [["r"+st], ["r"+st, "p"+st], single_data["trans2"]],
-                [["p"+st], [], single_data["decay2"]],
-            ] if ty == "Coding" else [
-                [["d"+st], ["m"+st], single_data["trans1"]],
-                [["m"+st], ["d"+st, "r"+st], single_data["trans1"]],
-                [["r"+st], [], single_data["decay1"]],
+                [["d"+part_id], ["m"+part_id], single_data["trans1"]],
+                [["m"+part_id], ["d"+part_id, "r"+part_id], single_data["trans1"]],
+                [["r"+part_id], [], single_data["decay1"]],
+                [["r"+part_id], ["r"+part_id, "p"+part_id], single_data["trans2"]],
+                [["p"+part_id], [], single_data["decay2"]],
+            ] if part_type == "Coding" else [
+                [["d"+part_id], ["m"+part_id], single_data["trans1"]],
+                [["m"+part_id], ["d"+part_id, "r"+part_id], single_data["trans1"]],
+                [["r"+part_id], [], single_data["decay1"]],
             ]
             for reg_sub in ["Promoter", "RBS"]:
                 pro = coding_find_last(single, reg_sub)
@@ -100,60 +95,51 @@ class DeviceSystem(object):
                     reg_pro = maps[tmp]["id1"]
                     if maps[tmp]["type"] == ("inh" if reg_sub == "Promoter" else "lock"):
                         single_reaction.append(
-                            [[reg_pro, "m"+st], ["n"+st], reg_data["reg"]]
+                            [[reg_pro, "m"+part_id], ["n"+part_id], reg_data["reg"]]
                         )
                         single_reaction.append(
-                            [["n"+st], [reg_pro, "d"+st], reg_data["reg"]]
+                            [["n"+part_id], [reg_pro, "d"+part_id], reg_data["reg"]]
                         )
-                        if not "n"+st in species:
-                            species.append("n"+st)
+                        if not "n"+part_id in species:
+                            species.append("n"+part_id)
                         if reg_sub == "Promoter":
                             temp = find_in_map(id2="e"+str(tmp))
                             while temp != -1:
                                 rep_data = data[maps[temp]["id"]]
                                 rep_pro = maps[tmp]["id1"]
                                 single_reaction.append(
-                                    [[rep_pro, "n"+st], ["m"+st, reg_pro, rep_pro], rep_data["reg"]]
+                                    [[rep_pro, "n"+part_id], ["m"+part_id, reg_pro, rep_pro], rep_data["reg"]]
                                 )
                                 temp = find_in_map(temp+1, id2="e"+str(tmp))
                     else:
                         single_reaction.append(
-                            [[reg_pro, "d"+st], [reg_pro, "d"+st, "r"+st], reg_data["reg"]]
+                            [[reg_pro, "d"+part_id], [reg_pro, "d"+part_id, "r"+part_id], reg_data["reg"]]
                         )
                     tmp = find_in_map(tmp+1, id2="d"+str(pro))
             reaction += single_reaction
-        self.species = species
-        self.reaction = reaction
-        self.logi = logi
-        self.data = data
-    def get_reaction(self, ID, InPut, OutPut):
-        """
-        get reaction data
-        """
-        def add_str(li, ID):
-            for sig in li:
-                if isinstance(sig, list):
-                    add_str(sig, ID)
-            for sig in range(len(li)):
-                if isinstance(li[sig], str):
-                    li[sig] = ID+li[sig]
-        def replace_str(li, st1, st2):
-            for sig in li:
-                if isinstance(sig, list):
-                    replace_str(sig, st1, st2)
-            for sig in range(len(li)):
-                if li[sig] == st1:
-                    li[sig] = st2
-        species = self.species
-        reaction = self.reaction
-        logi = self.logi
-        add_str(species, ID)
-        add_str(reaction, ID)
-        for i in range(len(InPut)): replace_str(species, ID+logi["input"][i], InPut[i])
-        for i in range(len(OutPut)): replace_str(species, ID+logi["output"][i], OutPut[i])
-        for i in range(len(InPut)): replace_str(reaction, ID+logi["input"][i], InPut[i])
-        for i in range(len(OutPut)): replace_str(reaction, ID+logi["output"][i], OutPut[i])
-        return ReactionSystem(reaction, species)
+
+    def add_str(list_from, nodes_id):
+        for sig in list_from:
+            if isinstance(sig, list):
+                add_str(sig, nodes_id)
+        for sig in range(len(list_from)):
+            if isinstance(list_from[sig], str):
+                list_from[sig] = nodes_id+list_from[sig]
+    def replace_str(list_from, st1, st2):
+        for sig in list_from:
+            if isinstance(sig, list):
+                replace_str(sig, st1, st2)
+        for sig in range(len(list_from)):
+            if list_from[sig] == st1:
+                list_from[sig] = st2
+
+    add_str(species, nodes_id)
+    add_str(reaction, nodes_id)
+    tmp = [replace_str(species, nodes_id+gates["input"][i], input_sub[i]) for i in range(len(input_sub))]
+    tmp = [replace_str(species, nodes_id+gates["output"][i], output_sub[i]) for i in range(len(output_sub))]
+    tmp = [replace_str(reaction, nodes_id+gates["input"][i], input_sub[i]) for i in range(len(input_sub))]
+    tmp = [replace_str(reaction, nodes_id+gates["output"][i], output_sub[i]) for i in range(len(output_sub))]
+    return ReactionSystem(reaction, species)
 
 def bio_system(system_data):
     """
@@ -162,12 +148,11 @@ def bio_system(system_data):
 
     """
     time = system_data["system_parameter"]["time"]
-    logi = {single_lizhi["id"]:single_lizhi for single_lizhi in lizhi}
+    gates = {single_gate["id"]:single_gate for single_gate in gates_data}
     nodes = system_data["nodes"]
-    devices = [DeviceSystem(
-        logi[nodes[i]],
-        system_data["simulation_parameters"][i]
-    ).get_reaction(
+    devices = [dev_system(
+        gates[nodes[i]],
+        system_data["simulation_parameters"][i],
         str(i),
         [str(j["from"]) for j in system_data["arcs"] if j["to"] == i],
         str(i)
