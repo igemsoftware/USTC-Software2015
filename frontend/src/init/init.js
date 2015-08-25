@@ -34,7 +34,7 @@ BioBLESS.init = function() {
     BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 400;
     BioBLESS.base_stage.static_stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {BioBLESS.base_stage.static_stage.fps.text = "FPS: " + fps;}, 1000);
-    BioBLESS.prepare_navigation();
+
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.utils.new_drag_area());
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.base_stage.static_stage.fps);
     
@@ -45,14 +45,14 @@ BioBLESS.init = function() {
             d = e.wheelDelta;
         else if(e.detail) //Firefox
             d = e.detail;
-        if(BioBLESS.scroll_function !== undefined)
+		if(BioBLESS.scroll_function !== undefined)
             BioBLESS.scroll_function(d);
     };
     if(document.addEventListener) //W3C
         document.addEventListener('DOMMouseScroll', scroll_func, false);
     window.onmousewheel = document.onmousewheel = scroll_func; //IE/Opera/Chrome/Safari
     
-    
+    BioBLESS.prepare_navigation();
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation);
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation_title);
     BioBLESS.add_animate_hook(function() {
@@ -63,6 +63,6 @@ BioBLESS.init = function() {
         return false;
     });
     $.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
-    BioBLESS.scroll_function = BioBLESS.zoom_function;
+	BioBLESS.scroll_function = BioBLESS.zoom_function;
     BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 };
