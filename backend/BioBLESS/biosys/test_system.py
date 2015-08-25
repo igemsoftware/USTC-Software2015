@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from django.test import TestCase
 
-from test_data import system_data
+from data_test import system_data
 from bio_system import bio_system
 
 
