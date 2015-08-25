@@ -10,19 +10,19 @@ system_data = {
     "simulation_parameters": [
     {
         "e1": {
-            "trans1": 0,#0.01,
+            "trans1": 0.001,#0.01,
             "trans2": 0.5,
-            "decay1": 0.1,
-            "decay2": 0.05
+            "decay1": 0.2,
+            "decay2": 0.1
         },
         "e2": {
-            "reg": 20
+            "reg": 40
         },
         "e3": {
             "trans1": 0.01,#0.01,
             "trans2": 0.5,
-            "decay1": 0.1,
-            "decay2": 0.05
+            "decay1": 0.2,
+            "decay2": 0.1
         },
         "e4": {
             "reg": 20
@@ -33,19 +33,19 @@ system_data = {
         "e6": {
             "trans1": 0.01,
             "trans2": 0.5,
-            "decay1": 0.1,
-            "decay2": 0.05
+            "decay1": 0.2,
+            "decay2": 0.1
         },
         "device_parameter": {
             "initial":[
-                20,20,20
+                40,40,40
             ]
         }
     },
     {
         "device_parameter": {
             "initial":[
-                1
+                0
             ]
         }
     }
