@@ -13,37 +13,38 @@ BioBLESS.logic.init = function() {
  */
 BioBLESS.logic.circuit = {
     "nodes": [],
-    "arcs": [],
-    "mark": []
+    "arcs": []
 };
 
+BioBLESS.logic.mark =[]; 
+
 /**
- * circuitAddGate is the function to add the structure based on element 
+ * circuit_add_gate is the function to add the structure based on element 
  * @param {type} element
  */
-BioBLESS.logic.circuitAddGate = function(type) {
+BioBLESS.logic.circuit_add_gate = function(type, title) {
     if(type === "not"){
-        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = type;
+        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title;
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.circuit.nodes.length - 2};
-        BioBLESS.logic.circuit.mark[BioBLESS.logic.circuit.mark.length] = BioBLESS.logic.circuit.nodes.length - 2;
+        BioBLESS.logic.mark[BioBLESS.logic.mark.length] = BioBLESS.logic.circuit.nodes.length - 2;
     }
     else{
-        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = type;
+        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title;
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 2, "to":BioBLESS.logic.circuit.nodes.length - 3};
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.circuit.nodes.length - 3};
-        BioBLESS.logic.circuit.mark[BioBLESS.logic.circuit.mark.length] = BioBLESS.logic.circuit.nodes.length - 3;
+        BioBLESS.logic.mark[BioBLESS.logic.mark.length] = BioBLESS.logic.circuit.nodes.length - 3;
     }
 };
 
 /**
- * circuitAddLine is the function to add the structure based on line
+ * circuit_add_line is the function to add the structure based on line
  * @param {mama} line.mother or line.father
  * @param {papa} line.mother or line.father
  */
-BioBLESS.logic.circuitAddLine = function(mama, papa) {
+BioBLESS.logic.circuit_add_line = function(mama, papa) {
     var i,j;
     var m,d;
     for(var k = 0;k < BioBLESS.logic.elements.length;k++){
@@ -56,7 +57,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
     }//确定线父母的家长是哪个节点
     if(mama === mama.parent.input_1 || mama === mama.parent.input_2){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
+            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
                 if(BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
                     m = BioBLESS.logic.circuit.arcs[k].from;
                     break;
@@ -69,7 +70,7 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
     }//确定线母亲是哪一个接口
     if(papa === papa.parent.input_1 || papa === papa.parent.input_2){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
+            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[j]){
                 if(BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
                     d = BioBLESS.logic.circuit.arcs[k].from;
                     break;
@@ -91,21 +92,21 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
                 BioBLESS.logic.circuit.arcs[k].to -= 1;
             }
         }
-        for(var k = 0; k < BioBLESS.logic.circuit.mark.length; k++){
-            if(BioBLESS.logic.circuit.mark[k] > d){
-                BioBLESS.logic.circuit.mark[k] -= 1;
+        for(var k = 0; k < BioBLESS.logic.mark.length; k++){
+            if(BioBLESS.logic.mark[k] > d){
+                BioBLESS.logic.mark[k] -= 1;
             }
         }
         if(m > d){
             m -= 1;
         }
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === d && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
+            if(BioBLESS.logic.circuit.arcs[k].from === d && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
         }
-        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":m, "to":BioBLESS.logic.circuit.mark[j]};
+        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":m, "to":BioBLESS.logic.mark[j]};
     }//INPUT----INPUT
     else if(m !== null && d ===null){
         BioBLESS.logic.circuit.nodes.splice(m, 1);
@@ -117,18 +118,18 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
                 BioBLESS.logic.circuit.arcs[k].to -= 1;
             }
         }
-        for(var k = 0; k < BioBLESS.logic.circuit.mark.length; k++){
-            if(BioBLESS.logic.circuit.mark[k] > m){
-                BioBLESS.logic.circuit.mark[k] -= 1;
+        for(var k = 0; k < BioBLESS.logic.mark.length; k++){
+            if(BioBLESS.logic.mark[k] > m){
+                BioBLESS.logic.mark[k] -= 1;
             }
         }
        for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === m && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
+            if(BioBLESS.logic.circuit.arcs[k].from === m && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
         }
-        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.mark[j], "to":BioBLESS.logic.circuit.mark[i]};
+        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.mark[j], "to":BioBLESS.logic.mark[i]};
     }// papa's OUTPUT--->mama's INPUT
     else if(m === null && d !==null){
         BioBLESS.logic.circuit.nodes.splice(d, 1);
@@ -140,18 +141,18 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
                 BioBLESS.logic.circuit.arcs[k].to -= 1;
             }
         }
-        for(var k = 0; k < BioBLESS.logic.circuit.mark.length; k++){
-            if(BioBLESS.logic.circuit.mark[k] > d){
-                BioBLESS.logic.circuit.mark[k] -= 1;
+        for(var k = 0; k < BioBLESS.logic.mark.length; k++){
+            if(BioBLESS.logic.mark[k] > d){
+                BioBLESS.logic.mark[k] -= 1;
             }
         }
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === d && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
+            if(BioBLESS.logic.circuit.arcs[k].from === d && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 break;
             }
         }
-        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.mark[i], "to":BioBLESS.logic.circuit.mark[j]};
+        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.mark[i], "to":BioBLESS.logic.mark[j]};
     }// mama's OUTPUT--->papa's INPUT
     else{
         alert("CreateLine error");
@@ -159,11 +160,11 @@ BioBLESS.logic.circuitAddLine = function(mama, papa) {
 };
 
 /**
- * circuitDeleteLine is the function to remove structure based on line
+ * circuit_delete_line is the function to remove structure based on line
  * @param {mama} line.mother or line.father
  * @param {papa} line.mother or line.father
  */
-BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
+BioBLESS.logic.circuit_delete_line = function(mama, papa) {
     var i,j;
     var m,d;
     for(var k = 0; k < BioBLESS.logic.elements.length; k++){
@@ -176,60 +177,62 @@ BioBLESS.logic.circuitDeleteLine = function(mama, papa) {
     }//确定线父母的家长是哪个节点
     if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i] && BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
+            if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i] && BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
                 for(var l = 0;l < BioBLESS.logic.circuit.arcs.length; l++){
-                    if(BioBLESS.logic.circuit.arcs[l].to === BioBLESS.logic.circuit.mark[j] && BioBLESS.logic.circuit.arcs[l].from === BioBLESS.logic.circuit.arcs[k].from){
+                    if(BioBLESS.logic.circuit.arcs[l].to === BioBLESS.logic.mark[j] && BioBLESS.logic.circuit.arcs[l].from === BioBLESS.logic.circuit.arcs[k].from){
                         BioBLESS.logic.circuit.arcs.splice(l, 1);
                         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[j]};
+                        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.mark[j]};
+                        break;
                     }
                 }
+                break;
             }
         }
     }//INPUT----INPUT
     else if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.output)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.circuit.mark[j] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
+            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.mark[j] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[i]};
+                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.mark[i]};
                 break;
             }
         }
     }// papa's OUTPUT--->mama's INPUT
     else if((mama === mama.parent.output) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.circuit.mark[i] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[j]){
+            if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.mark[i] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.circuit.mark[j]};
+                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.mark[j]};
                 break;
             }
         }
     }// mama's OUTPUT--->papa's INPUT
     else{
-        alert("Deleteline error!");
+        alert("Delete the errorline");
     }// OUTPUT----OUTPUT error.
 };
 
 /**
- * circuitDeleteElement is the function to remove structure based on element
- * @param {thing} element
+ * circuit_delete_gate is the function to remove structure based on gate
+ * @param {thing} gate
  */
-BioBLESS.logic.circuitDeleteElement = function(thing) {
+BioBLESS.logic.circuit_delete_gate = function(thing) {
     if(thing.input_1.connection === true){
         for(var k = 0; k < thing.input_1.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(thing.input_1.lines[k][0].mother, thing.input_1.lines[k][0].father);
+            BioBLESS.logic.circuit_delete_line(thing.input_1.lines[k][0].mother, thing.input_1.lines[k][0].father);
         }
     }
     if(thing.input_2.connection === true){
         for(var k = 0; k < thing.input_2.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(thing.input_2.lines[k][0].mother, thing.input_2.lines[k][0].father);
+            BioBLESS.logic.circuit_delete_line(thing.input_2.lines[k][0].mother, thing.input_2.lines[k][0].father);
         }
     }
     if(thing.output.connection === true){
         for(var k = 0; k < thing.output.counts; k++){
-            BioBLESS.logic.circuitDeleteLine(thing.output.lines[k][0].mother, thing.output.lines[k][0].father);
+            BioBLESS.logic.circuit_delete_line(thing.output.lines[k][0].mother, thing.output.lines[k][0].father);
         }
     }
     var i;
@@ -240,10 +243,11 @@ BioBLESS.logic.circuitDeleteElement = function(thing) {
     }
     for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
         var j = BioBLESS.logic.circuit.arcs[k].from;
-        if(BioBLESS.logic.circuit.nodes[j] === "INPUT" && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.circuit.mark[i]){
+        if(BioBLESS.logic.circuit.nodes[j] === "INPUT" && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
             BioBLESS.logic.circuit.nodes.splice(j, 1);
             BioBLESS.logic.circuit.arcs.splice(k, 1);
-            for(var m = 0; m < BioBLESS.logic.circuit.arcs.length; m++){
+            var m;
+            for(m in BioBLESS.logic.circuit.arcs){
                 if(BioBLESS.logic.circuit.arcs[m].from > j){
                     BioBLESS.logic.circuit.arcs[m].from -= 1;
                 }
@@ -251,16 +255,17 @@ BioBLESS.logic.circuitDeleteElement = function(thing) {
                     BioBLESS.logic.circuit.arcs[m].to -= 1;
                 }
             }
-            for(var m = 0; m < BioBLESS.logic.circuit.mark.length; m++){
-                if(BioBLESS.logic.circuit.mark[m] > j){
-                    BioBLESS.logic.circuit.mark[m] -= 1;
+            for(m in BioBLESS.logic.mark){
+                if(BioBLESS.logic.mark[m] > j){
+                    BioBLESS.logic.mark[m] -= 1;
                 }
             }
+            k--;
         }
     }
-    var d = BioBLESS.logic.circuit.mark[i];
-    BioBLESS.logic.circuit.nodes.splice(BioBLESS.logic.circuit.mark[i], 1);
-    BioBLESS.logic.circuit.mark.splice(i, 1);
+    var d = BioBLESS.logic.mark[i];
+    BioBLESS.logic.circuit.nodes.splice(BioBLESS.logic.mark[i], 1);
+    BioBLESS.logic.mark.splice(i, 1);
     for(var k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
         if(BioBLESS.logic.circuit.arcs[k].from > d){
             BioBLESS.logic.circuit.arcs[k].from -= 1;
@@ -269,9 +274,9 @@ BioBLESS.logic.circuitDeleteElement = function(thing) {
             BioBLESS.logic.circuit.arcs[k].to -= 1;
         }
     }
-    for(var k = 0; k < BioBLESS.logic.circuit.mark.length; k++){
-        if(BioBLESS.logic.circuit.mark[k] > d){
-            BioBLESS.logic.circuit.mark[k] -= 1;
+    for(var k = 0; k < BioBLESS.logic.mark.length; k++){
+        if(BioBLESS.logic.mark[k] > d){
+            BioBLESS.logic.mark[k] -= 1;
         }
     }
     BioBLESS.logic.elements.splice(i, 1);
@@ -279,13 +284,13 @@ BioBLESS.logic.circuitDeleteElement = function(thing) {
 };
 
 /**
- * DrawGate function works for preparing the svg of logicgate
+ * draw_gate function works for preparing the svg of logicgate
  * @function
  * @param {device} caused by users
  * @return {element} PIXI.Graphics
  */
 
-BioBLESS.logic.DrawGate = function(device){
+BioBLESS.logic.draw_gate = function(device){
     /**
      * element is a stage to draw the gate
      * @type {PIXI.Graphics}
@@ -318,7 +323,7 @@ BioBLESS.logic.DrawGate = function(device){
         element.graphics.beginFill(0, 0);
         element.graphics.drawRect(30, 0, 90, 70);
         element.graphics.endFill();
-        element.IsHisWork = new PIXI.Graphics();
+        element.gate_delete_button = new PIXI.Graphics();
 
         element.output.beginFill(0x000000, 1);
         element.output.drawRect(0, 0, -30, 3);
@@ -403,11 +408,11 @@ BioBLESS.logic.DrawGate = function(device){
 var waitForDoubleClick = false;
 
 /**
- * onDragStart_e makes element to be move-available
+ * on_drag_start_e makes element to be move-available
  * @function
  * @param {event} cause by users
  */
-BioBLESS.logic.onDragStart_e = function(event) {
+BioBLESS.logic.on_drag_start_e = function(event) {
     if(waitForDoubleClick){
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
@@ -429,10 +434,10 @@ BioBLESS.logic.onDragStart_e = function(event) {
     this.dragging = true;
 };
 /**
- * onDragMove_e makes element to keep draging and handles the lines
+ * on_drag_move_e makes element to keep draging and handles the lines
  * @function
  */
-BioBLESS.logic.onDragMove_e = function() {
+BioBLESS.logic.on_drag_move_e = function() {
     if(this.dragging) {
         var newPosition = this.data.getLocalPosition(this.parent.parent);
         this.parent.position.x = newPosition.x - 75;
@@ -583,10 +588,10 @@ BioBLESS.logic.onDragMove_e = function() {
 };
 
 /**
- * onDragEnd_e makes element to end draging
+ * on_drag_end_e makes element to end draging
  * @function
  */
-BioBLESS.logic.onDragEnd_e = function() {
+BioBLESS.logic.on_drag_end_e = function() {
     this.alpha = 1;
     this.dragging = false;
     this.data = null;
@@ -596,11 +601,11 @@ var waitFordrawBegin = false;
 var moving = false;
 var drawPart;
 /**
- * onDrawLineUp works for star andend of drawlines
+ * on_draw_line_up works for star andend of drawlines
  * @function
  * @param  event caused by users
  */
-BioBLESS.logic.onDrawLineUp = function(event){
+BioBLESS.logic.on_draw_line_up = function(event){
     waitFordrawBegin = !waitFordrawBegin;
     if(waitFordrawBegin){
         this.lines[this.counts] = [];
@@ -620,26 +625,26 @@ BioBLESS.logic.onDrawLineUp = function(event){
         drawPart[0].interactive = true;
         drawPart[0].buttonMode = true;
         drawPart[0].mother = this;
-        drawPart[0].on('mouseover', BioBLESS.logic.IsHerWorkCreate)
-                   .on('mouseout', BioBLESS.logic.IsHerWorkDelete)
-                   .on('click', BioBLESS.logic.lineWaitforKey);
-        BioBLESS.logic.circuitAddLine(drawPart[0].mother, drawPart[0].father);     
+        drawPart[0].on('mouseover', BioBLESS.logic.line_delete_button_create)
+                   .on('mouseout', BioBLESS.logic.line_delete_button_remove)
+                   .on('click', BioBLESS.logic.line_wait_for_key);
+        BioBLESS.logic.circuit_add_line(drawPart[0].mother, drawPart[0].father);
     }
 };
 /**
- * onDrawLineMove works for keeping drawing lines
+ * on_draw_line_move works for keeping drawing lines
  * @function
  * @param  event caused by users
  */
-BioBLESS.logic.onDrawLineMove = function(event){
+BioBLESS.logic.on_draw_line_move = function(event){
     if(moving){
             var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
             var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
             var newPosition =  event.data.getLocalPosition(this.parent.parent);
             var wRect = newPosition.x - xRect;
             var hRect = newPosition.y - yRect;
-            drawPart[0].IsHerWork = new PIXI.Graphics();
-            drawPart[0].IsHerWork.father = drawPart[0];
+            drawPart[0].line_delete_button = new PIXI.Graphics();
+            drawPart[0].line_delete_button.father = drawPart[0];
             drawPart[0].clear();
             drawPart[0].beginFill(0x000000, 1);
             drawPart[0].lineStyle(0, 0x000000, 1);
@@ -671,58 +676,58 @@ BioBLESS.logic.onDrawLineMove = function(event){
                 drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
             }
             drawPart[0].endFill();
-            drawPart[0].IsHerWork.interactive = true;
-            drawPart[0].IsHerWork.buttonMode = true;
+            drawPart[0].line_delete_button.interactive = true;
+            drawPart[0].line_delete_button.buttonMode = true;
             drawPart[0].father.parent.parent.addChild(drawPart[0]);
     }
 };
 
 /**
- * IsHerWorkCreate means to create a button on its line
+ * line_delete_button_create means to create a button on its line
  * @function
  * @param {event} mouseover the line
  */
-BioBLESS.logic.IsHerWorkCreate = function(event) {
+BioBLESS.logic.line_delete_button_create = function(event) {
     var xRect = this.father.parent.position.x + this.father.position.x;
     var yRect = this.father.parent.position.y + this.father.position.y;
     var wRect = this.mother.parent.position.x + this.mother.position.y - xRect;
     var hRect = this.mother.parent.position.y + this.mother.position.y - yRect;
-    this.IsHerWork.clear();
-    this.IsHerWork.position.x = xRect + wRect/2 - 10;
-    this.IsHerWork.position.y = yRect + hRect/2 - 20;
-    this.IsHerWork.beginFill(0x345678, 0.5);
-    this.IsHerWork.drawCircle(0, 0, 20);
-    this.IsHerWork.endFill();
-    this.IsHerWork.lineStyle(4, 0xffff00, 1);
-    this.IsHerWork.moveTo(-8, 0);
-    this.IsHerWork.lineTo(8, 0);
-    this.IsHerWork.alpha = 1;
-    this.IsHerWork.on('mouseover', BioBLESS.logic.IsHerWorkUp)
-                  .on('click', BioBLESS.logic.IsHerWorkRight)
-                  .on('mouseout', BioBLESS.logic.IsherWorkDown);
-    this.father.parent.parent.addChild(this.IsHerWork);
-    clearInterval(this.IsHerWork.her_animation);
-    clearTimeout(this.IsHerWork.herworkend);
+    this.line_delete_button.clear();
+    this.line_delete_button.position.x = xRect + wRect/2 - 10;
+    this.line_delete_button.position.y = yRect + hRect/2 - 20;
+    this.line_delete_button.beginFill(0x345678, 0.5);
+    this.line_delete_button.drawCircle(0, 0, 20);
+    this.line_delete_button.endFill();
+    this.line_delete_button.lineStyle(4, 0xffff00, 1);
+    this.line_delete_button.moveTo(-8, 0);
+    this.line_delete_button.lineTo(8, 0);
+    this.line_delete_button.alpha = 1;
+    this.line_delete_button.on('mouseover', BioBLESS.logic.line_delete_button_up)
+                  .on('click', BioBLESS.logic.line_delete_button_right)
+                  .on('mouseout', BioBLESS.logic.line_delete_button_down);
+    this.father.parent.parent.addChild(this.line_delete_button);
+    clearInterval(this.line_delete_button.her_animation);
+    clearTimeout(this.line_delete_button.her_workend);
 };
 
 /**
- * IsHerWorkDelete is the function to delete the button after mouseout the line
+ * line_delete_button_remove is the function to delete the button after mouseout the line
  * @function
  */
-BioBLESS.logic.IsHerWorkDelete = function() {
+BioBLESS.logic.line_delete_button_remove = function() {
     var that = this;
-    this.IsHerWork.her_animation = setInterval(function(){if(that.IsHerWork.alpha > 0){that.IsHerWork.alpha -= 0.05;}}, 100);        
-    this.IsHerWork.herworkend = setTimeout(function(){that.father.parent.parent.removeChild(that.IsHerWork);}, 2000);
+    this.line_delete_button.her_animation = setInterval(function(){if(that.line_delete_button.alpha > 0){that.line_delete_button.alpha -= 0.05;}}, 100);        
+    this.line_delete_button.her_workend = setTimeout(function(){that.father.parent.parent.removeChild(that.line_delete_button);}, 2000);
 };
 
 /**
- * IsHerWorkRight is the function for delete itself and its line
+ * line_delete_button_right is the function for delete itself and its line
  * @function
  * @param {event} caused by users
  */
-BioBLESS.logic.IsHerWorkRight = function(event) {
+BioBLESS.logic.line_delete_button_right = function(event) {
     var that = this.father;
-    BioBLESS.logic.circuitDeleteLine(that.mother, that.father);//delete
+    BioBLESS.logic.circuit_delete_line(that.mother, that.father);//delete
     that.mother.counts -= 1;
     if(that.mother.counts === 0){
         that.mother.connection = false;
@@ -736,31 +741,31 @@ BioBLESS.logic.IsHerWorkRight = function(event) {
 };
 
 /**
- * IsHerWorkUp is the function to turn on the button
+ * line_delete_button_up is the function to turn on the button
  * @function
  * @param {event} caused by users
  */
-BioBLESS.logic.IsHerWorkUp = function(event) {
+BioBLESS.logic.line_delete_button_up = function(event) {
     this.father.father.parent.parent.addChild(this);
     this.alpha = 1;
     clearInterval(this.her_animation);
-    clearTimeout(this.herworkend);
+    clearTimeout(this.her_workend);
 };
 
 /**
- * IsherWorkDown is the function to turn off the button
+ * line_delete_button_down is the function to turn off the button
  * @function
  */
-BioBLESS.logic.IsherWorkDown = function() {
+BioBLESS.logic.line_delete_button_down = function() {
 
 };
 
 /**
- * lineWaitforKey is the function  to detect keypress for itself, the line
+ * line_wait_for_key is the function  to detect keypress for itself, the line
  * @function
  * @param {event}
  */
-BioBLESS.logic.lineWaitforKey = function(event) {
+BioBLESS.logic.line_wait_for_key = function(event) {
     var currkey;
     this.keypress = function(e) {
         var e = e || event;
@@ -769,7 +774,7 @@ BioBLESS.logic.lineWaitforKey = function(event) {
     this.keypress;
     switch(currkey){
         case 46: //delete
-            BioBLESS.logic.circuitDeleteLine(this.father, this.mother);
+            BioBLESS.logic.circuit_delete_line(this.father, this.mother);
             this.mother.counts -= 1;
             if(this.mother.counts === 0){
                 this.mother.connection = false;
@@ -778,53 +783,53 @@ BioBLESS.logic.lineWaitforKey = function(event) {
             if(this.father.counts === 0){
                 this.father.connection = false;
             }
-            this.father.parent.parent.removeChild(this.IsHerWork);
+            this.father.parent.parent.removeChild(this.line_delete_button);
             this.father.parent.parent.removeChild(this);
             break;
         }
 };
 
 /**
- * IsHisWorkCreate means to create a button on its element
+ * gate_delete_buttonCreate means to create a button on its element
  * @function
  * @param {event} mouseover the element.graphics
  */
-BioBLESS.logic.IsHisWorkCreate = function(event) {
-    this.parent.IsHisWork.clear();
-    this.parent.IsHisWork.beginFill(0x345678, 0.5);
-    this.parent.IsHisWork.drawCircle(75, 35, 20);
-    this.parent.IsHisWork.endFill();
-    this.parent.IsHisWork.lineStyle(4, 0xffff00, 1);
-    this.parent.IsHisWork.moveTo(75 - 8, 35);
-    this.parent.IsHisWork.lineTo(75 + 8, 35);
-    this.parent.IsHisWork.y = -65;
-    this.parent.IsHisWork.alpha = 1;
-    this.parent.IsHisWork.on('mouseover', BioBLESS.logic.IsHisWorkUp)
-                         .on('mouseout', BioBLESS.logic.IsHisWorkDown)
-                         .on('click', BioBLESS.logic.IsHisWorkRight);
-    this.parent.addChild(this.parent.IsHisWork);
-    clearInterval(this.parent.IsHisWork.his_animation);
-    clearTimeout(this.parent.IsHisWork.hisworkend);
+BioBLESS.logic.gate_delete_buttonCreate = function(event) {
+    this.parent.gate_delete_button.clear();
+    this.parent.gate_delete_button.beginFill(0x345678, 0.5);
+    this.parent.gate_delete_button.drawCircle(75, 35, 20);
+    this.parent.gate_delete_button.endFill();
+    this.parent.gate_delete_button.lineStyle(4, 0xffff00, 1);
+    this.parent.gate_delete_button.moveTo(75 - 8, 35);
+    this.parent.gate_delete_button.lineTo(75 + 8, 35);
+    this.parent.gate_delete_button.y = -65;
+    this.parent.gate_delete_button.alpha = 1;
+    this.parent.gate_delete_button.on('mouseover', BioBLESS.logic.gate_delete_button_up)
+                                  .on('mouseout', BioBLESS.logic.gate_delete_button_down)
+                                  .on('click', BioBLESS.logic.gate_delete_button_right);
+    this.parent.addChild(this.parent.gate_delete_button);
+    clearInterval(this.parent.gate_delete_button.his_animation);
+    clearTimeout(this.parent.gate_delete_button.his_workend);
 };
 
 /**
- * IsHisWorkDelete is the function to delete the button after mouseout the element.graphics
+ * gate_delete_buttonDelete is the function to delete the button after mouseout the element.graphics
  * @function
  */
-BioBLESS.logic.IsHisWorkDelete = function() {
+BioBLESS.logic.gate_delete_buttonDelete = function() {
     var that = this;
-    this.parent.IsHisWork.his_animation = setInterval(function(){if(that.parent.IsHisWork.alpha > 0){that.parent.IsHisWork.alpha -= 0.05;}}, 100);
-    this.parent.IsHisWork.hisworkend = setTimeout(function(){that.parent.removeChild(that.parent.IsHisWork);}, 2000);
+    this.parent.gate_delete_button.his_animation = setInterval(function(){if(that.parent.gate_delete_button.alpha > 0){that.parent.gate_delete_button.alpha -= 0.05;}}, 100);
+    this.parent.gate_delete_button.his_workend = setTimeout(function(){that.parent.removeChild(that.parent.gate_delete_button);}, 2000);
 };
 
 /**
- * IsHisWorkRight is the function for delete its element with all thing in it
+ * gate_delete_button_right is the function for delete its element with all thing in it
  * @function
  * @param {event} caused by users
  */
-BioBLESS.logic.IsHisWorkRight = function(event) {
-	var ready;
-    ready = BioBLESS.logic.circuitDeleteElement(this.parent);
+BioBLESS.logic.gate_delete_button_right = function(event) {
+    var ready;
+    ready = BioBLESS.logic.circuit_delete_gate(this.parent);
     if(ready === "OK"){
         if(this.parent.input_1.connection === true){
             for(var k = 0; k < this.parent.input_1.counts; k++){
@@ -854,34 +859,34 @@ BioBLESS.logic.IsHisWorkRight = function(event) {
 
 
 /**
- * IsHisWorkUp is the function to turn on the button
+ * gate_delete_button_up is the function to turn on the button
  * @function
  * @param {event} caused by users
  */
-BioBLESS.logic.IsHisWorkUp = function(event) {
+BioBLESS.logic.gate_delete_button_up = function(event) {
     this.parent.addChild(this);
     this.alpha = 1;
     clearInterval(this.his_animation);
-    clearTimeout(this.hisworkend);
+    clearTimeout(this.his_workend);
 };
 
 /**
- * IsHisWorkDown is the function to turn off the button
+ * gate_delete_button_down is the function to turn off the button
  * @function
  */
-BioBLESS.logic.IsHisWorkDown = function() {
+BioBLESS.logic.gate_delete_button_down = function() {
     // var that = this;
     // this.his_animation2 = setInterval(function(){if(that.alpha > 0){that.alpha -= 0.05;}}, 100);
-    // this.hisworkend2 = setTimeout(function(){that.parent.removeChild(that);}, 2000);
+    // this.his_workend2 = setTimeout(function(){that.parent.removeChild(that);}, 2000);
 };
 
 /**
- * elementWaitforKey is the function  to detect keypress for itself, the element
+ * gate_wait_for_key is the function  to detect keypress for itself, the element
  * @function
  * @param {event}
  */
 
-BioBLESS.logic.elementWaitforKey = function() {
+BioBLESS.logic.gate_wait_for_key = function() {
     var currkey;
     this.keydown = function(e){
         e = e || event;
@@ -890,7 +895,7 @@ BioBLESS.logic.elementWaitforKey = function() {
     this.keypress;
     switch(currkey){
         case 46: //delete
-            BioBLESS.logic.circuitDeleteElement(this.parent);
+            //BioBLESS.logic.circuit_delete_gate(this.parent);
             if(this.parent.input_1.connection === true){
                 for(var k = 0; k < this.parent.input_1.counts; k++){
                     this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
@@ -926,10 +931,10 @@ BioBLESS.logic.elementWaitforKey = function() {
 
 
 /**
- * onDragStart makes element could be dragged from list
+ * on_drag_start makes element could be dragged from list
  * @function
  */
-BioBLESS.logic.onDragStart = function(event) {
+BioBLESS.logic.on_drag_start = function(event) {
     this.data = event.data;
     this.alpha = 0.5;
     this.dragging = true;
@@ -937,10 +942,10 @@ BioBLESS.logic.onDragStart = function(event) {
     this.startY = this.position.y;
 };
 /**
- * onDragMove makes element to move
+ * on_drag_move makes element to move
  * @function
  */
-BioBLESS.logic.onDragMove = function() {
+BioBLESS.logic.on_drag_move = function() {
     if(this.dragging) {
         var newPosition = this.data.getLocalPosition(this.parent);
         this.position.x = newPosition.x - 75;
@@ -948,7 +953,10 @@ BioBLESS.logic.onDragMove = function() {
         this.childPosition = this.data.getLocalPosition(BioBLESS.logic.stage.movable_stage);
     }
 };
-
+/**
+ * create a button with text
+ * @function
+ */
 BioBLESS.logic.create_textbutton = function(t, w, h, color){
     var button = new PIXI.Container();
     button.background = new PIXI.Graphics();
@@ -994,7 +1002,10 @@ BioBLESS.logic.on_drag_e = function(){
     this.dragging = false;
     this.data = null;
 };
-
+/**
+ * create a scroll area for truth table stage
+ * @function
+ */
 BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
@@ -1010,7 +1021,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.is_out = true;
     contain.mask = mask;
     stage.addChild(mask);
-	stage.addChild(contain);
+    stage.addChild(contain);
     if(contain_h > h){
         var line = new PIXI.Graphics();
         line.lineStyle(2, 0x000000, 0.5);
@@ -1051,6 +1062,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.interactive = true;
     var that = mask;
     if(contain_h > h){
+        stage.scroll_fun = function(){};
         stage.scroll_function = function(d){
             if(d < 0){
                 that.contain.y -= 50;
@@ -1066,12 +1078,13 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
             }
             var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
             that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
+            stage.scroll_fun(d);
         }
-    }
-    else{
+    }else
         stage.scroll_function = function(){};
-    }
+    
     var on_mouse_over = function(event){
+        
         if(this.is_out){
             this.is_out = false;
             this.back_up = BioBLESS.scroll_function;
@@ -1088,7 +1101,10 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.on("mouseout", on_mouse_out);
     return stage;
 };
-
+/**
+ * create the base stage of truth table
+ * @function
+ */
 BioBLESS.logic.create_abcd = function(){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
@@ -1178,7 +1194,10 @@ BioBLESS.logic.create_abcd = function(){
     };
     return stage;
 };
-
+/**
+ * a constructor can calculate circuits to picture
+ * @constructor
+ */
 BioBLESS.logic.circuits = function(){
     this.stage = new PIXI.Container();
     this.draw_lines_between_gates = function(){
@@ -1219,9 +1238,9 @@ BioBLESS.logic.circuits = function(){
                 this.devs[i] = BioBLESS.gene_network.create_textbutton("OUT", 100, 80, 0x0000ff);
             }
             else{
-                this.devs[i] = BioBLESS.logic.DrawGate(device);
+                this.devs[i] = BioBLESS.logic.draw_gate(device);
             }
-			this.devs[i].id = gates.nodes[i];
+            this.devs[i].id = gates.nodes[i];
             this.devs[i].chosen = false;
             this.devs[i].input = [];
             this.devs[i].input_num = 0;
@@ -1333,7 +1352,10 @@ BioBLESS.logic.circuits = function(){
 
 
 
-
+/**
+ * create the output stage of truth table
+ * @function
+ */
 BioBLESS.logic.craete_efgh = function(back_stage) {
     var stage = new PIXI.Container();
     stage.x = BioBLESS.width - 300;
@@ -1372,6 +1394,124 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     return stage;
 };
 
+BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
+    BioBLESS.logic.add_gate = function(){
+        BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate();
+        var i,j;
+        for(i in thing.poi){
+        	for(j in thing.poi[i]){
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing.poi[i][j].position.x;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing.poi[i][j].position.y;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].Index = this.Index;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.on('mousedown', that.on_drag_start_e)
+                                                                                    .on('touchstart', that.on_drag_start_e)
+                                                                                    .on('mouseup', that.on_drag_end_e)
+                                                                                    .on('mouseupoutside', that.on_drag_end_e)
+                                                                                    .on('touchend', that.on_drag_end_e)
+                                                                                    .on('touchendoutside', that.on_drag_end_e)
+                                                                                    .on('mousemove', that.on_drag_move_e)
+                                                                                    .on('touchmove', that.on_drag_move_e)
+                                                                                    .on('mouseover', that.gate_delete_buttonCreate)
+                                                                                    .on('mouseout', that.gate_delete_buttonDelete)
+                                                                                    .on('click', that.gate_wait_for_key);
+
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.on('mousedown', that.on_draw_line_up)
+                                                                                  .on('touchstart', that.on_draw_line_up)
+                                                                                  .on('mousemove', that.on_draw_line_move)
+                                                                                  .on('touchmove', that.on_draw_line_move);
+                
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.on('mousedown', that.on_draw_line_up)
+                                                                                   .on('touchstart', that.on_draw_line_up)
+                                                                                   .on('mousemove', that.on_draw_line_move)
+                                                                                   .on('touchmove', that.on_draw_line_move);
+                    
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.buttonMode = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.on('mousedown', that.on_draw_line_up)
+                                                                                   .on('touchstart', that.on_draw_line_up)
+                                                                                   .on('mousemove', that.on_draw_line_move)
+                                                                                   .on('touchmove', that.on_draw_line_move);
+
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.interactive = true;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
+                BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
+                that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
+            }
+        }
+    };
+
+    BioBLESS.logic.add_line = function(papa, mama) {
+        drawPart[0] = new PIXI.Graphics();
+        papa.lines[papa.counts] = [];
+        drawPart = papa.lines[papa.counts];
+        papa.counts ++;
+        papa.connection = true;
+        drawPart[0].father = papa;
+        mama.lines[mama.counts] = [];
+        mama.lines[mama.counts] = drawPart;
+        mama.counts ++;
+        mama.connection = true;
+        drawPart[0].mother = mama;
+        var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
+        var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
+        var wRect = drawPart[0].mother.position.x + drawPart[0].mother.parent.position.x - xRect;
+        var hRect = drawPart[0].mother.position.y + drawPart[0].mother.parent.position.y - yRect;
+        drawPart[0].line_delete_button = new PIXI.Graphics();
+        drawPart[0].line_delete_button.father = drawPart[0];
+        drawPart[0].clear();
+        drawPart[0].beginFill(0x000000, 1);
+        drawPart[0].lineStyle(0, 0x000000, 1);
+        drawPart[0].drawCircle(xRect, yRect + 1.5, 1.5);
+        drawPart[0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+        drawPart[0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+        drawPart[0].endFill();
+        drawPart[0].lineStyle(3, 0x000000, 1);
+        drawPart[0].moveTo(xRect, yRect + 1.5);
+        drawPart[0].lineTo(xRect, yRect + hRect/2 + 1.5);
+        drawPart[0].moveTo(xRect, yRect + hRect/2 + 1.5);
+        drawPart[0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+        drawPart[0].moveTo(xRect + wRect, yRect + hRect/2);
+        drawPart[0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+        drawPart[0].beginFill(0, 0);
+        drawPart[0].lineStyle(0, 0, 0);
+        // if(hRect > 0){
+        //     drawPart[0].drawRect(xRect - 1, yRect, 5, hRect/2);
+        //     drawPart[0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+        // }
+        // else{
+        //     drawPart[0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+        //     drawPart[0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+        // }
+        if(wRect > 0){
+            drawPart[0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+        }
+        else{
+            drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+        }
+        drawPart[0].endFill();
+        drawPart[0].line_delete_button.interactive = true;
+        drawPart[0].line_delete_button.buttonMode = true;
+        drawPart[0].interactive = true;
+        drawPart[0].buttonMode = true;
+        drawPart[0].father.parent.parent.addChild(drawPart[0]);
+        drawPart[0].on('mouseover', BioBLESS.logic.line_delete_button_create)
+                   .on('mouseout', BioBLESS.logic.line_delete_button_remove)
+                   .on('click', BioBLESS.logic.line_wait_for_key);
+        BioBLESS.logic.circuit_add_line(drawPart[0].mother, drawPart[0].father);
+    };
+    
+    // for(){
+    //     BioBLESS.logic.add_line();
+    // };
+};
+
+
 /**
  * draw function works for renderng the whole homepage.<br>
  * @function
@@ -1382,56 +1522,56 @@ BioBLESS.logic.draw = function(devices){
     var that = BioBLESS.logic;
     BioBLESS.logic.elements = [];
     /**
-     * onDragEnd makes element to end draging
+     * on_drag_end makes element to end draging
      * @function
      */
-    BioBLESS.logic.onDragEnd = function() {
+    BioBLESS.logic.on_drag_end = function() {
         this.alpha = 1;
         this.dragging = false;
         this.data = null;
         if(!(this.position.x + 75 >= BioBLESS.width - 220 && this.position.x + 75 <= BioBLESS.width - 20 && this.position.y >= 110 && this.position.y <= BioBLESS.height - 20)){
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.DrawGate(devices[this.Index]);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate(devices[this.Index]);
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = this.childPosition.x - 75;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = this.childPosition.y - 35;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.buttonMode = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].Index = this.Index;
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.on('mousedown', that.onDragStart_e)
-                                                                                .on('touchstart', that.onDragStart_e)
-                                                                                .on('mouseup', that.onDragEnd_e)
-                                                                                .on('mouseupoutside', that.onDragEnd_e)
-                                                                                .on('touchend', that.onDragEnd_e)
-                                                                                .on('touchendoutside', that.onDragEnd_e)
-                                                                                .on('mousemove', that.onDragMove_e)
-                                                                                .on('touchmove', that.onDragMove_e)
-                                                                                .on('mouseover', that.IsHisWorkCreate)
-                                                                                .on('mouseout', that.IsHisWorkDelete)
-                                                                                .on('click', that.elementWaitforKey);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.on('mousedown', that.on_drag_start_e)
+                                                                                .on('touchstart', that.on_drag_start_e)
+                                                                                .on('mouseup', that.on_drag_end_e)
+                                                                                .on('mouseupoutside', that.on_drag_end_e)
+                                                                                .on('touchend', that.on_drag_end_e)
+                                                                                .on('touchendoutside', that.on_drag_end_e)
+                                                                                .on('mousemove', that.on_drag_move_e)
+                                                                                .on('touchmove', that.on_drag_move_e)
+                                                                                .on('mouseover', that.gate_delete_buttonCreate)
+                                                                                .on('mouseout', that.gate_delete_buttonDelete)
+                                                                                .on('click', that.gate_wait_for_key);
 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.buttonMode = true;
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.on('mousedown', that.onDrawLineUp)
-                                                                              .on('touchstart', that.onDrawLineUp)
-                                                                              .on('mousemove', that.onDrawLineMove)
-                                                                              .on('touchmove', that.onDrawLineMove);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].output.on('mousedown', that.on_draw_line_up)
+                                                                              .on('touchstart', that.on_draw_line_up)
+                                                                              .on('mousemove', that.on_draw_line_move)
+                                                                              .on('touchmove', that.on_draw_line_move);
                 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.buttonMode = true;
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.on('mousedown', that.onDrawLineUp)
-                                                                               .on('touchstart', that.onDrawLineUp)
-                                                                               .on('mousemove', that.onDrawLineMove)
-                                                                               .on('touchmove', that.onDrawLineMove);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_2.on('mousedown', that.on_draw_line_up)
+                                                                               .on('touchstart', that.on_draw_line_up)
+                                                                               .on('mousemove', that.on_draw_line_move)
+                                                                               .on('touchmove', that.on_draw_line_move);
                 
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.interactive = true;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.buttonMode = true;
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.on('mousedown', that.onDrawLineUp)
-                                                                               .on('touchstart', that.onDrawLineUp)
-                                                                               .on('mousemove', that.onDrawLineMove)
-                                                                               .on('touchmove', that.onDrawLineMove);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].input_1.on('mousedown', that.on_draw_line_up)
+                                                                               .on('touchstart', that.on_draw_line_up)
+                                                                               .on('mousemove', that.on_draw_line_move)
+                                                                               .on('touchmove', that.on_draw_line_move);
 
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].IsHisWork.interactive = true;
-            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].IsHisWork.buttonMode = true;
-            BioBLESS.logic.circuitAddGate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.interactive = true;
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
+            BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
             that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
         }
         this.position.x = this.startX;
@@ -1441,8 +1581,8 @@ BioBLESS.logic.draw = function(devices){
     that._logicGates = [];
     that.logicGates = [];
     for(var i = 0; i < devices.length; i++){
-        that._logicGates[i] = BioBLESS.logic.DrawGate(devices[i]);
-        that.logicGates[i] = BioBLESS.logic.DrawGate(devices[i]);
+        that._logicGates[i] = BioBLESS.logic.draw_gate(devices[i]);
+        that.logicGates[i] = BioBLESS.logic.draw_gate(devices[i]);
         that._logicGates[i].position.x = 120 * BioBLESS.navigation.scale.x + 140 + i * 180;
         that._logicGates[i].position.y = 30;
         that.logicGates[i].position.x = 120 * BioBLESS.navigation.scale.x + 140 + i * 180;
@@ -1450,14 +1590,14 @@ BioBLESS.logic.draw = function(devices){
         that.logicGates[i].interactive = true;
         that.logicGates[i].buttonMode = true;
         that.logicGates[i].Index = i;
-        that.logicGates[i].on('mousedown', that.onDragStart)
-            .on('touchstart', that.onDragStart)
-            .on('mouseup', that.onDragEnd)
-            .on('mouseupoutside', that.onDragEnd)
-            .on('touchend', that.onDragEnd)
-            .on('touchendoutside', that.onDragEnd)
-            .on('mousemove', that.onDragMove)
-            .on('touchmove', that.onDragMove);
+        that.logicGates[i].on('mousedown', that.on_drag_start)
+            .on('touchstart', that.on_drag_start)
+            .on('mouseup', that.on_drag_end)
+            .on('mouseupoutside', that.on_drag_end)
+            .on('touchend', that.on_drag_end)
+            .on('touchendoutside', that.on_drag_end)
+            .on('mousemove', that.on_drag_move)
+            .on('touchmove', that.on_drag_move);
     }
     
     /**
