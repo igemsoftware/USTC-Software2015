@@ -45,8 +45,9 @@ system_data = {
     {
         "device_parameter": {
             "initial":[
-                500
-            ]
+                50
+            ],
+            "decay": 0.1
         }
     }
     ]
