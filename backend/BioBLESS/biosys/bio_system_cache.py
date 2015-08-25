@@ -1,6 +1,4 @@
-__author__ = 'zsy95_000'
-import json
-from data_test import system_data as biosystem_sample1
+__author__ = 'suquark'
 from debug_tool import debug_info
 from hash_tool import dump_ord, hash_list
 import copy
