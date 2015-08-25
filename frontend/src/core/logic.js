@@ -1087,14 +1087,12 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         
         if(this.is_out){
             this.is_out = false;
-            this.back_up = BioBLESS.scroll_function;
             BioBLESS.scroll_function = stage.scroll_function;
         }
     };
     var on_mouse_out = function(){
         if(this.is_out === false){
             this.is_out = true;
-            BioBLESS.scroll_function = this.back_up;
         }
     };
     mask.on("mouseover", on_mouse_over);
@@ -1172,11 +1170,12 @@ BioBLESS.logic.create_abcd = function(){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
-            $.getJSON("https://ustc.software/biocircuit/01000010/", function(data) {
+            var that = this;
+            $.getJSON("/misc/gates_sup.json", function(data) {
                     BioBLESS.logic.gates_sup = data;
-                    var new_stage = BioBLESS.logic.craete_efgh(this.parent);
+                    var new_stage = BioBLESS.logic.craete_efgh(that.parent);
                     that.parent.parent.addChild(new_stage);
-                    that.parent.parent.removeChild(this.parent);
+                    that.parent.parent.removeChild(that.parent);
             }.bind(this));
         };
         OK.on("click", OK_function);
@@ -1346,6 +1345,12 @@ BioBLESS.logic.circuits = function(){
         }
         this.devs_width = x - 200;
         this.draw_lines_between_gates();    
+        
+        var bg = new PIXI.Graphics();
+        bg.beginFill(0, 0);
+        bg.drawRect(0, 0, this.devs_width, this.devs_height);
+        bg.endFill();
+        this.stage.addChild(bg);
     };
 };
 
@@ -1367,7 +1372,7 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     var BACK = BioBLESS.logic.create_textbutton("BACK", 100, 40, 0x000000);
     BACK.x = 100;
     BACK.y = BioBLESS.height - 60;
-    stage.addChild(BACK);
+    
     BACK.interactive = true;
     BACK.buttonMode = true;
     var BACK_function = function(){   
@@ -1378,19 +1383,74 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     
     var contain = new PIXI.Container();
     var curcuits = [];
+    var curcuits_move = [];
     var y = 0;
+    var mouse_over = function(){
+        this.button_bg.beginFill(0x555555, 1);
+        this.button_bg.drawRect(0, 0, 260, this.h);
+        this.button_bg.endFill();
+        BioBLESS.scroll_function = this.parent.parent.parent.scroll_function;
+    };
+    var mouse_out = function(){
+        this.button_bg.clear();
+    };
+    var on_mouse_start = function(e){
+        var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
+        curcuits_move[this.i].stage.x = new_position.x - 115;
+        curcuits_move[this.i].stage.y = new_position.y - this.h / 2;
+        BioBLESS.base_stage.addChild(curcuits_move[this.i].stage);
+    };
+    var on_mouse_move = function(e){
+        var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
+        this.x = new_position.x - 115;
+        this.y = new_position.y - this.h / 2;
+    };
+    var on_mouse_end = function(e){
+        BioBLESS.base_stage.removeChild(this);
+        //BioBLESS.logic.asdf(curcuits[i], BioBLESS.logic.gates_sup[i]);
+    };
     for(var i = 0; i < BioBLESS.logic.gates_sup.length; i++){
         curcuits[i] = new BioBLESS.logic.circuits();
         curcuits[i].draw(BioBLESS.logic.gates_sup[i]);
         curcuits[i].stage.y = y;
         curcuits[i].stage.scale.x = curcuits[i].stage.scale.y = 230 / curcuits[i].devs_width;
-        y += 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        curcuits[i].stage.button_bg = new PIXI.Graphics();
+        curcuits[i].stage.button_bg.y = curcuits[i].stage.y;
+        curcuits[i].stage.h = 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        contain.addChild(curcuits[i].stage.button_bg);
         contain.addChild(curcuits[i].stage);
+        curcuits[i].stage.i = i;
+        curcuits[i].stage.interactive = true;
+        curcuits[i].stage.on('mouseover', mouse_over)
+                         .on('mouseout', mouse_out)
+                         .on('mousedown', on_mouse_start);                                                               
+        
+        
+        curcuits_move[i] = new BioBLESS.logic.circuits();
+        curcuits_move[i].draw(BioBLESS.logic.gates_sup[i]);
+        curcuits_move[i].stage.y = y;
+        curcuits_move[i].stage.scale.x = curcuits_move[i].stage.scale.y = 230 / curcuits_move[i].devs_width;
+        curcuits_move[i].stage.h = 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        curcuits_move[i].stage.i = i;
+        curcuits_move[i].stage.interactive = true;
+        curcuits_move[i].stage.on('mousemove',  on_mouse_move)
+                              .on('mouseup',  on_mouse_end)
+                              .on('mouseupoutside',  on_mouse_end); 
+        y += 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        
     }
     var scroll_area = BioBLESS.logic.create_scrollarea(contain, y, 260, BioBLESS.height - 150);
+    var mask = new PIXI.Graphics();
+    mask.interactive = true;
+    mask.beginFill(0, 0);
+    mask.drawRect(0, -1000, 260, 1000);
+    mask.drawRect(0, BioBLESS.height - 150, 260, 1000);
+    mask.endFill();
+    scroll_area.addChild(mask);
     scroll_area.x = 20;
     scroll_area.y = 50;
     stage.addChild(scroll_area);
+    stage.addChild(BACK);
     return stage;
 };
 
@@ -1399,7 +1459,7 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
         BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate();
         var i,j;
         for(i in thing.poi){
-        	for(j in thing.poi[i]){
+            for(j in thing.poi[i]){
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing.poi[i][j].position.x;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing.poi[i][j].position.y;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;

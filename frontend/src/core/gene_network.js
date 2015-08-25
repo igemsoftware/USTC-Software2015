@@ -902,7 +902,7 @@ BioBLESS.gene_network.create_inputitem = function(name, num, w){
                 input.del();
             }else if(((code >= 48) && (code <= 57)) || code === 8 || code === 0 || ((code >= 96) && (code <= 105)) || code === 37 || code === 39){
             }else{
-                if(code === 46 || code === 110){
+                if(code === 46 || code === 110 || code === 190){
                     var num = 0;
                     for(var i = 0; i < input.value.length; i++){
                         if(input.value[i] === '.')
