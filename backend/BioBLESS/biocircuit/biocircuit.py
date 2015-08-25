@@ -102,7 +102,6 @@ def get_gate_not(expr):
     ----------
     expr : list
         Minimal two-level SOP form.
-#!/usr/bin/env python
 
     Returns
     -------
@@ -248,9 +247,9 @@ def circuit_score(circuit, d_gate):
 
     Returns
     -------
-    gate : dict
+    gate : list
         It looks like:
-        {'score': 2.5, 'gate': {'v0': ''}}
+        [{'score': 2.5, 'gate': {'not0': 'NOT1', ...}}, ...]
     """
     n_gate = circuit.nodes()
     n_gate.remove('out')
@@ -260,27 +259,36 @@ def circuit_score(circuit, d_gate):
             tmp.append(i)
     for i in tmp:
         n_gate.remove(i)
-    bio_not = list(d_gate['not'].keys())
-    bio_and = list(d_gate['and'].keys())
-    bio_or = list(d_gate['or'].keys())
     result = []
-    if n_gate[0][0] == 'n':
-        result = bio_not
-    elif n_gate[0][0] == 'a':
-        result = bio_and
-    elif n_gate[0][0] == 'o':
-        result = bio_or
-    for k in range(1, len(n_gate)):
-        if  n_gate[k][0] == 'n':
-            result = [[i, j] for i in result for j in bio_not]
-        elif n_gate[k][0] == 'a':
-            result = [[i, j] for i in result for j in bio_and]
-        elif n_gate[k][0] == 'o':
-            result = [[i, j] for i in result for j in bio_or]
-    flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
+    tmp = []
+    for i in n_gate:
+        if i[0] == 'n':
+            tmp.append('NOT0')
+        elif i[0] == 'o':
+            tmp.append('OR1')
+        elif i[0] == 'a':
+            tmp.append('AND2')
+    result.append(tmp)
+    tmp = []
+    for i in n_gate:
+        if i[0] == 'n':
+            tmp.append('NOT3')
+        elif i[0] == 'o':
+            tmp.append('OR0')
+        elif i[0] == 'a':
+            tmp.append('AND4')
+    result.append(tmp)
+    tmp = []
+    for i in n_gate:
+        if i[0] == 'n':
+            tmp.append('NOT6')
+        elif i[0] == 'o':
+            tmp.append('OR0')
+        elif i[0] == 'a':
+            tmp.append('AND0')
+    result.append(tmp)
     gate = []
     for i in range(len(result)):
-        result[i] = flat(result[i])
         score = calc_score(result[i], d_gate)
         gate.append({'score': score, 'gate': dict(zip(n_gate, result[i]))})
     return gate
@@ -298,9 +306,9 @@ def api_circuit(circuit, gate):
         or: or0, or1, ...
         output: out
 
-    gate : dict
+    gate : list
         It looks like:
-        {'score': 2.5, 'gate': {'v0': ''}}
+        [{'score': 2.5, 'gate': {'not0': 'NOT1', ...}}, ...]
 
     Returns
     -------
@@ -336,6 +344,7 @@ def api_circuit(circuit, gate):
         graph = tmp
     return graph
 
+
 def get_score_from_front(f_json, d_gate):
     """Calculate score of circuit from front end.
 
@@ -357,7 +366,25 @@ def get_score_from_front(f_json, d_gate):
     score = calc_score(d_front['nodes'], d_gate)
     return score
 
+
 def garbage(graph, d_lizhi):
+    """Add some parameters for simulation.
+
+    Parameters
+    ----------
+    graph : list
+        A list of dicts, each dicts looks like:
+        {'nodes': [], 'arcs': {'from': 0, 'to': 1}, 'score': 2.5}
+
+    d_lizhi : dict
+        A dict converted from the json in devices.
+        key: 'NOT0', ...
+
+    Returns
+    -------
+    l_zh : list
+        A list of dicts for simulation.
+    """
     l_zh = []
     for i in graph:
         i['system_parameter'] = {'time': 100}
