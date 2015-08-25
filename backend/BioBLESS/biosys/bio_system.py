@@ -24,8 +24,6 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
     if gates["id"] == "INPUT":
         species = [[gates["parts"]["id"][0][0], data["device_parameter"]["initial"][0]]]
         reaction = []
-        gates = gates
-        data = data
     else:
         def coding_find_last(tmp, string):
             while parts_type[tmp] != string:
@@ -190,8 +188,5 @@ def bio_system(system_data):
         reaction.simulate([], time)
     except IndexError:
         pass
-    print reaction.species
-    reaction.show_reaction()
-    reaction.show_record(map(str, range(len(nodes))))
-    reaction.show_record()
+    reaction.nodes = nodes
     return reaction
