@@ -21,7 +21,7 @@ class PartsView(APIView):
     Usage:
     """
     parser_classes = (JSONParser,)
-    renderer_classes = (JSONRenderer, )
+    renderer_classes = (JSONRenderer,)
     def post(self,request,format=None):
         """
         deal with the POST method only

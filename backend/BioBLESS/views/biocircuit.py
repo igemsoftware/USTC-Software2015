@@ -51,7 +51,7 @@ class ScoreView(APIView):
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer,)
 
-    def post(self, request):
+    def post(self, request, format=None):
         """
         request: POST /biocircuit/score/
         Response: json
@@ -61,7 +61,7 @@ class ScoreView(APIView):
                 }
         """
         try:
-            response_from_back = biocircuit.get_score_from_front(request, biogate.d_gate)
+            response_from_back = biocircuit.get_score_from_front(request.data, biogate.d_gate)
             response = {}
             response["status"] = "SUCCESS"
             response["score"] = response_from_back
