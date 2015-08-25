@@ -20,5 +20,4 @@ else:
             B=ReactionSystem([[["b"],["c"],1]],[["b",100],"c"])
             C=A+B
             print C.species
-            C.simulate([],10,["a","b","c"])
-
+            C.simulate([], 10)
