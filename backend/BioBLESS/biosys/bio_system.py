@@ -190,8 +190,8 @@ def bio_system(system_data):
         reaction.simulate([], time)
     except IndexError:
         pass
-    #print reaction.species
-    #reaction.show_reaction()
+    print reaction.species
+    reaction.show_reaction()
     reaction.show_record(map(str, range(len(nodes))))
     reaction.show_record()
     return reaction
