@@ -3,8 +3,12 @@ BioBLESS.dna.detail = {
     "device": [] 
 };
 
-BioBLESS.dna.detail.device[0].d = ["ATTTCCGATTTCCGATTTCCGATTTCCG", "CTTCACGCTTCACGCTTCACGCTTCACG", "CGGATAACGGATAACGGATAACGGATAA"];
-BioBLESS.dna.detail.device[0].d_oppsite = [];
+BioBLESS.dna.detail.device = [
+    {
+        "d" : ["ATTTCCGATTTCCGATTTCCGATTTCCG", "CTTCACGCTTCACGCTTCACGCTTCACG", "CGGATAACGGATAACGGATAACGGATAA"],
+        "d_oppsite" : []
+    }
+];
 
 BioBLESS.dna.init = function() {
     this.stage = BioBLESS.utils.init_stage();
