@@ -16,15 +16,15 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic.base import RedirectView
+
 import BioBLESS.views.parts
 import BioBLESS.views.biocircuit
-import BioBLESS.views.views
 import BioBLESS.views.simulate
-from django.views.generic.base import RedirectView
+import BioBLESS.views.views
 
 urlpatterns = [
                   url(r'^$', RedirectView.as_view(url='/BioBLESS/')),
-    url(r'^aplusb/(\d+)/(\d+)/$', BioBLESS.views.views.aplusb),
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^parts/', BioBLESS.views.parts.PartsView.as_view()),
     # biosys

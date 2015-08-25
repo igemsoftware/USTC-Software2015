@@ -3,12 +3,13 @@ Return parts information to the frontend
  details are in doc/api-for-front/parts.txt
 """
 __author__ = 'ctyi'
-from BioBLESS.models import Parts
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from BioBLESS.models import Parts
 
 
 class PartsSerializer(serializers.ModelSerializer):

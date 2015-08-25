@@ -18,11 +18,11 @@ __author__ = 'E-Neo <e-neo@qq.com>'
 # Maybe pyeda is better in the future, but pyeda contains some
 # bugs by far(0.28.0). Espresso Algorithm is better than Q-M
 # Algorithm
-import qm
-
 import numpy as np
 import networkx as nx
 import simplejson
+
+import qm
 
 
 def string2truthtable(string):
