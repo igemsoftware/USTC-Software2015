@@ -18,7 +18,7 @@ __author__ = 'E-Neo <e-neo@qq.com>'
 # Maybe pyeda is better in the future, but pyeda contains some
 # bugs by far(0.28.0). Espresso Algorithm is better than Q-M
 # Algorithm
-import qm
+import BioBLESS.biocircuit.qm
 
 import numpy as np
 import networkx as nx
@@ -91,7 +91,7 @@ def string2expr(string):
         Minimal two-level SOP form.
     """
     f_tt = string2truthtable(string)
-    expr = qm.qm(f_tt[0], f_tt[1], f_tt[2])
+    expr = BioBLESS.biocircuit.qm.qm(f_tt[0], f_tt[1], f_tt[2])
     return expr
 
 
@@ -247,39 +247,32 @@ def circuit_score(circuit, d_gate):
 
     Returns
     -------
-    gate : dict
+    gate : list
         It looks like:
-        {'score': 2.5, 'gate': {'v0': ''}}
+        [{'score': 2.5, 'gate': {'not0': 'NOT1', ...}}, ...]
     """
     n_gate = circuit.nodes()
-    n_gate.pop(n_gate.index('out'))
+    n_gate.remove('out')
     tmp = []
     for i in n_gate:
         if i[0] == 'v':
             tmp.append(i)
     for i in tmp:
         n_gate.remove(i)
-    bio_not = list(d_gate['not'].keys())
-    bio_and = list(d_gate['and'].keys())
-    bio_or = list(d_gate['or'].keys())
     result = []
-    if n_gate[0][0] == 'n':
-        result = bio_not
-    elif n_gate[0][0] == 'a':
-        result = bio_and
-    elif n_gate[0][0] == 'o':
-        result = bio_or
-    for k in range(1, len(n_gate)):
-        if  n_gate[k][0] == 'n':
-            result = [[i, j] for i in result for j in bio_not]
-        elif n_gate[k][0] == 'a':
-            result = [[i, j] for i in result for j in bio_and]
-        elif n_gate[k][0] == 'o':
-            result = [[i, j] for i in result for j in bio_or]
-    flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
+    if len(n_gate) == 1:
+        if n_gate[0][0] == 'n':
+            result = [[i] for i in d_gate['not'].keys()]
+        elif n_gate[0][0] == 'a':
+            result = [[i] for i in d_gate['and'].keys()]
+        elif n_gate[0][0] == 'o':
+            result = [[i] for i in d_gate['or'].keys()]
+    else:
+        result.append(['NOT0' if i[0] == 'n' else 'OR1' if i[0] == 'o' else 'AND2' for i in n_gate])
+        result.append(['NOT3' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND4' for i in n_gate])
+        result.append(['NOT6' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND0' for i in n_gate])
     gate = []
     for i in range(len(result)):
-        result[i] = flat(result[i])
         score = calc_score(result[i], d_gate)
         gate.append({'score': score, 'gate': dict(zip(n_gate, result[i]))})
     return gate
@@ -297,9 +290,9 @@ def api_circuit(circuit, gate):
         or: or0, or1, ...
         output: out
 
-    gate : dict
+    gate : list
         It looks like:
-        {'score': 2.5, 'gate': {'v0': ''}}
+        [{'score': 2.5, 'gate': {'not0': 'NOT1', ...}}, ...]
 
     Returns
     -------
@@ -335,13 +328,14 @@ def api_circuit(circuit, gate):
         graph = tmp
     return graph
 
-def get_score_from_front(f_json, d_gate):
+
+def get_score_from_front(d_json, d_gate):
     """Calculate score of circuit from front end.
 
     Parameters
     ----------
-    f_json : string
-        json include information of nodes and something else
+    d_json : dict
+        dict include information of nodes and something else
 
     d_gate : dict
         A dict of biogates and their 4 parameters. It should be
@@ -352,11 +346,28 @@ def get_score_from_front(f_json, d_gate):
     score : float
         The score of the biocircuit.
     """
-    d_front = simplejson.loads(f_json)
-    score = calc_score(d_front['nodes'], d_gate)
+    score = calc_score(d_json['nodes'], d_gate)
     return score
 
+
 def garbage(graph, d_lizhi):
+    """Add some parameters for simulation.
+
+    Parameters
+    ----------
+    graph : list
+        A list of dicts, each dicts looks like:
+        {'nodes': [], 'arcs': {'from': 0, 'to': 1}, 'score': 2.5}
+
+    d_lizhi : dict
+        A dict converted from the json in devices.
+        key: 'NOT0', ...
+
+    Returns
+    -------
+    l_zh : list
+        A list of dicts for simulation.
+    """
     l_zh = []
     for i in graph:
         i['system_parameter'] = {'time': 100}

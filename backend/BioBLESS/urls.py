@@ -16,20 +16,21 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic.base import RedirectView
+
 import BioBLESS.views.parts
 import BioBLESS.views.biocircuit
-import BioBLESS.views.views
 import BioBLESS.views.simulate
-from django.views.generic.base import RedirectView
+import BioBLESS.views.views
 
 urlpatterns = [
                   url(r'^$', RedirectView.as_view(url='/BioBLESS/')),
-    url(r'^aplusb/(\d+)/(\d+)/$', BioBLESS.views.views.aplusb),
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^parts/', BioBLESS.views.parts.PartsView.as_view()),
     # biosys
     url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^biocircuit/(.+)/$', BioBLESS.views.biocircuit.BiocircuitView.as_view()),
                   url(r'^sleep/$', BioBLESS.views.views.sleep),
-    url(r'^simulate/$', BioBLESS.views.simulate.SimulateView.as_view())
+                  url(r'^score/$', BioBLESS.views.biocircuit.ScoreView.as_view()),
+                  url(r'^simulate/$', BioBLESS.views.simulate.SimulateView.as_view()),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

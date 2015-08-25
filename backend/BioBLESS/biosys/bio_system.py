@@ -24,8 +24,6 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
     if gates["id"] == "INPUT":
         species = [[gates["parts"]["id"][0][0], data["device_parameter"]["initial"][0]]]
         reaction = []
-        gates = gates
-        data = data
     else:
         def coding_find_last(tmp, string):
             while parts_type[tmp] != string:
@@ -58,7 +56,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
         maps = gates["map"]
         protein = select(parts_type, "Coding")
         s_rna = select(parts_type, "sRNA")
-        species = get_species(protein, ["d", "m", "r", "p"])+get_species(s_rna, ["d", "m", "r"])
+        species = get_species(protein, ["d", "m", "r",  "l","p"])+get_species(s_rna, ["d", "m", "r"])
         initial = data["device_parameter"]["initial"]
         for i in range(len(initial)):
             for j in gates["parts"]["id"][i]:
@@ -80,7 +78,8 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                 [["d"+part_id], ["m"+part_id], single_data["trans1"]],
                 [["m"+part_id], ["d"+part_id, "r"+part_id], single_data["trans1"]],
                 [["r"+part_id], [], single_data["decay1"]],
-                [["r"+part_id], ["r"+part_id, "p"+part_id], single_data["trans2"]],
+                [["r"+part_id], ["l"+part_id], single_data["trans2"]],
+                [["l"+part_id], ["r"+part_id, "p"+part_id], single_data["trans2"]],
                 [["p"+part_id], [], single_data["decay2"]],
             ] if part_type == "Coding" else [
                 [["d"+part_id], ["m"+part_id], single_data["trans1"]],
@@ -93,28 +92,52 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                 while tmp != -1:
                     reg_data = data[maps[tmp]["id"]]
                     reg_pro = maps[tmp]["id1"]
-                    if maps[tmp]["type"] == ("inh" if reg_sub == "Promoter" else "lock"):
+                    
+                    """
+                    d    ->    r    ->    p
+                          m          l
+                      n            i
+                    """
+
+                    if maps[tmp]["type"] == "inh":
                         single_reaction.append(
-                            [[reg_pro, "m"+part_id], ["n"+part_id], reg_data["reg"]]
+                            [[reg_pro, "m"+part_id], ["n"+part_id], reg_data["reg"]*single_data["trans1"]]
                         )
                         single_reaction.append(
-                            [["n"+part_id], [reg_pro, "d"+part_id], reg_data["reg"]]
+                            [["n"+part_id], [reg_pro, "d"+part_id], reg_data["reg"]*single_data["trans1"]]
                         )
                         if not "n"+part_id in species:
                             species.append("n"+part_id)
-                        if reg_sub == "Promoter":
-                            temp = find_in_map(id2="e"+str(tmp))
-                            while temp != -1:
-                                rep_data = data[maps[temp]["id"]]
-                                rep_pro = maps[tmp]["id1"]
-                                single_reaction.append(
-                                    [[rep_pro, "n"+part_id], ["m"+part_id, reg_pro, rep_pro], rep_data["reg"]]
-                                )
-                                temp = find_in_map(temp+1, id2="e"+str(tmp))
-                    else:
+                        temp = find_in_map(id2="e"+str(tmp))
+                        while temp != -1:
+                            rep_data = data[maps[temp]["id"]]
+                            rep_pro = maps[tmp]["id1"]
+                            single_reaction.append(
+                                [[rep_pro, "n"+part_id], ["m"+part_id, reg_pro, rep_pro], rep_data["reg"]*reg_data["reg"]*single_data["trans1"]]
+                            )
+                            temp = find_in_map(temp+1, id2="e"+str(tmp))
+
+
+                    if maps[tmp]["type"] == "lock":
                         single_reaction.append(
-                            [[reg_pro, "d"+part_id], [reg_pro, "d"+part_id, "r"+part_id], reg_data["reg"]]
+                            [[reg_pro, "l"+part_id], ["i"+part_id], reg_data["reg"]*single_data["trans2"]]
                         )
+                        single_reaction.append(
+                            [["i"+part_id], [reg_pro, "r"+part_id], reg_data["reg"]*single_data["trans2"]]
+                        )
+                        if not "i"+part_id in species:
+                            species.append("n"+part_id)
+
+                    if maps[tmp]["type"] == "act":
+                        single_reaction.append(
+                            [[reg_pro, "d"+part_id], [reg_pro, "d"+part_id, "r"+part_id], reg_data["reg"]*single_data["trans1"]]
+                        )
+
+                    if maps[tmp]["type"] == "key":
+                        single_reaction.append(
+                            [[reg_pro, "r"+part_id], [reg_pro, "p"+part_id, "r"+part_id], reg_data["reg"]*single_data["trans2"]]
+                        )
+
                     tmp = find_in_map(tmp+1, id2="d"+str(pro))
             reaction += single_reaction
 
@@ -165,8 +188,5 @@ def bio_system(system_data):
         reaction.simulate([], time)
     except IndexError:
         pass
-    #print reaction.species
-    #reaction.show_reaction()
-    reaction.show_record(map(str, range(len(nodes))))
-    reaction.show_record()
+    reaction.nodes = nodes
     return reaction
