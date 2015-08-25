@@ -62,7 +62,7 @@ def initialize(init_list, current, species_name_inverse):
 
 ################################################################
 try:
-    import pylab
+    import matplotlib.pyplot as plt
 except ImportError:
     pass
 ################################################################
@@ -72,27 +72,19 @@ class ReactionSystem(object):
     the class to describe reactions system
     """
 
-    @property
-    def species_number(self):
+    def __init__(self, reactions, species):
         """
-        Show the number of the species in this parts system
+        Init this system
         Parameters:
+            list:the data of the reactions in this system
+                looking for help(set_reactions) to find the format of this list
+            list:the name of all the species in this system
+        Returns
             none
-        Returns:
-            int:the number of the species
         """
-        return len(self.species_name)
-
-    @property
-    def reaction_number(self):
-        """
-        Show the number of the reactions in this system
-        Parameters:
-            none
-        Returns:
-            int:the number of the reactions
-        """
-        return len(self.reactions)
+        self.set_species_name(species)
+        self.set_reactions(reactions)
+        self.record = None 
 
     def set_species_name(self, species):
         """
@@ -104,7 +96,8 @@ class ReactionSystem(object):
         """
         self.species = species
         self.species_name = numpy.array(map(choice, species))
-        self.species_name_inverse = {self.species_name[name_temp]: name_temp for name_temp in range(len(self.species_name))}
+        self.species_name_inverse = \
+        {self.species_name[name_temp]: name_temp for name_temp in range(len(self.species_name))}
 
     def set_reactions(self, reaction):
         """
@@ -155,19 +148,6 @@ class ReactionSystem(object):
             print_temp += "\t\t" + str(single_reaction[2])
             print print_temp
 
-    def __init__(self, reactions, species):
-        """
-        Init this system
-        Parameters:
-            list:the data of the reactions in this system
-                looking for help(set_reactions) to find the format of this list
-            list:the name of all the species in this system
-        Returns
-            none
-        """
-        self.set_species_name(species)
-        self.set_reactions(reactions)
-
     def __add__(self, other):
         reaction = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist() + transpose(numpy.array([other.reactant, other.product, other.constant])).tolist()
         species_name = list(set(self.species_name.tolist() + other.species_name.tolist()))
@@ -188,12 +168,12 @@ class ReactionSystem(object):
             list:the record of the simulation
                 the format of the list is : [[time,[species current number,...]],...]
         """
-        current = numpy.zeros(self.species_number)  # numpy.array([0] * self.species_number)
+        current = numpy.zeros(len(self.species_name))  # numpy.array([0] * self.species_number)
         current = initialize(self.species, current, self.species_name_inverse)
         current = initialize(initial, current, self.species_name_inverse)
         time = 0
         self.record = [[time, current.tolist()]]
-        reaction_number = self.reaction_number
+        reaction_number = len(self.reactions)
         while time < stop_time:
             intensities = numpy.array(map(lambda single_reactant: numpy.array(map(lambda species_temp: COMB[current[species_temp[0]], species_temp[1]], single_reactant)).prod(), self.reactant_data))
             possibility = numpy.array(intensities * self.constant, numpy.float64)
@@ -222,13 +202,13 @@ class ReactionSystem(object):
         """
         plot_list = [self.species_name_inverse[single_species] for single_species in plot_list] if plot_list else self.species_name_inverse.values()
         for species in plot_list:
-            pylab.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
+            plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         # # !!! TODO: Something error HERE, pylab can only show once !!!
         # # pylab.ion()
-        pylab.show()
+        plt.show()
 
     @property
-    def record_list(self, plot_list=None):
+    def record_list(self):
         """
         Return the list of the record simulated
         Parameters:
