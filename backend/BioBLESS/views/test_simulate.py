@@ -6,7 +6,7 @@ __author__ = 'ctyi'
 from django.test import TestCase
 import simplejson
 
-import BioBLESS.biosys.test_data as input_dict
+import BioBLESS.biosys.data_test as input_dict
 
 
 class TestSimulate(TestCase):
