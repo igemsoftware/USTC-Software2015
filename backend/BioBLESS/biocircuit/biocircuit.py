@@ -260,33 +260,17 @@ def circuit_score(circuit, d_gate):
     for i in tmp:
         n_gate.remove(i)
     result = []
-    tmp = []
-    for i in n_gate:
-        if i[0] == 'n':
-            tmp.append('NOT0')
-        elif i[0] == 'o':
-            tmp.append('OR1')
-        elif i[0] == 'a':
-            tmp.append('AND2')
-    result.append(tmp)
-    tmp = []
-    for i in n_gate:
-        if i[0] == 'n':
-            tmp.append('NOT3')
-        elif i[0] == 'o':
-            tmp.append('OR0')
-        elif i[0] == 'a':
-            tmp.append('AND4')
-    result.append(tmp)
-    tmp = []
-    for i in n_gate:
-        if i[0] == 'n':
-            tmp.append('NOT6')
-        elif i[0] == 'o':
-            tmp.append('OR0')
-        elif i[0] == 'a':
-            tmp.append('AND0')
-    result.append(tmp)
+    if len(n_gate) == 1:
+        if n_gate[0][0] == 'n':
+            result = [[i] for i in d_gate['not'].keys()]
+        elif n_gate[0][0] == 'a':
+            result = [[i] for i in d_gate['and'].keys()]
+        elif n_gate[0][0] == 'o':
+            result = [[i] for i in d_gate['or'].keys()]
+    else:
+        result.append(['NOT0' if i[0] == 'n' else 'OR1' if i[0] == 'o' else 'AND2' for i in n_gate])
+        result.append(['NOT3' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND4' for i in n_gate])
+        result.append(['NOT6' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND0' for i in n_gate])
     gate = []
     for i in range(len(result)):
         score = calc_score(result[i], d_gate)
