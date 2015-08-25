@@ -5,7 +5,7 @@ URI:/simulate
 method:POST
 """
 __author__ = 'ctyi'
-import BioBLESS.biosys.BioSystem as Biosystem
+import BioBLESS.biosys.bio_system as biosystem
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -26,8 +26,7 @@ class SimulateView(APIView):
 
         """
         try:
-            input_from_back = Biosystem.BioSystem(request.data)
-            response_from_back = input_from_back.simulate().record_list
+            response_from_back = biosystem.bio_system(request.data).record_list
         except BaseException as error:
             #raise
             response = {}
