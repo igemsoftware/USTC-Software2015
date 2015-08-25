@@ -24,8 +24,6 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
     if gates["id"] == "INPUT":
         species = [[gates["parts"]["id"][0][0], data["device_parameter"]["initial"][0]]]
         reaction = []
-        gates = gates
-        data = data
     else:
         def coding_find_last(tmp, string):
             while parts_type[tmp] != string:

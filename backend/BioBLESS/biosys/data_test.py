@@ -45,7 +45,7 @@ system_data = {
     {
         "device_parameter": {
             "initial":[
-                500
+                50
             ]
         }
     }

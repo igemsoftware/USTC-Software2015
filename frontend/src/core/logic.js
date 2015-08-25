@@ -5,9 +5,11 @@
  * @author Ubrok
  * @since 2015-8-12
  */
+
 BioBLESS.logic.init = function() {
     this.stage = BioBLESS.utils.init_stage();
 };
+
 /**
  * circuit is a data structure communicate between frontend and backend
  */
@@ -295,115 +297,115 @@ BioBLESS.logic.draw_gate = function(device){
      * element is a stage to draw the gate
      * @type {PIXI.Graphics}
      */
-        var icon = device.id;
-        var Regx = /^[0-9]*$/;
-        while(Regx.test(icon[icon.length - 1])){
-            icon = icon.substring(0, icon.length - 1);
-        }
-        var element = new PIXI.Container();
-        element.graphics = new PIXI.Graphics();
-        element.title = new PIXI.Text(device.id);
-        element.input_1 = new PIXI.Graphics();
-        element.input_1.lines = [];
-        element.input_1.counts = 0;
-        element.input_1.connection = false;
-        element.input_2 = new PIXI.Graphics();
-        element.input_2.lines = [];
-        element.input_2.counts = 0;
-        element.input_2.connection = false;
-        element.output = new PIXI.Graphics();
-        element.output.lines = [];
-        element.output.counts = 0;
-        element.output.connection = false;
-        element.title.anchor.x = element.title.anchor.y = 0.5;
-        element.title.position.x = 75;
-        element.title.position.y = 35;
-        element.type = icon;
-        element.graphics.lineStyle(3, 0x000000, 1);
-        element.graphics.beginFill(0, 0);
-        element.graphics.drawRect(30, 0, 90, 70);
-        element.graphics.endFill();
-        element.gate_delete_button = new PIXI.Graphics();
+    var icon = device.id;
+    var Regx = /^[0-9]*$/;
+    while(Regx.test(icon[icon.length - 1])){
+        icon = icon.substring(0, icon.length - 1);
+    }
+    var element = new PIXI.Container();
+    element.graphics = new PIXI.Graphics();
+    element.title = new PIXI.Text(device.id);
+    element.input_1 = new PIXI.Graphics();
+    element.input_1.lines = [];
+    element.input_1.counts = 0;
+    element.input_1.connection = false;
+    element.input_2 = new PIXI.Graphics();
+    element.input_2.lines = [];
+    element.input_2.counts = 0;
+    element.input_2.connection = false;
+    element.output = new PIXI.Graphics();
+    element.output.lines = [];
+    element.output.counts = 0;
+    element.output.connection = false;
+    element.title.anchor.x = element.title.anchor.y = 0.5;
+    element.title.position.x = 75;
+    element.title.position.y = 35;
+    element.type = icon;
+    element.graphics.lineStyle(3, 0x000000, 1);
+    element.graphics.beginFill(0, 0);
+    element.graphics.drawRect(30, 0, 90, 70);
+    element.graphics.endFill();
+    element.gate_delete_button = new PIXI.Graphics();
 
-        element.output.beginFill(0x000000, 1);
-        element.output.drawRect(0, 0, -30, 3);
-        element.output.position.x = 150;
-        element.output.position.y = 34;
-        element.output.endFill();
-        element.output.beginFill(0, 0);
-        element.output.drawRect(-30, -1, 30, 5);
-        element.output.endFill();
-        switch(icon){
-            default: 
-                alert("Error - 1001!");
-                break;
-            case "XOR":
-            case "AND":
-            case "OR":
-            case "xor":
-            case "and":
-            case "or":
-                element.input_1.beginFill(0x000000, 1);
-                element.input_1.drawRect(0, 0, 30, 3);
-                element.input_1.position.x = 0;
-                element.input_1.position.y = 17;
-                element.input_1.endFill();
-                element.input_1.beginFill(0, 0);
-                element.input_1.drawRect(0, -1, 30, 5);
-                element.input_1.endFill();
-                element.input_2.beginFill(0x000000, 1);
-                element.input_2.drawRect(0, 0, 30, 3);
-                element.input_2.position.x = 0;
-                element.input_2.position.y = 51;
-                element.input_2.endFill();
-                element.input_2.beginFill(0, 0);
-                element.input_2.drawRect(0, -1, 30, 5);
-                element.input_2.endFill();
-                break;
-            case "NOT":
-            case "not":
-                element.input_1.beginFill(0x000000, 1);
-                element.input_1.drawRect(0, 0, 30, 3);
-                element.input_1.position.x = 0;
-                element.input_1.position.y = 34;
-                element.input_1.endFill();
-                element.input_1.beginFill(0, 0);
-                element.input_1.drawRect(0, -1, 30, 5);
-                element.input_1.endFill();
-                element.graphics.moveTo(135, 35);
-                element.graphics.lineTo(120, 20);
-                break;
-            case "NAND":
-            case "nand":
-            case "NOR":
-            case "nor":
-            case "XNOR":
-            case "xnor":
-                element.input_1.beginFill(0x000000, 1);
-                element.input_1.drawRect(0, 0, 30, 3);
-                element.input_1.position.x = 0;
-                element.input_1.position.y = 17;
-                element.input_1.endFill();
-                element.input_1.beginFill(0, 0);
-                element.input_1.drawRect(0, -1, 30, 5);
-                element.input_1.endFill();
-                element.input_2.beginFill(0x000000, 1);
-                element.input_2.drawRect(0, 0, 30, 3);
-                element.input_2.position.x = 0;
-                element.input_2.position.y = 51;
-                element.input_2.endFill();
-                element.input_2.beginFill(0, 0);
-                element.input_2.drawRect(0, -1, 30, 5);
-                element.input_2.endFill();
-                break;
-        }
-        element.addChild(element.graphics);
-        element.addChild(element.input_1);
-        element.addChild(element.input_2);
-        element.addChild(element.output);
-        element.addChild(element.title);
-        return element;
-    };
+    element.output.beginFill(0x000000, 1);
+    element.output.drawRect(0, 0, -30, 3);
+    element.output.position.x = 150;
+    element.output.position.y = 34;
+    element.output.endFill();
+    element.output.beginFill(0, 0);
+    element.output.drawRect(-30, -1, 30, 5);
+    element.output.endFill();
+    switch(icon){
+        default: 
+            alert("Error - 1001!");
+            break;
+        case "XOR":
+        case "AND":
+        case "OR":
+        case "xor":
+        case "and":
+        case "or":
+            element.input_1.beginFill(0x000000, 1);
+            element.input_1.drawRect(0, 0, 30, 3);
+            element.input_1.position.x = 0;
+            element.input_1.position.y = 17;
+            element.input_1.endFill();
+            element.input_1.beginFill(0, 0);
+            element.input_1.drawRect(0, -1, 30, 5);
+            element.input_1.endFill();
+            element.input_2.beginFill(0x000000, 1);
+            element.input_2.drawRect(0, 0, 30, 3);
+            element.input_2.position.x = 0;
+            element.input_2.position.y = 51;
+            element.input_2.endFill();
+            element.input_2.beginFill(0, 0);
+            element.input_2.drawRect(0, -1, 30, 5);
+            element.input_2.endFill();
+            break;
+        case "NOT":
+        case "not":
+            element.input_1.beginFill(0x000000, 1);
+            element.input_1.drawRect(0, 0, 30, 3);
+            element.input_1.position.x = 0;
+            element.input_1.position.y = 34;
+            element.input_1.endFill();
+            element.input_1.beginFill(0, 0);
+            element.input_1.drawRect(0, -1, 30, 5);
+            element.input_1.endFill();
+            element.graphics.moveTo(135, 35);
+            element.graphics.lineTo(120, 20);
+            break;
+        case "NAND":
+        case "nand":
+        case "NOR":
+        case "nor":
+        case "XNOR":
+        case "xnor":
+            element.input_1.beginFill(0x000000, 1);
+            element.input_1.drawRect(0, 0, 30, 3);
+            element.input_1.position.x = 0;
+            element.input_1.position.y = 17;
+            element.input_1.endFill();
+            element.input_1.beginFill(0, 0);
+            element.input_1.drawRect(0, -1, 30, 5);
+            element.input_1.endFill();
+            element.input_2.beginFill(0x000000, 1);
+            element.input_2.drawRect(0, 0, 30, 3);
+            element.input_2.position.x = 0;
+            element.input_2.position.y = 51;
+            element.input_2.endFill();
+            element.input_2.beginFill(0, 0);
+            element.input_2.drawRect(0, -1, 30, 5);
+            element.input_2.endFill();
+            break;
+    }
+    element.addChild(element.graphics);
+    element.addChild(element.input_1);
+    element.addChild(element.input_2);
+    element.addChild(element.output);
+    element.addChild(element.title);
+    return element;
+};
 
 var waitForDoubleClick = false;
 
@@ -1087,14 +1089,12 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         
         if(this.is_out){
             this.is_out = false;
-            this.back_up = BioBLESS.scroll_function;
             BioBLESS.scroll_function = stage.scroll_function;
         }
     };
     var on_mouse_out = function(){
         if(this.is_out === false){
             this.is_out = true;
-            BioBLESS.scroll_function = this.back_up;
         }
     };
     mask.on("mouseover", on_mouse_over);
@@ -1172,11 +1172,11 @@ BioBLESS.logic.create_abcd = function(){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
-            $.getJSON("https://ustc.software/biocircuit/01000010/", function(data) {
+            $.getJSON("https://ustc.software/biocircuit/10110010/", function(data) {
                     BioBLESS.logic.gates_sup = data;
                     var new_stage = BioBLESS.logic.craete_efgh(this.parent);
-                    that.parent.parent.addChild(new_stage);
-                    that.parent.parent.removeChild(this.parent);
+                    this.parent.parent.addChild(new_stage);
+                    this.parent.parent.removeChild(this.parent);
             }.bind(this));
         };
         OK.on("click", OK_function);
@@ -1296,9 +1296,12 @@ BioBLESS.logic.circuits = function(){
                 this.devs[j] = BioBLESS.gene_network.create_textbutton("OUT", 100, 80, 0x0000ff);
                 this.devs[i].output[0].to_dev_index[0] = j;
                 this.devs[i].output[0].to_dev_input_index[0] = 0;
+                this.devs[j].output = [];
+                this.devs[j].input = [];
+                this.devs[j].input[0] = {};
                 this.devs[j].input[0].to_dev_index = i;
                 this.devs[j].input[0].to_dev_output_index = 0;
-                this.devs[j].input_num++;
+                this.devs[j].input_num = 1;
             }
         }
         this.poi = [];
@@ -1346,10 +1349,14 @@ BioBLESS.logic.circuits = function(){
         }
         this.devs_width = x - 200;
         this.draw_lines_between_gates();    
+        
+        var bg = new PIXI.Graphics();
+        bg.beginFill(0, 0);
+        bg.drawRect(0, 0, this.devs_width, this.devs_height);
+        bg.endFill();
+        this.stage.addChild(bg);
     };
 };
-
-
 
 
 /**
@@ -1367,7 +1374,7 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     var BACK = BioBLESS.logic.create_textbutton("BACK", 100, 40, 0x000000);
     BACK.x = 100;
     BACK.y = BioBLESS.height - 60;
-    stage.addChild(BACK);
+    
     BACK.interactive = true;
     BACK.buttonMode = true;
     var BACK_function = function(){   
@@ -1378,30 +1385,98 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     
     var contain = new PIXI.Container();
     var curcuits = [];
+    var curcuits_move = [];
     var y = 0;
+    var mouse_over = function(){
+        this.button_bg.beginFill(0x555555, 1);
+        this.button_bg.drawRect(0, 0, 260, this.h);
+        this.button_bg.endFill();
+        BioBLESS.scroll_function = this.parent.parent.parent.scroll_function;
+    };
+    var mouse_out = function(){
+        this.button_bg.clear();
+    };
+    var on_mouse_start = function(e){
+        var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
+        curcuits_move[this.i].stage.x = new_position.x - 115;
+        curcuits_move[this.i].stage.y = new_position.y - this.h / 2;
+        BioBLESS.base_stage.addChild(curcuits_move[this.i].stage);
+    };
+    var on_mouse_move = function(e){
+        var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
+        this.x = new_position.x - 115;
+        this.y = new_position.y - this.h / 2;
+    };
+    var on_mouse_end = function(e){
+        BioBLESS.base_stage.removeChild(this);
+        BioBLESS.logic.circuit_draw_of_data(curcuits[i], BioBLESS.logic.gates_sup[i]);
+    };
     for(var i = 0; i < BioBLESS.logic.gates_sup.length; i++){
         curcuits[i] = new BioBLESS.logic.circuits();
         curcuits[i].draw(BioBLESS.logic.gates_sup[i]);
         curcuits[i].stage.y = y;
         curcuits[i].stage.scale.x = curcuits[i].stage.scale.y = 230 / curcuits[i].devs_width;
-        y += 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        curcuits[i].stage.button_bg = new PIXI.Graphics();
+        curcuits[i].stage.button_bg.y = curcuits[i].stage.y;
+        curcuits[i].stage.h = 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        contain.addChild(curcuits[i].stage.button_bg);
         contain.addChild(curcuits[i].stage);
+        curcuits[i].stage.i = i;
+        curcuits[i].stage.interactive = true;
+        curcuits[i].stage.on('mouseover', mouse_over)
+                         .on('mouseout', mouse_out)
+                         .on('mousedown', on_mouse_start);                                                               
+        
+        
+        curcuits_move[i] = new BioBLESS.logic.circuits();
+        curcuits_move[i].draw(BioBLESS.logic.gates_sup[i]);
+        curcuits_move[i].stage.y = y;
+        curcuits_move[i].stage.scale.x = curcuits_move[i].stage.scale.y = 230 / curcuits_move[i].devs_width;
+        curcuits_move[i].stage.h = 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        curcuits_move[i].stage.i = i;
+        curcuits_move[i].stage.interactive = true;
+        curcuits_move[i].stage.on('mousemove',  on_mouse_move)
+                              .on('mouseup',  on_mouse_end)
+                              .on('mouseupoutside',  on_mouse_end); 
+        y += 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        
     }
     var scroll_area = BioBLESS.logic.create_scrollarea(contain, y, 260, BioBLESS.height - 150);
+    var mask = new PIXI.Graphics();
+    mask.interactive = true;
+    mask.beginFill(0, 0);
+    mask.drawRect(0, -1000, 260, 1000);
+    mask.drawRect(0, BioBLESS.height - 150, 260, 1000);
+    mask.endFill();
+    scroll_area.addChild(mask);
     scroll_area.x = 20;
     scroll_area.y = 50;
     stage.addChild(scroll_area);
+    stage.addChild(BACK);
     return stage;
 };
 
+/**
+ * circuit_draw_of_data is the function to draw according to true table
+ * @function
+ * @param  {thing} BioBLESS.logic.circuits
+ * @param  {circuit_data} BioBLESS.logic.circuit
+ */
 BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
-    BioBLESS.logic.add_gate = function(){
-        BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate();
-        var i,j;
-        for(i in thing.poi){
-        	for(j in thing.poi[i]){
-                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing.poi[i][j].position.x;
-                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing.poi[i][j].position.y;
+    BioBLESS.logic.circuit = circuit_data;
+
+    /**
+     * add_gate is the function to draw gate according to the BioBLESS.logic.circuits.poi
+     * @function
+     * @param {thing_e} BioBLESS.logic.circuits
+     */
+    BioBLESS.logic.add_gate = function(thing_e){
+        var i,j,k,m;
+        for(i = 1; i < thing_e.poi.length - 1; i++){
+            for(j in thing_e.poi[i]){
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate(thing_e.poi[i][j]);
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing_e.poi[i][j].position.x;
+                BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing_e.poi[i][j].position.y;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.buttonMode = true;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].Index = this.Index;
@@ -1437,15 +1512,27 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
                                                                                    .on('touchstart', that.on_draw_line_up)
                                                                                    .on('mousemove', that.on_draw_line_move)
                                                                                    .on('touchmove', that.on_draw_line_move);
+                
+                for(k in thing_e.dev){
+                    if(thing_e.dev[k] === thing_e.poi[i][j]){
+                        break;
+                    }
+                }
+                BioBLESS.logic.mark[BioBLESS.logic.elements.length - 1] = k;
 
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.interactive = true;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
-                BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
                 that.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
             }
         }
     };
 
+    /**
+     * add_line is the function to draw line according to its two connections
+     * @function
+     * @param {papa} BioBLESS.logic.elemennts.input_1/input_2/output
+     * @param {mama} BioBLESS.logic.elemennts.input_1/input_2/output
+     */
     BioBLESS.logic.add_line = function(papa, mama) {
         drawPart[0] = new PIXI.Graphics();
         papa.lines[papa.counts] = [];
@@ -1503,12 +1590,62 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
         drawPart[0].on('mouseover', BioBLESS.logic.line_delete_button_create)
                    .on('mouseout', BioBLESS.logic.line_delete_button_remove)
                    .on('click', BioBLESS.logic.line_wait_for_key);
-        BioBLESS.logic.circuit_add_line(drawPart[0].mother, drawPart[0].father);
     };
-    
-    // for(){
-    //     BioBLESS.logic.add_line();
-    // };
+
+    BioBLESS.logic.add_gate(thing);
+    var i,j,k;
+    var dad = 0;
+    var mom;
+    for(i = 1; i < thing.poi.length -2; i++){
+        for(j in thing.poi[i]){
+            for(k in thing.poi[i][j].output[0].to_dev_index){
+                for(mom in BioBLESS.logic.elements){
+                    if(BioBLESS.logic.mark[mom] === thing.poi[i][j].output[0].to_dev_index[k]){
+                        break;
+                    }
+                    if(thing.poi[i][j].output[0].to_dev_index[k] === (thing.dev.length - 1)){
+                        mom === null;
+                        break;
+                    }
+                }
+                if(mom !==null){
+                    if(poi[i][j].output[0].to_dev_input_index[k] === 0){
+                        BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].output, BioBLESS.logic.elements[mom].input_1);
+                    }
+                    else{
+                        BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].output, BioBLESS.logic.elements[mom].input_2);
+                    }
+                }
+            }
+            dad++;    
+        }
+    }
+    for(i in thing.poi[0]){
+        if(thing.poi[0][i].output[0].to_dev_index.length > 1){
+            for(j = 0; j < thing.poi[0][i].output[0].to_dev_index.length -1; j++){
+                for(k in BioBLESS.logic.elements){
+                    if(BioBLESS.logic.mark[k] === thing.poi[0][i].output[0].to_dev_index[j]){
+                        dad = k;
+                    }
+                    if(BioBLESS.logic.mark[k] === thing.poi[0][i].output[0].to_dev_index[j + 1]){
+                        mom = k;
+                    }
+                }
+                if(thing.poi[0][i].output[0].to_dev_input_index[j] === 0 && thing.poi[0][i].output[0].to_dev_input_index[j + 1] === 0){
+                    BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].input_1, BioBLESS.logic.elements[mom].input_1);
+                }
+                else if(thing.poi[0][i].output[0].to_dev_input_index[j] === 1 && thing.poi[0][i].output[0].to_dev_input_index[j + 1] === 0){
+                    BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].input_2, BioBLESS.logic.elements[mom].input_1);
+                }
+                else if(thing.poi[0][i].output[0].to_dev_input_index[j] === 0 && thing.poi[0][i].output[0].to_dev_input_index[j + 1] === 1){
+                    BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].input_1, BioBLESS.logic.elements[mom].input_2);
+                }
+                else{
+                    BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].input_2, BioBLESS.logic.elements[mom].input_2);
+                }
+            }
+        }
+    }
 };
 
 
