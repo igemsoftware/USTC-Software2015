@@ -1301,6 +1301,12 @@ BioBLESS.logic.circuits = function(){
                 this.devs[j].input[0] = {};
                 this.devs[j].input[0].to_dev_index = i;
                 this.devs[j].input[0].to_dev_output_index = 0;
+                this.devs[j].input[0].x = 0;
+                this.devs[j].input[0].y = 35;
+                this.devs[j].chosen = false;
+                this.devs[j].id = "OUT";
+                this.devs[j].stage_h = 70;
+                this.devs[j].stage_w = 150;
                 this.devs[j].input_num = 1;
             }
         }
@@ -1347,7 +1353,7 @@ BioBLESS.logic.circuits = function(){
             }
             x += this.row[i].width;
         }
-        this.devs_width = x - 200;
+        this.devs_width = x;
         this.draw_lines_between_gates();    
         
         var bg = new PIXI.Graphics();
@@ -1409,16 +1415,16 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
     };
     var on_mouse_end = function(e){
         BioBLESS.base_stage.removeChild(this);
-        BioBLESS.logic.circuit_draw_of_data(curcuits[i], BioBLESS.logic.gates_sup[i]);
+        BioBLESS.logic.circuit_draw_of_data(curcuits[this.i], BioBLESS.logic.gates_sup[this.i]);
     };
     for(var i = 0; i < BioBLESS.logic.gates_sup.length; i++){
         curcuits[i] = new BioBLESS.logic.circuits();
         curcuits[i].draw(BioBLESS.logic.gates_sup[i]);
         curcuits[i].stage.y = y;
-        curcuits[i].stage.scale.x = curcuits[i].stage.scale.y = 230 / curcuits[i].devs_width;
+        curcuits[i].stage.scale.x = curcuits[i].stage.scale.y = 250 / curcuits[i].devs_width;
         curcuits[i].stage.button_bg = new PIXI.Graphics();
         curcuits[i].stage.button_bg.y = curcuits[i].stage.y;
-        curcuits[i].stage.h = 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        curcuits[i].stage.h = 250 / curcuits[i].devs_width * curcuits[i].devs_height;
         contain.addChild(curcuits[i].stage.button_bg);
         contain.addChild(curcuits[i].stage);
         curcuits[i].stage.i = i;
@@ -1431,14 +1437,14 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
         curcuits_move[i] = new BioBLESS.logic.circuits();
         curcuits_move[i].draw(BioBLESS.logic.gates_sup[i]);
         curcuits_move[i].stage.y = y;
-        curcuits_move[i].stage.scale.x = curcuits_move[i].stage.scale.y = 230 / curcuits_move[i].devs_width;
-        curcuits_move[i].stage.h = 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        curcuits_move[i].stage.scale.x = curcuits_move[i].stage.scale.y = 250 / curcuits_move[i].devs_width;
+        curcuits_move[i].stage.h = 250 / curcuits[i].devs_width * curcuits[i].devs_height;
         curcuits_move[i].stage.i = i;
         curcuits_move[i].stage.interactive = true;
         curcuits_move[i].stage.on('mousemove',  on_mouse_move)
                               .on('mouseup',  on_mouse_end)
                               .on('mouseupoutside',  on_mouse_end); 
-        y += 230 / curcuits[i].devs_width * curcuits[i].devs_height;
+        y += 250 / curcuits[i].devs_width * curcuits[i].devs_height;
         
     }
     var scroll_area = BioBLESS.logic.create_scrollarea(contain, y, 260, BioBLESS.height - 150);
@@ -1472,8 +1478,9 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
      */
     BioBLESS.logic.add_gate = function(thing_e){
         var i,j,k,m;
-        for(i = 1; i < thing_e.poi.length - 1; i++){
-            for(j in thing_e.poi[i]){
+        var that = BioBLESS.logic;
+        for(i = 1; i < thing_e.poi.length - 2; i++){
+            for(j = 0;j < thing_e.poi[i].length; j++){
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate(thing_e.poi[i][j]);
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = thing_e.poi[i][j].position.x;
                 BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = thing_e.poi[i][j].position.y;
@@ -1513,8 +1520,8 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
                                                                                    .on('mousemove', that.on_draw_line_move)
                                                                                    .on('touchmove', that.on_draw_line_move);
                 
-                for(k in thing_e.dev){
-                    if(thing_e.dev[k] === thing_e.poi[i][j]){
+                for(k = 0; k < thing_e.devs.length; k++){
+                    if(thing_e.devs[k] === thing_e.poi[i][j]){
                         break;
                     }
                 }
@@ -1534,11 +1541,11 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
      * @param {mama} BioBLESS.logic.elemennts.input_1/input_2/output
      */
     BioBLESS.logic.add_line = function(papa, mama) {
-        drawPart[0] = new PIXI.Graphics();
         papa.lines[papa.counts] = [];
         drawPart = papa.lines[papa.counts];
         papa.counts ++;
         papa.connection = true;
+        drawPart[0] = new PIXI.Graphics();
         drawPart[0].father = papa;
         mama.lines[mama.counts] = [];
         mama.lines[mama.counts] = drawPart;
@@ -1597,19 +1604,19 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
     var dad = 0;
     var mom;
     for(i = 1; i < thing.poi.length -2; i++){
-        for(j in thing.poi[i]){
-            for(k in thing.poi[i][j].output[0].to_dev_index){
-                for(mom in BioBLESS.logic.elements){
+        for(j = 0; j < thing.poi[i].length; j++){
+            for(k = 0; k < thing.poi[i][j].output[0].to_dev_index.length; k++){
+                for(mom = 0; mom < BioBLESS.logic.elements.length; mom++){
                     if(BioBLESS.logic.mark[mom] === thing.poi[i][j].output[0].to_dev_index[k]){
                         break;
                     }
-                    if(thing.poi[i][j].output[0].to_dev_index[k] === (thing.dev.length - 1)){
-                        mom === null;
+                    if(thing.poi[i][j].output[0].to_dev_index[k] === (thing.devs.length - 1)){
+                        mom = null;
                         break;
                     }
                 }
-                if(mom !==null){
-                    if(poi[i][j].output[0].to_dev_input_index[k] === 0){
+                if(mom !== null && mom !== BioBLESS.logic.elements.length){
+                    if(thing.poi[i][j].output[0].to_dev_input_index[k] === 0){
                         BioBLESS.logic.add_line(BioBLESS.logic.elements[dad].output, BioBLESS.logic.elements[mom].input_1);
                     }
                     else{
@@ -1620,10 +1627,10 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
             dad++;    
         }
     }
-    for(i in thing.poi[0]){
+    for(i = 0; i < thing.poi[0].length; i++){
         if(thing.poi[0][i].output[0].to_dev_index.length > 1){
             for(j = 0; j < thing.poi[0][i].output[0].to_dev_index.length -1; j++){
-                for(k in BioBLESS.logic.elements){
+                for(k = 0; k < BioBLESS.logic.elements.length; k++){
                     if(BioBLESS.logic.mark[k] === thing.poi[0][i].output[0].to_dev_index[j]){
                         dad = k;
                     }
