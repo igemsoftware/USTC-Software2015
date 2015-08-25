@@ -162,7 +162,7 @@ def bio_system(system_data):
 
     """
     time = system_data["system_parameter"]["time"]
-    logi = {single_lizhi["id"]:single_lizhi for single_lizhi in lizhi}
+    logi = {single_lizhi["id"]:single_lizhi for single_lizhi in gates_data}
     nodes = system_data["nodes"]
     devices = [DeviceSystem(
         logi[nodes[i]],
