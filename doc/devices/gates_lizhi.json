@@ -1,22 +1,5 @@
 [
     {
-        "id": "INPUT",
-        "input": [],
-        "output": [
-            "d1"
-        ],
-        "parts": {
-            "id": [
-                "d1"
-            ],
-            "type": {
-                "d1": "input"
-            }
-        },
-        "map": [],
-        "type": {}
-    },
-    {
         "id": "OR0",
         "input": [
             "p100",
