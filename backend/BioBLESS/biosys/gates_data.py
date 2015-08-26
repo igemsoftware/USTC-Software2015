@@ -10,7 +10,7 @@ gates_data = [
         "parts": {
             "id": [["d1"]],
             "type": {"d1": "Input"}
-	},
+        },
         "map": [],
         "type": {}
     },
