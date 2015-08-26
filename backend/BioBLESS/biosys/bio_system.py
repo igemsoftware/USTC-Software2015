@@ -13,7 +13,23 @@ Create some biosys and calculate their simulation
 __author__ = 'Trumpet'
 
 from reaction_system import ReactionSystem
-from gates_data import gates_data
+
+
+null=None
+gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+gate_data_source = gate_file.read()
+exec("gates_data = "+gate_data_source)
+gates_data.append({
+        "id": "INPUT",
+        "input": [],
+        "output": ["d1"],
+        "parts": {
+            "id": [["d1"]],
+            "type": {"d1": "Input"}
+        },
+        "map": [],
+        "type": {}
+    })
 
 def dev_system(gates, data, nodes_id, input_sub, output_sub):
     '''
