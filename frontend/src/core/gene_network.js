@@ -769,21 +769,18 @@ BioBLESS.gene_network.create_textbutton = function(t, w, h, color){
 };
 BioBLESS.gene_network.create_dialog = function(){
     var stage = new PIXI.Container();
+    var mask = new PIXI.Graphics();
+    mask.beginFill(0, 0);
+    mask.drawRect(-1000, -1000, 3000, 5000);
+    mask.interactive = true;
+    mask.on('click', function(){stage.del();});
+    stage.addChild(mask);
     var bg = new PIXI.Graphics();
     bg.beginFill(0x333333, 1);
     bg.drawRoundedRect(0, 0, 500, BioBLESS.height - 100, 50);
     bg.endFill();
     bg.interactive = true;
     stage.addChild(bg);
-    var mask = new PIXI.Graphics();
-    mask.beginFill(0, 0);
-    mask.drawRect(-1000, -1000, 3000, 1000);
-    mask.drawRect(500, 0, 1000, BioBLESS.height - 100);
-    mask.drawRect(-1000, 0, 1000, BioBLESS.height - 100);
-    mask.drawRect(-1000, BioBLESS.height - 100, 3000, 1000);
-    mask.interactive = true;
-    mask.on('click', function(){stage.del();});
-    stage.addChild(mask);
     
     var title = new PIXI.Text("ID");
     title.x = 55;
@@ -951,7 +948,7 @@ BioBLESS.gene_network.create_inputitem = function(name, num, w){
         input.value = stage.num.text;
         var position = stage.toGlobal(stage.num.position);
         input.style.left = position.x.toString() + "px";
-        input.style.top = (position.y + 2).toString() + "px";
+        input.style.top = (position.y).toString() + "px";
         $("body").append(input);
         var bg = new PIXI.Graphics();
         bg.beginFill(0, 0);
