@@ -12,13 +12,15 @@ Create some biosys and calculate their simulation
 """
 __author__ = 'Trumpet'
 
+import simplejson
+
 from reaction_system import ReactionSystem
 
 
 null=None
 gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
 gate_data_source = gate_file.read()
-exec("gates_data = "+gate_data_source)
+gates_data = simplejson.loads(gate_data_source)
 gates_data.append({
         "id": "INPUT",
         "input": [],
