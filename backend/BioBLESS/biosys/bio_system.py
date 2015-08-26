@@ -18,7 +18,14 @@ from reaction_system import ReactionSystem
 
 
 null = None
-gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+try:
+    gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+except:
+    pass
+try:
+    gate_file = open("../doc/devices/gates_lizhi.json", "r")
+except:
+    pass
 gate_data_source = gate_file.read()
 gates_data = simplejson.loads(gate_data_source)
 gates_data.append({
