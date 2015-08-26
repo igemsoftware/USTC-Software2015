@@ -10,6 +10,8 @@ Simulation structure:[[[species,initial],...],stop_time]
 Show structure:[species_to_show]
 """
 
+__author__ = "Trumpet"
+
 import numpy
 
 SIZE = 1001
