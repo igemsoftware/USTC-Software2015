@@ -852,6 +852,18 @@
                 "params": {
                     "reg": 20
                 }
+            },
+            {
+                "id": "e4",
+                "id1": "d7",
+                "id2": "p7",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
             }
         ],
         "type": {
