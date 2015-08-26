@@ -1,16 +1,17 @@
 __author__ = 'suquark'
+import os
+import json
 from debug_tool import debug_info
 from hash_tool import dump_ord, hash_list
 import copy
 
 
-
 def hash_gates_and_simulation(biosystem):
-    hash_list = []
+    hash_lst = []
     for i in range(len(biosystem['nodes'])):
         hash_str = dump_ord(biosystem['simulation_parameters'][i])
-        hash_list.append(hash('"%s":%s' % (biosystem['nodes'][i], hash_str)))
-    return hash_list
+        hash_lst.append(hash('"%s":%s' % (biosystem['nodes'][i], hash_str)))
+    return hash_lst
 
 
 class BioSystemNetwork(object):
@@ -26,6 +27,9 @@ class BioSystemNetwork(object):
         self.reaction_lines_hash = hash_list(self.reaction_lines)
         if __debug__:
             print debug_info('BioNetwork_lines_hash'), self.reaction_lines_hash
+        self.network_hash = hash(dump_ord(sorted(self.reaction_lines_hash)))
+        if __debug__:
+            print debug_info('BioNetwork_hash'), self.network_hash
 
     @staticmethod
     def reconstruct_arcs(biosystem):
@@ -83,6 +87,32 @@ class BioSystemNetwork(object):
 #     return sorted(list1) == sorted(list2)
 
 
+def biosystem_cache(biosystem):
+    """
+
+    :param biosystem:
+    :return:
+    """
+    network_hash = BioSystemNetwork(biosystem).network_hash
+    f_name = '../cache/%d.json' % network_hash
+    if os.path.exists(f_name):
+        fp = open(f_name, 'r')
+        data = fp.read()
+        fp.close()
+        return json.loads(data)
+    else:
+        return None
+
+
+def biosystem_update_cache(biosystem, record):
+    network_hash = BioSystemNetwork(biosystem).network_hash
+    f_name = '../cache/%d.json' % network_hash
+    if not os.path.exists(f_name):
+        fp = open(f_name, 'w+')
+        json.dump(record, fp)
+        fp.close()
+
+
 def compare_biosystem(biosystem1, biosystem2):
     list1, list2 = map(hash_gates_and_simulation, (biosystem1, biosystem2))
     if __debug__:
@@ -91,6 +121,3 @@ def compare_biosystem(biosystem1, biosystem2):
         return False
     net1, net2 = map(BioSystemNetwork, (biosystem1, biosystem2))
     return sorted(net1.reaction_lines_hash) == sorted(net2.reaction_lines_hash)
-
-
-
