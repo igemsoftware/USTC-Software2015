@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fringe Detection</title>
+<meta charset="utf-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script type="text/javascript">
+	imagetmp = new FileReader();
+	imagetmp.onload = function (tem) 
+	{
+  		document.getElementById("previewimage").src = tem.target.result;
+  		console.log(tem.target.result)
+	};
+	function loadImageFile() 
+	{
+ 	var trueimage = document.getElementById("imagefile").files[0];
+  	imagetmp.readAsDataURL(trueimage);
+	};
+</script>
+<script type="text/javascript">
+function uploadandSubmit(){
+    	var imagetmp = new FileReader();
+    	var img = document.getElementById("imagefile").files[0];
+	imagetmp.onload = function (tem) 
+	{
+  		$.post("http://localhost:8000",tem.target.result,function(data){ 
+  			a=$.parseJSON(data);
+  			alert("Success")})
+	};
+    	imagetmp.readAsBinaryString(img);
+ } 	
+</script>
+</head>
+
+<body onload="loadImageFile();">
+<form id="demoForm">
+	<fieldset id="picture upload">
+		<legend>Picture Upload</legend>
+		<table>
+			<tbody>
+				<tr>
+					<td id="l1r1"><img id="previewimage" src="" /></td>
+					<td id="l1r2"><input type="file" id="imagefile" name="file" accept="image/*" onchange="loadImageFile();"  /></td>
+					<td id="l1r3"><p  onclick="uploadandSubmit()">Submit</p></td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>
+</form>
+<form>
+	<fieldset id="select point">
+		<legend>Select Point</legend>
+		<canvas id="binimage" height=2px width=10px style="background-color: #FFFFFF">your browser does not support the canvas tag</canvas>
+		<script type="text/javascript">
+			var canvas=document.getElementById('binimage');
+			var ctx=canvas.getContext('2d');
+			var tmp=[[1,1,1,1,1,1,1,1,1,1],[1,0,1,0,1,1,0,0,1,0]];
+			var imagedata=ctx.createImageData(tmp[0].length,tmp.length);
+			for (var i=0; i<2; i++)
+			{
+				for (var j=0; j<10; j++)
+				{
+					var off = 4 * (i * tmp[0].length + j);
+					if (tmp[i][j]==1)
+					{
+						imagedata.data[off + 3]=255;
+					}
+					else
+					{
+						imagedata.data[off + 3]=0;
+					}
+				}
+			}
+			ctx.putImageData(imagedata,0,0);
+
+		</script>
+	</fieldset>
+</form>
+
+</body>
+</html>

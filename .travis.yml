@@ -25,6 +25,9 @@ script:
     - pwd
     - ./pylint_test.sh
     - python manage.py migrate
-    - python manage.py test BioBLESS
+    - coverage run --source=BioBLESS manage.py test BioBLESS
     - cd ../frontend
-    - npm test
+    # - npm test
+after_success:
+    - cd ../backend
+    - coveralls

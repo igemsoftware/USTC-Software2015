@@ -12,8 +12,33 @@ Create some biosys and calculate their simulation
 """
 __author__ = 'Trumpet'
 
+import simplejson
+
 from reaction_system import ReactionSystem
-from gates_data import gates_data
+
+
+null = None
+try:
+    gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+except:
+    pass
+try:
+    gate_file = open("../doc/devices/gates_lizhi.json", "r")
+except:
+    pass
+gate_data_source = gate_file.read()
+gates_data = simplejson.loads(gate_data_source)
+gates_data.append({
+        "id": "INPUT",
+        "input": [],
+        "output": ["d1"],
+        "parts": {
+            "id": [["d1"]],
+            "type": {"d1": "Input"}
+        },
+        "map": [],
+        "type": {}
+    })
 
 def dev_system(gates, data, nodes_id, input_sub, output_sub):
     '''
@@ -56,7 +81,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
         maps = gates["map"]
         protein = select(parts_type, "Coding")
         s_rna = select(parts_type, "sRNA")
-        species = get_species(protein, ["d", "m", "r",  "l","p"])+get_species(s_rna, ["d", "m", "r"])
+        species = get_species(protein, ["d", "m", "r", "l", "p"])+get_species(s_rna, ["d", "m", "r"])
         initial = data["device_parameter"]["initial"]
         for i in range(len(initial)):
             for j in gates["parts"]["id"][i]:
