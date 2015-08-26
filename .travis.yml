@@ -29,4 +29,5 @@ script:
     - cd ../frontend
     # - npm test
 after_success:
+    - cd backend
     - coveralls
