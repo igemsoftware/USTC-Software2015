@@ -17,7 +17,7 @@ import simplejson
 from reaction_system import ReactionSystem
 
 
-null=None
+null = None
 gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
 gate_data_source = gate_file.read()
 gates_data = simplejson.loads(gate_data_source)
@@ -74,7 +74,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
         maps = gates["map"]
         protein = select(parts_type, "Coding")
         s_rna = select(parts_type, "sRNA")
-        species = get_species(protein, ["d", "m", "r",  "l","p"])+get_species(s_rna, ["d", "m", "r"])
+        species = get_species(protein, ["d", "m", "r", "l", "p"])+get_species(s_rna, ["d", "m", "r"])
         initial = data["device_parameter"]["initial"]
         for i in range(len(initial)):
             for j in gates["parts"]["id"][i]:
