@@ -5,7 +5,7 @@ from bio_system import bio_system
 try:
     while True:
         null = None
-        gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+        gate_file = open("../doc/devices/gates_lizhi.json", "r")
         gate_data_source = gate_file.read()
         gates_data = simplejson.loads(gate_data_source)
         gates_data.append({
