@@ -8,3 +8,4 @@ markdown
 djangorestframework
 django-rest-swagger
 django-filter
+coveralls
