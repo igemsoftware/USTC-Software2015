@@ -78,7 +78,7 @@ def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=0):
     answer : image
         the processed image.
     """
-    gray = ImageOps.invert(ImageOps.grayscale(Image.open("stripes.jpg")))
+    gray = ImageOps.invert(ImageOps.grayscale(Image.open(path)))
     gray_blur = gray.filter(ImageFilter.GaussianBlur(blur_radius))
     high_freq = ImageMath.eval("25*(a-b)", a=gray, b=gray_blur).convert("L")
 
@@ -257,7 +257,7 @@ def calculate_begin_rank(delta_n, delta_r, rank_func):
             x[1]-x[0]-delta_n,
             x[3]-x[2]-delta_r
         ]
-    return int()fsolve(lhs,[50,100,200,400])[0])
+    return int(fsolve(lhs,[50,100,200,400])[0])
 
 def all_in_one(path, initial, final, s_hold, b_hold):
     img = strip_processing(path)
