@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-
 print "Initing............................................"
 print "Please waiting....................................."
 
 import simplejson
+from time import clock
+
 from bio_system import bio_system
+
 
 try:
     while True:
@@ -40,7 +42,7 @@ try:
         print "Input the initial number of DNA in the gate:"
         gate_dna_number = input()
 
-        print "Input the intitial of input species ( %d ):" % input_num
+        print "Input the intitial of input species (%d):" % input_num
         initial = [input() for i in range(input_num)]
 
         print "Input simulation time:"
@@ -52,15 +54,21 @@ try:
             "system_parameter":{"time": time_to},
             "simulation_parameters":[
                 dict(
-                    {"device_parameter":{"initial":[gate_dna_number]*len(gates_data[gate_name]["parts"]["id"])}}.items()+
-                    {i["id"]:i["params"] for i in gates_data[gate_name]["map"]}.items()
+                    [("device_parameter", {"initial":[gate_dna_number]*len(gates_data[gate_name]["parts"]["id"])})]+
+                    [(i["id"], i["params"]) for i in gates_data[gate_name]["map"]]
                 )
             ]+[{"device_parameter":{"initial":[initial[i]]}} for i in range(input_num)]
         }
 
         print "Simulating..."
+        print "System is:"
+        print graph
 
+        starter = clock()
         reaction = bio_system(graph)
+        ender = clock()
+        print "Time is :"
+        print ender-starter
 
         reaction.show_record()
         try:
