@@ -156,7 +156,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                             [["i" + part_id], [reg_pro, "r" + part_id], reg_data["reg"] * single_data["trans2"]]
                         )
                         if not "i" + part_id in species:
-                            species.append("n" + part_id)
+                            species.append("i" + part_id)
 
                     if maps[tmp]["type"] == "act":
                         single_reaction.append(
