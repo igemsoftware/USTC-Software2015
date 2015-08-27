@@ -1358,10 +1358,10 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.00001,
+                    "trans1": 0.00003,
                     "trans2": 0.5,
-                    "decay1": 0.2,
-                    "decay2": 0.1
+                    "decay1": 0.12,
+                    "decay2": 0.06
                 }
             },
             {
@@ -1381,8 +1381,8 @@
                 "params": {
                     "trans1": 0.01,
                     "trans2": 0.5,
-                    "decay1": 0.2,
-                    "decay2": 0.1
+                    "decay1": 0.12,
+                    "decay2": 0.06
                 }
             },
             {
@@ -1391,7 +1391,7 @@
                 "id2": "d9",
                 "type": "act",
                 "params": {
-                    "reg": 3
+                    "reg": 20
                 }
             },
             {
@@ -1400,7 +1400,7 @@
                 "id2": "d2",
                 "type": "act",
                 "params": {
-                    "reg": 3
+                    "reg": 4
                 }
             },
             {
@@ -1409,10 +1409,10 @@
                 "id2": "p11",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
+                    "trans1": 0.001,
                     "trans2": 0.5,
-                    "decay1": 0.2,
-                    "decay2": 0.1
+                    "decay1": 0.12,
+                    "decay2": 0.06
                 }
             }
         ],
