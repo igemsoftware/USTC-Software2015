@@ -22,7 +22,6 @@ import BioBLESS.biocircuit.qm
 
 import numpy as np
 import networkx as nx
-import simplejson
 
 
 def string2truthtable(string):
@@ -66,15 +65,15 @@ def string2truthtable(string):
     """
     ones = []
     zeros = []
-    dc = []
+    qm_dc = []
     for i in range(len(string)):
         if string[i] == '1':
             ones.append(i)
         elif string[i] == '0':
             zeros.append(i)
         else:
-            dc.append(i)
-    return ones, zeros, dc
+            qm_dc.append(i)
+    return ones, zeros, qm_dc
 
 
 def string2expr(string):
@@ -348,36 +347,3 @@ def get_score_from_front(d_json, d_gate):
     """
     score = calc_score(d_json['nodes'], d_gate)
     return score
-
-
-def garbage(graph, d_lizhi):
-    """Add some parameters for simulation.
-
-    Parameters
-    ----------
-    graph : list
-        A list of dicts, each dicts looks like:
-        {'nodes': [], 'arcs': {'from': 0, 'to': 1}, 'score': 2.5}
-
-    d_lizhi : dict
-        A dict converted from the json in devices.
-        key: 'NOT0', ...
-
-    Returns
-    -------
-    l_zh : list
-        A list of dicts for simulation.
-    """
-    l_zh = []
-    for i in graph:
-        i['system_parameter'] = {'time': 100}
-        i['simulation_parameters'] = []
-        for j in i['nodes']:
-            chain = len(d_lizhi[j]['parts']['id'])
-            d_map = {}
-            for k in d_lizhi[j]['map']:
-                d_map[k['id']] = k['params']
-            d_map['device_parameter'] = {'initial': [20 for x in range(chain)]}
-            i['simulation_parameters'].append(d_map)
-        l_zh.append(i)
-    return l_zh

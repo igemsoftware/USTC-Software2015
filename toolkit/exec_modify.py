@@ -4,12 +4,17 @@ print "Please waiting....................................."
 
 import simplejson
 from time import clock
-
+from sys import path
+try :
+    path.append('../backend/BioBLESS/biosys')
+except:
+    pass
 from bio_system import bio_system
-
 
 try:
     while True:
+        print "Print enter to load json"
+        raw_input()
         null = None
         try:
             gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
@@ -21,6 +26,7 @@ try:
             pass
         gate_data_source = gate_file.read()
         gates_data = simplejson.loads(gate_data_source)
+        gates_data = list(gates_data)
         gates_data.append({
                 "id": "INPUT",
                 "input": [],
