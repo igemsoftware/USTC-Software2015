@@ -86,8 +86,8 @@ def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=0):
     binarized_data = binarized.load()
     #binarized.show()
 
-    height = binarized.height
-    width = binarized.width
+    height = binarized.size[1]
+    width = binarized.size[0]
 
     pix = np.array([[np.uint8(binarized_data[j, i]) for j in range(width)] for i in range(height)])
 
