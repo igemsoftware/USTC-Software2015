@@ -87,6 +87,7 @@ class ReactionSystem(object):
         self.set_species_name(species)
         self.set_reactions(reactions)
         self.record = None 
+        self.time = 0
 
     def set_species_name(self, species):
         """
@@ -231,4 +232,10 @@ class ReactionSystem(object):
         """
         self.simulate(initial, stop_time)
         self.show_record(list_plot)
+
+    def simulation(self):
+        """
+        Just do simulation
+        """
+        self.simulate([], self.time)
 
