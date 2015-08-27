@@ -12,74 +12,88 @@ from PIL import ImageMath
 def lut(threshold):
     """Generate the lookup table for binarize.
 
-    Inputs:
-    int: threshold
+    Parameters
+    ----------
+    threshold : int
+        threshold
 
-    Outputs:
-    list: [0, 0, ..., 255, 255, ..., 255]"""
-
-    return [255 if i<=threshold else 0 for i in range(256)]
+    Returns
+    -------
+    points : list
+        A list seems like: [0, 0, ..., 255, 255, ..., 255]
+    """
+    points = [255 if i <= threshold else 0 for i in range(256)]
+    return points
 
 def denoise(pix):
-
     """Kernel filter.
 
-    Inputs:
-    list: pix map
+    Parameters
+    ----------
+    pix : list
+        pix map
 
-    Outputs:
-    list: pix_new map"""
-
-    pix_new=pix.copy()
-    height=len(pix)
-    width=len(pix[0])
-    for i in range(1,height-1):
-        for j in range(1,width-1):
-            if pix[i,j]==0:
-                ans=\
-                int(pix[i-1,j-1])+\
-                int(pix[i-1,j])+\
-                int(pix[i-1,j+1])+\
-                int(pix[i,j-1])+\
-                int(pix[i,j+1])+\
-                int(pix[i+1,j-1])+\
-                int(pix[i+1,j])+\
-                int(pix[i+1,j+1])
-                if ans>=3*255:
+    Returns
+    -------
+    pix_new : list
+        pix_new map
+    """
+    pix_new = pix.copy()
+    height = len(pix)
+    width = len(pix[0])
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            if pix[i, j] == 0:
+                ans = \
+                int(pix[i-1, j-1])+\
+                int(pix[i-1, j])+\
+                int(pix[i-1, j+1])+\
+                int(pix[i, j-1])+\
+                int(pix[i, j+1])+\
+                int(pix[i+1, j-1])+\
+                int(pix[i+1, j])+\
+                int(pix[i+1, j+1])
+                if ans >= 3*255:
                     #print "Modefied!(%s,%s)ans=%s"%(i,j,ans)
-                    pix_new[i,j]=np.uint8(255)
+                    pix_new[i, j] = np.uint8(255)
     return pix_new
 
 def strip_processing(path, blur_radius=7, iter_steps=1, binarize_threshold=100):
-
     """Strip precessing function.
 
-    Inputs:
-    string: path of the image
-    blur_radius: radius of gaussian blur
-    iter_steps: execution times of denoise
-    binarize_threshold: used as function lut's input
+    Parameters
+    ----------
+    path : string
+        path of the image
+    blur_radius : int
+        radius of gaussian blur
+    iter_steps : int
+        execution times of denoise
+    binarize_threshold : 100
+        used as function lut's input
 
-    Outputs:
-    Image: the processed image."""
+    Returns
+    -------
+    answer : image
+        the processed image.
+    """
+    gray = ImageOps.invert(ImageOps.grayscale(Image.open("stripes.jpg")))
+    gray_blur = gray.filter(ImageFilter.GaussianBlur(blur_radius))
+    high_freq = ImageMath.eval("25*(a-b)", a=gray, b=gray_blur).convert("L")
 
-    gray=ImageOps.invert(ImageOps.grayscale(Image.open("stripes.jpg")))
-    gray_blur=gray.filter(ImageFilter.GaussianBlur(blur_radius))
-    high_freq=ImageMath.eval("25*(a-b)",a=gray,b=gray_blur).convert("L")
-
-    binarized=ImageOps.invert(high_freq.point(lut(binarize_threshold))).convert("1")
-    binarized_data=binarized.load()
+    binarized = ImageOps.invert(high_freq.point(lut(binarize_threshold))).convert("1")
+    binarized_data = binarized.load()
     #binarized.show()
 
-    height=binarized.height
-    width=binarized.width
+    height = binarized.height
+    width = binarized.width
 
-    pix=np.array([[np.uint8(binarized_data[j,i]) for j in range(width)] for i in range(height)])
+    pix = np.array([[np.uint8(binarized_data[j, i]) for j in range(width)] for i in range(height)])
 
     for i in range(iter_steps):
-        pix=denoise(pix)
+        pix = denoise(pix)
 
-    answer=Image.fromarray(pix)
+    answer = Image.fromarray(pix)
     #answer.show()
     #answer.save("test.bmp")
     return answer
@@ -87,71 +101,71 @@ def strip_processing(path, blur_radius=7, iter_steps=1, binarize_threshold=100):
 
 def t_mid(begin, end):
 
-    begin_x=begin[0]
-    begin_y=begin[1]
-    end_x=end[0]
-    end_y=end[1]
-    x_min=min(begin_x,end_x)
-    y_min=min(begin_y,end_y)
-    x_max=max(begin_x,end_x)
-    y_max=max(begin_y,end_y)
+    begin_x = begin[0]
+    begin_y = begin[1]
+    end_x = end[0]
+    end_y = end[1]
+    x_min = min(begin_x, end_x)
+    y_min = min(begin_y, end_y)
+    x_max = max(begin_x, end_x)
+    y_max = max(begin_y, end_y)
 
-    o=begin
-    norm=np.sqrt((end-begin).dot(end-begin))
-    if begin_x==end_x and begin_y==end_y:
+    o = begin
+    norm = np.sqrt((end-begin).dot(end-begin))
+    if begin_x == end_x and begin_y == end_y:
         return []
-    d=(end-begin)/norm
+    d = (end-begin)/norm
 
-    if begin_x!=end_x and begin_y!=end_y:
-        x_check_list=[i+0.5 for i in range(x_min,x_max)]
-        y_check_list=[i+0.5 for i in range(y_min,y_max)]
-        t_x=[(x-o[0])/d[0] for x in x_check_list]
-        t_y=[(y-o[1])/d[1] for y in y_check_list]
-        t_intersection=sorted(t_x+t_y)
+    if begin_x != end_x and begin_y != end_y:
+        x_check_list = [i+0.5 for i in range(x_min, x_max)]
+        y_check_list = [i+0.5 for i in range(y_min, y_max)]
+        t_x = [(x-o[0])/d[0] for x in x_check_list]
+        t_y = [(y-o[1])/d[1] for y in y_check_list]
+        t_intersection = sorted(t_x+t_y)
 
-    elif begin_x!=end_x and begin_y==end_y:
-        x_check_list=[i+0.5 for i in range(x_min,x_max)]
-        t_x=[(x-o[0])/d[0] for x in x_check_list]
-        t_intersection=sorted(t_x)
+    elif begin_x != end_x and begin_y == end_y:
+        x_check_list = [i+0.5 for i in range(x_min, x_max)]
+        t_x = [(x-o[0])/d[0] for x in x_check_list]
+        t_intersection = sorted(t_x)
 
-    elif begin_x==end_x and begin_y!=end_y:
-        y_check_list=[i+0.5 for i in range(y_min,y_max)]
-        t_y=[(y-o[1])/d[1] for y in y_check_list]
-        t_intersection=sorted(t_y)
+    elif begin_x == end_x and begin_y != end_y:
+        y_check_list = [i+0.5 for i in range(y_min, y_max)]
+        t_y = [(y-o[1])/d[1] for y in y_check_list]
+        t_intersection = sorted(t_y)
 
-    if len(t_intersection)>=2:
-        t_mid=[(t_intersection[i+1]+t_intersection[i])/2 \
-               for i in range(len(t_intersection)-1)]
+    if len(t_intersection) >= 2:
+        t_mid = [(t_intersection[i+1]+t_intersection[i])/2 \
+                 for i in range(len(t_intersection)-1)]
     else:
-        t_mid=[]
+        t_mid = []
 
     return t_mid
 
 def fix_to_pix(t):
-    offset=t-int(t)
-    if offset>=0.5:
+    offset = t-int(t)
+    if offset >= 0.5:
         return int(t)+1
     else:
         return int(t)
 
 def pix_sequence(begin, end):
 
-    begin_x=begin[0]
-    begin_y=begin[1]
-    end_x=end[0]
-    end_y=end[1]
+    begin_x = begin[0]
+    begin_y = begin[1]
+    end_x = end[0]
+    end_y = end[1]
 
-    o=begin
-    norm=np.sqrt((end-begin).dot(end-begin))
-    if begin_x==end_x and begin_y==end_y:
+    o = begin
+    norm = np.sqrt((end-begin).dot(end-begin))
+    if begin_x == end_x and begin_y == end_y:
         return []
-    d=(end-begin)/norm
-    t_list=t_mid(begin, end)
+    d = (end-begin)/norm
+    t_list = t_mid(begin, end)
 
-    ans=[]
+    ans = []
     for t in t_list:
-        point=o+t*d
-        ans.append(np.array([fix_to_pix(point[0]),fix_to_pix(point[1])]))
+        point = o + t*d
+        ans.append(np.array([fix_to_pix(point[0]), fix_to_pix(point[1])]))
 
     return ans
 
@@ -215,31 +229,6 @@ def array2graph(img_array, color):
     return G
 
 
-def get_useless_nodes(graph, degree):
-    tmp = graph.nodes()
-    useless = []
-    while len(tmp) != 0:
-        nodes = nx.dfs_tree(graph, tmp[0])
-        if len(nodes) < degree:
-            useless.append(nodes)
-        for i in nodes:
-            tmp.remove(i)
-    return useless
-
-
-def remove_noise(img, degree):
-    img_array = np.array(img)
-    g_white = array2graph(img_array, 255)
-    g_black = array2graph(img_array, 0)
-    black = get_useless_nodes(g_white, degree)
-    white = get_useless_nodes(g_black, degree)
-    for i in black:
-        img_array[i] = 0
-    for i in white:
-        img_array[i] = 255
-    return Image.fromarray(img_array)
-
-
 def point2line(G, t):
     """return a list as a line"""
     H = nx.dfs_tree(G, t)
@@ -255,3 +244,10 @@ def line_distance(l1, l2):
             if d < d_min:
                 d_min = d
     return d_min
+
+
+def all_in_one(path, initial, final, s_hold, b_hold):
+    img = strip_processing(path)
+    points = get_stripes(img, initial, final)
+    stripes = count_stripes(points, s_hold, b_hold)
+    return stripes
