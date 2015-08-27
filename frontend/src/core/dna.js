@@ -208,7 +208,7 @@ BioBLESS.dna.dna_select_end = function(event) {
         BioBLESS.dna.endPosition = event.data.getLocalPosition(this);
         var end_control_x = BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width;
         var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/25);
-        var end_control_y = (BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height);
+        var end_control_y = BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y;
         var end_count_y = Math.floor(end_control_y/100);
 
         BioBLESS.dna.endPosition.x = end_count_x * 25 + 0.1 * BioBLESS.width;
@@ -250,5 +250,41 @@ BioBLESS.dna.dna_select_end = function(event) {
 BioBLESS.dna.dna_copy_work = function() {
     var starpoint = Math.floor((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * BioBLESS.dna.deoxyribonucleic_acid.line_width + Math.floor((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/25);
     var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * BioBLESS.dna.deoxyribonucleic_acid.line_width + Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/25);
-    var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint - starpoint);
+    var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint - starpoint); 
+    if(window.clipboardData){
+        window.clipboardData.setData("Text", string);
+        alert("copy completed"+ "\n" + string);
+    }
+    else if(navigator.userAgent.indexOf("Opera") != -1){
+        window.location = string;
+    }
+    else if(window.netscape){
+        try{
+            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+        }
+        catch(e){ 
+            alert("被浏览器拒绝！\n请在浏览器地址栏输入'about:config'并回车\n然后将'signed.applets.codebase_principal_support'设置为'true'"); 
+        }
+        var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+        if(!clip){ 
+            return;
+        }
+        var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+        if (!trans){
+            return;
+        }
+        trans.addDataFlavor('text/unicode');
+        var str = new Object();
+        var len = new Object();
+        var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+        var copytext = string;
+        str.data = copytext;
+        trans.setTransferData("text/unicode", str, copytext.length * 2);
+        var clipid = Components.interfaces.nsIClipboard;
+        if(!clip){
+            return false; 
+        }
+        clip.setData(trans, null, clipid.kGlobalClipboard);
+        alert("copy completed" + "\n" + string);
+    }
 };

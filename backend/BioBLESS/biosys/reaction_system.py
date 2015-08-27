@@ -237,5 +237,8 @@ class ReactionSystem(object):
         """
         Just do simulation
         """
-        self.simulate([], self.time)
+        try:
+            self.simulate([], self.time)
+        except IndexError:
+            pass
 

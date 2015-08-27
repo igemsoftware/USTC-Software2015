@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Fringe Detection</title>
+<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 <style type="text/css">
 html {
     background-color: #eee;
@@ -16,6 +17,9 @@ body {
     margin: 40px auto 20px;
     background-color: #fff;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+p {
+    font-family: "Lato", sans-serif;
 }
 .theme {
     margin: 0;
@@ -34,11 +38,47 @@ body {
     cursor: pointer;
     text-align: center;
 }
-#select_points_theme, #select_points {
-    display: none;
+#submitdata {
+    width: 70px;
+    padding: 5px 5px;
+    border: 1px solid #ccc;
+    margin: 10px 45%;
+    border-radius: 10em;
+    background-color: #eee;
+    cursor: pointer;
+    text-align: center;
 }
+/*#select_points_theme, #select_points {
+    display: none;
+}*/
 canvas {
     background-color: white;
+}
+table.data {
+    font-family: "Lato", sans-serif;
+    font-size: 20px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse: collapse;
+    margin-top: 0px;
+    width: 50%;
+}
+table.data th{
+    background-color: #eee;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+table.data tr{
+    background-color: #eee;
+}
+table.data td{
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
 }
 </style>
 <script src="//code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
@@ -69,6 +109,8 @@ var uploadandSubmit = function() {
                 var canvas = document.getElementById('binimage');
                 var ctx = canvas.getContext('2d');
                 var tmp = json.lrunze;
+                canvas.width(633px);
+                canvas.height(475px);
                 var imagedata = ctx.createImageData(tmp[0].length,tmp.length);
                 for(var i = 0; i < 2; i++) {
                     for(var j = 0; j < 10; j++) {
@@ -88,8 +130,8 @@ var uploadandSubmit = function() {
 var hidesubmit = function() {
     $("#picture_upload_theme").hide();
     $("#picture_upload").hide();
-    $("#select_points_theme").show();
-    $("#select_points").show();
+    /*$("#select_points_theme").show();
+    $("#select_points").show();*/
 };
 </script>
 </head>
@@ -102,8 +144,21 @@ var hidesubmit = function() {
 </div>
 <p id="select_points_theme" class="theme">Select Points</p>
 <div id="select_points" class="feature">
+    <p>Raw Picture</p><br >
+    <div id="previewimage"></div>
+    <p>Altered Picture</p>
     <canvas id="binimage"></canvas>
-    <p>ok</p>    
+    <table class="data">
+        <tr>
+            <th>r</th>
+            <th>l</th>
+        </tr>
+        <tr onmouseover="this.style.backgroundColor='#000'" onmouseout="this.style.backgroundColor='#eee'">
+            <td><input type="number"></td>
+            <td><input type="number"></td>
+        </tr>
+    </table>    
+    <p id="submitdata" onclick="">Submit</p>
 </div>
 </body>
 </html>
