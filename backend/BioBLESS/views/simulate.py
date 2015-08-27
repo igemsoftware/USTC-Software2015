@@ -27,7 +27,9 @@ class SimulateView(APIView):
 
         """
         try:
-            response_from_back = biosystem.bio_system(request.data).record_list
+            system_data = biosystem.bio_system(request.data)
+            system_data.simulation()
+            response_from_back = system_data.record_list
         except BaseException as error:
             #raise
             response = {}
