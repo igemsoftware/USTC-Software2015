@@ -8,6 +8,7 @@ from PIL import Image
 from PIL import ImageFilter
 from PIL import ImageOps
 from PIL import ImageMath
+from scipy.optimize import fsolve
 
 def lut(threshold):
     """Generate the lookup table for binarize.
@@ -248,6 +249,15 @@ def point_line_distance(point, line):
             d_min = d
     return d_min
 
+def calculate_begin_rank(delta_n, delta_r, rank_func):
+    def lhs(x):
+        return [
+            rank_func(x[0])-x[2],
+            rank_func(x[1])-x[3],
+            x[1]-x[0]-delta_n,
+            x[3]-x[2]-delta_r
+        ]
+    return int()fsolve(lhs,[50,100,200,400])[0])
 
 def all_in_one(path, initial, final, s_hold, b_hold):
     img = strip_processing(path)
