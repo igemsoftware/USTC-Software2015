@@ -3,21 +3,22 @@
 <head>
 <title>Fringe Detection</title>
 <meta charset="utf-8">
+<style type="text/css">
+	.container { position:relative; overflow:hidden; width: 650px; padding: 40px 60px; border: 1px solid #ccc; margin: 40px auto 20px; background: #fff; -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.1); -moz-box-shadow: 0 0 15px rgba(0,0,0,0.1); box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+	#submit  {width:70px;padding: 5px 5px; border: 1px solid #ccc; margin: 5px -6.5px;border-radius: 10em;background-color: #eee;cursor:pointer;text-align: center;}
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
 <script type="text/javascript">
+function loadImageFile() {	
 	imagetmp = new FileReader();
 	imagetmp.onload = function (tem) 
 	{
   		document.getElementById("previewimage").src = tem.target.result;
   		console.log(tem.target.result)
 	};
-	function loadImageFile() 
-	{
  	var trueimage = document.getElementById("imagefile").files[0];
   	imagetmp.readAsDataURL(trueimage);
-	};
-</script>
-<script type="text/javascript">
+};
 function uploadandSubmit(){
     	var imagetmp = new FileReader();
     	var img = document.getElementById("imagefile").files[0];
@@ -25,36 +26,9 @@ function uploadandSubmit(){
 	{
   		$.post("http://localhost:8000",tem.target.result,function(data){ 
   			a=$.parseJSON(data);
-  			alert("Success")})
-	};
-    	imagetmp.readAsBinaryString(img);
- } 	
-</script>
-</head>
-
-<body onload="loadImageFile();">
-<form id="demoForm">
-	<fieldset id="picture upload">
-		<legend>Picture Upload</legend>
-		<table>
-			<tbody>
-				<tr>
-					<td id="l1r1"><img id="previewimage" src="" /></td>
-					<td id="l1r2"><input type="file" id="imagefile" name="file" accept="image/*" onchange="loadImageFile();"  /></td>
-					<td id="l1r3"><p  onclick="uploadandSubmit()">Submit</p></td>
-				</tr>
-			</tbody>
-		</table>
-	</fieldset>
-</form>
-<form>
-	<fieldset id="select point">
-		<legend>Select Point</legend>
-		<canvas id="binimage" height=2px width=10px style="background-color: #FFFFFF">your browser does not support the canvas tag</canvas>
-		<script type="text/javascript">
-			var canvas=document.getElementById('binimage');
+  			var canvas=document.getElementById('binimage');
 			var ctx=canvas.getContext('2d');
-			var tmp=[[1,1,1,1,1,1,1,1,1,1],[1,0,1,0,1,1,0,0,1,0]];
+			var tmp=a.lrunze;
 			var imagedata=ctx.createImageData(tmp[0].length,tmp.length);
 			for (var i=0; i<2; i++)
 			{
@@ -72,10 +46,47 @@ function uploadandSubmit(){
 				}
 			}
 			ctx.putImageData(imagedata,0,0);
+  		})
+	};
+    	imagetmp.readAsBinaryString(img);
+ }; 	
+</script>
+</head>
 
-		</script>
-	</fieldset>
-</form>
-
+<body onload="loadImageFile();" style="background-color: #eee">
+<div class="container">
+<fieldset id="picture_upload">
+	<legend>Picture Upload</legend>
+	<table>
+		<tbody>
+			<tr>
+				<td id="l1r1"><img id="previewimage" src=""  style="" /></td>
+			</tr>
+			<tr>
+				<td id="l2r1"><input type="file" id="imagefile" name="file" accept="image/jpg" onchange="loadImageFile();"  /></td>
+			</tr>
+			<tr>
+				<td id="l2r2"><p  id="submit" onclick="uploadandSubmit();hidesubmit();">Submit</p></td>
+			</tr>
+		</tbody>
+	</table>
+</fieldset>
+<fieldset id="select_points">
+	<legend>Select Points</legend>
+	<table>
+		<tbody>
+			<tr>
+				<td id="l1r1"><img id="previewimage" src=""  style="" /></td>
+			</tr>
+			<tr>
+				<canvas id="binimage" height=2px width=10px style="background-color: #FFFFFF">your browser does not support the canvas tag</canvas>
+			</tr>
+			<tr>
+				<p>ok</p>	
+			</tr>
+		</tbody>
+	</table>	
+</fieldset>
+</div>
 </body>
 </html>
