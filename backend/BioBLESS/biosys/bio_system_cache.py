@@ -125,7 +125,7 @@ def biosystem_update_cache(biosystem, record):
     while dir_size > 100 * 1000 * 1000:
         os.remove(cache_files[0])
         cache_files.remove(0)
-
+    # our algorithm
     network_hash = BioSystemNetwork(biosystem).network_hash
     f_name = '../cache/%d.json' % network_hash
     if not os.path.exists(f_name):
