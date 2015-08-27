@@ -257,7 +257,7 @@ def calculate_begin_rank(delta_n, delta_r, rank_func):
             x[1]-x[0]-delta_n,
             x[3]-x[2]-delta_r
         ]
-    return int()fsolve(lhs,[50,100,200,400])[0])
+    return int(fsolve(lhs,[50,100,200,400])[0])
 
 def all_in_one(path, initial, final, s_hold, b_hold):
     img = strip_processing(path)
