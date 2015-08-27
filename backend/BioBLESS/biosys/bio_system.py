@@ -215,5 +215,5 @@ def bio_system(system_data):
     #    reaction.simulate([], time)
     #except IndexError:
     #   pass
-    #reaction.nodes = nodes
+    reaction.nodes = nodes
     return reaction
