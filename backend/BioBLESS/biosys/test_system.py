@@ -12,6 +12,7 @@ if __name__ == "__main__":
     reaction = bio_system(system_data)
     print reaction.species
     reaction.show_reaction()
+    reaction.simulation()
     reaction.show_record(map(str, range(len(reaction.nodes))))
     reaction.show_record()
 else:

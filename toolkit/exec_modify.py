@@ -72,6 +72,7 @@ try:
 
         starter = clock()
         reaction = bio_system(graph)
+        reaction.simulation()
         ender = clock()
         print "Time is :"
         print ender-starter

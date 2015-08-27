@@ -210,9 +210,10 @@ def bio_system(system_data):
     for single_nodes in range(1, len(nodes)):
         reaction += devices[single_nodes]
 
-    try:
-        reaction.simulate([], time)
-    except IndexError:
-        pass
-    reaction.nodes = nodes
+    reaction.time = time
+    #try:
+    #    reaction.simulate([], time)
+    #except IndexError:
+    #   pass
+    #reaction.nodes = nodes
     return reaction
