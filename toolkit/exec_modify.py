@@ -13,14 +13,7 @@ from bio_system import bio_system
 
 
 null = None
-try:
-    gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
-except:
-    pass
-try:
-    gate_file = open("../doc/devices/gates_lizhi.json", "r")
-except:
-    pass
+gate_file = open("../doc/devices/gates_lizhi.json", "r")
 gate_data_source = gate_file.read()
 gates_data = simplejson.loads(gate_data_source)
 gates_data = list(gates_data)
