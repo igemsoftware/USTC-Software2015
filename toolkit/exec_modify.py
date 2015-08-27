@@ -1,11 +1,24 @@
 #!/usr/bin/env python
+print "Initing............................................"
+print "Please waiting....................................."
+
 import simplejson
+from time import clock
+
 from bio_system import bio_system
+
 
 try:
     while True:
         null = None
-        gate_file = open("../doc/devices/gates_lizhi.json", "r")
+        try:
+            gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+        except:
+            pass
+        try:
+            gate_file = open("../doc/devices/gates_lizhi.json", "r")
+        except:
+            pass
         gate_data_source = gate_file.read()
         gates_data = simplejson.loads(gate_data_source)
         gates_data.append({
@@ -29,7 +42,7 @@ try:
         print "Input the initial number of DNA in the gate:"
         gate_dna_number = input()
 
-        print "Input the intitial of input species ( %d ):" % input_num
+        print "Input the intitial of input species (%d):" % input_num
         initial = [input() for i in range(input_num)]
 
         print "Input simulation time:"
@@ -41,21 +54,29 @@ try:
             "system_parameter":{"time": time_to},
             "simulation_parameters":[
                 dict(
-                    {"device_parameter":{"initial":[gate_dna_number]*len(gates_data[gate_name]["parts"]["id"])}}.items()+
-                    {i["id"]:i["params"] for i in gates_data[gate_name]["map"]}.items()
+                    [("device_parameter", {"initial":[gate_dna_number]*len(gates_data[gate_name]["parts"]["id"])})]+
+                    [(i["id"], i["params"]) for i in gates_data[gate_name]["map"]]
                 )
             ]+[{"device_parameter":{"initial":[initial[i]]}} for i in range(input_num)]
         }
 
-        print "Simulating"
+        print "Simulating..."
+        print "System is:"
+        print graph
 
+        starter = clock()
         reaction = bio_system(graph)
+        ender = clock()
+        print "Time is :"
+        print ender-starter
 
         reaction.show_record()
         try:
             while True:
-                print "What do you want to show(0,1,2,3,)(pay attention ,you should add every ',' after nodes number ):"
-                reaction.show_record(map(str, input()))
+                print "What else do you want to show(0,1,0d3,0p5):"
+                string = raw_input()
+                strings = string.split(",")
+                reaction.show_record(strings)
         except:
             pass
 except:
