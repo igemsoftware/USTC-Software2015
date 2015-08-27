@@ -1,92 +1,109 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Fringe Detection</title>
-<meta charset="utf-8">
 <style type="text/css">
-	.container { position:relative; overflow:hidden; width: 650px; padding: 40px 60px; border: 1px solid #ccc; margin: 40px auto 20px; background: #fff; -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.1); -moz-box-shadow: 0 0 15px rgba(0,0,0,0.1); box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-	#submit  {width:70px;padding: 5px 5px; border: 1px solid #ccc; margin: 5px -6.5px;border-radius: 10em;background-color: #eee;cursor:pointer;text-align: center;}
+html {
+    background-color: #eee;
+}
+body {
+    position: relative;
+    overflow: hidden;
+    width: 650px;
+    padding: 40px 60px;
+    border: 1px solid #ccc;
+    margin: 40px auto 20px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+.theme {
+    margin: 0;
+}
+.feature {
+    padding: 10px;
+    border: 1px solid;
+}
+#submit {
+    width: 70px;
+    padding: 5px 5px;
+    border: 1px solid #ccc;
+    margin: 5px -6.5px;
+    border-radius: 10em;
+    background-color: #eee;
+    cursor: pointer;
+    text-align: center;
+}
+#select_points_theme, #select_points {
+    display: none;
+}
+canvas {
+    background-color: white;
+}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-function loadImageFile() {	
-	imagetmp = new FileReader();
-	imagetmp.onload = function (tem) 
-	{
-  		document.getElementById("previewimage").src = tem.target.result;
-  		console.log(tem.target.result)
-	};
- 	var trueimage = document.getElementById("imagefile").files[0];
-  	imagetmp.readAsDataURL(trueimage);
+var loadImageFile = function() {
+    var imagetmp = new FileReader();
+    imagetmp.onload = function(tem) {
+        var img = document.createElement("img");
+        img.src = tem.target.result;
+        img.width = 633;
+        $("#previewimage").empty();
+        document.getElementById("previewimage").appendChild(img);
+        console.log(tem.target.result);
+    };
+    var trueimage = document.getElementById("imagefile").files[0];
+    imagetmp.readAsDataURL(trueimage);
 };
-function uploadandSubmit(){
-    	var imagetmp = new FileReader();
-    	var img = document.getElementById("imagefile").files[0];
-	imagetmp.onload = function (tem) 
-	{
-  		$.post("http://localhost:8000",tem.target.result,function(data){ 
-  			a=$.parseJSON(data);
-  			var canvas=document.getElementById('binimage');
-			var ctx=canvas.getContext('2d');
-			var tmp=a.lrunze;
-			var imagedata=ctx.createImageData(tmp[0].length,tmp.length);
-			for (var i=0; i<2; i++)
-			{
-				for (var j=0; j<10; j++)
-				{
-					var off = 4 * (i * tmp[0].length + j);
-					if (tmp[i][j]==1)
-					{
-						imagedata.data[off + 3]=255;
-					}
-					else
-					{
-						imagedata.data[off + 3]=0;
-					}
-				}
-			}
-			ctx.putImageData(imagedata,0,0);
-  		})
-	};
-    	imagetmp.readAsBinaryString(img);
- }; 	
+var uploadandSubmit = function() {
+    var imagetmp = new FileReader();
+    var img = document.getElementById("imagefile").files[0];
+    imagetmp.onload = function(tem) {
+        $.ajax("http://localhost/", {
+            data : tem.target.result,
+            contentType : "image/jpeg",
+            method : "POST",
+            success : function(data) {
+                var json = $.parseJSON(data);
+                var canvas = document.getElementById('binimage');
+                var ctx = canvas.getContext('2d');
+                var tmp = json.lrunze;
+                var imagedata = ctx.createImageData(tmp[0].length,tmp.length);
+                for(var i = 0; i < 2; i++) {
+                    for(var j = 0; j < 10; j++) {
+                        var off = 4 * (i * tmp[0].length + j);
+                        if(tmp[i][j] == 1)
+                            imagedata.data[off + 3] = 255;
+                        else
+                            imagedata.data[off + 3] = 0;
+                    }
+                }
+                ctx.putImageData(imagedata,0,0);
+            }
+        });
+    };
+    imagetmp.readAsBinaryString(img);
+};
+var hidesubmit = function() {
+    $("#picture_upload_theme").hide();
+    $("#picture_upload").hide();
+    $("#select_points_theme").show();
+    $("#select_points").show();
+};
 </script>
 </head>
-
-<body onload="loadImageFile();" style="background-color: #eee">
-<div class="container">
-<fieldset id="picture_upload">
-	<legend>Picture Upload</legend>
-	<table>
-		<tbody>
-			<tr>
-				<td id="l1r1"><img id="previewimage" src=""  style="" /></td>
-			</tr>
-			<tr>
-				<td id="l2r1"><input type="file" id="imagefile" name="file" accept="image/jpg" onchange="loadImageFile();"  /></td>
-			</tr>
-			<tr>
-				<td id="l2r2"><p  id="submit" onclick="uploadandSubmit();hidesubmit();">Submit</p></td>
-			</tr>
-		</tbody>
-	</table>
-</fieldset>
-<fieldset id="select_points">
-	<legend>Select Points</legend>
-	<table>
-		<tbody>
-			<tr>
-				<td id="l1r1"><img id="previewimage" src=""  style="" /></td>
-			</tr>
-			<tr>
-				<canvas id="binimage" height=2px width=10px style="background-color: #FFFFFF">your browser does not support the canvas tag</canvas>
-			</tr>
-			<tr>
-				<p>ok</p>	
-			</tr>
-		</tbody>
-	</table>	
-</fieldset>
+<body>
+<p id="picture_upload_theme" class="theme">Picture Upload</p>
+<div id="picture_upload" class="feature">
+    <div id="previewimage"></div>
+    <input type="file" id="imagefile" name="file" accept="image/*" onchange="loadImageFile();">
+    <p id="submit" onclick="uploadandSubmit();hidesubmit();">Submit</p>
+</div>
+<p id="select_points_theme" class="theme">Select Points</p>
+<div id="select_points" class="feature">
+    <canvas id="binimage"></canvas>
+    <p>ok</p>    
 </div>
 </body>
 </html>
