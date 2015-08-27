@@ -28,9 +28,10 @@ class SimulateView(APIView):
 
         """
         try:
+            # request.data is the graph of the bio-system
             system_data = biosystem.bio_system(request.data)
             cache_data = cache.biosystem_cache(request.data)
-            if cache_data:  # != None
+            if cache_data:  # != None, better not compare with None.
                 response_from_back = cache_data
             else:
                 system_data.simulation()
@@ -38,9 +39,7 @@ class SimulateView(APIView):
                 cache.biosystem_update_cache(request.data, response_from_back)
         except BaseException as error:
             # raise
-            response = {}
-            response["status"] = "failed"
-            response["detail"] = error.message
+            response = {"status": "failed", "detail": error.message}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         assert isinstance(response_from_back, list)
         return Response(response_from_back)

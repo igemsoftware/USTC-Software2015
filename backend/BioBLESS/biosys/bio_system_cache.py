@@ -116,6 +116,16 @@ def biosystem_update_cache(biosystem, record):
     :param record:
     :return:
     """
+    # Auto cache size control.
+    cache_files = os.listdir('.../cache')
+    dir_size = sum(map(os.path.getsize, cache_files))
+    if __debug__:
+        print debug_info('size of cache'), dir_size
+    cache_files.sort(cache_files, None, os.path.getsize)
+    while dir_size > 100 * 1000 * 1000:
+        os.remove(cache_files[0])
+        cache_files.remove(0)
+
     network_hash = BioSystemNetwork(biosystem).network_hash
     f_name = '../cache/%d.json' % network_hash
     if not os.path.exists(f_name):
