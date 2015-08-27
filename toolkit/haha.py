@@ -78,7 +78,7 @@ def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=0):
     answer : image
         the processed image.
     """
-    gray = ImageOps.invert(ImageOps.grayscale(Image.open("stripes.jpg")))
+    gray = ImageOps.invert(ImageOps.grayscale(Image.open(path)))
     gray_blur = gray.filter(ImageFilter.GaussianBlur(blur_radius))
     high_freq = ImageMath.eval("25*(a-b)", a=gray, b=gray_blur).convert("L")
 
