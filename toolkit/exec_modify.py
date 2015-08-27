@@ -21,6 +21,7 @@ try:
             pass
         gate_data_source = gate_file.read()
         gates_data = simplejson.loads(gate_data_source)
+        gates_data = list(gates_data)
         gates_data.append({
                 "id": "INPUT",
                 "input": [],
