@@ -58,7 +58,7 @@ def denoise(pix):
                     pix_new[i, j] = np.uint8(255)
     return pix_new
 
-def strip_processing(path, blur_radius=7, iter_steps=1, binarize_threshold=100):
+def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=0):
     """Strip precessing function.
 
     Parameters
@@ -231,23 +231,28 @@ def array2graph(img_array, color):
 
 def point2line(G, t):
     """return a list as a line"""
+    if G.has_node(t) == False:
+        return []
     H = nx.dfs_tree(G, t)
     return H.nodes()
 
 
-def line_distance(l1, l2):
+def point_line_distance(point, line):
     """return the distence between two lines"""
-    d_min = np.linalg.norm(np.array(l1[0]) - np.array(l2[0]))
-    for i in l1:
-        for j in l2:
-            d = np.linalg.norm(np.array(i) - np.array(j))
-            if d < d_min:
-                d_min = d
+    if len(line) == 0:
+        return 0
+    d_min = np.linalg.norm(np.array(point) - np.array(line[0]))
+    for i in line:
+        d = np.linalg.norm(np.array(point) - np.array(i))
+        if d < d_min:
+            d_min = d
     return d_min
 
 
 def all_in_one(path, initial, final, s_hold, b_hold):
     img = strip_processing(path)
     points = get_stripes(img, initial, final)
-    stripes = count_stripes(points, s_hold, b_hold)
-    return stripes
+    delt_n = count_stripes(points, s_hold, b_hold)
+    G = array2graph(np.array(img), 0)
+    delt_r = point_line_distance(initial, point2line(G, final))
+    return delt_n, delt_r
