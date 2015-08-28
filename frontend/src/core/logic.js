@@ -11,7 +11,7 @@ BioBLESS.logic.init = function() {
 };
 
 /**
- * circuit is a data structure communicate between frontend and backend
+ * circuit is a data structure of logiv gates which communicate between frontend and backend
  */
 BioBLESS.logic.circuit = {
     "nodes": [],
