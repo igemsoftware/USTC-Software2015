@@ -80,6 +80,9 @@ table.data td{
     border-style: solid;
     border-color: #a9c6c9;
 }
+#param:hover {
+    background-color: black;
+}
 </style>
 <script src="//code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -153,7 +156,7 @@ var hidesubmit = function() {
             <th>r</th>
             <th>l</th>
         </tr>
-        <tr onmouseover="this.style.backgroundColor='#000'" onmouseout="this.style.backgroundColor='#eee'">
+        <tr id="param">
             <td><input type="number"></td>
             <td><input type="number"></td>
         </tr>
