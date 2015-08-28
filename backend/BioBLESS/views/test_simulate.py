@@ -17,4 +17,5 @@ class TestSimulate(TestCase):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
         response_dict = simplejson.loads(response.content)
+        # print response_dict
         assert isinstance(response_dict, list)
