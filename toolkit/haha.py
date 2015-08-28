@@ -25,7 +25,7 @@ def lut(threshold):
     points : list
         A list seems like: [0, 0, ..., 255, 255, ..., 255]
     """
-    points = [255 if i <= threshold else 0 for i in range(256)]
+    points = [0 if i <= threshold else 255 for i in range(256)]
     return points
 
 def denoise(pix):
