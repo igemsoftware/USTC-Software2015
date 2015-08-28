@@ -293,4 +293,7 @@ def step2(mat, info):
     final = info['points'][1]
     through = get_stripes(img_array, initial, final)
     delt_n = count_stripes(through, 2, 2)
-    G = array2graph()
+    G = array2graph(img_array, 0)
+    delt_r = point_line_distance(initial, point2line(G, final))
+    ring_num = 0
+    return ring_num
