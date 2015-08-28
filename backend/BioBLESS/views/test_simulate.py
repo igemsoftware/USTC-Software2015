@@ -31,7 +31,8 @@ class TestSimulate(TestCase):
         response = self.client.post('/simulate/', simplejson.dumps(input_dict.system_data),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
-        response_dict = simplejson.loads(response.content)
+        response_dict_cache = simplejson.loads(response.content)
+        self.assertEqual(response_dict, response_dict_cache)
         # print response_dict
         assert isinstance(response_dict, list)
 
