@@ -46,14 +46,14 @@ class TestSimulate(TestCase):
 
     def setUp(self):
         try:
-            shutil.rmtree('../cache')
+            shutil.rmtree('../cache',ignore_errors=True)
             os.mkdir('../cache')
         except OSError as e:
             pass
 
     def tearDown(self):
         try:
-            shutil.rmtree('../cache')
+            shutil.rmtree('../cache',ignore_errors=True)
             os.mkdir('../cache')
         except OSError as e:
             pass
