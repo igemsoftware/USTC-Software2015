@@ -10,7 +10,6 @@ html {
 }
 body {
     position: relative;
-    overflow: hidden;
     width: 650px;
     padding: 40px 60px;
     border: 1px solid #ccc;
@@ -47,6 +46,14 @@ p {
     background-color: #eee;
     cursor: pointer;
     text-align: center;
+}
+#binimage {
+    width: 633px;
+    height: 475px;
+}
+#rawimage {
+    width: 633px;
+    height: 475px;
 }
 /*#select_points_theme, #select_points {
     display: none;
@@ -90,7 +97,9 @@ var loadImageFile = function() {
         img.src = tem.target.result;
         img.width = 633;
         $("#previewimage").empty();
-        document.getElementById("previewimage").appendChild(img);
+        img1=img;
+        document.getElementById("previewimage").appendChild(img1);
+        document.getElementById("rawimage").appendChild(img);
         console.log(tem.target.result);
     };
     var trueimage = document.getElementById("imagefile").files[0];
@@ -100,7 +109,7 @@ var uploadandSubmit = function() {
     var imagetmp = new FileReader();
     var img = document.getElementById("imagefile").files[0];
     imagetmp.onload = function(tem) {
-        $.ajax("http://localhost/", {
+        $.ajax("http://stripe.sinaapp.com", {
             data : tem.target.result,
             contentType : "image/jpeg",
             method : "POST",
@@ -109,8 +118,6 @@ var uploadandSubmit = function() {
                 var canvas = document.getElementById('binimage');
                 var ctx = canvas.getContext('2d');
                 var tmp = json.lrunze;
-                canvas.width(633px);
-                canvas.height(475px);
                 var imagedata = ctx.createImageData(tmp[0].length,tmp.length);
                 for(var i = 0; i < 2; i++) {
                     for(var j = 0; j < 10; j++) {
@@ -133,6 +140,9 @@ var hidesubmit = function() {
     /*$("#select_points_theme").show();
     $("#select_points").show();*/
 };
+var rawcanvas = document.getElementById("rawimage");
+var rawctx = rawcanvas.getContext('2d');
+rawctx.putImageData(document.getElementById("image1"),0,0);
 </script>
 </head>
 <body>
@@ -145,7 +155,7 @@ var hidesubmit = function() {
 <p id="select_points_theme" class="theme">Select Points</p>
 <div id="select_points" class="feature">
     <p>Raw Picture</p><br >
-    <div id="previewimage"></div>
+    <div id="rawimage"></div>
     <p>Altered Picture</p>
     <canvas id="binimage"></canvas>
     <table class="data">
