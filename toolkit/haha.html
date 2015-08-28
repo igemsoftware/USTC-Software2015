@@ -3,19 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Fringe Detection</title>
+<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 <style type="text/css">
 html {
     background-color: #eee;
 }
 body {
     position: relative;
-    overflow: hidden;
-    width: 650px;
+    width: 900px;
     padding: 40px 60px;
     border: 1px solid #ccc;
     margin: 40px auto 20px;
     background-color: #fff;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+p {
+    font-family: "Lato", sans-serif;
 }
 .theme {
     margin: 0;
@@ -28,62 +31,117 @@ body {
     width: 70px;
     padding: 5px 5px;
     border: 1px solid #ccc;
-    margin: 5px -6.5px;
+    margin: 10px 45%;
     border-radius: 10em;
     background-color: #eee;
     cursor: pointer;
     text-align: center;
 }
-#select_points_theme, #select_points {
+#submitdata {
+    width: 70px;
+    padding: 5px 5px;
+    border: 1px solid #ccc;
+    margin: 10px 45%;
+    border-radius: 10em;
+    background-color: #eee;
+    cursor: pointer;
+    text-align: center;
+}
+#binimage {
+    width: 633px;
+    height: 475px;
+}
+#rawimage {
+    width: 633px;
+    height: 475px;
+}
+#select_points_theme, #select_points, #rawimage1xy {
     display: none;
+}
+#rawimage1 {
+	display: none;
 }
 canvas {
     background-color: white;
+    margin-left: 120px;
+	margin-top: 20px;
+}
+table.data {
+    font-family: "Lato", sans-serif;
+    font-size: 20px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse: collapse;
+    margin: 10px 20%;
+    width: 50%;
+}
+table.data th{
+    background-color: #eee;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+table.data tr{
+    background-color: #eee;
+}
+table.data td{
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+#param:hover {
+    background-color: black;
+}
+#rawimage1xy, #rawimagexy, #binxy {
+	border: 1px solid ;
+	background-color: #eee;
+	padding: 2px 4px;
 }
 </style>
 <script src="//code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var loadImageFile = function() {
-    var imagetmp = new FileReader();
-    imagetmp.onload = function(tem) {
-        var img = document.createElement("img");
-        img.src = tem.target.result;
-        img.width = 633;
-        $("#previewimage").empty();
-        document.getElementById("previewimage").appendChild(img);
-        console.log(tem.target.result);
-    };
+	$("#rawimage1").show();
     var trueimage = document.getElementById("imagefile").files[0];
-    imagetmp.readAsDataURL(trueimage);
+    var orig_canvas = document.getElementById('rawimage');
+    var orig_ctx = orig_canvas.getContext('2d');
+    var raw_ctx = document.getElementById("rawimage1").getContext('2d');
+    var img_obj = new Image();
+    var src = URL.createObjectURL(trueimage);
+    img_obj.src = src;
+    img_obj.onload = function() {
+    orig_ctx.drawImage(img_obj, 0, 0);
+    raw_ctx.drawImage(img_obj, 0, 0);
+    URL.revokeObjectURL(src);
+    }
 };
 var uploadandSubmit = function() {
-    var imagetmp = new FileReader();
     var img = document.getElementById("imagefile").files[0];
-    imagetmp.onload = function(tem) {
-        $.ajax("http://localhost/", {
-            data : tem.target.result,
+    $.ajax("http://stripe.sinaapp.com/", {
+            data : img,
+            processData : false,
             contentType : "image/jpeg",
             method : "POST",
             success : function(data) {
-                var json = $.parseJSON(data);
                 var canvas = document.getElementById('binimage');
                 var ctx = canvas.getContext('2d');
-                var tmp = json.lrunze;
+                var tmp = data.lrunze;
                 var imagedata = ctx.createImageData(tmp[0].length,tmp.length);
-                for(var i = 0; i < 2; i++) {
-                    for(var j = 0; j < 10; j++) {
-                        var off = 4 * (i * tmp[0].length + j);
-                        if(tmp[i][j] == 1)
-                            imagedata.data[off + 3] = 255;
+                for(var i = 0; i < tmp.length; i++) {
+                    for(var j = 0; j < tmp[0].length; j++) {
+                        var off = 4 * (i * tmp[0].length + j) + 3;
+                        if(!tmp[i][j])
+                            imagedata.data[off] = 255;
                         else
-                            imagedata.data[off + 3] = 0;
+                            imagedata.data[off] = 0;
                     }
                 }
                 ctx.putImageData(imagedata,0,0);
             }
         });
-    };
-    imagetmp.readAsBinaryString(img);
 };
 var hidesubmit = function() {
     $("#picture_upload_theme").hide();
@@ -91,19 +149,84 @@ var hidesubmit = function() {
     $("#select_points_theme").show();
     $("#select_points").show();
 };
+var bin_getCoordinates = function(overevent) {
+	$("#binxy").show();
+	x = overevent.clientX - document.getElementById("binimage").getBoundingClientRect().left;
+	y = overevent.clientY - document.getElementById("binimage").getBoundingClientRect().top;
+	document.getElementById("binxy").innerHTML = "Coordinates : (" + x + "," + y + ")";
+	var test = document.getElementById("binxy");
+	test.style.position = "absolute";
+	test.style.top = overevent.pageY + 5 + "px";
+	test.style.left = overevent.pageX + 3 + "px";
+
+};
+var raw1_getCoordinates = function(overevent) {
+	$("#rawimage1xy").show();
+	x = overevent.clientX - document.getElementById("rawimage1").getBoundingClientRect().left;
+	y = overevent.clientY - document.getElementById("rawimage1").getBoundingClientRect().top;
+	document.getElementById("rawimage1xy").innerHTML = "Coordinates : (" + x + "," + y + ")";
+	var test = document.getElementById("rawimage1xy");
+	test.style.position = "absolute";
+	test.style.top = overevent.pageY + 5 + "px";
+	test.style.left = overevent.pageX + 3 + "px";
+};
+var raw_getCoordinates = function(overevent) {
+	$("#rawimagexy").show();
+	x = overevent.clientX - document.getElementById("rawimage").getBoundingClientRect().left;
+	y = overevent.clientY - document.getElementById("rawimage").getBoundingClientRect().top;
+	document.getElementById("rawimagexy").innerHTML = "Coordinates : (" + x + "," + y + ")";
+	var test = document.getElementById("rawimagexy");
+	test.style.position = "absolute";
+	test.style.top = overevent.pageY + 5 + "px";
+	test.style.left = overevent.pageX + 3 + "px";
+
+};
+var clearCoordinates = function() {
+	document.getElementById("binxy").innerHTML = "";
+	document.getElementById("rawimage1xy").innerHTML = "";
+	document.getElementById("rawimagexy").innerHTML = "";
+	$("#rawimage1xy").hide();
+	$("#binxy").hide();
+	$("#rawimagexy").hide();
+};
 </script>
 </head>
 <body>
 <p id="picture_upload_theme" class="theme">Picture Upload</p>
 <div id="picture_upload" class="feature">
-    <div id="previewimage"></div>
+	<p onmousemove="raw1_getCoordinates(event)" onmouseout="clearCoordinates()">
+    	<canvas id="rawimage1" width="633px" height="475px" ></canvas>
+    </p>
+    <div id="rawimage1xy">
+    </div>
     <input type="file" id="imagefile" name="file" accept="image/*" onchange="loadImageFile();">
     <p id="submit" onclick="uploadandSubmit();hidesubmit();">Submit</p>
 </div>
 <p id="select_points_theme" class="theme">Select Points</p>
 <div id="select_points" class="feature">
-    <canvas id="binimage"></canvas>
-    <p>ok</p>    
+    <p>Raw Picture</p><br >
+    <p onmousemove="raw_getCoordinates(event)" onmouseout="clearCoordinates()">
+    	<canvas id="rawimage" width="633px" height="475px" style="margin-top: 5px" ></canvas>
+    </p>
+    <div id="rawimagexy">
+    </div>
+    <p>Altered Picture</p>
+    <p onmousemove="bin_getCoordinates(event)" onmouseout="clearCoordinates()">
+    	<canvas id="binimage" width="633px" height="475px" ></canvas>
+    </p>
+    <div id="binxy">
+    </div>
+    <table class="data">
+        <tr>
+            <th>r</th>
+            <th>l</th>
+        </tr>
+        <tr id="param">
+            <td><input type="number"></td>
+            <td><input type="number"></td>
+        </tr>
+    </table>    
+    <p id="submitdata" onclick="">Submit</p>
 </div>
 </body>
 </html>

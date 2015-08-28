@@ -218,7 +218,7 @@ class ReactionSystem(object):
         Returns:
             none
         """
-        return self.species_name_inverse, [(x[0], x[1]) for x in self.record]
+        return [self.species_name_inverse, [[x[0], x[1]] for x in self.record]]
 
     def show_simulate(self, initial, stop_time, list_plot):
         """
@@ -237,5 +237,8 @@ class ReactionSystem(object):
         """
         Just do simulation
         """
-        self.simulate([], self.time)
+        try:
+            self.simulate([], self.time)
+        except IndexError:
+            pass
 

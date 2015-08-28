@@ -1,3 +1,7 @@
+"""
+This module do something about biosystem cache.
+It will accelerate the simulation process.
+"""
 __author__ = 'suquark'
 import os
 import json
@@ -57,6 +61,7 @@ class BioSystemNetwork(object):
 
     def resolve_biosystem_net(self, vertex):
         """
+        This function will change the graph into reaction lines
         :param vertex:
         """
         for item in vertex:
@@ -89,7 +94,7 @@ class BioSystemNetwork(object):
 
 def biosystem_cache(biosystem):
     """
-
+    Try to cache a biosystem. If not found, return None.
     :param biosystem:
     :return:
     """
@@ -105,6 +110,22 @@ def biosystem_cache(biosystem):
 
 
 def biosystem_update_cache(biosystem, record):
+    """
+    This function will check and update the biosystem
+    :param biosystem:
+    :param record:
+    :return:
+    """
+    # Auto cache size control.
+    cache_files = os.listdir('.../cache')
+    dir_size = sum(map(os.path.getsize, cache_files))
+    if __debug__:
+        print debug_info('size of cache'), dir_size
+    cache_files.sort(cache_files, None, os.path.getsize)
+    while dir_size > 100 * 1000 * 1000:
+        os.remove(cache_files[0])
+        cache_files.remove(0)
+    # our algorithm
     network_hash = BioSystemNetwork(biosystem).network_hash
     f_name = '../cache/%d.json' % network_hash
     if not os.path.exists(f_name):
@@ -114,6 +135,12 @@ def biosystem_update_cache(biosystem, record):
 
 
 def compare_biosystem(biosystem1, biosystem2):
+    """
+    Compare two biosystem. If same return True otherwise False
+    :param biosystem1:
+    :param biosystem2:
+    :return:
+    """
     list1, list2 = map(hash_gates_and_simulation, (biosystem1, biosystem2))
     if __debug__:
         print debug_info(), list1, list2
