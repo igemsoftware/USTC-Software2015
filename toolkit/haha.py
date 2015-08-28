@@ -56,12 +56,12 @@ def denoise(pix):
                 int(pix[i+1, j-1])+\
                 int(pix[i+1, j])+\
                 int(pix[i+1, j+1])
-                if ans >= 3*255:
+                if ans >= 4*255:
                     #print "Modefied!(%s,%s)ans=%s"%(i,j,ans)
                     pix_new[i, j] = np.uint8(255)
     return pix_new
 
-def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=0):
+def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=120):
     """Strip precessing function.
 
     Parameters
