@@ -77,7 +77,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
             for single_map in range(tmp, len(maps)):
                 try:
                     if maps[single_map][kw.keys()[0]] == kw.values()[0]:
-                        return single_map
+                        return single_map#
                 except:
                     pass
             return -1
@@ -101,12 +101,8 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
         for single in protein + s_rna:
             part_type = parts_type[single - 1]
             part_id = str(single)
-            print part_id
-            parts_type[single]
             maper = find_in_map(id1="d" + part_id)
             single_data = data[maps[maper]["id"]]
-            print single
-            print maps[maper] #
             single_reaction = [
                 [["d" + part_id], ["m" + part_id], single_data["trans1"]],
                 [["m" + part_id], ["d" + part_id, "r" + part_id], single_data["trans1"]],
@@ -181,7 +177,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
             if isinstance(sig, list):
                 add_str(sig, nodes_id)
         for sig in range(len(list_from)):
-            if isinstance(list_from[sig], str):
+            if isinstance(list_from[sig], str) or isinstance(list_from[sig], unicode):
                 list_from[sig] = nodes_id + list_from[sig]
 
     def replace_str(list_from, st1, st2):
