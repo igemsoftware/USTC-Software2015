@@ -172,8 +172,7 @@ def pix_sequence(begin, end):
 
     return ans
 
-def get_stripes(img, initial, final):
-    img_array = np.array(img)
+def get_stripes(img_array, initial, final):
     initial = np.array(initial)
     final = np.array(final)
     pix = pix_sequence(initial, final)
@@ -251,11 +250,13 @@ def point_line_distance(point, line):
             d_min = d
     return d_min
 
+
 def jacobi(func, x):
     dim=len(x)
     x_test=[np.array([DIF_PRECISION if j==i else 0 for j in range(dim)])for i in range(dim)]
     ans=np.array([[(func(x+x_test[j])[i]-func(x)[i])/DIF_PRECISION for j in range(dim)] for i in range(dim)])
     return ans
+
 
 def fsolve(func, init):
     cur_x=init
@@ -264,6 +265,7 @@ def fsolve(func, init):
         cur_x=cur_x+delta_x
         delta_x=np.linalg.solve(jacobi(func, cur_x), -func(cur_x))
     return cur_x
+
 
 def calculate_begin_rank(delta_n, delta_r, rank_func):
     def lhs(x):
@@ -275,10 +277,20 @@ def calculate_begin_rank(delta_n, delta_r, rank_func):
         ])
     return int(fsolve(lhs,[50,100,200,400])[0])
 
+
 def all_in_one(path, initial, final, s_hold, b_hold):
     img = strip_processing(path)
-    points = get_stripes(img, initial, final)
+    points = get_stripes(np.array(img), initial, final)
     delt_n = count_stripes(points, s_hold, b_hold)
     G = array2graph(np.array(img), 0)
     delt_r = point_line_distance(initial, point2line(G, final))
     return delt_n, delt_r
+
+
+def step2(mat, info):
+    img_array = np.array(mat)
+    initial = info['points'][0]
+    final = info['points'][1]
+    through = get_stripes(img_array, initial, final)
+    delt_n = count_stripes(through, 2, 2)
+    G = array2graph()
