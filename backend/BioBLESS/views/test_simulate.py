@@ -45,9 +45,15 @@ class TestSimulate(TestCase):
         assert isinstance(response_dict, list)
 
     def setUp(self):
-        shutil.rmtree('../cache')
-        os.mkdir('../cache')
+        try:
+            shutil.rmtree('../cache')
+            os.mkdir('../cache')
+        except OSError as e:
+            pass
 
     def tearDown(self):
-        shutil.rmtree('../cache')
-        os.mkdir('../cache')
+        try:
+            shutil.rmtree('../cache')
+            os.mkdir('../cache')
+        except OSError as e:
+            pass
