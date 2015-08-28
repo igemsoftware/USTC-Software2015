@@ -103,7 +103,7 @@ var uploadandSubmit = function() {
     var imagetmp = new FileReader();
     var img = document.getElementById("imagefile").files[0];
     imagetmp.onload = function(tem) {
-        $.ajax("http://localhost/", {
+        $.ajax("http://stripe.sinaapp.com/", {
             data : tem.target.result,
             contentType : "image/jpeg",
             method : "POST",
