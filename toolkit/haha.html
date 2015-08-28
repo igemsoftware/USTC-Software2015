@@ -100,10 +100,7 @@ var loadImageFile = function() {
         img.src = tem.target.result;
         img.width = 633;
         $("#previewimage").empty();
-        img1=img;
-        document.getElementById("previewimage").appendChild(img1);
-        document.getElementById("rawimage").appendChild(img);
-        console.log(tem.target.result);
+        document.getElementById("previewimage").appendChild(img);
     };
     var trueimage = document.getElementById("imagefile").files[0];
     imagetmp.readAsDataURL(trueimage);
@@ -116,33 +113,38 @@ var uploadandSubmit = function() {
             contentType : "image/jpeg",
             method : "POST",
             success : function(data) {
-                var json = $.parseJSON(data);
                 var canvas = document.getElementById('binimage');
                 var ctx = canvas.getContext('2d');
-                var tmp = json.lrunze;
+                var tmp = data.lrunze;
                 var imagedata = ctx.createImageData(tmp[0].length,tmp.length);
-                for(var i = 0; i < 2; i++) {
-                    for(var j = 0; j < 10; j++) {
-                        var off = 4 * (i * tmp[0].length + j);
-                        if(tmp[i][j] == 1)
-                            imagedata.data[off + 3] = 255;
+                for(var i = 0; i < tmp.length; i++) {
+                    for(var j = 0; j < tmp[0].length; j++) {
+                        var off = 4 * (i * tmp[0].length + j) + 3;
+                        if(!tmp[i][j])
+                            imagedata.data[off] = 255;
                         else
-                            imagedata.data[off + 3] = 0;
+                            imagedata.data[off] = 0;
                     }
                 }
                 ctx.putImageData(imagedata,0,0);
+                var orig_canvas = document.getElementById('rawimage');
+                var orig_ctx = orig_canvas.getContext('2d');
+                var img_obj = new Image();
+                var src = URL.createObjectURL(img);
+                img_obj.src = src;
+                img_obj.onload = function() {
+                    orig_ctx.drawImage(img_obj, 0, 0);
+                    URL.revokeObjectURL(src);
+                }
             }
         });
 };
 var hidesubmit = function() {
     $("#picture_upload_theme").hide();
     $("#picture_upload").hide();
-    /*$("#select_points_theme").show();
-    $("#select_points").show();*/
+    $("#select_points_theme").show();
+    $("#select_points").show();
 };
-var rawcanvas = document.getElementById("rawimage");
-var rawctx = rawcanvas.getContext('2d');
-rawctx.putImageData(document.getElementById("image1"),0,0);
 </script>
 </head>
 <body>
@@ -155,9 +157,9 @@ rawctx.putImageData(document.getElementById("image1"),0,0);
 <p id="select_points_theme" class="theme">Select Points</p>
 <div id="select_points" class="feature">
     <p>Raw Picture</p><br >
-    <div id="rawimage"></div>
+    <canvas id="rawimage" width="633px" height="475px"></canvas>
     <p>Altered Picture</p>
-    <canvas id="binimage"></canvas>
+    <canvas id="binimage" width="633px" height="475px"></canvas>
     <table class="data">
         <tr>
             <th>r</th>
