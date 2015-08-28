@@ -4,6 +4,7 @@ It will accelerate the simulation process.
 """
 __author__ = 'suquark'
 import os
+from BioBLESS.settings import DEBUG as DEBUG
 import json
 from debug_tool import debug_info
 from hash_tool import dump_ord, hash_list
@@ -21,17 +22,17 @@ def hash_gates_and_simulation(biosystem):
 class BioSystemNetwork(object):
     def __init__(self, biosystem):
         self.vertex = self.reconstruct_arcs(biosystem)
-        if __debug__:
+        if DEBUG:
             print debug_info('reconstructed_arcs'), self.vertex
         self.reaction_lines = []
         self.resolve_biosystem_net(self.vertex)
-        if __debug__:
+        if DEBUG:
             print debug_info('BioNetwork_lines'), self.reaction_lines
         self.reaction_lines_hash = hash_list(self.reaction_lines)
-        if __debug__:
+        if DEBUG:
             print debug_info('BioNetwork_lines_hash'), self.reaction_lines_hash
         self.network_hash = hash(dump_ord(sorted(self.reaction_lines_hash)))
-        if __debug__:
+        if DEBUG:
             print debug_info('BioNetwork_hash'), self.network_hash
 
     @staticmethod
@@ -87,7 +88,7 @@ class BioSystemNetwork(object):
 #
 # def compare_gates_and_simulation(biosystem1, biosystem2):
 #     list1, list2 = map(hash_gates_and_simulation, (biosystem1, biosystem2))
-#     if __debug__:
+#     if DEBUG:
 #         print debug_info(), list1, list2
 #     return sorted(list1) == sorted(list2)
 
@@ -98,6 +99,8 @@ def biosystem_cache(biosystem):
     :param biosystem:
     :return:
     """
+    if not os.path.exists("../cache"):
+        os.mkdir("../cache")
     network_hash = BioSystemNetwork(biosystem).network_hash
     f_name = '../cache/%d.json' % network_hash
     if os.path.exists(f_name):
@@ -117,11 +120,13 @@ def biosystem_update_cache(biosystem, record):
     :return:
     """
     # Auto cache size control.
+    if not os.path.exists("../cache"):
+        os.mkdir("../cache")
     cache_files = os.listdir('../cache')
     dir_size = sum(map(os.path.getsize, cache_files))
     cache_files_size = map(os.path.getsize, cache_files)
     sdict = dict([[cache_files[i], cache_files_size[i]] for i in range(len(cache_files))])
-    if __debug__:
+    if DEBUG:
         print debug_info('size of cache'), dir_size
     cache_files.sort(cache_files, key=lambda x:sdict[x])
     while dir_size > 100 * 1000 * 1000:
@@ -144,7 +149,7 @@ def compare_biosystem(biosystem1, biosystem2):
     :return:
     """
     list1, list2 = map(hash_gates_and_simulation, (biosystem1, biosystem2))
-    if __debug__:
+    if DEBUG:
         print debug_info(), list1, list2
     if sorted(list1) != sorted(list2):
         return False
