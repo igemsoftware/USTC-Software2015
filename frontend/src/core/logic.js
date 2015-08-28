@@ -26,13 +26,13 @@ BioBLESS.logic.mark =[];
  */
 BioBLESS.logic.circuit_add_gate = function(type, title) {
     if(type === "not"){
-        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title;
+        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title._text;
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.circuit.nodes.length - 2};
         BioBLESS.logic.mark[BioBLESS.logic.mark.length] = BioBLESS.logic.circuit.nodes.length - 2;
     }
     else{
-        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title;
+        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title._text;
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 2, "to":BioBLESS.logic.circuit.nodes.length - 3};
@@ -420,7 +420,7 @@ BioBLESS.logic.on_drag_start_e = function(event) {
         var that = this;
         $.getJSON("misc/gates.json", function(data) {
             if(data && BioBLESS.gene_network.gates){
-                BioBLESS.gene_network.draw(data, that.parent.Index);
+                BioBLESS.gene_network.draw(data, -1);
                 BioBLESS.change_stage(BioBLESS.gene_network);
             }
         });
@@ -640,47 +640,47 @@ BioBLESS.logic.on_draw_line_up = function(event){
  */
 BioBLESS.logic.on_draw_line_move = function(event){
     if(moving){
-        var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
-        var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
-        var newPosition =  event.data.getLocalPosition(this.parent.parent);
-        var wRect = newPosition.x - xRect;
-        var hRect = newPosition.y - yRect;
-        drawPart[0].line_delete_button = new PIXI.Graphics();
-        drawPart[0].line_delete_button.father = drawPart[0];
-        drawPart[0].clear();
-        drawPart[0].beginFill(0x000000, 1);
-        drawPart[0].lineStyle(0, 0x000000, 1);
-        drawPart[0].drawCircle(xRect, yRect + 1.5, 1.5);
-        drawPart[0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
-        drawPart[0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
-        drawPart[0].endFill();
-        drawPart[0].lineStyle(3, 0x000000, 1);
-        drawPart[0].moveTo(xRect, yRect + 1.5);
-        drawPart[0].lineTo(xRect, yRect + hRect/2 + 1.5);
-        drawPart[0].moveTo(xRect, yRect + hRect/2 + 1.5);
-        drawPart[0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
-        drawPart[0].moveTo(xRect + wRect, yRect + hRect/2);
-        drawPart[0].lineTo(xRect + wRect, yRect + hRect + 1.5);
-        drawPart[0].beginFill(0, 0);
-        drawPart[0].lineStyle(0, 0, 0);
-        // if(hRect > 0){
-        //     drawPart[0].drawRect(xRect - 1, yRect, 5, hRect/2);
-        //     drawPart[0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
-        // }
-        // else{
-        //     drawPart[0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
-        //     drawPart[0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
-        // }
-        if(wRect > 0){
-            drawPart[0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
-        }
-        else{
-            drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
-        }
-        drawPart[0].endFill();
-        drawPart[0].line_delete_button.interactive = true;
-        drawPart[0].line_delete_button.buttonMode = true;
-        drawPart[0].father.parent.parent.addChild(drawPart[0]);
+            var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
+            var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
+            var newPosition =  event.data.getLocalPosition(this.parent.parent);
+            var wRect = newPosition.x - xRect;
+            var hRect = newPosition.y - yRect;
+            drawPart[0].line_delete_button = new PIXI.Graphics();
+            drawPart[0].line_delete_button.father = drawPart[0];
+            drawPart[0].clear();
+            drawPart[0].beginFill(0x000000, 1);
+            drawPart[0].lineStyle(0, 0x000000, 1);
+            drawPart[0].drawCircle(xRect, yRect + 1.5, 1.5);
+            drawPart[0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
+            drawPart[0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
+            drawPart[0].endFill();
+            drawPart[0].lineStyle(3, 0x000000, 1);
+            drawPart[0].moveTo(xRect, yRect + 1.5);
+            drawPart[0].lineTo(xRect, yRect + hRect/2 + 1.5);
+            drawPart[0].moveTo(xRect, yRect + hRect/2 + 1.5);
+            drawPart[0].lineTo(xRect + wRect, yRect + hRect/2 + 1.5);
+            drawPart[0].moveTo(xRect + wRect, yRect + hRect/2);
+            drawPart[0].lineTo(xRect + wRect, yRect + hRect + 1.5);
+            drawPart[0].beginFill(0, 0);
+            drawPart[0].lineStyle(0, 0, 0);
+            // if(hRect > 0){
+            //     drawPart[0].drawRect(xRect - 1, yRect, 5, hRect/2);
+            //     drawPart[0].drawRect(xRect - 1 + wRect, yRect -1 + hRect/2, 5, hRect/2);
+            // }
+            // else{
+            //     drawPart[0].drawRect(xRect - 1, yRect + hRect/2, 5, 0 - hRect/2);
+            //     drawPart[0].drawRect(xRect - 1 + wRect, yRect + hRect, 5, 0 - hRect/2);
+            // }
+            if(wRect > 0){
+                drawPart[0].drawRect(xRect, yRect - 1 + hRect/2, wRect, 5);
+            }
+            else{
+                drawPart[0].drawRect(xRect + wRect, yRect - 1 + hRect/2, 0 - wRect, 5);
+            }
+            drawPart[0].endFill();
+            drawPart[0].line_delete_button.interactive = true;
+            drawPart[0].line_delete_button.buttonMode = true;
+            drawPart[0].father.parent.parent.addChild(drawPart[0]);
     }
 };
 
@@ -1010,6 +1010,8 @@ BioBLESS.logic.on_drag_e = function(){
  */
 BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     var stage = new PIXI.Container();
+	stage.h = h;
+	contain.h = contain_h;
     var bg = new PIXI.Graphics();
     bg.lineStyle(2, 0x000000, 1);
     bg.beginFill(0x888888, 1);
@@ -1062,24 +1064,23 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
         this.position.y = y;
     };
     mask.interactive = true;
-    var that = mask;
     if(contain_h > h){
         stage.scroll_fun = function(){};
         stage.scroll_function = function(d){
             if(d < 0){
-                that.contain.y -= 50;
-                if(that.contain.y < that.button.area_h - that.button.contain_h){
-                    that.contain.y = that.button.area_h - that.button.contain_h;
+                contain.y -= 50;
+                if(contain.y < stage.h - contain.h){
+                    contain.y = stage.h - contain.h;
                 }
             }
             else{
-                that.contain.y += 50;
-                if(that.contain.y > 0){
-                    that.contain.y = 0;
+                contain.y += 50;
+                if(contain.y > 0){
+                    contain.y = 0;
                 }
             }
-            var t = (0 - that.contain.y) / (that.button.contain_h - that.button.area_h);
-            that.button.y = that.button.start_y + t * (that.button.end_y - that.button.start_y);
+            var t = (0 - contain.y) / (contain.h - stage.h);
+            button.y = button.start_y + t * (button.end_y - button.start_y);
             stage.scroll_fun(d);
         }
     }else

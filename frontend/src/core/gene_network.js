@@ -14,7 +14,8 @@ var nodeH = 100, nodeW = 50, nodeDis = 100, floorDis = 135;
 var svg_index = 0;
 
 BioBLESS.gene_network.get_gates_supsification = function(){
-    $.getJSON("misc/gates_supsification.json", function(data) {BioBLESS.gene_network.gates = data;});
+    //$.getJSON("misc/gates_supsification.json", function(data) {BioBLESS.gene_network.gates = data;});
+	BioBLESS.gene_network.gates = BioBLESS.logic.circuit;
 };
 /** 
 * @author needsay
@@ -401,7 +402,7 @@ this.draw = function(devices, n){
         this.draw_arrow(graphics, 6, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, "up");
     };//绘制有关蛋白质节点的支路
     
-    graphics.lineStyle(6, 0xffff00, 1);
+    graphics.lineStyle(6, 0xff00ff, 1);
     for(i = 0; i < devices[n].map.length; i++){
         if(devices[n].map[i].id2[0] == 'e'){
             Num = parseInt(devices[n].map[i].id2.substring(1)) - 1;
@@ -704,7 +705,7 @@ BioBLESS.gene_network.draw_lines_between_devices = function(){
         for(j = 0; j < this.devs[i].output.length; j++){
             for(l = 0; l < this.devs[i].output[j].to_dev_index.length; l++){
                 var graphic = new PIXI.Graphics();
-                graphic.lineStyle(6, 0xffff00, 1);
+                graphic.lineStyle(6, 0xff00ff, 1);
                 var input_dev =  this.devs[this.devs[i].output[j].to_dev_index[l]];
                 for(k = 0; k < input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x.length; k++){
                     
@@ -1196,7 +1197,7 @@ BioBLESS.gene_network.create_ijkl = function(){
 BioBLESS.gene_network.draw = function(devices, n){
     this.stage.movable_stage.removeChildren();
     
-    if(n !== -1){
+    if(n === -1){
         var i, j, k, l, temp;
         this.devs_analysis(devices);
         this.draw_lines_between_devices();
