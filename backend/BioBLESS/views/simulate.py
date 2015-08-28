@@ -41,5 +41,5 @@ class SimulateView(APIView):
             raise
             response = {"status": "failed", "detail": error.message}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        assert isinstance(response_from_back, list)
+        # assert isinstance(response_from_back, list)
         return Response(response_from_back)
