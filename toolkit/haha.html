@@ -10,7 +10,7 @@ html {
 }
 body {
     position: relative;
-    width: 650px;
+    width: 900px;
     padding: 40px 60px;
     border: 1px solid #ccc;
     margin: 40px auto 20px;
@@ -31,7 +31,7 @@ p {
     width: 70px;
     padding: 5px 5px;
     border: 1px solid #ccc;
-    margin: 5px -6.5px;
+    margin: 10px 45%;
     border-radius: 10em;
     background-color: #eee;
     cursor: pointer;
@@ -55,11 +55,16 @@ p {
     width: 633px;
     height: 475px;
 }
-/*#select_points_theme, #select_points {
+#select_points_theme, #select_points {
     display: none;
-}*/
+}
+#rawimage1 {
+	display: none;
+}
 canvas {
     background-color: white;
+    margin-left: 120px;
+	margin-top: 20px;
 }
 table.data {
     font-family: "Lato", sans-serif;
@@ -94,16 +99,19 @@ table.data td{
 <script src="//code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var loadImageFile = function() {
-    var imagetmp = new FileReader();
-    imagetmp.onload = function(tem) {
-        var img = document.createElement("img");
-        img.src = tem.target.result;
-        img.width = 633;
-        $("#previewimage").empty();
-        document.getElementById("previewimage").appendChild(img);
-    };
+	$("#rawimage1").show();
     var trueimage = document.getElementById("imagefile").files[0];
-    imagetmp.readAsDataURL(trueimage);
+    var orig_canvas = document.getElementById('rawimage');
+    var orig_ctx = orig_canvas.getContext('2d');
+    var raw_ctx = document.getElementById("rawimage1").getContext('2d');
+    var img_obj = new Image();
+    var src = URL.createObjectURL(trueimage);
+    img_obj.src = src;
+    img_obj.onload = function() {
+    orig_ctx.drawImage(img_obj, 0, 0);
+    raw_ctx.drawImage(img_obj, 0, 0);
+    URL.revokeObjectURL(src);
+    }
 };
 var uploadandSubmit = function() {
     var img = document.getElementById("imagefile").files[0];
@@ -127,15 +135,6 @@ var uploadandSubmit = function() {
                     }
                 }
                 ctx.putImageData(imagedata,0,0);
-                var orig_canvas = document.getElementById('rawimage');
-                var orig_ctx = orig_canvas.getContext('2d');
-                var img_obj = new Image();
-                var src = URL.createObjectURL(img);
-                img_obj.src = src;
-                img_obj.onload = function() {
-                    orig_ctx.drawImage(img_obj, 0, 0);
-                    URL.revokeObjectURL(src);
-                }
             }
         });
 };
@@ -145,21 +144,53 @@ var hidesubmit = function() {
     $("#select_points_theme").show();
     $("#select_points").show();
 };
+var bin_getCoordinates = function(overevent) {
+	x = overevent.clientX - document.getElementById("binimage").getBoundingClientRect().left;
+	y = overevent.clientY - document.getElementById("binimage").getBoundingClientRect().top;
+	document.getElementById("binxy").innerHTML = "Coordinates : (" + x + "," + y + ")";
+};
+var raw1_getCoordinates = function(overevent) {
+	x = overevent.clientX - document.getElementById("rawimage1").getBoundingClientRect().left;
+	y = overevent.clientY - document.getElementById("rawimage1").getBoundingClientRect().top;
+	document.getElementById("rawimage1xy").innerHTML = "Coordinates : (" + x + "," + y + ")";
+};
+var raw_getCoordinates = function(overevent) {
+	x = overevent.clientX - document.getElementById("rawimage").getBoundingClientRect().left;
+	y = overevent.clientY - document.getElementById("rawimage").getBoundingClientRect().top;
+	document.getElementById("rawimagexy").innerHTML = "Coordinates : (" + x + "," + y + ")";
+};
+var clearCoordinates = function() {
+	document.getElementById("binxy").innerHTML = "";
+	document.getElementById("rawimage1xy").innerHTML = "";
+	document.getElementById("rawimagexy").innerHTML = "";
+};
 </script>
 </head>
 <body>
 <p id="picture_upload_theme" class="theme">Picture Upload</p>
 <div id="picture_upload" class="feature">
-    <div id="previewimage"></div>
+	<p onmousemove="raw1_getCoordinates(event)" onmouseout="clearCoordinates()">
+    	<canvas id="rawimage1" width="633px" height="475px" ></canvas>
+    </p>
+    <div id="rawimage1xy">
+    </div>
     <input type="file" id="imagefile" name="file" accept="image/*" onchange="loadImageFile();">
     <p id="submit" onclick="uploadandSubmit();hidesubmit();">Submit</p>
 </div>
 <p id="select_points_theme" class="theme">Select Points</p>
 <div id="select_points" class="feature">
     <p>Raw Picture</p><br >
-    <canvas id="rawimage" width="633px" height="475px"></canvas>
+    <p onmousemove="raw_getCoordinates(event)" onmouseout="clearCoordinates()">
+    	<canvas id="rawimage" width="633px" height="475px" style="margin-top: 5px" ></canvas>
+    </p>
+    <div id="rawimagexy">
+    </div>
     <p>Altered Picture</p>
-    <canvas id="binimage" width="633px" height="475px"></canvas>
+    <p onmousemove="bin_getCoordinates(event)" onmouseout="clearCoordinates()">
+    	<canvas id="binimage" width="633px" height="475px" ></canvas>
+    </p>
+    <div id="binxy">
+    </div>
     <table class="data">
         <tr>
             <th>r</th>
