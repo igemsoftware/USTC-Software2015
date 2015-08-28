@@ -109,11 +109,10 @@ var loadImageFile = function() {
     imagetmp.readAsDataURL(trueimage);
 };
 var uploadandSubmit = function() {
-    var imagetmp = new FileReader();
     var img = document.getElementById("imagefile").files[0];
-    imagetmp.onload = function(tem) {
-        $.ajax("http://stripe.sinaapp.com/", {
-            data : tem.target.result,
+    $.ajax("http://stripe.sinaapp.com/", {
+            data : img,
+            processData : false,
             contentType : "image/jpeg",
             method : "POST",
             success : function(data) {
@@ -134,8 +133,6 @@ var uploadandSubmit = function() {
                 ctx.putImageData(imagedata,0,0);
             }
         });
-    };
-    imagetmp.readAsBinaryString(img);
 };
 var hidesubmit = function() {
     $("#picture_upload_theme").hide();
