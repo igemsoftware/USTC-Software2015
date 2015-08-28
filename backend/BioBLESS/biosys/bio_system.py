@@ -177,7 +177,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
             if isinstance(sig, list):
                 add_str(sig, nodes_id)
         for sig in range(len(list_from)):
-            if isinstance(list_from[sig], str):
+            if isinstance(list_from[sig], str) or isinstance(list_from[sig], unicode):
                 list_from[sig] = nodes_id + list_from[sig]
 
     def replace_str(list_from, st1, st2):
