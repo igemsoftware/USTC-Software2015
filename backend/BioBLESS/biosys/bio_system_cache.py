@@ -19,7 +19,6 @@ def hash_gates_and_simulation(biosystem):
 
 
 class BioSystemNetwork(object):
-
     def __init__(self, biosystem):
         self.vertex = self.reconstruct_arcs(biosystem)
         if __debug__:
@@ -37,19 +36,19 @@ class BioSystemNetwork(object):
 
     @staticmethod
     def reconstruct_arcs(biosystem):
-            """
-            Change the shape of the data of the connection of the net
-            :param biosystem:
-            :return:
-            """
-            hash_list = hash_gates_and_simulation(biosystem)
-            vertex = []
-            for node in range(len(biosystem['nodes'])):
-                vertex.append(dict({'in': [], 'out': [], 'hash': hash_list[node]}))
-            for edge in biosystem['arcs']:
-                vertex[edge['from']]['out'].append(edge['to'])
-                vertex[edge['to']]['in'].append(edge['from'])
-            return vertex
+        """
+        Change the shape of the data of the connection of the net
+        :param biosystem:
+        :return:
+        """
+        hash_list = hash_gates_and_simulation(biosystem)
+        vertex = []
+        for node in range(len(biosystem['nodes'])):
+            vertex.append(dict({'in': [], 'out': [], 'hash': hash_list[node]}))
+        for edge in biosystem['arcs']:
+            vertex[edge['from']]['out'].append(edge['to'])
+            vertex[edge['to']]['in'].append(edge['from'])
+        return vertex
 
     def _resolve_biosystem_net_recurrent(self, vertex, index, reaction_line):
         reaction_line.append(vertex[index]['hash'])
@@ -67,6 +66,7 @@ class BioSystemNetwork(object):
         for item in vertex:
             if len(item['in']) == 0:
                 self._resolve_biosystem_net_recurrent(vertex, vertex.index(item), [])
+
 
 #
 # def compare_gates(biosystem1, biosystem2):
@@ -117,14 +117,16 @@ def biosystem_update_cache(biosystem, record):
     :return:
     """
     # Auto cache size control.
-    cache_files = os.listdir('.../cache')
+    cache_files = os.listdir('../cache')
     dir_size = sum(map(os.path.getsize, cache_files))
+    cache_files_size = map(os.path.getsize, cache_files)
+    sdict = dict([[cache_files[i], cache_files_size[i]] for i in range(len(cache_files))])
     if __debug__:
         print debug_info('size of cache'), dir_size
-    cache_files.sort(cache_files, None, os.path.getsize)
+    cache_files.sort(cache_files, key=lambda x:sdict[x])
     while dir_size > 100 * 1000 * 1000:
         os.remove(cache_files[0])
-        cache_files.remove(0)
+        del cache_files[0]
     # our algorithm
     network_hash = BioSystemNetwork(biosystem).network_hash
     f_name = '../cache/%d.json' % network_hash
