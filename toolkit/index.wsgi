@@ -39,11 +39,10 @@ def app(environ, start_response):
         recv_obj = json.loads(data)
         hash_sum = recv_obj['hash']
         result = query_db_matrix(cur, hash_sum)
-        if result == '':
+        if result is None:
             status = '404 Not Found'
         else:
-            matrix_obj = json.loads(result)
-            response_body = json.dumps(step2(matrix_obj, recv_obj))
+            response_body = json.dumps(step2(result, recv_obj))
     else:
         status = '415 Unsupported Media Type'
     cur.close()

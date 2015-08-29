@@ -185,6 +185,8 @@ def get_stripes(img_array, initial, final):
 
 
 def count_stripes(points, s_hold, b_hold):
+    if len(points) == 0:
+        return 0
     s_value = 0
     b_value = 255
     stripes = 0
@@ -295,7 +297,7 @@ def step1(data):
     return result
 
 def step2(mat, info):
-    img_array = np.array(mat)
+    img_array = np.array(mat) * 255
     initial = info['points'][0]
     final = info['points'][1]
     through = get_stripes(img_array, initial, final)
