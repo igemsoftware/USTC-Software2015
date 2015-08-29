@@ -31,7 +31,7 @@ class BioSystemNetwork(object):
         self.reaction_lines_hash = hash_list(self.reaction_lines)
         if DEBUG:
             print debug_info('BioNetwork_lines_hash'), self.reaction_lines_hash
-        self.network_hash = hash(dump_ord(sorted(self.reaction_lines_hash)))
+        self.network_hash = hash(dump_ord(sorted(self.reaction_lines_hash))) + biosystem['system_parameter']['time']
         if DEBUG:
             print debug_info('BioNetwork_hash'), self.network_hash
 
@@ -122,16 +122,20 @@ def biosystem_update_cache(biosystem, record):
     # Auto cache size control.
     if not os.path.exists("../cache"):
         os.mkdir("../cache")
-    cache_files = os.listdir('../cache')
-    dir_size = sum(map(os.path.getsize, cache_files))
-    cache_files_size = map(os.path.getsize, cache_files)
-    sdict = dict([[cache_files[i], cache_files_size[i]] for i in range(len(cache_files))])
-    if DEBUG:
-        print debug_info('size of cache'), dir_size
-    cache_files.sort(cache_files, key=lambda x:sdict[x])
-    while dir_size > 100 * 1000 * 1000:
-        os.remove(cache_files[0])
-        del cache_files[0]
+    # There may be IO-async Error, rare but once happened
+    try:
+        cache_files = os.listdir('../cache')
+        dir_size = sum(map(os.path.getsize, cache_files))
+        cache_files_size = map(os.path.getsize, cache_files)
+        sdict = dict([[cache_files[i], cache_files_size[i]] for i in range(len(cache_files))])
+        if DEBUG:
+            print debug_info('size of cache'), dir_size
+        cache_files.sort(cache_files, key=lambda x:sdict[x])
+        while dir_size > 100 * 1000 * 1000:
+            os.remove(cache_files[0])
+            del cache_files[0]
+    except OSError:
+        pass
     # our algorithm
     network_hash = BioSystemNetwork(biosystem).network_hash
     f_name = '../cache/%d.json' % network_hash
@@ -148,6 +152,8 @@ def compare_biosystem(biosystem1, biosystem2):
     :param biosystem2:
     :return:
     """
+    if biosystem1['system_parameter']['time'] != biosystem2['system_parameter']['time']:
+        return False
     list1, list2 = map(hash_gates_and_simulation, (biosystem1, biosystem2))
     if DEBUG:
         print debug_info(), list1, list2
