@@ -372,8 +372,8 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans1": 0.1,
+                    "trans2": 5,
                     "decay1": 0.1,
                     "decay2": 0.05
                 }
@@ -384,8 +384,8 @@
                 "id2": "p4",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans1": 0.1,
+                    "trans2": 5,
                     "decay1": 0.1,
                     "decay2": 0.05
                 }
@@ -396,7 +396,7 @@
                 "id2": "d6",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 100
                 }
             },
             {
@@ -405,7 +405,7 @@
                 "id2": "d6",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 100
                 }
             },
             {
@@ -414,8 +414,8 @@
                 "id2": "p8",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans1": 0.1,
+                    "trans2": 5,
                     "decay1": 0.1,
                     "decay2": 0.05
                 }
@@ -424,7 +424,7 @@
                 "id": "e6",
                 "id1": "p100",
                 "id2": "e3",
-                "type": "inh",
+                "type": "rep",
                 "params": {
                     "reg": 20
                 }
@@ -433,7 +433,7 @@
                 "id": "e7",
                 "id1": "p200",
                 "id2": "e4",
-                "type": "inh",
+                "type": "rep",
                 "params": {
                     "reg": 20
                 }
@@ -824,8 +824,8 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans1": 0.00005,
+                    "trans2": 0.025,
                     "decay1": 0.1,
                     "decay2": 0.05
                 }
@@ -836,7 +836,7 @@
                 "id2": "d5",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 40
                 }
             },
             {
@@ -854,8 +854,8 @@
                 "id2": "p7",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans1": 0.1,
+                    "trans2": 5,
                     "decay1": 0.1,
                     "decay2": 0.05
                 }
@@ -1253,8 +1253,8 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans1": 0.00005,
+                    "trans2": 0.025,
                     "decay1": 0.1,
                     "decay2": 0.05
                 }
@@ -1265,7 +1265,7 @@
                 "id2": "d5",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 5
                 }
             },
             {
@@ -1286,7 +1286,7 @@
                 "id2": "d9",
                 "type": "key",
                 "params": {
-                    "reg": 20
+                    "reg": 10
                 }
             },
             {
@@ -1295,7 +1295,7 @@
                 "id2": "d2",
                 "type": "act",
                 "params": {
-                    "reg": 20
+                    "reg": 3
                 }
             },
             {
@@ -1304,7 +1304,7 @@
                 "id2": "p10",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
+                    "trans1": 0.001,
                     "trans2": 0.5,
                     "decay1": 0.1,
                     "decay2": 0.05
