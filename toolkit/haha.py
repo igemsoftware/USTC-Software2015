@@ -253,7 +253,7 @@ def point_line_distance(point, line):
             d_min = d
     return d_min
 
-
+"""
 def jacobi(func, x):
     dim=len(x)
     x_test=[np.array([DIF_PRECISION if j==i else 0 for j in range(dim)])for i in range(dim)]
@@ -268,17 +268,10 @@ def fsolve(func, init):
         cur_x=cur_x+delta_x
         delta_x=np.linalg.solve(jacobi(func, cur_x), -func(cur_x))
     return cur_x
+"""
 
-
-def calculate_begin_rank(delta_n, delta_r, rank_func):
-    def lhs(x):
-        return np.array([
-            rank_func(x[0])-x[2],
-            rank_func(x[1])-x[3],
-            x[1]-x[0]-delta_n,
-            x[3]-x[2]-delta_r
-        ])
-    return int(fsolve(lhs,[50,100,200,400])[0])
+def calculate_begin_rank(delta_n, delta_r, alpha):
+    return (((alpha * delta_n / delta_r)-(delta_r / alpha))**2)/4
 
 
 def all_in_one(path, initial, final, s_hold, b_hold):
