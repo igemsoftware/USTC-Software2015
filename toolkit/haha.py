@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__author__ = 'E-Neo <e-neo@qq.com>, LingyuanJi <jly@mail.ustc.edu.cn>'
+__author__ = 'E-Neo <e-neo@qq.com>, LingyuanJi <jly@mail.ustc.edu.cn>, lizitian <lizitian@mail.ustc.edu.cn>'
 
 import numpy as np
 import networkx as nx
@@ -8,6 +8,7 @@ from PIL import Image
 from PIL import ImageFilter
 from PIL import ImageOps
 from PIL import ImageMath
+from cStringIO import StringIO
 
 DIF_PRECISION=1e-13
 SOLVE_PRECISION=1e-13
@@ -25,7 +26,7 @@ def lut(threshold):
     points : list
         A list seems like: [0, 0, ..., 255, 255, ..., 255]
     """
-    points = [255 if i <= threshold else 0 for i in range(256)]
+    points = [0 if i <= threshold else 255 for i in range(256)]
     return points
 
 def denoise(pix):
@@ -56,12 +57,12 @@ def denoise(pix):
                 int(pix[i+1, j-1])+\
                 int(pix[i+1, j])+\
                 int(pix[i+1, j+1])
-                if ans >= 3*255:
+                if ans >= 4*255:
                     #print "Modefied!(%s,%s)ans=%s"%(i,j,ans)
                     pix_new[i, j] = np.uint8(255)
     return pix_new
 
-def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=0):
+def strip_processing(path, blur_radius=2, iter_steps=1, binarize_threshold=120):
     """Strip precessing function.
 
     Parameters
@@ -172,8 +173,7 @@ def pix_sequence(begin, end):
 
     return ans
 
-def get_stripes(img, initial, final):
-    img_array = np.array(img)
+def get_stripes(img_array, initial, final):
     initial = np.array(initial)
     final = np.array(final)
     pix = pix_sequence(initial, final)
@@ -185,6 +185,8 @@ def get_stripes(img, initial, final):
 
 
 def count_stripes(points, s_hold, b_hold):
+    if len(points) == 0:
+        return 0
     s_value = 0
     b_value = 255
     stripes = 0
@@ -251,11 +253,13 @@ def point_line_distance(point, line):
             d_min = d
     return d_min
 
+"""
 def jacobi(func, x):
     dim=len(x)
     x_test=[np.array([DIF_PRECISION if j==i else 0 for j in range(dim)])for i in range(dim)]
     ans=np.array([[(func(x+x_test[j])[i]-func(x)[i])/DIF_PRECISION for j in range(dim)] for i in range(dim)])
     return ans
+
 
 def fsolve(func, init):
     cur_x=init
@@ -264,21 +268,34 @@ def fsolve(func, init):
         cur_x=cur_x+delta_x
         delta_x=np.linalg.solve(jacobi(func, cur_x), -func(cur_x))
     return cur_x
+"""
 
-def calculate_begin_rank(delta_n, delta_r, rank_func):
-    def lhs(x):
-        return np.array([
-            rank_func(x[0])-x[2],
-            rank_func(x[1])-x[3],
-            x[1]-x[0]-delta_n,
-            x[3]-x[2]-delta_r
-        ])
-    return int(fsolve(lhs,[50,100,200,400])[0])
+def calculate_begin_rank(delta_n, delta_r, alpha):
+    return (((alpha * delta_n / delta_r)-(delta_r / alpha))**2)/4
+
 
 def all_in_one(path, initial, final, s_hold, b_hold):
     img = strip_processing(path)
-    points = get_stripes(img, initial, final)
+    points = get_stripes(np.array(img), initial, final)
     delt_n = count_stripes(points, s_hold, b_hold)
     G = array2graph(np.array(img), 0)
     delt_r = point_line_distance(initial, point2line(G, final))
     return delt_n, delt_r
+
+def step1(data):
+    path = StringIO(data)
+    img = strip_processing(path)
+    mat = np.array(img) / 255
+    result = mat.tolist()
+    return result
+
+def step2(mat, info):
+    img_array = np.array(mat) * 255
+    initial = info['points'][0]
+    final = info['points'][1]
+    through = get_stripes(img_array, initial, final)
+    delt_n = count_stripes(through, 2, 2)
+    G = array2graph(img_array, 0)
+    delt_r = point_line_distance(initial, point2line(G, final))
+    ring_num = 0
+    return ring_num
