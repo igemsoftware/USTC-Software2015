@@ -8,6 +8,7 @@ from PIL import Image
 from PIL import ImageFilter
 from PIL import ImageOps
 from PIL import ImageMath
+from cStringIO import StringIO
 
 DIF_PRECISION=1e-13
 SOLVE_PRECISION=1e-13

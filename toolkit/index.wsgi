@@ -7,7 +7,6 @@ import json
 import numpy as np
 from hashlib import sha256
 from MySQLdb import connect
-from cStringIO import StringIO
 from haha import step1, step2
 
 def query_db_matrix(cur, hash_sum):
