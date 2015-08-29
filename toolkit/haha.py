@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__author__ = 'E-Neo <e-neo@qq.com>, LingyuanJi <jly@mail.ustc.edu.cn>'
+__author__ = 'E-Neo <e-neo@qq.com>, LingyuanJi <jly@mail.ustc.edu.cn>, lizitian <lizitian@mail.ustc.edu.cn>'
 
 import numpy as np
 import networkx as nx
@@ -286,6 +286,12 @@ def all_in_one(path, initial, final, s_hold, b_hold):
     delt_r = point_line_distance(initial, point2line(G, final))
     return delt_n, delt_r
 
+def step1(data):
+    path = StringIO(data)
+    img = strip_processing(path)
+    mat = np.array(img) / 255
+    result = mat.tolist()
+    return result
 
 def step2(mat, info):
     img_array = np.array(mat)

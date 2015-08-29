@@ -8,14 +8,7 @@ import numpy as np
 from hashlib import sha256
 from MySQLdb import connect
 from cStringIO import StringIO
-from haha import strip_processing
-
-def step1(data):
-    path = StringIO(data)
-    img = strip_processing(path)
-    mat = np.array(img) / 255
-    result = mat.tolist()
-    return result
+from haha import step1, step2
 
 def query_db_matrix(cur, hash_sum):
     cur.execute('select matrix from stripe where hash = %s', hash_sum)
@@ -52,8 +45,7 @@ def app(environ, start_response):
             status = '404 Not Found'
         else:
             matrix_obj = json.loads(result)
-            obj = {'lrunze': matrix_obj, 'recv_obj': recv_obj}
-            response_body = json.dumps(obj)
+            response_body = json.dumps(step2(matrix_obj, recv_obj))
     else:
         status = '415 Unsupported Media Type'
     cur.close()
