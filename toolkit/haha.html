@@ -55,11 +55,8 @@ p {
     width: 633px;
     height: 475px;
 }
-#select_points_theme, #select_points, #rawimage1xy {
+#select_points_theme, #select_points, #rawimage1xy, #rawimage1 {
     display: none;
-}
-#rawimage1 {
-	display: none;
 }
 canvas {
     background-color: white;
@@ -92,6 +89,9 @@ table.data td{
     border-style: solid;
     border-color: #a9c6c9;
 }
+#param {
+	text-align: center;
+}
 #param:hover {
     background-color: black;
 }
@@ -103,6 +103,7 @@ table.data td{
 </style>
 <script src="//code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+var tmpdata;
 var loadImageFile = function() {
 	$("#rawimage1").show();
     var trueimage = document.getElementById("imagefile").files[0];
@@ -128,12 +129,12 @@ var uploadandSubmit = function() {
             success : function(data) {
                 var canvas = document.getElementById('binimage');
                 var ctx = canvas.getContext('2d');
-                var tmp = data.lrunze;
-                var imagedata = ctx.createImageData(tmp[0].length,tmp.length);
-                for(var i = 0; i < tmp.length; i++) {
-                    for(var j = 0; j < tmp[0].length; j++) {
-                        var off = 4 * (i * tmp[0].length + j) + 3;
-                        if(!tmp[i][j])
+                var tmpdata = data.lrunze;
+                var imagedata = ctx.createImageData(tmpdata[0].length,tmpdata.length);
+                for(var i = 0; i < tmpdata.length; i++) {
+                    for(var j = 0; j < tmpdata[0].length; j++) {
+                        var off = 4 * (i * tmpdata[0].length + j) + 3;
+                        if(!tmpdata[i][j])
                             imagedata.data[off] = 255;
                         else
                             imagedata.data[off] = 0;
@@ -160,6 +161,12 @@ var bin_getCoordinates = function(overevent) {
 	test.style.left = overevent.pageX + 3 + "px";
 
 };
+/*var x,y;
+var rawcanvas=document.getElementById("rawimage1");
+rawcanvas.addEventListener("mousemove",function(event) {
+		x = event.clientX;
+		y = event.clientY;
+});*/
 var raw1_getCoordinates = function(overevent) {
 	$("#rawimage1xy").show();
 	x = overevent.clientX - document.getElementById("rawimage1").getBoundingClientRect().left;
@@ -189,6 +196,38 @@ var clearCoordinates = function() {
 	$("#binxy").hide();
 	$("#rawimagexy").hide();
 };
+var drawcrosscanvas = function(_canvas,x,y) {
+	var tmpcanvas = _canvas.getContext('2d');
+	var fourcanvas = tmpcanvas.createImageData(3,3);
+	for (var j=0; j<3; j++){
+		var oF = 4 * (1 * 3 + j);
+		fourcanvas.data[oF + 1] = 255;
+		fourcanvas.data[oF + 3] = 255;
+	};
+	for (var i=0; i<3; i++){
+		var oFF = 4 * (i * 3 +1);
+		fourcanvas.data[oFF + 1] = 255;
+		fourcanvas.data[oFF + 3] = 255;
+	};
+	fourcanvas.data[3]  = 0;
+	fourcanvas.data[11] = 0;
+	fourcanvas.data[27] = 0;
+	fourcanvas.data[35] = 0;
+	tmpcanvas.putImageData(_canvas,x-1,y-1);
+};
+var selectpoints = function(clickevent) {
+	x = clickevent.clientX;
+	y = clickevent.clientY;
+	if (tmpdata[x][y]==0)
+	{
+		alert("doubility");
+	};
+	else
+	{
+		drawcrosscanvas(document.getElementById("binimage"),x,y);
+		drawcrosscanvas(document.getElementById("rawimage"),x,y);
+	}
+};
 </script>
 </head>
 <body>
@@ -216,6 +255,7 @@ var clearCoordinates = function() {
     </p>
     <div id="binxy">
     </div>
+    <p id="click_select" onclick="selectpoints(event)"></p>
     <table class="data">
         <tr>
             <th>r</th>
