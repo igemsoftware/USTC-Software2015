@@ -190,6 +190,42 @@
                 "params": {
                     "reg": 20
                 }
+            },
+            {
+                "id": "e6",
+                "id1": "d4",
+                "id2": "p4",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e7",
+                "id1": "d8",
+                "id2": "p8",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e8",
+                "id1": "d12",
+                "id2": "p12",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
             }
         ],
         "type": {
@@ -657,6 +693,30 @@
                 "type": "inh",
                 "params": {
                     "reg": 20
+                }
+            },
+            {
+                "id": "e6",
+                "id1": "d4",
+                "id2": "p4",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
+                }
+            },
+            {
+                "id": "e7",
+                "id1": "d8",
+                "id2": "p8",
+                "type": "trans",
+                "params": {
+                    "trans1": 0.01,
+                    "trans2": 0.5,
+                    "decay1": 0.1,
+                    "decay2": 0.05
                 }
             }
         ],
