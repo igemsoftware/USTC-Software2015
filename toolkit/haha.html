@@ -64,21 +64,21 @@ canvas {
 	margin-top: 20px;
 }
 table.data {
-    font-family: "Lato", sans-serif;
-    font-size: 20px;
-    color: #333333;
-    border-width: 1px;
-    border-color: #999999;
-    border-collapse: collapse;
-    margin: 10px 20%;
-    width: 50%;
+	font-family: "Lato", sans-serif;
+	font-size: 20px;
+	color: #333333;
+	border-width: 1px;
+	border-color: #999999;
+	border-collapse: collapse;
+	margin: 10px 20%;
+	width: 50%;
 }
 table.data th{
-    background-color: #eee;
-    border-width: 1px;
-    padding: 8px;
-    border-style: solid;
-    border-color: #a9c6c9;
+	background-color: #eee;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
 }
 table.data tr{
     background-color: #eee;
@@ -157,16 +157,10 @@ var bin_getCoordinates = function(overevent) {
 	document.getElementById("binxy").innerHTML = "Coordinates : (" + x + "," + y + ")";
 	var test = document.getElementById("binxy");
 	test.style.position = "absolute";
-	test.style.top = overevent.pageY + 5 + "px";
-	test.style.left = overevent.pageX + 3 + "px";
+	test.style.top = overevent.pageY + 7 + "px";
+	test.style.left = overevent.pageX + 7 + "px";
 
 };
-/*var x,y;
-var rawcanvas=document.getElementById("rawimage1");
-rawcanvas.addEventListener("mousemove",function(event) {
-		x = event.clientX;
-		y = event.clientY;
-});*/
 var raw1_getCoordinates = function(overevent) {
 	$("#rawimage1xy").show();
 	x = overevent.clientX - document.getElementById("rawimage1").getBoundingClientRect().left;
@@ -174,8 +168,8 @@ var raw1_getCoordinates = function(overevent) {
 	document.getElementById("rawimage1xy").innerHTML = "Coordinates : (" + x + "," + y + ")";
 	var test = document.getElementById("rawimage1xy");
 	test.style.position = "absolute";
-	test.style.top = overevent.pageY + 5 + "px";
-	test.style.left = overevent.pageX + 3 + "px";
+	test.style.top = overevent.pageY + 7 + "px";
+	test.style.left = overevent.pageX + 7 + "px";
 };
 var raw_getCoordinates = function(overevent) {
 	$("#rawimagexy").show();
@@ -184,8 +178,8 @@ var raw_getCoordinates = function(overevent) {
 	document.getElementById("rawimagexy").innerHTML = "Coordinates : (" + x + "," + y + ")";
 	var test = document.getElementById("rawimagexy");
 	test.style.position = "absolute";
-	test.style.top = overevent.pageY + 5 + "px";
-	test.style.left = overevent.pageX + 3 + "px";
+	test.style.top = overevent.pageY + 7 + "px";
+	test.style.left = overevent.pageX + 7 + "px";
 
 };
 var clearCoordinates = function() {
@@ -218,14 +212,14 @@ var drawcrosscanvas = function(_canvas,x,y) {
 var selectpoints = function(clickevent) {
 	x = clickevent.clientX;
 	y = clickevent.clientY;
-	if (tmpdata[x][y]==0)
+	if ( tmpdata[x][y] == 0 )
 	{
 		alert("doubility");
-	};
+	}
 	else
 	{
-		drawcrosscanvas(document.getElementById("binimage"),x,y);
-		drawcrosscanvas(document.getElementById("rawimage"),x,y);
+		drawcrosscanvas(document.getElementById("binimage"), x, y);
+		drawcrosscanvas(document.getElementById("rawimage"), x, y);
 	}
 };
 </script>
