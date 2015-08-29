@@ -4,7 +4,6 @@ __author__ = 'lizitian <lizitian@mail.ustc.edu.cn>'
 
 import sae
 import json
-import numpy as np
 from hashlib import sha256
 from MySQLdb import connect
 from haha import step1, step2
