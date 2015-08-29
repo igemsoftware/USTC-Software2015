@@ -416,11 +416,16 @@ var waitForDoubleClick = false;
  */
 BioBLESS.logic.on_drag_start_e = function(event) {
     if(waitForDoubleClick){
+	    var i; 
+	    for(i = 0; i < BioBLESS.logic.elements.length; i++){
+		     if(BioBLESS.logic.elements[i] === this.parent)
+			     break;
+		};
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
         $.getJSON("misc/gates.json", function(data) {
             if(data && BioBLESS.gene_network.gates){
-                BioBLESS.gene_network.draw(data, -1);
+                BioBLESS.gene_network.draw(data, -1, BioBLESS.logic.mark[i]);
                 BioBLESS.change_stage(BioBLESS.gene_network);
             }
         });
