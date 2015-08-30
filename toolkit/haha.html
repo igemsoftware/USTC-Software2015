@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -114,7 +115,7 @@ var loadImageFile = function() {
 };
 var uploadandSubmit = function() {
     var img = document.getElementById("imagefile").files[0];
-    $.ajax("http://stripe.sinaapp.com/", {
+    $.ajax("https://stripe.sinaapp.com/", {
             data : img,
             processData : false,
             contentType : "image/jpeg",
@@ -143,23 +144,29 @@ var hidesubmit = function() {
     $("#step2").show();
     $("#theme").html("Select Points");
 };
+var get_xy = function(event) {
+    bbox = document.getElementById("binimage").getBoundingClientRect();
+    x = Math.floor(event.clientX - bbox.left);
+    y = Math.floor(event.clientY - bbox.top);
+};
 $(function() {
     var canvas = document.getElementById("binimage");
     canvas.addEventListener("mousemove", function(event) {
         $("#xy").show();
-        x = event.clientX;
-        y = event.clientY;
-        bbox = document.getElementById("binimage").getBoundingClientRect();
-        x = Math.floor(x - bbox.left + 1);
-        y = Math.floor(y - bbox.top + 1);
+        get_xy(event);
         $("#xy").html("Coordinates : (" + x + "," + y + ")");
         var test = document.getElementById("xy");
         test.style.position = "absolute";
         test.style.top = y + 600 + "px";
         test.style.left = x + 240 + "px";
+        if(tmpdata[y][x])
+            $("#xy").css("color", "red");
+        else
+            $("#xy").css("color", "green");
     });
     canvas.addEventListener("click", function(event) {
-        if(tmpdata[x][y] == 1)
+        get_xy(event);
+        if(tmpdata[y][x] == 1)
         {
             alert("1");
             console.log(x)
@@ -179,24 +186,18 @@ $(function() {
 });
 var drawcrosscanvas = function(_canvas,x,y) {
     var tmpcanvas = _canvas.getContext('2d');
-    var fourcanvas = tmpcanvas.createImageData(6,6);
-    for (var i=0; i<6; i++){
-        leftline = 28 * i;
-        fourcanvas.data[leftline + 1] = 255;
-        fourcanvas.data[leftline + 3] = 255;
+    var fourcanvas = tmpcanvas.createImageData(5,5);
+    var list = [0, 16, 24, 32, 48, 64, 72, 80, 96];
+    for(var i in list) {
+        fourcanvas.data[list[i] + 1] = 255;
+        fourcanvas.data[list[i] + 3] = 255;
     }
-    for (var j=1; j<7; j++){
-        rightline = 20 * j;
-        fourcanvas.data[rightline + 1] = 255;
-        fourcanvas.data[rightline + 3] = 255;
-    }
-
     tmpcanvas.putImageData(fourcanvas,x-2,y-2);
 };
 function submitdata() {
 	$.ajax({
 		type: "POST",
-		url: "http://stripe.sinaapp.com/",
+		url: "https://stripe.sianapp.com/",
 		contentType: "application/json",
 		data: JSON.stringify(GetJsonData()),
 		success: function(data){
