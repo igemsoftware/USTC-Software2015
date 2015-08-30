@@ -430,7 +430,7 @@ BioBLESS.logic.on_drag_start_e = function(event) {
             }
         });
         return;
-    }else{
+    } else {
         waitForDoubleClick = true;
         setTimeout(function(){
             waitForDoubleClick = false;
@@ -458,8 +458,7 @@ BioBLESS.logic.on_drag_move_e = function() {
                 if(this.parent.input_1.lines[i][0].father === this.parent.input_1){
                     xRect = this.parent.input_1.lines[i][0].mother.position.x + this.parent.input_1.lines[i][0].mother.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].mother.position.y + this.parent.input_1.lines[i][0].mother.parent.position.y;
-                }
-                else{
+                } else{
                     xRect = this.parent.input_1.lines[i][0].father.position.x + this.parent.input_1.lines[i][0].father.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].father.position.y + this.parent.input_1.lines[i][0].father.parent.position.y; 
                 }

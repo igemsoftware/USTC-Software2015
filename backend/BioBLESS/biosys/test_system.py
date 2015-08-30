@@ -7,7 +7,6 @@ except ImportError:
 from data_test import system_data
 from bio_system import bio_system
 
-
 if __name__ == "__main__":
     reaction = bio_system(system_data)
     print reaction.species
@@ -19,4 +18,3 @@ else:
     class TestSystem(TestCase):
         def test_system(self):
             A = bio_system(system_data)
-
