@@ -25,7 +25,10 @@ def app(environ, start_response):
     conn = connect(host=sae.const.MYSQL_HOST, port=int(sae.const.MYSQL_PORT), user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, charset='utf8')
     cur = conn.cursor()
     if not 'CONTENT_TYPE' in environ:
-        pass
+        fp = open('haha.html')
+        response_body = fp.read()
+        fp.close()
+        response_headers[0] = ('Content-Type', 'text/html')
     elif environ['CONTENT_TYPE'] == 'image/jpeg':
         hash_sum = sha256(data).hexdigest()
         result = query_db_matrix(cur, hash_sum)
