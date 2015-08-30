@@ -14,14 +14,14 @@ __author__ = "Trumpet"
 
 import numpy
 
-SIZE = 1001
-
-COMB = numpy.zeros((SIZE, SIZE))
-for i in xrange(SIZE):
+SIZE = 10000
+MAXCOL = 10
+COMB = numpy.zeros((SIZE, MAXCOL))
+for i in range(SIZE):
     COMB[i, 0] = 1
-    COMB[i, i] = 1
-    for j in xrange(1, i):
+    for j in range(1, MAXCOL):
         COMB[i, j] = COMB[i - 1, j - 1] + COMB[i - 1, j]
+
 
 def itemfreq(temp):
     """
