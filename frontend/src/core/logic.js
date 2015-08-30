@@ -416,16 +416,21 @@ var waitForDoubleClick = false;
  */
 BioBLESS.logic.on_drag_start_e = function(event) {
     if(waitForDoubleClick){
+	    var i; 
+	    for(i = 0; i < BioBLESS.logic.elements.length; i++){
+		     if(BioBLESS.logic.elements[i] === this.parent)
+			     break;
+		};
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
         $.getJSON("misc/gates.json", function(data) {
             if(data && BioBLESS.gene_network.gates){
-                BioBLESS.gene_network.draw(data, -1);
+                BioBLESS.gene_network.draw(data, -1, BioBLESS.logic.mark[i]);
                 BioBLESS.change_stage(BioBLESS.gene_network);
             }
         });
         return;
-    }else{
+    } else {
         waitForDoubleClick = true;
         setTimeout(function(){
             waitForDoubleClick = false;
@@ -453,8 +458,7 @@ BioBLESS.logic.on_drag_move_e = function() {
                 if(this.parent.input_1.lines[i][0].father === this.parent.input_1){
                     xRect = this.parent.input_1.lines[i][0].mother.position.x + this.parent.input_1.lines[i][0].mother.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].mother.position.y + this.parent.input_1.lines[i][0].mother.parent.position.y;
-                }
-                else{
+                } else{
                     xRect = this.parent.input_1.lines[i][0].father.position.x + this.parent.input_1.lines[i][0].father.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].father.position.y + this.parent.input_1.lines[i][0].father.parent.position.y; 
                 }
