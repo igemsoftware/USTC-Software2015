@@ -57,11 +57,13 @@ graph = {
 }
 
 print "Simulating..."
-print "System is:"
+print "This bio-system is:"
 print graph
 
 starter = clock()
 reaction = bio_system(graph)
+print reaction.species
+reaction.show_reaction()
 reaction.simulation()
 ender = clock()
 print "Time is :"
