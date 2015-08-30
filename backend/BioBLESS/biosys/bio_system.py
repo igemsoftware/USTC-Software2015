@@ -146,9 +146,6 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                         if not "n" + part_id in species:
                             species.append("n" + part_id)
                         temp = find_in_map(id2="e" + str(tmp+1))
-                        print "#"
-                        print str(tmp)
-                        print temp
                         while temp != -1:
                             rep_data = data[maps[temp]["id"]]
                             rep_pro = maps[temp]["id1"]
