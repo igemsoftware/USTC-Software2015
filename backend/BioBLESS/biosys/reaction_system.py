@@ -13,6 +13,8 @@ Show structure:[species_to_show]
 __author__ = "Trumpet"
 
 import numpy
+from BioBLESS.settings import DEBUG
+from stopwatch import *
 
 SIZE = 10000
 MAXCOL = 10
@@ -186,22 +188,41 @@ class ReactionSystem(object):
         time = 0
         self.record = [[time, current.tolist()]]
         reaction_number = len(self.reactions)
+        if DEBUG:
+            sw_alloc("Intensities")
+            sw_alloc("Possibility")
+            sw_alloc("Update substances")
         while time < stop_time:
+            if DEBUG:
+                sw_start("Intensities")
             intensities = numpy.array(map(lambda single_reactant: numpy.array(
                 map(lambda species_temp: COMB[current[species_temp[0]], species_temp[1]], single_reactant)).prod(),
                                           self.reactant_data))
+            if DEBUG:
+                sw_accmu("Intensities")
+                sw_start("Possibility")
             possibility = numpy.array(intensities * self.constant, numpy.float64)
             possibility_sum = possibility.sum()
             if possibility_sum == 0:
                 break
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
             next_reaction = numpy.random.choice(numpy.arange(reaction_number), p=possibility / possibility_sum)
+            if DEBUG:
+                sw_accmu("Possibility")
+                sw_start("Update substances")
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp[0]] -= species_temp[1]
             for species_temp in self.product_data[next_reaction]:
                 current[species_temp[0]] += species_temp[1]
             time += delta_time
             self.record.append([time + 0, current.tolist()])
+            if DEBUG:
+                sw_accmu("Update substances")
+        if DEBUG:
+            print
+            sw_print("Intensities")
+            sw_print("Possibility")
+            sw_print("Update substances")
         return self.record
 
     ################################################################
