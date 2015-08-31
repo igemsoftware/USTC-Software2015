@@ -20,3 +20,5 @@ else:
             C = A + B
             print C.species
             C.simulate([], 10)
+            C.show_species()
+            C.show_reaction()
