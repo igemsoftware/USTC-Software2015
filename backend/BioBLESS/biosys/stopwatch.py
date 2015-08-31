@@ -12,10 +12,5 @@ def sw_accmu(st):
     sws[st][1] += clock() - sws[st][0]
 
 def sw_print(st):
-    print "Timer %s: %s" % (st, str(sws[st][1]))
+    print "Timer <%s>: %ss" % (st, str(sws[st][1]))
 
-sw_alloc("a")
-for i in range(10000000):
-    sw_start("a")
-    sw_accmu("a")
-    sw_print("a")
