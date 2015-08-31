@@ -145,15 +145,15 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                         )
                         if not "n" + part_id in species:
                             species.append("n" + part_id)
-                        temp = find_in_map(id2="e" + str(tmp))
+                        temp = find_in_map(id2="e" + str(tmp+1))
                         while temp != -1:
                             rep_data = data[maps[temp]["id"]]
-                            rep_pro = maps[tmp]["id1"]
+                            rep_pro = maps[temp]["id1"]
                             single_reaction.append(
                                 [[rep_pro, "n" + part_id], ["m" + part_id, reg_pro, rep_pro],
                                  rep_data["reg"] * reg_data["reg"] * single_data["trans1"]]
                             )
-                            temp = find_in_map(temp + 1, id2="e" + str(tmp))
+                            temp = find_in_map(temp + 1, id2="e" + str(tmp+1))
 
                     if maps[tmp]["type"] == "lock":
                         single_reaction.append(
