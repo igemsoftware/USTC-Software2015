@@ -147,7 +147,7 @@ class ReactionSystem(object):
 
     ####################################################################
 
-    def simulate(self, stop_time):
+    def simulate(self, old_initial, stop_time):
         """
         Simulate after given species initial number and stoptime
         Parameters:
@@ -280,7 +280,7 @@ class ReactionSystem(object):
         # # pylab.ion()
         plt.show()
 
-    def show_simulate(self, stop_time, list_plot):
+    def show_simulate(self, old_initial, stop_time, list_plot):
         """
         Simulate and show the graph
         Parameters:
@@ -290,7 +290,7 @@ class ReactionSystem(object):
         Returns:
             none
         """
-        self.simulate(stop_time)
+        self.simulate([], stop_time)
         self.show_record(list_plot)
 
     #######################################################################3
@@ -308,12 +308,13 @@ class ReactionSystem(object):
         specieser = [[i, [self.record[j][1][self.species_name_inverse[i]] for j in range(num)]] for i in self.species_name]
         timer = [["t", [self.record[i][0] for i in range(num)]]]
         return dict(specieser+timer)
+        #return [self.species_name_inverse,self.record]
 
     def simulation(self):
         """
         Just do simulation
         """
         try:
-            self.simulate(self.time)
+            self.simulate([], self.time)
         except IndexError:
             pass
