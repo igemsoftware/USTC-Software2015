@@ -10,7 +10,7 @@ system_data = {
     "simulation_parameters": [
         {
             "e1": {
-                "trans1": 0.01, 
+                "trans1": 0.0001, 
                 "trans2": 0.5,
                 "decay1": 0.2,
                 "decay2": 0.1
@@ -45,7 +45,7 @@ system_data = {
         {
             "device_parameter": {
                 "initial": [
-                    50
+                    0
                 ]
             }
         }
