@@ -14,3 +14,10 @@ from django import http
 def sleep(request):
     time.sleep(300)
     return http.HttpResponse("<html></html>")
+
+
+def gates(request):
+    fp = open("../../../doc/devices/gates_lizhi.json")
+    data = fp.read()
+    fp.close()
+    return http.HttpResponse(data)
