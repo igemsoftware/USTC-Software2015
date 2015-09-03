@@ -62,7 +62,13 @@ BioBLESS.init = function() {
         }
         return false;
     });
-    $.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
+    $.ajax({
+        type: 'POST',
+        url: 'https://ustc.software/simulate/',
+        contentType: 'application/json',
+        data: '{"simulation_parameters": [{"device_parameter": {"initial": [10, 10, 10]}, "e5": {"reg": 20}, "e4": {"reg": 20}, "e6": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e1": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e3": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e2": {"reg": 20}}, {"device_parameter": {"initial": [0]}}], "nodes": ["NOT3", "INPUT"], "system_parameter": {"time": 1000}, "arcs": [{"to": 0, "from": 1}]}',
+        success: function(data) {BioBLESS.simulation.draw(data);}
+    });
 	BioBLESS.scroll_function = BioBLESS.zoom_function;
     BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 };

@@ -423,12 +423,10 @@ BioBLESS.logic.on_drag_start_e = function(event) {
 		};
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
-        $.getJSON("misc/gates.json", function(data) {
-            if(data && BioBLESS.gene_network.gates){
-                BioBLESS.gene_network.draw(data, -1, BioBLESS.logic.mark[i]);
-                BioBLESS.change_stage(BioBLESS.gene_network);
-            }
-        });
+        if(BioBLESS.gene_network.gates){
+            BioBLESS.gene_network.draw(BioBLESS.gates, -1, BioBLESS.logic.mark[i]);
+            BioBLESS.change_stage(BioBLESS.gene_network);
+        }
         return;
     } else {
         waitForDoubleClick = true;
