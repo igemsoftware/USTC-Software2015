@@ -17,7 +17,7 @@ def sleep(request):
 
 
 def gates(request):
-    fp = open("../../../doc/devices/gates_lizhi.json")
+    fp = open("../fixtures/gates_lizhi.json")
     data = fp.read()
     fp.close()
     return http.HttpResponse(data)
