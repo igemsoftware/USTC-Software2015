@@ -13,7 +13,7 @@ Show structure:[species_to_show]
 __author__ = "Trumpet"
 
 DEBUG = True
-import numpy
+import numpy, random, math
 try:
     from BioBLESS.settings import DEBUG
 except ImportError:
@@ -176,25 +176,45 @@ class ReactionSystem(object):
         time = 0
         self.record = [[time, current]]
 
-        possibility =  numpy.array([numpy.array([current[j] 
-            for j in self.reactant_data[i]]).prod()*self.constant[i] 
-            for i in range(self.reaction_number)])
+        possibility = [i for i in self.constant]
+        for i in range(self.reaction_number):
+            for j in self.reactant_data[i]:
+                possibility[i] *= current[j]
 
         if DEBUG:
             sw_alloc("Sum")
             sw_start("Sum")
+            sw_alloc("1")
+            sw_alloc("2")
+            sw_alloc("3")
+            sw_alloc("4")
+            sw_alloc("5")
+            sw_alloc("6")
 
         while time < stop_time:
 
+            sw_start("1")
+
             current = [x for x in current]
 
-            possibility_sum = possibility.sum()
+            sw_accmu("1")
+            sw_start("2")
+
+            possibility_sum = 0
+            for i in possibility:
+                possibility_sum += i
             if possibility_sum == 0:
                 break
 
-            delta_time = -numpy.log(numpy.random.random()) / possibility_sum
+            sw_accmu("2")
+            sw_start("3")
 
-            randomer = numpy.random.random()*possibility_sum
+            delta_time = -math.log(random.random()) / possibility_sum
+
+            sw_accmu("3")
+            sw_start("4")
+
+            randomer = random.random()*possibility_sum
             sumer = 0
             next_reaction = 0
             while True:
@@ -203,6 +223,9 @@ class ReactionSystem(object):
                     break
                 next_reaction += 1
 
+            sw_accmu("4")
+            sw_start("5")
+
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp] -= 1
             for species_temp in self.product_data[next_reaction]:
@@ -210,14 +233,25 @@ class ReactionSystem(object):
             time += delta_time
             self.record.append([time+0, current])
 
+            sw_accmu("5")
+            sw_start("6")
+
             for i in reaction_to_change[next_reaction]:
                 possibility[i] = self.constant[i] 
                 for j in self.reactant_data[i]:
                     possibility[i] *= current[j]
 
+            sw_accmu("6")
+
         if DEBUG:
             sw_accmu("Sum")
             sw_print("Sum")
+            sw_print("1")
+            sw_print("2")
+            sw_print("3")
+            sw_print("4")
+            sw_print("5")
+            sw_print("6")
 
         return self.record
 

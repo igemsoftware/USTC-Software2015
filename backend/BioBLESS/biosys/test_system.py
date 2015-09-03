@@ -22,5 +22,4 @@ if __name__ == "__main__":
 else:
     class TestSystem(TestCase):
         def test_system(self):
-            A = bio_system(system_data)
             [bio_system(i) for i in systems_data]
