@@ -12,39 +12,13 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
+DEBUG = True
 import numpy
-from BioBLESS.settings import DEBUG
+try:
+    from BioBLESS.settings import DEBUG
+except ImportError:
+    pass
 from stopwatch import *
-
-SIZE = 10000
-MAXCOL = 10
-COMB = numpy.zeros((SIZE, MAXCOL))
-for i in range(SIZE):
-    COMB[i, 0] = 1
-    for j in range(1, MAXCOL):
-        COMB[i, j] = COMB[i - 1, j - 1] + COMB[i - 1, j]
-
-
-def itemfreq(temp):
-    """
-    calculate the frequence in a list
-    """
-    if len(temp) == 0:
-        return numpy.array([])
-    else:
-        items, inv = numpy.unique(temp, return_inverse=True)
-        freq = numpy.bincount(inv)
-        return numpy.array([items, freq]).T
-
-
-def transpose(temp):
-    """
-    caclulate the transpose for a matrix
-    """
-    if len(temp) == 0:
-        return numpy.array([[], [], []])
-    else:
-        return temp.transpose()
 
 
 def choice(species):
@@ -56,24 +30,11 @@ def choice(species):
     else:
         return species
 
-
-def initialize(init_list, current, species_name_inverse):
-    """
-    initialize the system
-    """
-    for single_init in init_list:
-        if isinstance(single_init, list):
-            if single_init[1] != 0:
-                current[species_name_inverse[single_init[0]]] = single_init[1]
-    return current
-
-
 ################################################################
 try:
     import matplotlib.pyplot as plt
 except ImportError:
     pass
-
 
 ################################################################
 
@@ -94,8 +55,6 @@ class ReactionSystem(object):
         """
         self.set_species_name(species)
         self.set_reactions(reactions)
-        self.record = None
-        self.time = 0
 
     def set_species_name(self, species):
         """
@@ -106,11 +65,13 @@ class ReactionSystem(object):
             none
         """
         self.species = species
-        self.species_name = numpy.array(map(choice, species))
-        self.species_name_inverse = {self.species_name[name_temp]: name_temp for name_temp in
-                                     range(len(self.species_name))}
+        for i in range(len(self.species)):
+            if isinstance(self.species[i], str) or isinstance(self.species[i], unicode):
+                self.species[i] = [self.species[i], 0]
+        self.species_name = [i[0] for i in self.species]
+        self.species_name_inverse = {self.species_name[i]: i for i in range(len(self.species_name))}
 
-    def set_reactions(self, reaction):
+    def set_reactions(self, reactions):
         """
         Set all the reactions in this system
         Parameters:
@@ -119,15 +80,38 @@ class ReactionSystem(object):
         Returns:
             none
         """
-        self.reactions = numpy.array(reaction)
-        self.reactant, self.product, self.constant = transpose(self.reactions)
-        self.reactant = numpy.array(self.reactant)
-        self.product = numpy.array(self.product)
-        self.constant = numpy.array(self.constant)
-        self.reactant_data = map(itemfreq, (
-        map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.reactant)))
-        self.product_data = map(itemfreq, (
-        map(lambda temp1: map(lambda temp2: self.species_name_inverse[temp2], temp1), self.product)))
+        self.reactions = reactions
+        self.product = []
+        self.reactant = []
+        self.constant = []
+        for i in reactions:
+            self.reactant.append(i[0])
+            self.product.append(i[1])
+            self.constant.append(i[2])
+        self.reactant_data = [[self.species_name_inverse[j] for j in i] for i in self.reactant]
+        self.product_data = [[self.species_name_inverse[j] for j in i] for i in self.product]
+        self.reaction_number = len(self.constant)
+
+    def __add__(self, other):
+        reaction = [[self.reactant[i], self.product[i], self.constant[i]] for i in range(self.reaction_number)] + [[other.reactant[i], other.product[i], other.constant[i]] for i in range(other.reaction_number)]
+
+        species = list(set(self.species_name + other.species_name))
+
+        species_name_inverse = {species[i]: i for i in range(len(species))}
+
+        current = [0 for i in range(len(species))]
+        
+        for i in self.species:
+            if i[1] != 0:
+                current[species_name_inverse[i[0]]] = i[1]
+
+        for i in other.species:
+            if i[1] != 0:
+                current[species_name_inverse[i[0]]] = i[1]
+
+        return self.__class__(reaction, [[species[i], current[i]] for i in range(len(species))])
+
+    ######################################################################
 
     def show_species(self):
         """
@@ -161,18 +145,9 @@ class ReactionSystem(object):
             print_temp += "\t\t" + str(single_reaction[2])
             print print_temp
 
-    def __add__(self, other):
-        reaction = transpose(numpy.array([self.reactant, self.product, self.constant])).tolist() + transpose(
-            numpy.array([other.reactant, other.product, other.constant])).tolist()
-        species_name = list(set(self.species_name.tolist() + other.species_name.tolist()))
-        current = numpy.zeros(len(species_name))
-        species_name_inverse = {species_name[name_temp]: name_temp for name_temp in range(len(species_name))}
-        current = initialize(self.species, current, species_name_inverse)
-        current = initialize(other.species, current, species_name_inverse)
-        current = current.tolist()
-        return self.__class__(reaction, numpy.array([species_name, current]).transpose().tolist())
+    ####################################################################
 
-    def simulate(self, initial, stop_time):
+    def simulate(self, stop_time):
         """
         Simulate after given species initial number and stoptime
         Parameters:
@@ -182,40 +157,48 @@ class ReactionSystem(object):
             list:the record of the simulation
                 the format of the list is : [[time,[species current number,...]],...]
         """
-        current = numpy.zeros(len(self.species_name))  # numpy.array([0] * self.species_number)
-        current = initialize(self.species, current, self.species_name_inverse)
-        current = initialize(initial, current, self.species_name_inverse)
+
+        current = [i[1] for i in self.species] 
+
         time = 0
-        self.record = [[time, current.tolist()]]
-        reaction_number = len(self.reactions)
+        self.record = [[time, current]]
         if DEBUG:
             sw_alloc("Intensities")
             sw_alloc("Possibility")
             sw_alloc("Update substances")
+
         while time < stop_time:
+
             if DEBUG:
                 sw_start("Intensities")
-            intensities = numpy.array(map(lambda single_reactant: numpy.array(
-                map(lambda species_temp: COMB[current[species_temp[0]], species_temp[1]], single_reactant)).prod(),
-                                          self.reactant_data))
+
+            current = [x for x in current]
+            possibility = [numpy.array([current[j] 
+                for j in self.reactant_data[i]]).prod()*self.constant[i] 
+                for i in range(self.reaction_number)]
+
             if DEBUG:
                 sw_accmu("Intensities")
                 sw_start("Possibility")
-            possibility = numpy.array(intensities * self.constant, numpy.float64)
+
+            possibility = numpy.array(possibility,dtype=numpy.float64)
             possibility_sum = possibility.sum()
             if possibility_sum == 0:
                 break
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
-            next_reaction = numpy.random.choice(numpy.arange(reaction_number), p=possibility / possibility_sum)
+            next_reaction = numpy.random.choice(numpy.arange(self.reaction_number), p=possibility / possibility_sum)
+
             if DEBUG:
                 sw_accmu("Possibility")
                 sw_start("Update substances")
+
             for species_temp in self.reactant_data[next_reaction]:
-                current[species_temp[0]] -= species_temp[1]
+                current[species_temp] -= 1
             for species_temp in self.product_data[next_reaction]:
-                current[species_temp[0]] += species_temp[1]
+                current[species_temp] += 1
             time += delta_time
-            self.record.append([time + 0, current.tolist()])
+            self.record.append([time+0, current])
+
             if DEBUG:
                 sw_accmu("Update substances")
         if DEBUG:
@@ -223,6 +206,7 @@ class ReactionSystem(object):
             sw_print("Intensities")
             sw_print("Possibility")
             sw_print("Update substances")
+
         return self.record
 
     ################################################################
@@ -243,6 +227,21 @@ class ReactionSystem(object):
         # # pylab.ion()
         plt.show()
 
+    def show_simulate(self, stop_time, list_plot):
+        """
+        Simulate and show the graph
+        Parameters:
+            list:the number of the species at t=0
+            real:the time to stop the simualtion
+            list:the species to show
+        Returns:
+            none
+        """
+        self.simulate(stop_time)
+        self.show_record(list_plot)
+
+    #######################################################################3
+
     @property
     def record_list(self):
         """
@@ -254,24 +253,11 @@ class ReactionSystem(object):
         """
         return [self.species_name_inverse, self.record]
 
-    def show_simulate(self, initial, stop_time, list_plot):
-        """
-        Simulate and show the graph
-        Parameters:
-            list:the number of the species at t=0
-            real:the time to stop the simualtion
-            list:the species to show
-        Returns:
-            none
-        """
-        self.simulate(initial, stop_time)
-        self.show_record(list_plot)
-
     def simulation(self):
         """
         Just do simulation
         """
         try:
-            self.simulate([], self.time)
+            self.simulate(self.time)
         except IndexError:
             pass

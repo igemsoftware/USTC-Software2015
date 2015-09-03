@@ -8,10 +8,11 @@ from reaction_system import ReactionSystem
 
 if __name__ == "__main__":
     A = ReactionSystem([[["a"], ["b"], 1]], [["a", 100], "b"])
+    A.show_simulate(10,["a", "b"])
     B = ReactionSystem([[["b"], ["c"], 1]], [["b", 100], "c"])
     C = A + B
     print C.species
-    C.show_simulate([], 10, ["a", "b", "c"])
+    C.show_simulate(10, ["a", "b", "c"])
 else:
     class TestReaction(TestCase):
         def test_reaction(self):
@@ -19,6 +20,6 @@ else:
             B = ReactionSystem([[["b"], ["c"], 1]], [["b", 100], "c"])
             C = A + B
             print C.species
-            C.simulate([], 10)
+            C.simulate(10)
             C.show_species()
             C.show_reaction()
