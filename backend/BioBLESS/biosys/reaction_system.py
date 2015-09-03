@@ -14,21 +14,13 @@ __author__ = "Trumpet"
 
 DEBUG = True
 import random, math
+
 try:
     from BioBLESS.settings import DEBUG
 except ImportError:
     pass
 from stopwatch import *
 
-
-def choice(species):
-    """
-    choice the name of the species
-    """
-    if isinstance(species, list):
-        return species[0]
-    else:
-        return species
 
 ################################################################
 try:
@@ -94,21 +86,15 @@ class ReactionSystem(object):
 
     def __add__(self, other):
         reaction = [[self.reactant[i], self.product[i], self.constant[i]] for i in range(self.reaction_number)] + [[other.reactant[i], other.product[i], other.constant[i]] for i in range(other.reaction_number)]
-
         species = list(set(self.species_name + other.species_name))
-
         species_name_inverse = {species[i]: i for i in range(len(species))}
-
         current = [0 for i in range(len(species))]
-        
         for i in self.species:
             if i[1] != 0:
                 current[species_name_inverse[i[0]]] = i[1]
-
         for i in other.species:
             if i[1] != 0:
                 current[species_name_inverse[i[0]]] = i[1]
-
         return self.__class__(reaction, [[species[i], current[i]] for i in range(len(species))])
 
     ######################################################################
@@ -175,7 +161,6 @@ class ReactionSystem(object):
         current = [i[1] for i in self.species] 
         time = 0
         self.record = [[time, current]]
-
         possibility = [i for i in self.constant]
         for i in range(self.reaction_number):
             for j in self.reactant_data[i]:
@@ -190,34 +175,25 @@ class ReactionSystem(object):
             sw_alloc("4")
             sw_alloc("5")
             sw_alloc("6")
-
         while time < stop_time:
-
             if DEBUG:
                 sw_start("1")
-
             current = [x for x in current]
-
             if DEBUG:
                 sw_accmu("1")
                 sw_start("2")
-
             possibility_sum = 0
             for i in possibility:
                 possibility_sum += i
             if possibility_sum == 0:
                 break
-
             if DEBUG:
                 sw_accmu("2")
                 sw_start("3")
-
             delta_time = -math.log(random.random()) / possibility_sum
-
             if DEBUG:
                 sw_accmu("3")
                 sw_start("4")
-
             randomer = random.random()*possibility_sum
             sumer = 0
             next_reaction = 0
@@ -226,30 +202,24 @@ class ReactionSystem(object):
                 if sumer >= randomer:
                     break
                 next_reaction += 1
-
             if DEBUG:
                 sw_accmu("4")
                 sw_start("5")
-
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp] -= 1
             for species_temp in self.product_data[next_reaction]:
                 current[species_temp] += 1
             time += delta_time
             self.record.append([time+0, current])
-
             if DEBUG:
                 sw_accmu("5")
                 sw_start("6")
-
             for i in reaction_to_change[next_reaction]:
                 possibility[i] = self.constant[i] 
                 for j in self.reactant_data[i]:
                     possibility[i] *= current[j]
-
             if DEBUG:
               sw_accmu("6")
-
         if DEBUG:
             sw_accmu("Sum")
             sw_print("Sum")
@@ -259,7 +229,6 @@ class ReactionSystem(object):
             sw_print("4")
             sw_print("5")
             sw_print("6")
-
         return self.record
 
     ################################################################
@@ -276,8 +245,6 @@ class ReactionSystem(object):
                      plot_list] if plot_list else self.species_name_inverse.values()
         for species in plot_list:
             plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
-        # # !!! TODO: Something error HERE, pylab can only show once !!!
-        # # pylab.ion()
         plt.show()
 
     def show_simulate(self, old_initial, stop_time, list_plot):
