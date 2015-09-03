@@ -244,7 +244,10 @@ class ReactionSystem(object):
         Returns:
             none
         """
-        return [self.species_name_inverse, self.record]
+        num = len(self.record)
+        specieser = [[i, [self.record[j][1][self.species_name_inverse[i]] for j in range(num)]] for i in self.species_name]
+        timer = [["t", [self.record[i][0] for i in range(num)]]]
+        return dict(specieser+timer)
 
     def simulation(self):
         """
