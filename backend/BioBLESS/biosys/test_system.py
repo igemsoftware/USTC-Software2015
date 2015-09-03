@@ -17,7 +17,7 @@ if __name__ == "__main__":
     print reaction.species
     reaction.show_reaction()
     reaction.simulation()
-    reaction.show_record(map(str, range(len(reaction.nodes))))
+    reaction.show_record(map(lambda x:"S"+str(x), range(len(reaction.nodes))))
     reaction.show_record()
 else:
     class TestSystem(TestCase):

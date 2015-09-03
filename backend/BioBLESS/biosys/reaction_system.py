@@ -163,23 +163,18 @@ class ReactionSystem(object):
         time = 0
         self.record = [[time, current]]
         if DEBUG:
-            sw_alloc("Intensities")
             sw_alloc("Possibility")
             sw_alloc("Update substances")
 
         while time < stop_time:
 
             if DEBUG:
-                sw_start("Intensities")
+                sw_start("Possibility")
 
             current = [x for x in current]
             possibility = [numpy.array([current[j] 
                 for j in self.reactant_data[i]]).prod()*self.constant[i] 
                 for i in range(self.reaction_number)]
-
-            if DEBUG:
-                sw_accmu("Intensities")
-                sw_start("Possibility")
 
             possibility = numpy.array(possibility,dtype=numpy.float64)
             possibility_sum = possibility.sum()
@@ -202,8 +197,6 @@ class ReactionSystem(object):
             if DEBUG:
                 sw_accmu("Update substances")
         if DEBUG:
-            print
-            sw_print("Intensities")
             sw_print("Possibility")
             sw_print("Update substances")
 

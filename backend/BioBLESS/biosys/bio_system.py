@@ -196,12 +196,12 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
             if list_from[sig] == st1:
                 list_from[sig] = st2
 
-    add_str(species, nodes_id)
-    add_str(reaction, nodes_id)
-    tmp = [replace_str(species, nodes_id + gates["input"][i], input_sub[i]) for i in range(len(input_sub))]
-    tmp = [replace_str(species, nodes_id + gates["output"][i], output_sub[i]) for i in range(len(output_sub))]
-    tmp = [replace_str(reaction, nodes_id + gates["input"][i], input_sub[i]) for i in range(len(input_sub))]
-    tmp = [replace_str(reaction, nodes_id + gates["output"][i], output_sub[i]) for i in range(len(output_sub))]
+    add_str(species, "S"+nodes_id)
+    add_str(reaction, "S"+nodes_id)
+    tmp = [replace_str(species, "S"+nodes_id + gates["input"][i], "S"+input_sub[i]) for i in range(len(input_sub))]
+    tmp = [replace_str(species, "S"+nodes_id + gates["output"][i], "S"+output_sub[i]) for i in range(len(output_sub))]
+    tmp = [replace_str(reaction, "S"+nodes_id + gates["input"][i], "S"+input_sub[i]) for i in range(len(input_sub))]
+    tmp = [replace_str(reaction, "S"+nodes_id + gates["output"][i], "S"+output_sub[i]) for i in range(len(output_sub))]
     return ReactionSystem(reaction, species)
 
 
