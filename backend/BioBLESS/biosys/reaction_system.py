@@ -157,49 +157,51 @@ class ReactionSystem(object):
             list:the record of the simulation
                 the format of the list is : [[time,[species current number,...]],...]
         """
+        species_to_reaction = [[] for i in range(len(self.species_name))]
+        for i in range(self.reaction_number):
+            for j in self.reactant_data[i]:
+                species_to_reaction[j].append(i)
+            for j in self.product_data[i]:
+                species_to_reaction[j].append(i)
+
+        reaction_to_change = [[] for i in range(self.reaction_number)]
+        for i in range(self.reaction_number):
+            for j in self.reactant_data[i]:
+                reaction_to_change[i] += species_to_reaction[j]
+            for j in self.product_data[i]:
+                reaction_to_change[i] += species_to_reaction[j]
+        reaction_to_change = [set(i) for i in reaction_to_change]
 
         current = [i[1] for i in self.species] 
-
         time = 0
         self.record = [[time, current]]
+
+        possibility =  numpy.array([numpy.array([current[j] 
+            for j in self.reactant_data[i]]).prod()*self.constant[i] 
+            for i in range(self.reaction_number)])
+
         if DEBUG:
-            sw_alloc("Copy")
-            sw_alloc("Possibility")
             sw_alloc("Sum")
-            sw_alloc("Random")
-            sw_alloc("Update substances")
+            sw_start("Sum")
 
         while time < stop_time:
 
-            if DEBUG:
-                sw_start("Copy")
             current = [x for x in current]
 
-            if DEBUG:
-                sw_accmu("Copy")
-                sw_start("Possibility")
-            possibility = [numpy.array([current[j] 
-                for j in self.reactant_data[i]]).prod()*self.constant[i] 
-                for i in range(self.reaction_number)]
-
-            if DEBUG:
-                sw_accmu("Possibility")
-                sw_start("Sum")
-
-            possibility = numpy.array(possibility,dtype=numpy.float64)
             possibility_sum = possibility.sum()
             if possibility_sum == 0:
                 break
 
-            if DEBUG:
-                sw_accmu("Sum")
-                sw_start("Random")
             delta_time = -numpy.log(numpy.random.random()) / possibility_sum
-            next_reaction = numpy.random.choice(numpy.arange(self.reaction_number), p=possibility / possibility_sum)
 
-            if DEBUG:
-                sw_accmu("Random")
-                sw_start("Update substances")
+            randomer = numpy.random.random()*possibility_sum
+            sumer = 0
+            next_reaction = 0
+            while True:
+                sumer += possibility[next_reaction]
+                if sumer >= randomer:
+                    break
+                next_reaction += 1
 
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp] -= 1
@@ -208,14 +210,14 @@ class ReactionSystem(object):
             time += delta_time
             self.record.append([time+0, current])
 
-            if DEBUG:
-                sw_accmu("Update substances")
+            for i in reaction_to_change[next_reaction]:
+                possibility[i] = self.constant[i] 
+                for j in self.reactant_data[i]:
+                    possibility[i] *= current[j]
+
         if DEBUG:
-            sw_print("Copy")
-            sw_print("Possibility")
+            sw_accmu("Sum")
             sw_print("Sum")
-            sw_print("Random")
-            sw_print("Update substances")
 
         return self.record
 
