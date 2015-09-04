@@ -237,7 +237,7 @@
         }
     },
     {
-        "id": "OR2",
+        "id": "AND5",
         "input": [
             "p100",
             "p200"
@@ -268,10 +268,10 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
-                    "decay1": 0.1,
-                    "decay2": 0.05
+                    "trans1": 0.0008,
+                    "trans2": 0.05,
+                    "decay1": 0.4,
+                    "decay2": 0.01
                 }
             },
             {
@@ -280,7 +280,7 @@
                 "id2": "d1",
                 "type": "act",
                 "params": {
-                    "reg": 0.02
+                    "reg": 0.1
                 }
             },
             {
@@ -289,7 +289,7 @@
                 "id2": "d1",
                 "type": "key",
                 "params": {
-                    "reg": 0.02
+                    "reg": 0.4
                 }
             }
         ],
