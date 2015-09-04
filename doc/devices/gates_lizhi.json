@@ -222,9 +222,9 @@
                 "type": "trans",
                 "params": {
                     "trans1": 0.01,
-                    "trans2": 0.5,
+                    "trans2": 0.01,
                     "decay1": 0.1,
-                    "decay2": 0.05
+                    "decay2": 0.1
                 }
             }
         ],
@@ -268,7 +268,7 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.05,
+                    "trans1": 0.01,
                     "trans2": 0.5,
                     "decay1": 0.1,
                     "decay2": 0.05
@@ -280,7 +280,7 @@
                 "id2": "d1",
                 "type": "act",
                 "params": {
-                    "reg": 5
+                    "reg": 0.02
                 }
             },
             {
@@ -289,7 +289,7 @@
                 "id2": "d2",
                 "type": "key",
                 "params": {
-                    "reg": 5
+                    "reg": 0.02
                 }
             }
         ],
