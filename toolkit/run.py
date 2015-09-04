@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-print "Initing............................................"
-print "Please waiting....................................."
 
 import sys
 import simplejson
@@ -15,6 +13,7 @@ if '-v' in sys.argv:
     exit()
 if '-h' in sys.argv:
     print './run.py [-g option][-t time][-i initial][-d][-h][-v]'
+    exit()
 null = None
 gate_file = open("../doc/devices/gates_lizhi.json", "r")
 gate_data_source = gate_file.read()
