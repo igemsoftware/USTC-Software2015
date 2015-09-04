@@ -12,10 +12,7 @@ Create some biosys and calculate their simulation
 """
 __author__ = 'Trumpet'
 
-try:
-    import simplejson
-except ImportError:
-    import json as simplejson
+import simplejson
 
 from reaction_system import ReactionSystem
 
@@ -23,12 +20,8 @@ from reaction_system import ReactionSystem
 GATE_FILE = None
 try:
     GATE_FILE = open("../../../doc/devices/gates_lizhi.json", "r")
-except:
-    pass
-try:
+except IOError:
     GATE_FILE = open("../doc/devices/gates_lizhi.json", "r")
-except:
-    pass
 gate_data_source = GATE_FILE.read()
 gates_data = simplejson.loads(gate_data_source)
 gates_data = list(gates_data)
@@ -81,7 +74,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                 try:
                     if maps[single_map][kw.keys()[0]] == kw.values()[0]:
                         return single_map#
-                except:
+                except KeyError:
                     pass
             return -1
 
@@ -96,7 +89,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                 if j[0] == "d":
                     try:
                         species[species.index(j)] = [j, initial[i]]
-                    except:
+                    except ValueError:
                         pass
         species += gates["input"]
 
@@ -236,9 +229,5 @@ def bio_system(system_data):
         reaction += devices[single_nodes]
 
     reaction.time = time
-    # try:
-    #    reaction.simulate([], time)
-    # except IndexError:
-    #   pass
     reaction.nodes = nodes
     return reaction

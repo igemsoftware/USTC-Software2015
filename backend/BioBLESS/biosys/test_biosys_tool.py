@@ -1,9 +1,6 @@
 __author__ = 'suquark'
 # !/usr/bin/env python
-try:
-    from django.test import TestCase
-except ImportError:
-    pass
+from django.test import TestCase
 
 from debug_tool import debug_info
 from hash_tool import hash_list, hash_dict, hash_string_list

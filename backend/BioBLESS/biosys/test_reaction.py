@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-try:
-    from django.test import TestCase
-except ImportError:
-    pass
+from django.test import TestCase
 
 from reaction_system import ReactionSystem
 
