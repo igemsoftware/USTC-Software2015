@@ -10,7 +10,11 @@ except:
     pass
 from bio_system import bio_system
 
-
+if '-v' in sys.argv:
+    print 'run alpha'
+    exit()
+if '-h' in sys.argv:
+    print './run.py [-g option][-t time][-i initial][-d][-h][-v]'
 null = None
 gate_file = open("../doc/devices/gates_lizhi.json", "r")
 gate_data_source = gate_file.read()
@@ -64,7 +68,7 @@ if '-d' in sys.argv:
     reaction.show_reaction()
 reaction.simulation()
 
-reaction.show_record()
+reaction.show_record(["S0"])
 try:
     while True:
         print "What else do you want to show(0,1,0d3,0p5):"
