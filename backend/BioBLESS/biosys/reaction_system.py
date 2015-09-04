@@ -237,19 +237,6 @@ class ReactionSystem(object):
             plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         plt.show()
 
-    def show_simulate(self, stop_time, list_plot):
-        """
-        Simulate and show the graph
-        Parameters:
-            list:the number of the species at t=0
-            real:the time to stop the simualtion
-            list:the species to show
-        Returns:
-            none
-        """
-        self.simulate(stop_time)
-        self.show_record(list_plot)
-
     #######################################################################3
 
     @property
