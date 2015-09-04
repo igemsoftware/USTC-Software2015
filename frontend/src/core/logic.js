@@ -1175,7 +1175,7 @@ BioBLESS.logic.create_abcd = function(){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
-            $.getJSON("https://ustc.software/biocircuit/10110010/", function(data) {
+            $.getJSON(BioBLESS.host + "/biocircuit/10110010/", function(data) {
                     BioBLESS.logic.gates_sup = data;
                     var new_stage = BioBLESS.logic.craete_efgh(this.parent);
                     this.parent.parent.addChild(new_stage);
