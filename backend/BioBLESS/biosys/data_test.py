@@ -59,7 +59,7 @@ system_data_mixed = {
     ],
     "system_parameter":
         {
-            "time": 1000
+            "time": 10000
         },
     "simulation_parameters": [
         {
