@@ -215,11 +215,11 @@ class ReactionSystem(object):
                 sw_accmu("4")
         if DEBUG:
             sw_accmu("Sum")
-            sw_print("Sum")
             sw_print("1")
             sw_print("2")
             sw_print("3")
             sw_print("4")
+            sw_print("Sum")
         return self.record
 
     ################################################################
@@ -232,8 +232,7 @@ class ReactionSystem(object):
         Returns:
             none
         """
-        plot_list = [self.species_name_inverse[single_species] for single_species in
-                     plot_list] if plot_list else self.species_name_inverse.values()
+        plot_list = [self.species_name_inverse[single_species] for single_species in plot_list] if plot_list else self.species_name_inverse.values()
         for species in plot_list:
             plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         plt.show()
