@@ -4,4 +4,5 @@ __pycache__/
 *.pyc
 *~
 backend/db.sqlite3
-#*#
+*.so
+*.o
