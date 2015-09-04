@@ -258,7 +258,4 @@ class ReactionSystem(object):
         """
         Just do simulation
         """
-        try:
-            self.simulate(self.time)
-        except IndexError:
-            pass
+        self.simulate(self.time)
