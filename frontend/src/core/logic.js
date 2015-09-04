@@ -423,14 +423,12 @@ BioBLESS.logic.on_drag_start_e = function(event) {
 		};
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
-        $.getJSON("misc/gates.json", function(data) {
-            if(data && BioBLESS.gene_network.gates){
-                BioBLESS.gene_network.draw(data, -1, BioBLESS.logic.mark[i]);
-                BioBLESS.change_stage(BioBLESS.gene_network);
-            }
-        });
+        if(BioBLESS.gene_network.gates){
+            BioBLESS.gene_network.draw(BioBLESS.gates, -1, BioBLESS.logic.mark[i]);
+            BioBLESS.change_stage(BioBLESS.gene_network);
+        }
         return;
-    }else{
+    } else {
         waitForDoubleClick = true;
         setTimeout(function(){
             waitForDoubleClick = false;
@@ -458,8 +456,7 @@ BioBLESS.logic.on_drag_move_e = function() {
                 if(this.parent.input_1.lines[i][0].father === this.parent.input_1){
                     xRect = this.parent.input_1.lines[i][0].mother.position.x + this.parent.input_1.lines[i][0].mother.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].mother.position.y + this.parent.input_1.lines[i][0].mother.parent.position.y;
-                }
-                else{
+                } else{
                     xRect = this.parent.input_1.lines[i][0].father.position.x + this.parent.input_1.lines[i][0].father.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].father.position.y + this.parent.input_1.lines[i][0].father.parent.position.y; 
                 }
@@ -1178,7 +1175,7 @@ BioBLESS.logic.create_abcd = function(){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
-            $.getJSON("https://ustc.software/biocircuit/10110010/", function(data) {
+            $.getJSON(BioBLESS.host + "/biocircuit/10110010/", function(data) {
                     BioBLESS.logic.gates_sup = data;
                     var new_stage = BioBLESS.logic.craete_efgh(this.parent);
                     this.parent.parent.addChild(new_stage);

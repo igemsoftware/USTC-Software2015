@@ -4,6 +4,14 @@ __author__ = 'E-Neo <e-neo@qq.com>'
 import simplejson
 
 
+GATE_FILE = None
+try:
+    GATE_FILE = open("../../../doc/devices/gates_lizhi.json", "r")
+except IOError:
+    GATE_FILE = open("../doc/devices/gates_lizhi.json", "r")
+
+gate_data_source = GATE_FILE.read()
+
 def get_d_gate(lizhi_json):
     """Get d_gate from gates_lizhi.json.
 

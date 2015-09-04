@@ -6,6 +6,10 @@
 BioBLESS.gene_network.init = function() {
     this.stage = BioBLESS.utils.init_stage();
 };
+BioBLESS.gene_network.onchange = function() {
+	BioBLESS.gene_network.gates = BioBLESS.logic.circuit;
+    BioBLESS.gene_network.draw(BioBLESS.gates, -1);
+};
 (function() {
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors

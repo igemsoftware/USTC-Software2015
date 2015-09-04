@@ -51,7 +51,6 @@ BioBLESS.init = function() {
     if(document.addEventListener) //W3C
         document.addEventListener('DOMMouseScroll', scroll_func, false);
     window.onmousewheel = document.onmousewheel = scroll_func; //IE/Opera/Chrome/Safari
-    
     BioBLESS.prepare_navigation();
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation);
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation_title);
@@ -62,7 +61,6 @@ BioBLESS.init = function() {
         }
         return false;
     });
-    $.getJSON("misc/simulator.json", function(data) {BioBLESS.simulation.draw(data);});
 	BioBLESS.scroll_function = BioBLESS.zoom_function;
     BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
 };

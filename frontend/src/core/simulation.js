@@ -1,5 +1,66 @@
 ﻿BioBLESS.simulation.init = function() {
     this.stage = BioBLESS.utils.init_stage();
+    $.ajax({
+        type: 'POST',
+        url: BioBLESS.host + '/simulate/',
+        contentType: 'application/json',
+        data: '{"simulation_parameters": [{"device_parameter": {"initial": [10, 10, 10]}, "e5": {"reg": 20}, "e4": {"reg": 20}, "e6": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e1": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e3": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e2": {"reg": 20}}, {"device_parameter": {"initial": [0]}}], "nodes": ["NOT3", "INPUT"], "system_parameter": {"time": 1000}, "arcs": [{"to": 0, "from": 1}]}',
+        data: JSON.stringify(
+{
+    "nodes": ["NOT2", "INPUT"],
+    "arcs": [
+        {"from": 1, "to": 0}
+    ],
+    "system_parameter":
+        {
+            "time": 1000
+        },
+    "simulation_parameters": [
+        {
+            "e1": {
+                "trans1": 0.00001, 
+                "trans2": 0.5,
+                "decay1": 0.2,
+                "decay2": 0.1
+            },
+            "e2": {
+                "reg": 3
+            },
+            "e3": {
+                "trans1": 0.01, 
+                "trans2": 0.5,
+                "decay1": 0.2,
+                "decay2": 0.1
+            },
+            "e4": {
+                "reg": 3
+            },
+            "e5": {
+                "reg": 3
+            },
+            "e6": {
+                "trans1": 0.01,
+                "trans2": 0.5,
+                "decay1": 0.2,
+                "decay2": 0.1
+            },
+            "device_parameter": {
+                "initial": [
+                    40, 40, 40
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    100
+                ]
+            }
+        }
+    ]
+}),
+        success: function(data) {BioBLESS.simulation.draw(data);}
+    });
 };
 BioBLESS.simulation.draw = function(_nodes){
     this.stage.movable_stage._scale = 1;
