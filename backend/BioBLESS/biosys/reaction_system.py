@@ -45,6 +45,7 @@ class ReactionSystem(object):
         """
         self.set_species_name(species)
         self.set_reactions(reactions)
+        self.time = 0
 
     def set_species_name(self, species):
         """
