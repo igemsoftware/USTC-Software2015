@@ -2,11 +2,10 @@
 print "Initing............................................"
 print "Please waiting....................................."
 
+import sys
 import simplejson
-from time import clock
-from sys import path
 try :
-    path.append('../backend/BioBLESS/biosys')
+    sys.path.append('../backend/BioBLESS/biosys')
 except:
     pass
 from bio_system import bio_system
@@ -30,20 +29,18 @@ gates_data.append({
     })
 gates_data = {single_gate["id"]:single_gate for single_gate in gates_data}
 
-print "Input which gate you want to simualte(NOT6,OR0,...):"
-gate_name = raw_input()
-
+#print "Input which gate you want to simualte(NOT6,OR0,...):"
+gate_name = sys.argv[sys.argv.index('-g')+1]
 input_num = len(gates_data[gate_name]["input"])
 
 #print "Input the initial number of DNA in the gate:"
-gate_dna_number = 30#input()
+gate_dna_number = 10#input()
 
-print "Input the intitial of input species (%d):" % input_num
-initial = [input() for i in range(input_num)]
-
-print "Input simulation time:"
-time_to = input()
-
+#print "Input the intitial of input species (%d):" % input_num
+starter = sys.argv.index('-i')
+initial = map(int, sys.argv[starter+1:starter+input_num+1])#[input() for i in range(input_num)]
+#print "Input simulation time:"
+time_to = int(sys.argv[sys.argv.index('-t')+1])
 graph = {
     "nodes": [gate_name]+["INPUT"]*input_num, 
     "arcs": [{"from" :i, "to": 0} for i in range(1,input_num+1)], 
@@ -57,17 +54,15 @@ graph = {
 }
 
 print "Simulating..."
-print "This bio-system is:"
-print graph
+if '-d' in sys.argv:
+    print "This bio-system is:"
+    print graph
 
-starter = clock()
 reaction = bio_system(graph)
-print reaction.species
-reaction.show_reaction()
+if '-d' in sys.argv:
+    print reaction.species
+    reaction.show_reaction()
 reaction.simulation()
-ender = clock()
-print "Time is :"
-print ender-starter
 
 reaction.show_record()
 try:
