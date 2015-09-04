@@ -280,7 +280,7 @@
                 "id2": "d1",
                 "type": "act",
                 "params": {
-                    "reg": 20
+                    "reg": 5
                 }
             },
             {
@@ -289,7 +289,7 @@
                 "id2": "d2",
                 "type": "key",
                 "params": {
-                    "reg": 20
+                    "reg": 5
                 }
             }
         ],
