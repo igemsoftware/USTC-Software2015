@@ -22,7 +22,7 @@ class TestSimulate(TestCase):
         self.assertEqual(response.status_code, 200)
         response_dict = simplejson.loads(response.content)
         # print response_dict
-        assert isinstance(response_dict, list)
+        assert isinstance(response_dict, dict)
 
     def test_with_cache(self):
         cold_time_start = time.time()
@@ -42,7 +42,7 @@ class TestSimulate(TestCase):
         response_dict_cache = simplejson.loads(response.content)
         self.assertEqual(response_dict, response_dict_cache)
         # print response_dict
-        assert isinstance(response_dict, list)
+        assert isinstance(response_dict, dict)
 
     def setUp(self):
         try:
