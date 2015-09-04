@@ -12,7 +12,7 @@ Show structure:[species_to_show]
 
 __author__ = "Trumpet"
 
-DEBUG = True
+DEBUG = False
 import random, math
 
 try:
