@@ -21,8 +21,6 @@ except ImportError:
     pass
 from stopwatch import *
 
-
-################################################################
 try:
     import matplotlib.pyplot as plt
 except ImportError:
@@ -165,6 +163,9 @@ class ReactionSystem(object):
         for i in range(self.reaction_number):
             for j in self.reactant_data[i]:
                 possibility[i] *= current[j]
+        possibility_sum = 0
+        for i in possibility:
+            possibility_sum += i
 
         if DEBUG:
             sw_alloc("Sum")
@@ -173,27 +174,16 @@ class ReactionSystem(object):
             sw_alloc("2")
             sw_alloc("3")
             sw_alloc("4")
-            sw_alloc("5")
-            sw_alloc("6")
         while time < stop_time:
             if DEBUG:
                 sw_start("1")
             current = [x for x in current]
+            if possibility_sum == 0:
+                break
+            delta_time = -math.log(random.random()) / possibility_sum
             if DEBUG:
                 sw_accmu("1")
                 sw_start("2")
-            possibility_sum = 0
-            for i in possibility:
-                possibility_sum += i
-            if possibility_sum == 0:
-                break
-            if DEBUG:
-                sw_accmu("2")
-                sw_start("3")
-            delta_time = -math.log(random.random()) / possibility_sum
-            if DEBUG:
-                sw_accmu("3")
-                sw_start("4")
             randomer = random.random()*possibility_sum
             sumer = 0
             next_reaction = 0
@@ -203,8 +193,8 @@ class ReactionSystem(object):
                     break
                 next_reaction += 1
             if DEBUG:
-                sw_accmu("4")
-                sw_start("5")
+                sw_accmu("2")
+                sw_start("3")
             for species_temp in self.reactant_data[next_reaction]:
                 current[species_temp] -= 1
             for species_temp in self.product_data[next_reaction]:
@@ -212,14 +202,16 @@ class ReactionSystem(object):
             time += delta_time
             self.record.append([time+0, current])
             if DEBUG:
-                sw_accmu("5")
-                sw_start("6")
+                sw_accmu("3")
+                sw_start("4")
             for i in reaction_to_change[next_reaction]:
+                possibility_sum -= possibility[i]
                 possibility[i] = self.constant[i] 
                 for j in self.reactant_data[i]:
                     possibility[i] *= current[j]
+                possibility_sum += possibility[i]
             if DEBUG:
-              sw_accmu("6")
+              sw_accmu("4")
         if DEBUG:
             sw_accmu("Sum")
             sw_print("Sum")
@@ -227,8 +219,6 @@ class ReactionSystem(object):
             sw_print("2")
             sw_print("3")
             sw_print("4")
-            sw_print("5")
-            sw_print("6")
         return self.record
 
     ################################################################
