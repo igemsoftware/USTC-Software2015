@@ -19,7 +19,7 @@ try:
     from BioBLESS.settings import DEBUG
 except ImportError:
     pass
-from stopwatch import *
+from stopwatch import sw_alloc, sw_start, sw_accmu, sw_print
 
 try:
     import matplotlib.pyplot as plt
@@ -132,7 +132,7 @@ class ReactionSystem(object):
 
     ####################################################################
 
-    def simulate(self, old_initial, stop_time):
+    def simulate(self, stop_time):
         """
         Simulate after given species initial number and stoptime
         Parameters:
@@ -157,7 +157,7 @@ class ReactionSystem(object):
                 reaction_to_change[i] += species_to_reaction[j]
         reaction_to_change = [set(i) for i in reaction_to_change]
 
-        current = [i[1] for i in self.species] 
+        current = [i[1] for i in self.species]
         time = 0
         self.record = [[time, current]]
         possibility = [i for i in self.constant]
@@ -207,12 +207,12 @@ class ReactionSystem(object):
                 sw_start("4")
             for i in reaction_to_change[next_reaction]:
                 possibility_sum -= possibility[i]
-                possibility[i] = self.constant[i] 
+                possibility[i] = self.constant[i]
                 for j in self.reactant_data[i]:
                     possibility[i] *= current[j]
                 possibility_sum += possibility[i]
             if DEBUG:
-              sw_accmu("4")
+                sw_accmu("4")
         if DEBUG:
             sw_accmu("Sum")
             sw_print("Sum")
@@ -238,7 +238,7 @@ class ReactionSystem(object):
             plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         plt.show()
 
-    def show_simulate(self, old_initial, stop_time, list_plot):
+    def show_simulate(self, stop_time, list_plot):
         """
         Simulate and show the graph
         Parameters:
@@ -248,7 +248,7 @@ class ReactionSystem(object):
         Returns:
             none
         """
-        self.simulate([], stop_time)
+        self.simulate(stop_time)
         self.show_record(list_plot)
 
     #######################################################################3
@@ -273,6 +273,6 @@ class ReactionSystem(object):
         Just do simulation
         """
         try:
-            self.simulate([], self.time)
+            self.simulate(self.time)
         except IndexError:
             pass

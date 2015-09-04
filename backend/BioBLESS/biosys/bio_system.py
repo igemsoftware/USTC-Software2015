@@ -20,16 +20,16 @@ except ImportError:
 from reaction_system import ReactionSystem
 
 
-gate_file = None
+GATE_FILE = None
 try:
-    gate_file = open("../../../doc/devices/gates_lizhi.json", "r")
+    GATE_FILE = open("../../../doc/devices/gates_lizhi.json", "r")
 except:
     pass
 try:
-    gate_file = open("../doc/devices/gates_lizhi.json", "r")
+    GATE_FILE = open("../doc/devices/gates_lizhi.json", "r")
 except:
     pass
-gate_data_source = gate_file.read()
+gate_data_source = GATE_FILE.read()
 gates_data = simplejson.loads(gate_data_source)
 gates_data = list(gates_data)
 gates_data.append({
