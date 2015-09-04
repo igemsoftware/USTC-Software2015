@@ -9,7 +9,7 @@ except:
 from bio_system import bio_system
 
 if '-v' in sys.argv:
-    print 'run 0.2'
+    print 'run 0.3'
     exit()
 if '-h' in sys.argv:
     print './run.py [-g option][-t time][-i initial][-d][-h][-v]'
@@ -70,7 +70,7 @@ reaction.simulation()
 reaction.show_record(["S0"])
 try:
     while True:
-        print "What else do you want to show(0,1,0d3,0p5):"
+        print "What else do you want to show(S0,S1,S0d3,S0p5):"
         string = raw_input()
         strings = string.split(",")
         reaction.show_record(strings)
