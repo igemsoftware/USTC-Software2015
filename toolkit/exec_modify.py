@@ -35,8 +35,8 @@ gate_name = raw_input()
 
 input_num = len(gates_data[gate_name]["input"])
 
-print "Input the initial number of DNA in the gate:"
-gate_dna_number = input()
+#print "Input the initial number of DNA in the gate:"
+gate_dna_number = 30#input()
 
 print "Input the intitial of input species (%d):" % input_num
 initial = [input() for i in range(input_num)]
