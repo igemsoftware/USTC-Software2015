@@ -268,7 +268,7 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
+                    "trans1": 0.05,
                     "trans2": 0.5,
                     "decay1": 0.1,
                     "decay2": 0.05
