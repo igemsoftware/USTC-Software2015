@@ -427,8 +427,16 @@ BioBLESS.logic.on_drag_start_e = function(event) {
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
         if(BioBLESS.gene_network.gates){
+		    BioBLESS.logic.mark_back = [];
+		    for(var j = 0; j < BioBLESS.logic.mark.length; j++){
+			    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
+			};
             BioBLESS.gene_network.draw(BioBLESS.gates, -1, BioBLESS.logic.mark[i]);
-            BioBLESS.change_stage(BioBLESS.gene_network);
+            BioBLESS.base_stage.removeChild(BioBLESS.logic.stage);
+            BioBLESS.base_stage.addChild(BioBLESS.gene_network.stage);
+            BioBLESS.base_stage.addChild(BioBLESS.navigation);
+            BioBLESS.base_stage.addChild(BioBLESS.navigation_title);
+			BioBLESS.stage = BioBLESS.gene_network.stage;
         }
         return;
     } else {

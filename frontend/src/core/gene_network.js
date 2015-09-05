@@ -527,7 +527,7 @@ this.draw = function(devices, n){
         this.stage_w = 1000;
         output.x = 450;
         this.stage.addChild(output);
-        this.chosen = false;
+        this.chosen = true;
         this.input = [];
         this.input_num = 0;
         this.input[0] = {};
@@ -624,7 +624,9 @@ BioBLESS.gene_network.devs_analysis = function(devices){
         this.devs[i].draw(devices, g[i]);
         if(g[i] < 0) continue;
 		this.devs[i].devices_index = j;
-        this.devices[j] = BioBLESS.gene_network.clone(devices[g[i]]);
+		if(BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter === undefined)
+		    BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter = BioBLESS.gene_network.clone(devices[g[i]]);
+        this.devices[j] = BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter;
         var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0x00ffff);
         index_button.x = 50;
         index_button.y = 100;
@@ -675,6 +677,12 @@ BioBLESS.gene_network.devs_analysis = function(devices){
             
         };
         i++;
+    };
+	for(i = 0; i < this.devs.length; i++){
+        if(this.devs[i].output.length === 0){
+            this.poi[this.poi.length - 1][0] = this.devs[i];
+			this.poi[this.poi.length] = [];
+        }
     };
     this.row = [];
     this.devs_height = 0;
@@ -1179,7 +1187,7 @@ BioBLESS.gene_network.create_ijkl = function(){
     
     
     var contain = new PIXI.Container();
-    var inputitem = BioBLESS.gene_network.create_inputitem("time", 0, 250);
+    var inputitem = BioBLESS.gene_network.create_inputitem("time", BioBLESS.gene_network.system_parameters.time, 250);
     inputitem.y = 5;
     contain.addChild(inputitem);
     inputitem.change_value = function(value){
@@ -1189,7 +1197,7 @@ BioBLESS.gene_network.create_ijkl = function(){
         BioBLESS.gene_network.system_parameters.input[this.i] = value;
     };
     for(var i = 0; i < this.input_num; i++){
-        inputitem = BioBLESS.gene_network.create_inputitem("input " + i.toString(), 0, 250);
+        inputitem = BioBLESS.gene_network.create_inputitem("input " + i.toString(), BioBLESS.gene_network.system_parameters.input[i], 250);
         inputitem.y = 55 + i * 50;
         contain.addChild(inputitem);
         inputitem.i = i;
@@ -1221,17 +1229,26 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
         var i, j, k, l, temp;
         this.devs_analysis(devices);
         this.draw_lines_between_devices();
-        var t1 = this.row[0].width / this.devs_width;
-        var t2 = BioBLESS.height / this.devs_height;
-		
+        
+		if(BioBLESS.gene_network.system_parameters === undefined){
+            BioBLESS.gene_network.system_parameters = {};
+            BioBLESS.gene_network.system_parameters.time = 0;
+            BioBLESS.gene_network.system_parameters.input = [];
+		};
+        for(var i = 0; i < this.input_num; i++){
+            BioBLESS.gene_network.system_parameters.input[i] = 0;
+        };
 		var ijkl = BioBLESS.gene_network.create_ijkl();
 		if(mark === undefined){
+		    var t1 = (BioBLESS.width - 400) / this.devs_width;
+            var t2 = BioBLESS.height / this.devs_height;
             this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (t1 < t2)? t1 : t2;
-            this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2)) / 2; 
+            this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2) - 400) / 2 + 100; 
             this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * ((t1 < t2)? t1 : t2)) / 2; 
         }else{
-		    this.stage.movable_stage.x -= this.devs[mark].stage.x;
-			this.stage.movable_stage.y -= this.devs[mark].stage.y;
+		    this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (BioBLESS.width - 400) / this.devs[mark].stage_w * 0.8;
+		    this.stage.movable_stage.x -= this.devs[mark].stage.x * this.stage.movable_stage.scale.x - 100 - (BioBLESS.width - 400 - this.devs[mark].stage_w * this.stage.movable_stage.scale.x) / 2;
+			this.stage.movable_stage.y -= this.devs[mark].stage.y * this.stage.movable_stage.scale.x - (BioBLESS.height - this.devs[mark].stage_h * this.stage.movable_stage.scale.x) / 2 + 40;
 			var moveX = (BioBLESS.width - this.devs[mark].stage_w - 400) / 2;
             if(moveX > 0)
                 this.stage.movable_stage.position.x += moveX + 100;
@@ -1240,12 +1257,7 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
                 this.stage.movable_stage.position.y += moveY;
 			BioBLESS.gene_network.change_inputarea(this.devs[mark].devices_index);
 		}
-        BioBLESS.gene_network.system_parameters = {};
-        BioBLESS.gene_network.system_parameters.time = 0;
-        BioBLESS.gene_network.system_parameters.input = [];
-        for(var i = 0; i < this.input_num; i++){
-            BioBLESS.gene_network.system_parameters.input[i] = 0;
-        };
+		
 		this.stage.addChild(this.stage.movable_stage);
 		this.stage.addChild(ijkl);
     }else if(n >= 0){
@@ -1262,10 +1274,6 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
             this.stage.movable_stage.position.x = moveX;
 		this.stage.addChild(this.stage.movable_stage);
     }
-    
-    
-    
-    
     return this.stage;
 }
 
