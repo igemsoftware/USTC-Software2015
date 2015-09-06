@@ -328,7 +328,7 @@ this.draw = function(devices, n){
     for(i = 0; i < this.lines_num; i++){
         graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
         for(j = 0; j < devices[n].parts.id[i].length; j++){
-            parts[this.to_part[i][j]] = BioBLESS.IDdraw.drawElement(this.get_id());
+            parts[this.to_part[i][j]] = BioBLESS.sbol_draw.draw_sbol_svg(this.get_id());
             parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
             parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
             parts[this.to_part[i][j]].interactive = true;

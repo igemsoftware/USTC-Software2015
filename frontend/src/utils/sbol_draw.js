@@ -1,16 +1,16 @@
 /**
- * IDdraw function works for preparing SBOL considering about its own ID
+ * sbol_draw function works for preparing SBOL considering about its own ID
  * @author USTC-software frontend
  * @author Ubrok
  * @since  2015-8-9
  */
-BioBLESS.IDdraw = function(){};
+BioBLESS.sbol_draw = function(){};
 /**
- * drawElement makes svg of SBOL according to IDnumber
+ * draw_sbol_svg makes svg of SBOL according to IDnumber
  * @param icon caused by users
  * @return graphics {PIXI.Grphics}
  */
-BioBLESS.IDdraw.drawElement = function(icon){
+BioBLESS.sbol_draw.draw_sbol_svg = function(icon){
     var graphics = new PIXI.Graphics();
     graphics.lineStyle(3, 0x000000, 1);
     switch(icon){
@@ -328,7 +328,7 @@ BioBLESS.IDdraw.drawElement = function(icon){
     }
     return graphics;
 };
-BioBLESS.IDdraw.Create = function(devices, w, h){
+BioBLESS.sbol_draw.Create = function(devices, w, h){
     var onDragStart = function(event) {
         this.data = event.data;
         this.alpha = 0.5;
@@ -355,8 +355,8 @@ BioBLESS.IDdraw.Create = function(devices, w, h){
     that._SBOL = [];
     that.SBOL = [];
     for(var i = 0; i < devices.length; i++){
-            that._SBOL[i] = this.drawElement(devices[i].icon);
-            that.SBOL[i] = this.drawElement(devices[i].icon);
+            that._SBOL[i] = this.draw_sbol_svg(devices[i].icon);
+            that.SBOL[i] = this.draw_sbol_svg(devices[i].icon);
             that._SBOL[i].position.x = w - 195;
             that._SBOL[i].position.y = 140 + i * 100;  
             that.SBOL[i].position.x = w - 195;
@@ -373,5 +373,5 @@ BioBLESS.IDdraw.Create = function(devices, w, h){
                 .on('mousemove', onDragMove)
                 .on('touchmove', onDragMove);
         }
-        return this.stage;
+    return this.stage;
 };
