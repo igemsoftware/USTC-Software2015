@@ -328,7 +328,16 @@ BioBLESS.sbol_draw.draw_sbol_svg = function(icon){
     }
     return graphics;
 };
-BioBLESS.sbol_draw.Create = function(devices, w, h){
+
+/**
+ * sbol_create function is prepared for sbol-creation which could be draggable 
+ * @function
+ * @param {devices} 
+ * @param {w}  
+ * @param {h}
+ * @return {stage} PIXI.Container
+ */
+BioBLESS.sbol_draw.sbol_create = function(devices, w, h){
     var onDragStart = function(event) {
         this.data = event.data;
         this.alpha = 0.5;
@@ -358,20 +367,20 @@ BioBLESS.sbol_draw.Create = function(devices, w, h){
             that._SBOL[i] = this.draw_sbol_svg(devices[i].icon);
             that.SBOL[i] = this.draw_sbol_svg(devices[i].icon);
             that._SBOL[i].position.x = w - 195;
-            that._SBOL[i].position.y = 140 + i * 100;  
+            that._SBOL[i].position.y = 140 + i * 100;
             that.SBOL[i].position.x = w - 195;
             that.SBOL[i].position.y = 140 + i * 100;
             that.SBOL[i].interactive = true;
             that.SBOL[i].buttonMode = true;
             that.SBOL[i].Index = i;
             that.SBOL[i].on('mousedown', onDragStart)
-                .on('touchstart', onDragStart)
-                .on('mouseup', onDragEnd)
-                .on('mouseupoutside', onDragEnd)
-                .on('touchend', onDragEnd)
-                .on('touchendoutside', onDragEnd)
-                .on('mousemove', onDragMove)
-                .on('touchmove', onDragMove);
+                        .on('touchstart', onDragStart)
+                        .on('mouseup', onDragEnd)
+                        .on('mouseupoutside', onDragEnd)
+                        .on('touchend', onDragEnd)
+                        .on('touchendoutside', onDragEnd)
+                        .on('mousemove', onDragMove)
+                        .on('touchmove', onDragMove);
         }
     return this.stage;
 };
