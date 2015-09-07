@@ -722,8 +722,8 @@ BioBLESS.logic.line_delete_button_create = function(event) {
     this.line_delete_button.lineTo(8, 0);
     this.line_delete_button.alpha = 1;
     this.line_delete_button.on('mouseover', BioBLESS.logic.line_delete_button_up)
-                  .on('click', BioBLESS.logic.line_delete_button_right)
-                  .on('mouseout', BioBLESS.logic.line_delete_button_down);
+                           .on('click', BioBLESS.logic.line_delete_button_right)
+                           .on('mouseout', BioBLESS.logic.line_delete_button_down);
     this.father.parent.parent.addChild(this.line_delete_button);
     clearInterval(this.line_delete_button.her_animation);
     clearTimeout(this.line_delete_button.her_workend);
@@ -1490,7 +1490,20 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
  * @param  {circuit_data} BioBLESS.logic.circuit
  */
 BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
+    var i,j,k;
+    var temp_circuit = BioBLESS.logic.circuit;
+    var display = circuit_data.nodes.length;
     BioBLESS.logic.circuit = circuit_data;
+    for(i = 0; i < temp_circuit.nodes.length; i++){
+        BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = temp_circuit.nodes[i];
+    }
+    for(i = 0; i < temp_circuit.arcs.length; i++){
+        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":(temp_circuit.arcs[i].from + display), "to":(temp_circuit.arcs[i].to + display)};
+    }
+    for(i = 0; i < BioBLESS.logic.elements.length; i++){
+        BioBLESS.logic.mark[i] += display;
+    }
+
 
     /**
      * add_gate is the function to draw gate according to the BioBLESS.logic.circuits.poi
@@ -1624,7 +1637,6 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
     };
 
     BioBLESS.logic.add_gate(thing);
-    var i,j,k;
     var dad = 0;
     var mom;
     for(i = 1; i < thing.poi.length -2; i++){
