@@ -36,7 +36,7 @@ def string2expr(string):
         row = bin(i).replace('0b', '')
         row = '0' * (ninput - len(row)) + row
         tmp = [int(k) + 1 for k in row]
-        value = int(string[i]) if string[i] >= '0' and string[i] <= '9' else 2
+        value = int(string[i]) if string[i] == '0' or string[i] == '1' else 2
         cover.append((tuple(tmp), (value,)))
     cover = set(cover)
     result = list(espresso(ninput, 1, cover))
