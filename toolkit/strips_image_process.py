@@ -6,7 +6,7 @@ import numpy as np
 
 def lut(threshold):
     """Generate the lookup table for binarize.
-    
+
     Inputs:
     int: threshold
 
@@ -24,7 +24,7 @@ def denoise(pix):
 
     Outputs:
     list: pix_new map"""
-    
+
     pix_new=pix.copy()
     height=len(pix)
     width=len(pix[0])
@@ -57,7 +57,7 @@ def strip_processing(path, blur_radius=7, iter_steps=1, binarize_threshold=10):
 
     Outputs:
     Image: the processed image."""
-    
+
     gray=ImageOps.invert(ImageOps.grayscale(Image.open("stripes.jpg")))
     gray_blur=gray.filter(ImageFilter.GaussianBlur(blur_radius))
     high_freq=ImageMath.eval("25*(a-b)",a=gray,b=gray_blur).convert("L")
@@ -78,5 +78,5 @@ def strip_processing(path, blur_radius=7, iter_steps=1, binarize_threshold=10):
     #answer.show()
     #answer.save("test.bmp")
     return answer
-#use a image as a test        
+#use a image as a test
 #strip_processing("stripes.jpg").show()
