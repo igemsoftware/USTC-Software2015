@@ -1,3 +1,4 @@
 # espresso.so Makefile
 
-gcc -w ./espresso/*.c -fPIC -shared -o espresso.so
+espresso.so: ./espresso/*.c
+	gcc -w ./espresso/*.c -fPIC  -shared -o espresso.so
