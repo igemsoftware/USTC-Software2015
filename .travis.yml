@@ -4,6 +4,9 @@ python:
 install:
     # * NOTICE : Time limit for no-response-operation is 10 minutes, or an error will be caused.
     - cd backend
+    - cd BioBlESS/biocircuit
+    - make
+    - cd ../../
     - pip install --upgrade pip
     # - pip install numpy :: Numpy is OK
     # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
