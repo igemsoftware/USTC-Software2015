@@ -16,11 +16,11 @@ Create some biocircuits and calculate their scores
 __author__ = 'E-Neo <e-neo@qq.com>'
 
 
-from espresso import espresso
 from math import log
 
 import numpy as np
 import networkx as nx
+import BioBLESS.biocircuit.espresso as qm
 
 
 def string2expr(string):
@@ -61,7 +61,7 @@ def string2expr(string):
         value = int(string[i]) if string[i] == '0' or string[i] == '1' else 2
         cover.append((tuple(tmp), (value,)))
     cover = set(cover)
-    result = list(espresso(ninput, 1, cover))
+    result = list(qm.espresso(ninput, 1, cover))
     result = [i[0] for i in result]
     result = [''.join(['X' if i == 3 else str(i-1) for i in j]) for j in result]
     return result
