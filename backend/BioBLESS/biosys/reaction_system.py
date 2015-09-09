@@ -14,9 +14,21 @@ __author__ = "Trumpet"
 
 DEBUG = False
 import random, math, ctypes
-SIMULATE = ctypes.CDLL('./simulate.so')
-STDLIB = ctypes.CDLL('libc.so.6')
+
 C = False
+
+try:
+    try:
+        SIMULATE = ctypes.CDLL('./simulate.so')
+    except:
+        pass
+    try:
+        SIMULATE = ctypes.CDLL('./BioBLESS/biosys/simulate.so')
+    except:
+        pass
+    STDLIB = ctypes.CDLL('libc.so.6')
+except:
+    C = False
 
 try:
     from BioBLESS.settings import DEBUG
