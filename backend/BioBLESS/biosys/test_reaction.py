@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from django.test import TestCase
-
 from reaction_system import ReactionSystem
 
 if __name__ == "__main__":

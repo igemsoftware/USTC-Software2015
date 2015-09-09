@@ -13,7 +13,10 @@ Show structure:[species_to_show]
 __author__ = "Trumpet"
 
 DEBUG = False
-import random, math
+import random, math, ctypes
+SIMULATE = ctypes.CDLL('./simulate.so')
+STDLIB = ctypes.CDLL('libc.so.6')
+C = True
 
 try:
     from BioBLESS.settings import DEBUG
@@ -60,7 +63,9 @@ class ReactionSystem(object):
             if isinstance(self.species[i], str) or isinstance(self.species[i], unicode):
                 self.species[i] = [self.species[i], 0]
         self.species_name = [i[0] for i in self.species]
-        self.species_name_inverse = {self.species_name[i]: i for i in range(len(self.species_name))}
+        self.species_number = len(self.species_name)
+        self.species_name_inverse = {self.species_name[i]: i for i in range(self.species_number)}
+
 
     def set_reactions(self, reactions):
         """
@@ -142,7 +147,7 @@ class ReactionSystem(object):
             list:the record of the simulation
                 the format of the list is : [[time,[species current number,...]],...]
         """
-        species_to_reaction = [[] for i in range(len(self.species_name))]
+        species_to_reaction = [[] for i in range(self.species_number)]
         for i in range(self.reaction_number):
             for j in self.reactant_data[i]:
                 species_to_reaction[j].append(i)
@@ -155,7 +160,7 @@ class ReactionSystem(object):
                 reaction_to_change[i] += species_to_reaction[j]
             for j in self.product_data[i]:
                 reaction_to_change[i] += species_to_reaction[j]
-        reaction_to_change = [set(i) for i in reaction_to_change]
+        reaction_to_change = [list(set(i)) for i in reaction_to_change]
 
         current = [i[1] for i in self.species]
         time = 0
@@ -168,59 +173,197 @@ class ReactionSystem(object):
         for i in possibility:
             possibility_sum += i
 
-        if DEBUG:
-            sw_alloc("Sum")
-            sw_start("Sum")
-            sw_alloc("1")
-            sw_alloc("2")
-            sw_alloc("3")
-            sw_alloc("4")
-        while time < stop_time:
+        """
+struct current_data
+{
+  float time;
+  long long *numbers;
+};
+struct reaction_data
+{
+  int sub_num;
+  int *subs;
+};
+struct reaction_change_data
+{
+  int reaction_num;
+  int *reacs;
+};
+struct record_data
+{
+  struct current_data *ans;
+  int num;
+};
+struct record_data simulate(
+  float stop_time,
+  int species_number,
+  int reaction_number,
+  long long *current,//initial             long long * species_number
+  float *constant,//                             float * reaction_number
+  struct reaction_data *reactant_data,//     reaction_data * reaction_number
+  struct reaction_data *product_data,
+  struct reaction_change_data *reaction_link
+  );
+        """
+
+        if C:
+            class c_current_data(ctypes.Structure):
+                _fields_ = [
+                    ("time", ctypes.c_float),
+                    ("numbers", ctypes.POINTER(ctypes.c_longlong))
+                ]
+
+            class c_reaction_data(ctypes.Structure):
+                _fields_ = [
+                    ("sub_num", ctypes.c_int),
+                    ("subs", ctypes.POINTER(ctypes.c_int))
+                ]
+
+            class c_reaction_change_data(ctypes.Structure):
+                _fields_ = [
+                    ("reaction_num", ctypes.c_int),
+                    ("reacs", ctypes.POINTER(ctypes.c_int))
+                ]
+
+            class c_record_data(ctypes.Structure):
+                _fields_ = [
+                    ("ans",ctypes.POINTER(c_current_data)),
+                    ("num",ctypes.c_int)
+                ]
+
+            c_stop_time = ctypes.c_float(stop_time)
+            c_species_number = ctypes.c_int(self.species_number)
+            c_reaction_number = ctypes.c_int(self.reaction_number)
+
+            STDLIB.malloc.restype = ctypes.POINTER(ctypes.c_longlong)
+            c_current = STDLIB.malloc(ctypes.sizeof(ctypes.c_longlong)*self.species_number)
+            for i in range(self.species_number):
+                c_current[i] = current[i]
+
+            STDLIB.malloc.restype = ctypes.POINTER(ctypes.c_float)
+            c_constant = STDLIB.malloc(ctypes.sizeof(ctypes.c_float)*self.reaction_number)
+            for i in range(self.reaction_number):
+                c_constant[i] = self.constant[i]
+
+            STDLIB.malloc.restype = ctypes.POINTER(c_reaction_data)
+            c_reactant_data = STDLIB.malloc(ctypes.sizeof(c_reaction_data)*self.reaction_number)
+            c_product_data = STDLIB.malloc(ctypes.sizeof(c_reaction_data)*self.reaction_number)
+
+            STDLIB.malloc.restype = ctypes.POINTER(ctypes.c_int)
+            for i in range(self.reaction_number):
+                c_reactant_data[i].sub_num = len(self.reactant_data[i])
+                c_reactant_data[i].subs = STDLIB.malloc(ctypes.sizeof(ctypes.c_int)*c_reactant_data[i].sub_num)
+                for j in range(c_reactant_data[i].sub_num):
+                    c_reactant_data[i].subs[j] = self.reactant_data[i][j]
+                c_product_data[i].sub_num = len(self.product_data[i])
+                c_product_data[i].subs = STDLIB.malloc(ctypes.sizeof(ctypes.c_int)*c_product_data[i].sub_num)
+                for j in range(c_product_data[i].sub_num):
+                    c_product_data[i].subs[j] = self.product_data[i][j]
+
+            STDLIB.malloc.restype = ctypes.POINTER(c_reaction_change_data)
+            c_reaction_link = STDLIB.malloc(ctypes.sizeof(c_reaction_change_data)*self.reaction_number)
+
+            STDLIB.malloc.restype = ctypes.POINTER(ctypes.c_int)
+            for i in range(self.reaction_number):
+                c_reaction_link[i].reaction_num = len(reaction_to_change[i])
+                c_reaction_link[i].reacs = STDLIB.malloc(ctypes.sizeof(ctypes.c_int)*c_reaction_link[i].reaction_num)
+                for j in range(c_reaction_link[i].reaction_num):
+                    c_reaction_link[i].reacs[j] = reaction_to_change[i][j]
+
+            SIMULATE.simulate.restype = c_record_data
+            print "s start in py"
+            
+            ans = SIMULATE.simulate(
+                c_stop_time,
+                c_species_number,
+                c_reaction_number,
+                c_current,
+                c_constant,
+                c_reactant_data,
+                c_product_data,
+                c_reaction_link)
+
+            print "s done in py"
+            num = ans.num;
+            self.record = []
+            for i in range(num):
+                self.record.append([ans.ans[i].time,[ans.ans[i].numbers[j] for j in range(self.species_number)]])
+                #print self.record[-1]
+
+            #free
+            STDLIB.free(c_current)
+            STDLIB.free(c_constant)
+
+            for i in range(self.reaction_number):
+                STDLIB.free(c_reactant_data[i].subs)
+                STDLIB.free(c_product_data[i].subs)
+
+            STDLIB.free(c_reactant_data)
+            STDLIB.free(c_product_data)
+
+            for i in range(self.reaction_number):
+                STDLIB.free(c_reaction_link[i].reacs)
+            STDLIB.free(c_reaction_link)
+
+            #free ans TODO
+
+            return self.record
+
+        else:
             if DEBUG:
-                sw_start("1")
-            current = [x for x in current]
-            if possibility_sum == 0:
-                break
-            delta_time = -math.log(random.random()) / possibility_sum
-            if DEBUG:
-                sw_accmu("1")
-                sw_start("2")
-            randomer = random.random()*possibility_sum
-            sumer = 0
-            next_reaction = 0
-            while True:
-                sumer += possibility[next_reaction]
-                if sumer >= randomer:
+                sw_alloc("Sum")
+                sw_start("Sum")
+                sw_alloc("1")
+                sw_alloc("2")
+                sw_alloc("3")
+                sw_alloc("4")
+            while time < stop_time:
+                if DEBUG:
+                    sw_start("1")
+                current = [x for x in current]
+                if possibility_sum == 0:
                     break
-                next_reaction += 1
+                delta_time = -math.log(random.random()) / possibility_sum
+                if DEBUG:
+                    sw_accmu("1")
+                    sw_start("2")
+                randomer = random.random()*possibility_sum
+                sumer = 0
+                next_reaction = 0
+                while True:
+                    sumer += possibility[next_reaction]
+                    if sumer >= randomer:
+                        break
+                    next_reaction += 1
+                if DEBUG:
+                    sw_accmu("2")
+                    sw_start("3")
+                for species_temp in self.reactant_data[next_reaction]:
+                    current[species_temp] -= 1
+                for species_temp in self.product_data[next_reaction]:
+                    current[species_temp] += 1
+                time += delta_time
+                self.record.append([time+0, current])
+                if DEBUG:
+                    sw_accmu("3")
+                    sw_start("4")
+                for i in reaction_to_change[next_reaction]:
+                    possibility_sum -= possibility[i]
+                    possibility[i] = self.constant[i]
+                    for j in self.reactant_data[i]:
+                        possibility[i] *= current[j]
+                    possibility_sum += possibility[i]
+                if DEBUG:
+                    sw_accmu("4")
             if DEBUG:
-                sw_accmu("2")
-                sw_start("3")
-            for species_temp in self.reactant_data[next_reaction]:
-                current[species_temp] -= 1
-            for species_temp in self.product_data[next_reaction]:
-                current[species_temp] += 1
-            time += delta_time
-            self.record.append([time+0, current])
-            if DEBUG:
-                sw_accmu("3")
-                sw_start("4")
-            for i in reaction_to_change[next_reaction]:
-                possibility_sum -= possibility[i]
-                possibility[i] = self.constant[i]
-                for j in self.reactant_data[i]:
-                    possibility[i] *= current[j]
-                possibility_sum += possibility[i]
-            if DEBUG:
-                sw_accmu("4")
-        if DEBUG:
-            sw_accmu("Sum")
-            sw_print("1")
-            sw_print("2")
-            sw_print("3")
-            sw_print("4")
-            sw_print("Sum")
-        return self.record
+                sw_accmu("Sum")
+                sw_print("1")
+                sw_print("2")
+                sw_print("3")
+                sw_print("4")
+                sw_print("Sum")
+            return self.record
+
 
     ################################################################
 
