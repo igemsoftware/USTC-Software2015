@@ -16,7 +16,7 @@ DEBUG = False
 import random, math, ctypes
 SIMULATE = ctypes.CDLL('./simulate.so')
 STDLIB = ctypes.CDLL('libc.so.6')
-C = True
+C = False
 
 try:
     from BioBLESS.settings import DEBUG
@@ -237,6 +237,7 @@ struct record_data simulate(
 
             STDLIB.malloc.restype = ctypes.POINTER(ctypes.c_longlong)
             c_current = STDLIB.malloc(ctypes.sizeof(ctypes.c_longlong)*self.species_number)
+            #c_current = (ctypes.c_longlong*self.species_number)()
             for i in range(self.species_number):
                 c_current[i] = current[i]
 
@@ -271,7 +272,7 @@ struct record_data simulate(
                     c_reaction_link[i].reacs[j] = reaction_to_change[i][j]
 
             SIMULATE.simulate.restype = c_record_data
-            print "s start in py"
+            #print "s start in py"
             
             ans = SIMULATE.simulate(
                 c_stop_time,
@@ -283,14 +284,17 @@ struct record_data simulate(
                 c_product_data,
                 c_reaction_link)
 
-            print "s done in py"
+            #print "s done in py"
+            #print "s really done in py"
             num = ans.num;
+            #print num
             self.record = []
             for i in range(num):
                 self.record.append([ans.ans[i].time,[ans.ans[i].numbers[j] for j in range(self.species_number)]])
-                #print self.record[-1]
+                #print ans.ans[i].time
 
-            #free
+            #print "set done!"
+            """#free
             STDLIB.free(c_current)
             STDLIB.free(c_constant)
 
@@ -305,7 +309,7 @@ struct record_data simulate(
                 STDLIB.free(c_reaction_link[i].reacs)
             STDLIB.free(c_reaction_link)
 
-            #free ans TODO
+            #free ans TODO"""
 
             return self.record
 

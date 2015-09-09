@@ -36,14 +36,12 @@ struct record_data simulate(
   )
 {
   float t = 0;
-  int crt_size = sizeof(struct current_data);
-  int num_size = sizeof(long long)*species_number;
-  struct current_data *ans = (struct current_data *)malloc(crt_size);
+  struct current_data *ans = (struct current_data *)malloc(sizeof(struct current_data));
   ans->time = 0;
-  ans->numbers = (long long *)malloc(num_size);
-  memcpy(ans->numbers, current, num_size);
-  float *possibility = (float *)malloc(sizeof(long long));
-  memcpy(possibility, constant, num_size);
+  ans->numbers = (long long *)malloc(sizeof(long long)*species_number);
+  memcpy(ans->numbers, current, sizeof(long long)*species_number);
+  float *possibility = (float *)malloc(species_number*sizeof(float));
+  memcpy(possibility, constant, sizeof(float)*species_number);
   float possibility_sum = 0;
   //for(int i=0;i<species_number;i++){printf("%lld ",*(current+i));}
   //printf("\n");
@@ -69,15 +67,16 @@ struct record_data simulate(
   }
   for(int i=0;i<reaction_number;i++){printf("%f ", *(constant+i));};puts("\n");////////////*/
   while(t<stop_time){
-    printf("%f\t",t);
+    /*printf("%f\t",t);
     for(int i =0;i<species_number;i++)
       {
         printf("%lld ",*(current+i));
       };
-    puts("");
+    puts("");*/
     //printf("\t");puts("");
     //printf("%f \t" ,possibility_sum);puts("");
     //printf("%d ",num);
+    //puts("start of a while");
     if(possibility_sum<=0){
       //puts("break");
       break;
@@ -100,20 +99,22 @@ struct record_data simulate(
       (*(current+*((product_data+next_reaction)->subs+i)))++;
     };
     num++;
-                    printf("%d\n",num);
-    struct current_data *temp = (struct current_data *)malloc(num*crt_size);
+    //printf("%d\t",num*current_size);
+    /*struct current_data *temp = (struct current_data *)malloc(num*current_size);
                     puts("#");
-    memcpy(temp, ans, (num-1)*crt_size);
+    memcpy(temp, ans, (num-1)*current_size);
                     //puts("#");
     free(ans);
                     //puts("#");
-    ans = temp;
-
-    //ans = (struct current_data *)realloc(ans,num*crt_size);
-                //puts("#");
+    ans = temp;*/
+                         //
+    ans = (struct current_data *)realloc(ans,num*sizeof(struct current_data));
     (ans+num-1)->time=t;
+                    //printf("%lu\n",species_number*sizeof(long long));
+                    //printf("%d\t%f\n",num,t);
     (ans+num-1)->numbers = (long long *)malloc(species_number*sizeof(long long));
-    memcpy((ans+num-1)->numbers, current, num_size);
+                    //puts("#");
+    memcpy((ans+num-1)->numbers, current, sizeof(long long)*species_number);
     for(int i=0;i<(reaction_link+next_reaction)->reaction_num;i++){
       possibility_sum-=*(possibility+*((reaction_link+next_reaction)->reacs+i));
       *(possibility+*((reaction_link+next_reaction)->reacs+i))=*(constant+*((reaction_link+next_reaction)->reacs+i));
@@ -122,9 +123,8 @@ struct record_data simulate(
         };
       possibility_sum+=*(possibility+*((reaction_link+next_reaction)->reacs+i));
     };
-    //printf("\n");
   };
-  free(possibility);
+  //free(possibility);
   struct record_data record;
   record.num = num;
   record.ans = ans;
