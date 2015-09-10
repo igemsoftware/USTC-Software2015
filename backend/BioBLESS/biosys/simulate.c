@@ -67,12 +67,12 @@ struct record_data simulate(
   }
   for(int i=0;i<reaction_number;i++){printf("%f ", *(constant+i));};puts("\n");////////////*/
   while(t<stop_time){
-    /*printf("%f\t",t);
+    printf("%f\t",t);
     for(int i =0;i<species_number;i++)
       {
         printf("%lld ",*(current+i));
       };
-    puts("");*/
+    puts("");
     //printf("\t");puts("");
     //printf("%f \t" ,possibility_sum);puts("");
     //printf("%d ",num);

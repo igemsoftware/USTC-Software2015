@@ -58,7 +58,8 @@ def do_test(gate_name, time_to, initial):
     record = reaction.record_list
     length = len(record["t"])
     record = dict([[i[0],sum(i[1])/length] for i in record.items()])
-    return record
+    reaction.num = record
+    return reaction
 
 if __name__ == "__main__":
     gate_name = sys.argv[sys.argv.index('-g')+1]
@@ -66,8 +67,9 @@ if __name__ == "__main__":
     input_num = len(gates_data[gate_name]["input"])
     starter = sys.argv.index('-i')
     initial = map(int, sys.argv[starter+1:starter+input_num+1])
-    record = do_test(gate_name, time_to, initial)
-    print record["S0"]
+    reaction = do_test(gate_name, time_to, initial)
+    reaction.show_record(["S0"])
+    """
     try:
         while True:
             print "What else do you want to show(S0,S1,S0d3,S0p5):"
@@ -76,3 +78,4 @@ if __name__ == "__main__":
             reaction.show_record(strings)
     except:
         pass
+    """
