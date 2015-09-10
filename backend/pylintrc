@@ -1,2 +1,2 @@
 [TYPECHECK]
-ignored-modules = numpy,numpy.random
+ignored-modules = numpy,numpy.random, BioBLESS.biocircuit.espresso
