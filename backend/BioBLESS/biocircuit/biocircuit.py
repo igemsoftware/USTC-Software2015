@@ -15,65 +15,12 @@ Create some biocircuits and calculate their scores
 """
 __author__ = 'E-Neo <e-neo@qq.com>'
 
-# Maybe pyeda is better in the future, but pyeda contains some
-# bugs by far(0.28.0). Espresso Algorithm is better than Q-M
-# Algorithm
-import BioBLESS.biocircuit.qm
+
+from math import log
 
 import numpy as np
 import networkx as nx
-
-
-def string2truthtable(string):
-    """Convert string to truthtable which qm can recognize.
-
-    Parameters
-    ----------
-    string : string
-        A string of zeros and ones representing a truthtable.
-
-    Returns
-    -------
-    ones : list
-        Iterable of integer minterms.
-
-    zeros : list
-        Iterable of integer maxterms.
-
-    dc : list
-        Iterable of integers specifying don't-care terms
-
-    Examples
-    --------
-    A truthtable:
-    |---+---+---+-----|------+-------+----|
-    | A | B | C | out | ones | zeros | dc |
-    |---+---+---+-----|------+-------+----|
-    | 0 | 0 | 0 |  1  |  0   |       |    |
-    | 0 | 0 | 1 |  0  |      |   1   |    |
-    | 0 | 1 | 0 |  1  |  2   |       |    |
-    | 0 | 1 | 1 |  1  |  3   |       |    |
-    | 1 | 0 | 0 |  0  |      |   4   |    |
-    | 1 | 0 | 1 |  1  |  5   |       |    |
-    | 1 | 1 | 0 |  0  |      |   6   |    |
-    | 1 | 1 | 1 |  -  |      |       | 7  |
-    |---+---+---+-----|------+-------+----|
-    string = '1011010-'
-    ones = [0, 2, 3, 5]
-    zeros = [1, 4, 6]
-    dc = [7]
-    """
-    ones = []
-    zeros = []
-    qm_dc = []
-    for i in range(len(string)):
-        if string[i] == '1':
-            ones.append(i)
-        elif string[i] == '0':
-            zeros.append(i)
-        else:
-            qm_dc.append(i)
-    return ones, zeros, qm_dc
+import BioBLESS.biocircuit.espresso as qm
 
 
 def string2expr(string):
@@ -88,10 +35,36 @@ def string2expr(string):
     -------
     expr : list
         Minimal two-level SOP form.
+        Examples
+    --------
+    A truthtable:
+    |---+---+---+-----|
+    | A | B | C | out |
+    |---+---+---+-----|
+    | 0 | 0 | 0 |  1  |
+    | 0 | 0 | 1 |  0  |
+    | 0 | 1 | 0 |  1  |
+    | 0 | 1 | 1 |  1  |
+    | 1 | 0 | 0 |  0  |
+    | 1 | 0 | 1 |  1  |
+    | 1 | 1 | 0 |  0  |
+    | 1 | 1 | 1 |  -  |
+    |---+---+---+-----|
+    string = '1011010-'
     """
-    f_tt = string2truthtable(string)
-    expr = BioBLESS.biocircuit.qm.qm(f_tt[0], f_tt[1], f_tt[2])
-    return expr
+    ninput = int(log(len(string), 2))
+    cover = []
+    for i in range(len(string)):
+        row = bin(i).replace('0b', '')
+        row = '0' * (ninput - len(row)) + row
+        tmp = [int(k) + 1 for k in row]
+        value = int(string[i]) if string[i] == '0' or string[i] == '1' else 2
+        cover.append((tuple(tmp), (value,)))
+    cover = set(cover)
+    result = list(qm.espresso(ninput, 1, cover))
+    result = [i[0] for i in result]
+    result = [''.join(['X' if i == 3 else str(i-1) for i in j]) for j in result]
+    return result
 
 
 def get_gate_not(expr):
