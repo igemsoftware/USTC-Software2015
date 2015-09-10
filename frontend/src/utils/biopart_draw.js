@@ -63,7 +63,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * <ellipse fill="#716E5B" cx="264.807" cy="288.5" rx="94.693" ry="43"/>
              */
             graphics.beginFill(0x716E5B, 1);
-            graphics.drawEllipse(218.667, 220.376, 94.693, 43);
+            graphics.drawEllipse(100, 100, 95, 45);
             graphics.endFill();
             break;
         case "rbs":
@@ -72,7 +72,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * <ellipse fill="#C6C717" cx="488.472" cy="292" rx="67.528" ry="45"/>
              */
             graphics.beginFill(0xC6C717, 1);
-            graphics.drawEllipse(218.667, 220.376, 67.528, 45);
+            graphics.drawEllipse(100, 100, 67, 45);
             graphics.endFill();
             break
         case "sRNA":
@@ -227,7 +227,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * <circle fill="#FAC811" cx="411" cy="261" r="138"/>
              */
             graphics.beginFill(0xFAC811, 1);
-            graphics.drawCircle(218.667, 220.376, 138);
+            graphics.drawCircle(100, 100, 50);
             graphics.endFill();
             break;
         default:
