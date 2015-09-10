@@ -529,7 +529,7 @@
                 "id2": "e3",
                 "type": "rep",
                 "params": {
-                    "reg": 1
+                    "reg": 0.5
                 }
             },
             {
@@ -538,7 +538,7 @@
                 "id2": "e4",
                 "type": "rep",
                 "params": {
-                    "reg": 1
+                    "reg": 0.5
                 }
             }
         ],
