@@ -292,20 +292,31 @@ BioBLESS.dna.dna_select_end = function(event) {
 BioBLESS.dna.dna_copy_work = function() {
     var starpoint = Math.floor((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * BioBLESS.dna.deoxyribonucleic_acid.line_width + Math.floor((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/25);
     var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * BioBLESS.dna.deoxyribonucleic_acid.line_width + Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/25);
-    var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint - starpoint); 
+    var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint - starpoint);
+    BioBLESS.copy_to_clipboard(string);
+
+};
+
+/**
+ * copy_to_clipboard is the function to copy target to clipboard
+ * this function should be browser compatibility
+ * @param  {target}
+ */
+BioBLESS.copy_to_clipboard = function(target) {    
     if(window.clipboardData){
-        window.clipboardData.setData("Text", string);
-        alert("copy completed"+ "\n" + string);
+    	window.clipboardData.clearData();
+        window.clipboardData.setData("Text", target);
+        alert("Copy completed.");
     }
     else if(navigator.userAgent.indexOf("Opera") != -1){
-        window.location = string;
+        window.location = target;
     }
     else if(window.netscape){
         try{
             netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
         }
         catch(e){ 
-            alert("被浏览器拒绝！\n请在浏览器地址栏输入'about:config'并回车\n然后将'signed.applets.codebase_principal_support'设置为'true'"); 
+            alert("Rejected by the browser,\nplease check in 'about:config',\nand set 'signed.applets.codebase_principal_support' to be 'true'"); 
         }
         var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
         if(!clip){ 
@@ -319,7 +330,7 @@ BioBLESS.dna.dna_copy_work = function() {
         var str = new Object();
         var len = new Object();
         var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
-        var copytext = string;
+        var copytext = target;
         str.data = copytext;
         trans.setTransferData("text/unicode", str, copytext.length * 2);
         var clipid = Components.interfaces.nsIClipboard;
@@ -327,6 +338,6 @@ BioBLESS.dna.dna_copy_work = function() {
             return false; 
         }
         clip.setData(trans, null, clipid.kGlobalClipboard);
-        alert("copy completed" + "\n" + string);
+        alert("copy completed.");
     }
 };
