@@ -41,79 +41,78 @@ BioBLESS.scroll_animation = function(){
 
 
 
-BioBLESS.prepare_navigation_title = function(){
-    
-    this.navigation_title = new PIXI.Container();
-    var background2 = new PIXI.Graphics();
-    background2.beginFill(0x000000, 1);
-    background2.lineStyle(0);
-    background2.drawRect(0, 0, 120, 120);
-    background2.endFill();
-    background2.lineStyle(3, 0xffffff, 1);
-    background2.drawCircle(60, 60, 50);
-    background2.lineStyle(1, 0xffffff, 0.8);
-    background2.moveTo(12, 120);
-    background2.lineTo(108, 120);
-    var title = new PIXI.Text('BioBLESS', {fill: "#ffffff"});
-    title.position.y = 60;
-    title.position.x = 60;
-    title.anchor.x = 0.5;
-    title.anchor.y = 0.5;
-    title.scale.x = title.scale.y = 0.7;
-    this.navigation_title.addChild(background2);
-    this.navigation_title.addChild(title);
-};
+
 BioBLESS.prepare_navigation = function(){
-    BioBLESS.prepare_navigation_title();
-    var navigation_button = ["logic","gene_network","simulation","analysis","dna"];
+    var navigation_button = ["Logic","Gene-network","DNASequance","Simulation","Analysis"];
+	var navigation_plugin = ["logic","gene_network","dna","simulation","analysis"];
+	var icon_urls = ["misc/logic.png","misc/gene-network.png","misc/DNA.png","misc/simulation.png","misc/analyse.png"];
+	var text_scale = [0.65, 0.55, 0.55, 0.6, 0.6];
+	var text_y = [90, 102, 102, 102, 100];
+	var icon_y = [0, 10, 10, 10, 10];
     BioBLESS.navigation = new PIXI.Container();
     var button_width = 120;
-    var button_dis = (BioBLESS.height) / (navigation_button.length + 1);
+    var button_dis = (BioBLESS.height) / (navigation_button.length) * 5 / 6;
     if(button_dis < 120){
         button_dis = 120;
         BioBLESS.navigation.h = button_dis * (navigation_button.length + 1);
-        this.navigation_title.scale.x = this.navigation_title.scale.y =  BioBLESS.height / BioBLESS.navigation.h;
         this.navigation.scale.x = this.navigation.scale.y = BioBLESS.height / BioBLESS.navigation.h;
     }else
         BioBLESS.navigation.h = BioBLESS.height;
-    BioBLESS.navigation.condition = 0;
     BioBLESS.navigation.w = 120;
     var background = new PIXI.Graphics();
-    background.beginFill(0x000000, 1);
+    background.beginFill(0x808080, 1);
     background.lineStyle(0);
     background.drawRect(0, 0, this.navigation.w, this.navigation.h);
     background.endFill();
     BioBLESS.navigation.button = [];
     var onmousedown_obj = function() {
-        if(BioBLESS[this.t] !== undefined)
-             BioBLESS.change_stage(BioBLESS[this.t]);
+        if(BioBLESS[this.plugin] !== undefined)
+             BioBLESS.change_stage(BioBLESS[this.plugin]);
     };
-    for(var i = 1; i < navigation_button.length + 1; i++){
-        var j = i - 1;
-        BioBLESS.navigation.button[j] = new PIXI.Graphics();
-        BioBLESS.navigation.button[j].lineStyle(3, 0xffffff, 1);
-        BioBLESS.navigation.button[j].beginFill(0, 0);
-        BioBLESS.navigation.button[j].drawCircle(60, i * button_dis + 60, 50);
-        BioBLESS.navigation.button[j].endFill();
-        BioBLESS.navigation.button[j].title = new PIXI.Text(navigation_button[j], {fill: "#ffffff"});
-        BioBLESS.navigation.button[j].title.anchor.x = 0.5;
-        BioBLESS.navigation.button[j].title.anchor.y = 0.5;
-        if(navigation_button[j].length > 7){
-            BioBLESS.navigation.button[j].title.scale.x *= 6.5 / navigation_button[j].length;
-            BioBLESS.navigation.button[j].title.scale.y *= 6.5 / navigation_button[j].length;
-        }
-        BioBLESS.navigation.button[j].title.position.x = 60;
-        BioBLESS.navigation.button[j].title.position.y = i * button_dis + 60;
-        BioBLESS.navigation.button[j].t = navigation_button[j];
-        BioBLESS.navigation.button[j].on('mousedown', onmousedown_obj);
+	var mouse_over = function(){
+	    if(this.is_out){
+		    this.is_out = false;
+			this.bg.beginFill(0xffffff, 1);
+			this.bg.drawRect(0, 0, 120, 120);
+			this.bg.endFill();
+		}
+	};
+	var mouse_out = function(){
+	    if(!this.is_out){
+		    this.is_out = true;
+			this.bg.clear();
+		}
+	};
+    for(var i = 0; i < navigation_button.length; i++){
+	    BioBLESS.navigation.button[i] = new PIXI.Container();
+		BioBLESS.navigation.button[i].y = BioBLESS.height / 12 + i * button_dis;
+		BioBLESS.navigation.button[i].is_out = true;
+		var bg = new PIXI.Graphics();
+		BioBLESS.navigation.button[i].addChild(bg);
+		BioBLESS.navigation.button[i].bg = bg;
+        var texture = PIXI.Texture.fromImage(icon_urls[i]);
+		var icon = new PIXI.Sprite(texture);
+		icon.anchor.x = 0.5;
+		icon.scale.x = icon.scale.y = 0.07;
+		icon.x = 60;
+		icon.y = icon_y[i];
+		BioBLESS.navigation.button[i].addChild(icon);
+		var title = new PIXI.Text(navigation_button[i]);
+		title.anchor.x = 0.5;
+		title.anchor.y = 0.5;
+		title.scale.x = title.scale.y = text_scale[i];
+		title.x = 60;
+		title.y = text_y[i];
+		BioBLESS.navigation.button[i].addChild(title);
+        BioBLESS.navigation.button[i].interactive = true;
+		BioBLESS.navigation.button[i].buttonMode = true;
+        BioBLESS.navigation.button[i].on('click', onmousedown_obj)
+		                             .on('mouseover', mouse_over)
+									 .on('mouseout', mouse_out);
+		BioBLESS.navigation.addChild(BioBLESS.navigation.button[i]);
     }
     this.navigation.addChild(background);
-    for(var v = 0; v < BioBLESS.navigation.button.length; v++){
-        this.navigation.addChild(BioBLESS.navigation.button[v]);
-        this.navigation.addChild(BioBLESS.navigation.button[v].title);
-    }
-    for(var w = 0; w < BioBLESS.navigation.button.length; w++){
-        BioBLESS.navigation.button[w].interactive = true;
-        BioBLESS.navigation.button[w].buttonMode = true;
+    for(var i = 0; i < BioBLESS.navigation.button.length; i++){
+        this.navigation.addChild(BioBLESS.navigation.button[i]);
     }
 };

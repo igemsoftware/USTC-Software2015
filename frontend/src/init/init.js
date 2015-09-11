@@ -53,7 +53,6 @@ BioBLESS.init = function() {
     window.onmousewheel = document.onmousewheel = scroll_func; //IE/Opera/Chrome/Safari
     BioBLESS.prepare_navigation();
     BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation);
-    BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation_title);
     BioBLESS.add_animate_hook(function() {
         if(BioBLESS.gates) {
             BioBLESS.logic.draw(BioBLESS.gates);
