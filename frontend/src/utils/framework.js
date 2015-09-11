@@ -43,11 +43,11 @@ BioBLESS.scroll_animation = function(){
 
 
 BioBLESS.prepare_navigation = function(){
-    var navigation_button = ["Logic","Gene-network","DNASequance","Simulation","Analysis"];
-	var navigation_plugin = ["logic","gene_network","dna","simulation","analysis"];
-	var icon_urls = ["misc/logic.png","misc/gene-network.png","misc/DNA.png","misc/simulation.png","misc/analyse.png"];
-	var text_scale = [0.65, 0.55, 0.55, 0.6, 0.6];
-	var text_y = [90, 102, 102, 102, 100];
+    var navigation_button = ["Logic","Gene-network","Simulation","Analysis","DNASequance"];
+	var navigation_plugin = ["logic","gene_network","simulation","analysis","dna"];
+	var icon_urls = ["misc/logic.png","misc/gene-network.png","misc/simulation.png","misc/analyse.png","misc/DNA.png"];
+	var text_scale = [0.65, 0.55, 0.6, 0.6, 0.55];
+	var text_y = [90, 102, 102, 100, 102];
 	var icon_y = [0, 10, 10, 10, 10];
     BioBLESS.navigation = new PIXI.Container();
     var button_width = 120;
@@ -90,8 +90,7 @@ BioBLESS.prepare_navigation = function(){
 		var bg = new PIXI.Graphics();
 		BioBLESS.navigation.button[i].addChild(bg);
 		BioBLESS.navigation.button[i].bg = bg;
-        var texture = PIXI.Texture.fromImage(icon_urls[i]);
-		var icon = new PIXI.Sprite(texture);
+		var icon = PIXI.Sprite.fromImage(icon_urls[i]);
 		icon.anchor.x = 0.5;
 		icon.scale.x = icon.scale.y = 0.07;
 		icon.x = 60;

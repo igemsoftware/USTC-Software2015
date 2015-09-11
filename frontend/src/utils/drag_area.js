@@ -21,7 +21,7 @@ var drag_start_func = function(event) {
         BioBLESS.stage.movable_stage.inPosition = event.data.getLocalPosition(BioBLESS.stage.movable_stage);
     };
     var dragArea = new PIXI.Graphics();
-        dragArea.beginFill(0xfedcba, 1);
+        dragArea.beginFill(0x000000, 1);
         dragArea.drawRect(0, 0, BioBLESS.width, BioBLESS.height);
         dragArea.interactive = true;
         dragArea.on('mousedown', drag_start_func)

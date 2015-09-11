@@ -998,6 +998,85 @@ BioBLESS.logic.create_textbutton = function(t, w, h, color){
     return button;
 };
 
+/**
+ * create a circle button with text
+ * @function
+ */
+BioBLESS.logic.create_circlebutton = function(t, w){
+    var button = new PIXI.Container();
+    button.background = new PIXI.Graphics();
+    button.text = new PIXI.Text(t);
+	button.text2 = new PIXI.Text(t);
+    button.text2.style.fill = "white";
+    button.background.beginFill(0xffffff, 1);
+    button.background.drawCircle(w / 2, w / 2, w / 2);
+    button.background.endFill();
+    
+    button.text.anchor.x = 0.5;
+    button.text.anchor.y = 0.5;
+    button.text.x = w / 2;
+    button.text.y = w / 2;
+	
+	button.text2.anchor.x = 0.5;
+    button.text2.anchor.y = 0.5;
+    button.text2.x = w / 2;
+    button.text2.y = w / 2;
+    
+	button.redraw = function(){
+	    button.background.clear();
+	    button.background.beginFill(0xffffff, 1);
+        button.background.drawCircle(w / 2, w / 2, w / 2);
+        button.background.endFill();
+        button.addChild(button.text);
+        button.removeChild(button.text2);
+		button.interactive = true;
+		button.buttonMode = true;
+	};
+	
+	button.change = function(){
+	    button.background.clear();
+	    button.background.beginFill(0x000000, 1);
+        button.background.drawCircle(w / 2, w / 2, w / 2);
+        button.background.endFill();
+        button.addChild(button.text2);
+        button.removeChild(button.text);
+		button.interactive = false;
+		button.buttonMode = false;
+	};
+	
+    button.addChild(button.background);
+    button.addChild(button.text);
+    return button;
+};
+
+/**
+ * create a picture button with text
+ * @function
+ */
+BioBLESS.logic.create_picturebutton = function(w){
+    var button = new PIXI.Container();
+	button.condition = 1;
+	var icon1 = PIXI.Sprite.fromImage('misc/button1.png');
+	var icon2 = PIXI.Sprite.fromImage("misc/button2.png");
+	icon1.anchor.x = icon1.anchor.y = 0.5;
+	icon2.anchor.x = icon2.anchor.y = 0.5;
+	icon1.scale.x = icon1.scale.y = w / 1000;
+	icon2.scale.x = icon2.scale.y = w / 1000;
+	icon1.x = icon1.y = w / 2;
+	icon2.x = icon2.y = w / 2;
+	button.redraw = function(){
+	    button.addChild(icon1);
+		button.removeChild(icon2);
+		button.condition = 1;
+	};
+	button.change = function(){
+	    button.addChild(icon2);
+		button.removeChild(icon1);
+		button.condition = 2;
+	};
+	button.addChild(icon1);
+    return button;
+};
 BioBLESS.logic.on_drag_s = function(event){
     this.data = event.data;
     this.alpha = 0.5;
@@ -1126,20 +1205,33 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
  * create the base stage of truth table
  * @function
  */
-BioBLESS.logic.create_abcd = function(){
+BioBLESS.logic.create_base_stage_of_truth_table = function(){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
-    bg.beginFill(0x333333, 1);
+    bg.beginFill(0x888888, 1);
     bg.drawRect(0, 0, 300, BioBLESS.height);
     bg.endFill();
     stage.addChild(bg);
     var title = new PIXI.Text("Input Num:");
-    title.style.fill = "white";
     title.y = 43;
     title.x = 25;
     stage.addChild(title);
     var buttons = [];
+	var on_click = function(){
+	    if(this.condition === 1){
+		    this.change();
+			BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "1" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
+		}else{
+		    this.redraw();
+			BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "0" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
+		};
+	};
     var button_function = function(){
+	    for(var i = 0; i < buttons.length; i++){
+		    buttons[i].redraw();
+		};
+		buttons[this.n - 1].change();
+	    BioBLESS.logic.truth_table_parameter = "";
         var contain = new PIXI.Container();
         var num = [];
         var row = 1;
@@ -1156,36 +1248,35 @@ BioBLESS.logic.create_abcd = function(){
                 t /= 2;
             }
             for(i = 0; i < this.n; i++){
-                var button = BioBLESS.logic.create_textbutton(num[i].toString(), 40, 40, 0x000000);
+                var button = BioBLESS.logic.create_circlebutton(num[i].toString(), 40);
                 button.scale.x = 27 / 40;
                 button.scale.y = 27 / 40;
                 button.x = dis + i * dis - 5;
                 button.y = 20 + 40 * k;
                 contain.addChild(button);
             }
-            this.button[k] = [];
-            this.button[k][0] = BioBLESS.logic.create_textbutton("0", 40, 40, 0x000000);
-            this.button[k][1] = BioBLESS.logic.create_textbutton("1", 40, 40, 0x000000);
-            this.button[k][0].scale.x = 27 / 40;
-            this.button[k][0].scale.y = 27 / 40;
-            this.button[k][0].x = 14 + 6 * 28;
-            this.button[k][0].y = 20 + 40 * k;
-            this.button[k][1].scale.x = 27 / 40;
-            this.button[k][1].scale.y = 27 / 40;
-            this.button[k][1].x = 14 + 7 * 28;
-            this.button[k][1].y = 20 + 40 * k;
-            contain.addChild(this.button[k][0]);
-            contain.addChild(this.button[k][1]);
+            this.button[k] = BioBLESS.logic.create_picturebutton(40);
+            this.button[k].scale.x = 27 / 40;
+            this.button[k].scale.y = 27 / 40;
+            this.button[k].x = 28 + 6 * 28;
+            this.button[k].y = 20 + 40 * k;
+			this.button[k].n = k;
+			this.button[k].interactive = true;
+			this.button[k].buttonMode = true;
+			this.button[k].on('click', on_click);
+            contain.addChild(this.button[k]);
+			BioBLESS.logic.truth_table_parameter += "0";
         }
         var scroll_area = BioBLESS.logic.create_scrollarea(contain, (row + 1) * 40, 260, BioBLESS.height - 280);
         scroll_area.x = 20;
         scroll_area.y = 200;
         if(this.parent.scroll_area){
             this.parent.removeChild(this.parent.scroll_area);
-            this.parent.scroll_area.destroy(true);
         }
         this.parent.addChild(scroll_area);
         this.parent.scroll_area = scroll_area;
+		if(this.parent.has_OK)
+		    return;
         var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
         OK.x = 100;
         OK.y = BioBLESS.height - 60;
@@ -1195,22 +1286,22 @@ BioBLESS.logic.create_abcd = function(){
         var OK_function = function(){
             $.getJSON(BioBLESS.host + "/biocircuit/10110010/", function(data) {
                     BioBLESS.logic.gates_sup = data;
-                    var new_stage = BioBLESS.logic.craete_efgh(this.parent);
+                    var new_stage = BioBLESS.logic.create_output_stage_of_truth_table(this.parent);
                     this.parent.parent.addChild(new_stage);
                     this.parent.parent.removeChild(this.parent);
             }.bind(this));
         };
         OK.on("click", OK_function);
+		this.parent.has_OK = true;
     }
     for(var i = 0; i < 5; i++){
-        buttons[i] = this.create_textbutton((i + 1).toString(), 48, 48, 0x000000);
+        buttons[i] = this.create_circlebutton((i + 1).toString(), 48);
         buttons[i].n = i + 1;
         buttons[i].y = 100;
         buttons[i].x = 26 + i * 50;
         stage.addChild(buttons[i]);
         buttons[i].interactive = true;
         buttons[i].buttonMode = true;
-        var n = i;
         buttons[i].on("click", button_function);
     };
     return stage;
@@ -1390,7 +1481,7 @@ BioBLESS.logic.circuits = function(){
  * create the output stage of truth table
  * @function
  */
-BioBLESS.logic.craete_efgh = function(back_stage) {
+BioBLESS.logic.create_output_stage_of_truth_table = function(back_stage) {
     var stage = new PIXI.Container();
     stage.x = BioBLESS.width - 300;
     var bg = new PIXI.Graphics();
@@ -1785,10 +1876,10 @@ BioBLESS.logic.draw = function(devices){
      * @type {PIXI.Graphics}
      */
     that.plusobj = new PIXI.Graphics();
-    that.plusobj.beginFill(0x345678, 1);
+    that.plusobj.beginFill(0xffffff, 1);
     that.plusobj.drawCircle(0, 0, 30);
     that.plusobj.endFill();
-    that.plusobj.lineStyle(3, 0xffff00, 1);
+    that.plusobj.lineStyle(3, 0x000000, 1);
     that.plusobj.moveTo(-15, 0);
     that.plusobj.lineTo(15, 0);
     that.plusobj.moveTo(0, -15);
@@ -1836,7 +1927,7 @@ BioBLESS.logic.draw = function(devices){
     };        
     BioBLESS.add_animate_hook(BioBLESS.logic.plusobj_animation);
     
-    var abcd = this.create_abcd();
+    var abcd = this.create_base_stage_of_truth_table();
     abcd.x = BioBLESS.width - 300;
     
     /*var contain = new PIXI.Container();

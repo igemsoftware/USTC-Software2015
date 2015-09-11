@@ -1214,7 +1214,38 @@ BioBLESS.gene_network.create_ijkl = function(){
     stage.addChild(OK);
     return stage;
 }
-
+BioBLESS.gene_network.get_parameters = function(){
+    var parameters = {};
+	parameters.nodes = BioBLESS.gene_network.gates.nodes;
+	parameters.arcs = BioBLESS.gene_network.gates.arcs;
+	parameters.system_parameter = {};
+	parameters.system_parameter.time = BioBLESS.gene_network.system_parameters.time;
+	parameters.simulation_parameter = [];
+	var i = 0;
+	var input_num = 0;
+	for(var k = 0; k < parameters.nodes.length; k++){
+	    parameters.simulation_parameter[k] = {};
+	    if(parameters.nodes[k] === "INPUT"){
+		    
+			parameters.simulation_parameter[k].device_parameter =  {
+                "initial": [
+                ]
+            };
+			parameters.simulation_parameter[k].device_parameter.initial[0] = BioBLESS.gene_network.system_parameters.input[input_num++];
+			continue;
+		};
+		for(var j = 0; j < BioBLESS.gene_network.devices[i].map.length; j++){
+		    parameters.simulation_parameter[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params;
+		};
+		parameters.simulation_parameter[k].device_parameter = {
+                "initial": [
+                    10, 10, 10
+                ]
+            };
+		i++;
+	};
+	return parameters;
+};
 /** 
 * @description draw one device or the whole devices
 * @param {devices} the whole devices
