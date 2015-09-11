@@ -3,7 +3,7 @@
 # BioBLESS - iGEM USTC Software 2015
 
 ## Structure of the project
-+ `frontend` Frontend code lies here
++ `frontend` Frontend logic lies here
 + `backend`  Backend code locates here
 + `doc`      Documents for developers and users
 
@@ -47,21 +47,27 @@ you could run
    Then you can open doc_build/doc/html/index.html to view the doc
 
 ### Rest API doc
-in the URI `/docs`
+You can find it in the URI `/docs`
 
 ---
 # Frontend
+
+### Our frontend is with canvas-based HTML5. Please view it with IE10+, Microsoft Edge or newest Firebox, Chrome, etc., if it fails to render well.
+
+### Dependency (already included in the project)
 
 [jQuery-2.1.4](https://jquery.com/download/) License: MIT
 
 [Pixi.js-3.0.7](https://github.com/GoodBoyDigital/pixi.js) License: MIT
 
 ### Build
+You should just execute the following command:
 ```
 $ npm install
 $ npm run build
 ```
 ### Documentations
+Run it to view the documents:
 ```
 $ npm run build-doc
 ```
