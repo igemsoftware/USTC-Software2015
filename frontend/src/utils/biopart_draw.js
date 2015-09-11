@@ -15,7 +15,32 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
     var graphics = new PIXI.Graphics();
     switch(id){
         case "cds":
-
+            /**
+             * cds
+             * <path fill="#3360A3" d="M 452.625 25.76
+             * h -69.708
+             * c -2.667 -0.012 -3.2 3.24 -3.2 3.24
+             * v 21.76
+             * c 0.294 1.175 0.378 3.321 3.2 3.308
+             * l 69.708 0.039
+             * v -0.002
+             * v 14.182
+             * l 48.281 -28.359
+             * l -48.281 -28.359
+             * v 14.194"/>
+             */
+            graphics.beginFill(0x3360A3, 1);
+            graphics.moveTo(80, 25.76);
+            graphics.lineTo(80 - 69.708, 25.76);//(10.292, 25.76)
+            graphics.bezierCurveTo(10.292 - 2.667, 25.76 - 0.012, 10.292 - 3.2, 25.76 + 3.24, 10.292 - 3.2, 25.76 + 3.24);//(7.092, 29)
+            graphics.lineTo(7.092, 29 + 21.76);//(7.092, 50.76)
+            graphics.bezierCurveTo(7.092 + 0.294, 50.76 + 1.175, 7.092 + 0.378, 50.76 + 3.321, 7.092 + 3.2, 50.76 + 3.308);//(10.292, 54.068)
+            graphics.lineTo(10.292 + 69.708, 54.068);//(80, 54.068)
+            graphics.lineTo(80, 54.068 + 14.18);//(80, 68.248)
+            graphics.lineTo(80 + 48.281, 68.248 - 28.359);//(128.281, 39.889)
+            graphics.lineTo(128.281 - 48.281, 39.889 - 28.359);//(80, 11.53)
+            graphics.lineTo(80, 11.53 + 14.23);//(80, 25.76)
+            graphics.endFill();
             break;
         case "promoter":
             /**
@@ -37,7 +62,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * c -2.963 0 -14.05 2.773 -14.05 10.352 
              * v 125.234"/>
              */
-            graphics.beginFill(0xA6AA0F,1);
+            graphics.beginFill(0xA6AA0F, 1);
             graphics.lineStyle(3, 0xA6910F, 1);
             graphics.moveTo(218.667, 220.376);
             graphics.bezierCurveTo(218.667, 220.376 + 3.945, 218.667 + 4.747, 220.376 + 3.945, 218.667 + 4.747, 220.376 + 3.945);//(223.414, 224.321)
