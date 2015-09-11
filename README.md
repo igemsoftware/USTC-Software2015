@@ -7,6 +7,8 @@
 + `backend`  Backend code locates here
 + `doc`      Documents for developers and users
 
+### This project is backend/frontend separatable. This means that you can deploy backend and frontend in different places given frontend is capable of connecting to the backend(e.g. You can run backend in a webserver/your pc, and frontend in wherever a html5-friendly webbrowser is supported. Then you can configure the frontend to connect to the backend, this will be easy). 
+
 ---
 # Backend
 
@@ -52,7 +54,7 @@ You can find it in the URI `/docs`
 ---
 # Frontend
 
-### Our frontend is with canvas-based HTML5. Please view it with IE10+, Microsoft Edge or newest Firebox, Chrome, etc., if it fails to render well.
+### Our frontend is coded with canvas-based HTML5. Please view it with IE10+, Microsoft Edge or newest Firebox, Chrome, etc., if it fails to render well.
 
 ### Dependency (already included in the project)
 
