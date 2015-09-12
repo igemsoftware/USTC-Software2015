@@ -12,6 +12,17 @@ This project is backend/frontend separatable. This means that you can deploy bac
 ---
 # Backend
 
+### Requirements
++ python 2.7
++ build-essential
++ pip
++ virtualenv
+### Quick Guide
++ run `./install.sh` to install the application
++ run `./run.sh` to run the application
++ open **http://127.0.0.1:8000/BioBLESS/index.html** to enjoy it.
+
+### code structure
 + `backend` Root of django
 + `backend/BioBLESS` Functional codes
 +  Test cases are in the `backend/BioBLESS` directory
@@ -24,10 +35,12 @@ This project is backend/frontend separatable. This means that you can deploy bac
 + you could just use `pip install -r requirements.txt` to install all the dependency.
 
 ### Install
+    cd BioBLESS/biocircuit
+    make
     ./manage.py migrate
     ./manage.py loaddata parts
     ./manage.py runserver
-
+    cd BioBLESS/biocircuit
 ### Unit Test
 you could run
 ```
