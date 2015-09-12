@@ -186,7 +186,7 @@ BioBLESS.logic.circuit_delete_line = function(mama, papa) {
                     if(BioBLESS.logic.circuit.arcs[l].to === BioBLESS.logic.mark[j] && BioBLESS.logic.circuit.arcs[l].from === BioBLESS.logic.circuit.arcs[k].from){
                         BioBLESS.logic.circuit.arcs.splice(l, 1);
                         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.mark[j]};
+                        BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.mark[j]};
                         break;
                     }
                 }
@@ -199,7 +199,7 @@ BioBLESS.logic.circuit_delete_line = function(mama, papa) {
             if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.mark[j] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.mark[i]};
+                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.mark[i]};
                 break;
             }
         }
@@ -209,7 +209,7 @@ BioBLESS.logic.circuit_delete_line = function(mama, papa) {
             if(BioBLESS.logic.circuit.arcs[k].from === BioBLESS.logic.mark[i] && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[j]){
                 BioBLESS.logic.circuit.arcs.splice(k, 1);
                 BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
-                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.arcs.length - 1, "to":BioBLESS.logic.mark[j]};
+                BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.mark[j]};
                 break;
             }
         }
@@ -520,14 +520,14 @@ BioBLESS.logic.on_drag_move_e = function() {
                 wRect = this.parent.position.x + this.parent.input_2.position.x - xRect;
                 hRect = this.parent.position.y + this.parent.input_2.position.y - yRect;
                 this.parent.input_2.lines[i][0].clear();
-                this.parent.input_2.lines[i][0].beginFill(this.parent.input_2.line[i][0].line_color, 1);
-                this.parent.input_2.lines[i][0].lineStyle(0, this.parent.input_2.line[i][0].line_color, 1);
+                this.parent.input_2.lines[i][0].beginFill(this.parent.input_2.lines[i][0].line_color, 1);
+                this.parent.input_2.lines[i][0].lineStyle(0, this.parent.input_2.lines[i][0].line_color, 1);
                 this.parent.input_2.lines[i][0].drawCircle(xRect, yRect + 1.5, 1.5);
                 this.parent.input_2.lines[i][0].drawCircle(xRect, yRect + hRect/2 + 1.5, 1.5);
                 this.parent.input_2.lines[i][0].drawCircle(xRect + wRect, yRect + hRect/2 + 1.5, 1.5);
                 this.parent.input_2.lines[i][0].drawCircle(xRect + wRect, yRect + hRect, 1.5);
                 this.parent.input_2.lines[i][0].endFill();
-                this.parent.input_2.lines[i][0].lineStyle(3, this.parent.input_2.line[i][0].line_color, 1);
+                this.parent.input_2.lines[i][0].lineStyle(3, this.parent.input_2.lines[i][0].line_color, 1);
                 this.parent.input_2.lines[i][0].moveTo(xRect, yRect + 1.5);
                 this.parent.input_2.lines[i][0].lineTo(xRect, yRect + hRect/2 + 1.5);
                 this.parent.input_2.lines[i][0].moveTo(xRect, yRect + hRect/2 + 1.5);
@@ -1492,6 +1492,8 @@ BioBLESS.logic.craete_efgh = function(back_stage) {
 BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
     var i,j,k;
     var temp_circuit = BioBLESS.logic.circuit;
+    var temp_mark = [];
+    var temp_elements_length = BioBLESS.logic.elements.length;
     var display = circuit_data.nodes.length;
     BioBLESS.logic.circuit = circuit_data;
     for(i = 0; i < temp_circuit.nodes.length; i++){
@@ -1500,10 +1502,14 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
     for(i = 0; i < temp_circuit.arcs.length; i++){
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":(temp_circuit.arcs[i].from + display), "to":(temp_circuit.arcs[i].to + display)};
     }
+    for(i = 0; i < BioBLESS.logic.mark.length; i++){
+        temp_mark[i] = BioBLESS.logic.mark[i] + display;
+    }//backup BioBLESS.logic.mark
     for(i = 0; i < BioBLESS.logic.elements.length; i++){
-        BioBLESS.logic.mark[i] += display;
+        BioBLESS.logic.mark[i] = null;
     }
 
+    // var start_data = this.data.getLocalPosition(BioBLESS.stage.movable_stage);
 
     /**
      * add_gate is the function to draw gate according to the BioBLESS.logic.circuits.poi
@@ -1637,7 +1643,7 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
     };
 
     BioBLESS.logic.add_gate(thing);
-    var dad = 0;
+    var dad = temp_elements_length;
     var mom;
     for(i = 1; i < thing.poi.length -2; i++){
         for(j = 0; j < thing.poi[i].length; j++){
@@ -1688,6 +1694,9 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
                 }
             }
         }
+    }
+    for(i = 0; i < temp_mark.length; i++){
+        BioBLESS.logic.mark[i] = temp_mark[i];
     }
 };
 
