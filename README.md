@@ -17,6 +17,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
 + build-essential
 + pip
 + virtualenv
+
 ### Quick Guide
 + run `./install.sh` to install the application
 + run `./run.sh` to run the application
