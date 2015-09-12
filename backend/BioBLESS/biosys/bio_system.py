@@ -12,16 +12,17 @@ Create some biosys and calculate their simulation
 """
 __author__ = 'Trumpet'
 
-import simplejson
+import simplejson,os
 
 from reaction_system import ReactionSystem
 
 
 GATE_FILE = None
+real_path = os.path.split(os.path.realpath(__file__))[0]+"/"
 try:
-    GATE_FILE = open("../../../doc/devices/gates_lizhi.json", "r")
+    GATE_FILE = open(real_path+"../../../doc/devices/gates_lizhi.json", "r")
 except IOError:
-    GATE_FILE = open("../doc/devices/gates_lizhi.json", "r")
+    GATE_FILE = open(real_path+"../doc/devices/gates_lizhi.json", "r")
 gate_data_source = GATE_FILE.read()
 gates_data = simplejson.loads(gate_data_source)
 gates_data = list(gates_data)

@@ -24,6 +24,6 @@ script:
     - cd ..
     - coverage run --source=BioBLESS backend/manage.py test BioBLESS
     - cd frontend
-    - npm test
+#    - npm test
 after_success:
     - coveralls
