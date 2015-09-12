@@ -1394,10 +1394,10 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.00005,
-                    "trans2": 0.025,
-                    "decay1": 0.1,
-                    "decay2": 0.05
+                    "trans1": 0.01,
+                    "trans2": 0.001,
+                    "decay1": 0.01,
+                    "decay2": 0.01
                 }
             },
             {
@@ -1406,7 +1406,7 @@
                 "id2": "d5",
                 "type": "inh",
                 "params": {
-                    "reg": 10
+                    "reg": 0.05
                 }
             },
             {
@@ -1415,10 +1415,10 @@
                 "id2": "p7",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
-                    "decay1": 0.1,
-                    "decay2": 0.05
+                    "trans1": 0.05,
+                    "trans2": 0.05,
+                    "decay1": 0.01,
+                    "decay2": 0.01
                 }
             },
             {
@@ -1427,7 +1427,7 @@
                 "id2": "d9",
                 "type": "act",
                 "params": {
-                    "reg": 30
+                    "reg": 0.5
                 }
             },
             {
@@ -1436,7 +1436,7 @@
                 "id2": "d2",
                 "type": "act",
                 "params": {
-                    "reg": 3.2
+                    "reg": 0.5
                 }
             },
             {
@@ -1446,9 +1446,9 @@
                 "type": "trans",
                 "params": {
                     "trans1": 0.001,
-                    "trans2": 0.5,
-                    "decay1": 0.1,
-                    "decay2": 0.05
+                    "trans2": 0.05,
+                    "decay1": 0.01,
+                    "decay2": 0.01
                 }
             }
         ],
