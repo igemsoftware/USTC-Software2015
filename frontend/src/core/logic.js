@@ -323,14 +323,15 @@ BioBLESS.logic.draw_gate = function(device){
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
     element.title.position.y = 35;
+	element.title.style.fill = "white";
     element.type = icon;
-    element.graphics.lineStyle(3, 0x000000, 1);
+    element.graphics.lineStyle(3, 0xffffff, 1);
     element.graphics.beginFill(0, 0);
     element.graphics.drawRect(30, 0, 90, 70);
     element.graphics.endFill();
     element.gate_delete_button = new PIXI.Graphics();
 
-    element.output.beginFill(0x000000, 1);
+    element.output.beginFill(0xffffff, 1);
     element.output.drawRect(0, 0, -30, 3);
     element.output.position.x = 150;
     element.output.position.y = 34;
@@ -348,7 +349,7 @@ BioBLESS.logic.draw_gate = function(device){
         case "xor":
         case "and":
         case "or":
-            element.input_1.beginFill(0x000000, 1);
+            element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
             element.input_1.position.y = 17;
@@ -356,7 +357,7 @@ BioBLESS.logic.draw_gate = function(device){
             element.input_1.beginFill(0, 0);
             element.input_1.drawRect(0, -1, 30, 5);
             element.input_1.endFill();
-            element.input_2.beginFill(0x000000, 1);
+            element.input_2.beginFill(0xffffff, 1);
             element.input_2.drawRect(0, 0, 30, 3);
             element.input_2.position.x = 0;
             element.input_2.position.y = 51;
@@ -367,7 +368,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "NOT":
         case "not":
-            element.input_1.beginFill(0x000000, 1);
+            element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
             element.input_1.position.y = 34;
@@ -384,7 +385,7 @@ BioBLESS.logic.draw_gate = function(device){
         case "nor":
         case "XNOR":
         case "xnor":
-            element.input_1.beginFill(0x000000, 1);
+            element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
             element.input_1.position.y = 17;
@@ -392,7 +393,7 @@ BioBLESS.logic.draw_gate = function(device){
             element.input_1.beginFill(0, 0);
             element.input_1.drawRect(0, -1, 30, 5);
             element.input_1.endFill();
-            element.input_2.beginFill(0x000000, 1);
+            element.input_2.beginFill(0xffffff, 1);
             element.input_2.drawRect(0, 0, 30, 3);
             element.input_2.position.x = 0;
             element.input_2.position.y = 51;
@@ -435,7 +436,6 @@ BioBLESS.logic.on_drag_start_e = function(event) {
             BioBLESS.base_stage.removeChild(BioBLESS.logic.stage);
             BioBLESS.base_stage.addChild(BioBLESS.gene_network.stage);
             BioBLESS.base_stage.addChild(BioBLESS.navigation);
-            BioBLESS.base_stage.addChild(BioBLESS.navigation_title);
 			BioBLESS.stage = BioBLESS.gene_network.stage;
         }
         return;
@@ -612,7 +612,7 @@ BioBLESS.logic.on_drag_end_e = function() {
     this.data = null;
 };
 
-var line_color_style = [0x000000, 0x000066, 0x006600, 0x660000, 0x666600, 0x660066, 0x006666, 0x666666];
+var line_color_style = [0xffffff, 0x000066, 0x006600, 0x660000, 0x666600, 0x660066, 0x006666, 0x666666];
 var line_color_select = 0;
 var waitFordrawBegin = false;
 var moving = false;
@@ -1885,7 +1885,7 @@ BioBLESS.logic.draw = function(devices){
      * @type {PIXI.Graphics}
      */
     that.plusobj = new PIXI.Graphics();
-    that.plusobj.beginFill(0xffffff, 1);
+    that.plusobj.beginFill(0x888888, 1);
     that.plusobj.drawCircle(0, 0, 30);
     that.plusobj.endFill();
     that.plusobj.lineStyle(3, 0x000000, 1);
@@ -1903,7 +1903,7 @@ BioBLESS.logic.draw = function(devices){
      * @type {PIXI.Graphics}
      */
     that.list = new PIXI.Graphics();
-    that.list.beginFill(0x897897, 0.5);
+    that.list.beginFill(0x888888, 0.5);
     that.list.drawRoundedRect(120 * BioBLESS.navigation.scale.x + 120, 10, BioBLESS.width - 120 * BioBLESS.navigation.scale.x - 460, 115, 20);
     that.list.endFill();
     var added = false;

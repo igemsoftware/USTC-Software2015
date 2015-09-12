@@ -12,7 +12,7 @@ BioBLESS.sbol_draw = function(){};
  */
 BioBLESS.sbol_draw.draw_sbol_svg = function(icon){
     var graphics = new PIXI.Graphics();
-    graphics.lineStyle(3, 0x000000, 1);
+    graphics.lineStyle(3, 0xffffff, 1);
     switch(icon){
         case "00000167":
             /**

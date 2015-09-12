@@ -105,6 +105,7 @@ BioBLESS.prepare_navigation = function(){
 		BioBLESS.navigation.button[i].addChild(title);
         BioBLESS.navigation.button[i].interactive = true;
 		BioBLESS.navigation.button[i].buttonMode = true;
+		BioBLESS.navigation.button[i].plugin = navigation_plugin[i];
         BioBLESS.navigation.button[i].on('click', onmousedown_obj)
 		                             .on('mouseover', mouse_over)
 									 .on('mouseout', mouse_out);

@@ -14,7 +14,7 @@ BioBLESS.gene_network.onchange = function() {
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors
 */ 
-var nodeH = 100, nodeW = 50, nodeDis = 100, floorDis = 135;
+var nodeH = 200, nodeW = 200, nodeDis = 200, floorDis = 280;
 var svg_index = 0;
 
 BioBLESS.gene_network.get_gates_supsification = function(){
@@ -288,7 +288,7 @@ this.get_id = function(){
 
 this.draw_protein = function(){
     var graphic = new PIXI.Graphics();
-    graphic.lineStyle(3, 0x000000, 1);
+    graphic.lineStyle(3, 0xffffff, 1);
     graphic.drawCircle(25, 50, 20);
     return graphic;
 };
@@ -312,12 +312,10 @@ this.draw = function(devices, n){
     
     
     
-    var texture = PIXI.Texture.fromImage("/misc/test.png");
-    
     var parts = new Array();
     var graphics = new PIXI.Graphics();
     
-    graphics.lineStyle(8, 0x00ff55, 1);
+    graphics.lineStyle(20, 0xc0c0c0, 1);
     Num = 0;
     var on_click = function(){
         var dialog = BioBLESS.gene_network.create_dialog();
@@ -328,7 +326,8 @@ this.draw = function(devices, n){
     for(i = 0; i < this.lines_num; i++){
         graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
         for(j = 0; j < devices[n].parts.id[i].length; j++){
-            parts[this.to_part[i][j]] = BioBLESS.sbol_draw.draw_sbol_svg(this.get_id());
+            //parts[this.to_part[i][j]] = BioBLESS.sbol_draw.draw_sbol_svg(this.get_id());
+			parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
             parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
             parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
             parts[this.to_part[i][j]].interactive = true;
@@ -336,19 +335,19 @@ this.draw = function(devices, n){
             parts[this.to_part[i][j]].on('click', on_click);
         };
         Num += devices[n].parts.id[i].length;
-        graphics.lineTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
-        graphics.moveTo((Num + i + 1) * nodeDis, this.stage_h / 2.0);
-        graphics.lineTo((Num + i + 1) * nodeDis - 11, this.stage_h / 2.0 - 8);
-        graphics.lineTo((Num + i + 1) * nodeDis - 11, this.stage_h / 2.0 + 8);
+        graphics.lineTo((Num + i + 1) * nodeDis + 30, this.stage_h / 2.0);
+        graphics.moveTo((Num + i + 1) * nodeDis + 30, this.stage_h / 2.0);
+        graphics.lineTo((Num + i + 1) * nodeDis - 11 + 30, this.stage_h / 2.0 - 8);
+        graphics.lineTo((Num + i + 1) * nodeDis - 11 + 30, this.stage_h / 2.0 + 8);
     };//绘制主线上的part
     
     var ind = 15;
-    graphics.lineStyle(4, 0xff3300, 1);
+    graphics.lineStyle(12, 0xc2752d, 1);
     for(var d = 1; d < this.parts_num; d++){
         for(i = 0; i < this.parts_num - d; i++){
             j = i + d;
             if(this.is_line[i][j]){
-                parts[i].protein = this.draw_protein();
+                parts[i].protein = BioBLESS.biopart_draw.draw_biopart_svg("Protein");
                 parts[i].protein.position.x = parts[i].position.x;
                 parts[i].protein.position.y = parts[i].position.y - this.protein_height[i] * floorDis;
                 if(this.protein_height[i] > 0){
@@ -385,14 +384,54 @@ this.draw = function(devices, n){
                         this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5 - ind - 15, "up");
                     };
                 };
+				
                 
+            };
+			if(this.is_line[j][i]){
+                parts[j].protein = BioBLESS.biopart_draw.draw_biopart_svg("Protein");
+                parts[j].protein.position.x = parts[j].position.x;
+                parts[j].protein.position.y = parts[j].position.y - this.protein_height[j] * floorDis;
+                if(this.protein_height[j] > 0){
+                    this.part[i].upLine++;
+                    this.part[j].upLine++;
+                    k = nodeW / (this.part[j].upIndegree + this.part[j].upOutdegree + 1);
+                    l = nodeW / (this.part[i].upIndegree + this.part[i].upOutdegree + 1);
+                    graphics.moveTo(parts[j].position.x + k * this.part[j].upLine, parts[j].position.y + ind);
+                    graphics.lineTo(parts[j].position.x + k * this.part[j].upLine, parts[j].protein.position.y + nodeH - 18);
+                    this.draw_arrow(graphics, 6, parts[j].position.x + k * this.part[j].upLine, parts[j].protein.position.y + nodeH - 20, "up");
+                    
+                    this.draw_line(graphics, parts[j].protein.position.x, parts[j].protein.position.y + nodeH / 2.0, parts[i].position.x + l * this.part[i].upLine, parts[i].position.y - 8 + ind + 5, false);
+                    if(this.line_type[j][i] == 'inh'){
+                        graphics.moveTo(parts[i].position.x + l * this.part[i].upLine - 6, parts[i].position.y - 7 + ind + 5);
+                        graphics.lineTo(parts[i].position.x + l * this.part[i].upLine + 6, parts[i].position.y - 7 + ind + 5);
+                    }else{
+                        this.draw_arrow(graphics, 6, parts[i].position.x + l * this.part[i].upLine, parts[i].position.y - 5 + ind + 5, "down");
+                    };
+                }else{
+                    this.part[i].downLine++;
+                    this.part[j].downLine++;
+                    k = nodeW / (this.part[j].downIndegree + this.part[j].downOutdegree + 1);
+                    l = nodeW / (this.part[i].downIndegree + this.part[i].downOutdegree + 1);
+                    graphics.moveTo(parts[j].position.x + k * this.part[j].downLine, parts[j].position.y + nodeH - ind - 15);
+                    graphics.lineTo(parts[j].position.x + k * this.part[j].downLine, parts[j].protein.position.y + 16);
+                    this.draw_arrow(graphics, 6, parts[j].position.x + k * this.part[j].downLine, parts[j].protein.position.y + 18, "down");
+                    
+                    this.draw_line(graphics, parts[j].protein.position.x + nodeW, parts[j].protein.position.y + nodeH / 2.0, parts[i].position.x + l * this.part[i].downLine, parts[i].position.y + nodeH + 8 - ind - 15, false);
+                    
+                    if(this.line_type[j][i] !== 'inh'){
+                        graphics.moveTo(parts[i].position.x + l * this.part[i].downLine - 6, parts[i].position.y + nodeH + 7 - ind - 15);
+                        graphics.lineTo(parts[i].position.x + l * this.part[i].downLine + 6, parts[i].position.y + nodeH + 7 - ind - 15);
+                    }else{
+                        this.draw_arrow(graphics, 6, parts[i].position.x + l * this.part[i].downLine, parts[i].position.y + nodeH + 5 - ind - 15, "up");
+                    };
+                };
             };
         };
     };
     for(j = 0; j < devices[n].output.length; j++){
         i = parseInt(devices[n].output[j].substring(1)) - 1;
         this.part[i].upLine++;
-        parts[i].protein = this.draw_protein();
+        parts[i].protein = BioBLESS.biopart_draw.draw_biopart_svg("Protein");
         parts[i].protein.position.x = parts[i].position.x;
         parts[i].protein.position.y = parts[i].position.y - this.protein_height[i] * floorDis;
         if(this.part[i].upIndegree + this.part[i].upOutdegree > 1){
@@ -406,7 +445,7 @@ this.draw = function(devices, n){
         this.draw_arrow(graphics, 6, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, "up");
     };//绘制有关蛋白质节点的支路
     
-    graphics.lineStyle(6, 0xff00ff, 1);
+    graphics.lineStyle(12, 0x7ec02a, 1);
     for(i = 0; i < devices[n].map.length; i++){
         if(devices[n].map[i].id2[0] == 'e'){
             Num = parseInt(devices[n].map[i].id2.substring(1)) - 1;
@@ -432,8 +471,8 @@ this.draw = function(devices, n){
                 graphics.moveTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
                 graphics.lineTo(parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind + ind2);
                 if(devices[n].map[i].type == 'inh'){
-                    graphics.moveTo(parts[k].protein.position.x + nodeW + 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
-                    graphics.lineTo(parts[k].protein.position.x + nodeW + 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
+                    graphics.moveTo(parts[k].protein.position.x + nodeW + 37, parts[k].protein.position.y + nodeH / 2.0 + 7);
+                    graphics.lineTo(parts[k].protein.position.x + nodeW + 13, parts[k].protein.position.y + nodeH / 2.0 + 7);
                 }else{
                     this.draw_arrow(graphics, 6, parts[k].protein.position.x + nodeW + 25, parts[k].protein.position.y + nodeH / 2.0 + 7, "up");
                 }
@@ -447,8 +486,8 @@ this.draw = function(devices, n){
                 graphics.moveTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 8);
                 graphics.lineTo(parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind + ind2);
                 if(devices[n].map[i].type == 'inh'){
-                    graphics.moveTo(parts[k].protein.position.x - 19, parts[k].protein.position.y + nodeH / 2.0 + 7);
-                    graphics.lineTo(parts[k].protein.position.x - 31, parts[k].protein.position.y + nodeH / 2.0 + 7);
+                    graphics.moveTo(parts[k].protein.position.x - 13, parts[k].protein.position.y + nodeH / 2.0 + 7);
+                    graphics.lineTo(parts[k].protein.position.x - 37, parts[k].protein.position.y + nodeH / 2.0 + 7);
                 }else{
                     this.draw_arrow(graphics, 6, parts[k].protein.position.x - 25, parts[k].protein.position.y + nodeH / 2.0 + 7, "up");
                 }
@@ -486,8 +525,8 @@ this.draw = function(devices, n){
                     graphics.moveTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15);
                     graphics.lineTo(parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 40 - p + ind2);
                     if(devices[n].map[i].type == 'inh'){
-                        graphics.moveTo(parts[k].position.x + this.part[k].downLine * l - 6, parts[k].position.y + nodeH + 8 - ind - 15);
-                        graphics.lineTo(parts[k].position.x + this.part[k].downLine * l + 6, parts[k].position.y + nodeH + 8 - ind - 15);
+                        graphics.moveTo(parts[k].position.x + this.part[k].downLine * l - 12, parts[k].position.y + nodeH + 8 - ind - 15);
+                        graphics.lineTo(parts[k].position.x + this.part[k].downLine * l + 12, parts[k].position.y + nodeH + 8 - ind - 15);
                     }else{
                         this.draw_arrow(graphics, 6, parts[k].position.x + this.part[k].downLine * l, parts[k].position.y + nodeH + 8 - ind - 15, "up");
                     };
@@ -506,7 +545,7 @@ this.draw = function(devices, n){
     };
     
     
-    graphics.lineStyle(4, 0x000000, 1);
+    graphics.lineStyle(4, 0xffffff, 1);
     graphics.drawRoundedRect(10, 70, this.stage_w - 30, this.stage_h - 250, 50);
     
     
@@ -522,7 +561,8 @@ this.draw = function(devices, n){
     };
 	this.parts = parts;
     }else if(n === -1){
-        var output = BioBLESS.gene_network.create_textbutton("OUT", 100, 40, 0x0000ff);
+        var output = BioBLESS.gene_network.create_textbutton("OUT", 100, 40, 0x2672bd);
+		output.scale.x = output.scale.y = 1.5;
         this.stage_h = 100;
         this.stage_w = 1000;
         output.x = 450;
@@ -533,12 +573,13 @@ this.draw = function(devices, n){
         this.input[0] = {};
         this.input[0].to_dev_index = [];
         this.input[0].to_dev_output_index = [];
-        this.input[0].x = [500];
-        this.input[0].y = [40];
+        this.input[0].x = [525];
+        this.input[0].y = [50];
         this.output = [];
         this.output_num = 0;
     }else{
-        var input = BioBLESS.gene_network.create_textbutton("INPUT " + (0 - n - 2).toString(), 150, 40, 0x0000ff);
+        var input = BioBLESS.gene_network.create_textbutton("INPUT " + (0 - n - 2).toString(), 150, 40, 0x37b899);
+		input.scale.x = input.scale.y = 1.5;
         this.stage_h = 100;
         this.stage_w = 1000;
         input.x = 425;
@@ -551,8 +592,8 @@ this.draw = function(devices, n){
         this.output[0] = {};
         this.output[0].to_dev_index = [];
         this.output[0].to_dev_input_index = [];
-        this.output[0].x = 525;
-        this.output[0].y = -30;
+        this.output[0].x = 452;
+        this.output[0].y = -65;
     };
     
     
@@ -597,6 +638,10 @@ BioBLESS.gene_network.clone = function(obj){
 */ 
 BioBLESS.gene_network.devs_analysis = function(devices){
     var i, j, k, l, temp;
+	BioBLESS.logic.mark_back = [];
+	for(j = 0; j < BioBLESS.logic.mark.length; j++){
+	    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
+	};
     this.devs = [];
     this.devices = [];
     var gates = this.gates;
@@ -624,12 +669,14 @@ BioBLESS.gene_network.devs_analysis = function(devices){
         this.devs[i].draw(devices, g[i]);
         if(g[i] < 0) continue;
 		this.devs[i].devices_index = j;
+		
 		if(BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter === undefined)
 		    BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter = BioBLESS.gene_network.clone(devices[g[i]]);
         this.devices[j] = BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter;
-        var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0x00ffff);
+        var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0xa97a46);
         index_button.x = 50;
         index_button.y = 100;
+		index_button.scale.x = index_button.scale.y = 1.5;
         this.devs[i].stage.addChild(index_button);
     };
     for(i = 0; i < gates.arcs.length; i++){
@@ -697,7 +744,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
             if(this.row[i].width < this.poi[i][j].stage_w)
                 this.row[i].width = this.poi[i][j].stage_w;
         };
-		this.row[i].node_height += 50;
+		this.row[i].node_height += 550;
         this.row[i].width += 200;
         if(this.devs_height < this.row[i].node_height * this.poi[i].length)
             this.devs_height = this.row[i].node_height * this.poi[i].length;
@@ -721,7 +768,7 @@ BioBLESS.gene_network.draw_lines_between_devices = function(){
         for(j = 0; j < this.devs[i].output.length; j++){
             for(l = 0; l < this.devs[i].output[j].to_dev_index.length; l++){
                 var graphic = new PIXI.Graphics();
-                graphic.lineStyle(6, 0xff00ff, 1);
+                graphic.lineStyle(12, 0x7ec02a, 1);
                 var input_dev =  this.devs[this.devs[i].output[j].to_dev_index[l]];
                 for(k = 0; k < input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x.length; k++){
                     
@@ -731,26 +778,36 @@ BioBLESS.gene_network.draw_lines_between_devices = function(){
                 var output_x = this.devs[i].stage.position.x + this.devs[i].output[j].x;
                 var output_y = this.devs[i].stage.position.y + this.devs[i].output[j].y;
                 if(input_x > output_x + nodeW + 25 || input_x === output_x - 25){
-                    graphic.moveTo(output_x + nodeW, output_y + nodeH / 2);
+				    graphic.moveTo(output_x + nodeW, output_y + nodeH / 2);
+                    graphic.lineTo(output_x + nodeW + 25, output_y + nodeH / 2);
+                    graphic.lineTo(output_x + nodeW + 25, input_y + 30);
+                    graphic.lineTo(input_x, input_y + 30);
+                    graphic.lineTo(input_x, input_y + 13 - 30);
+					graphic.lineTo(input_x, input_y + 30);
+					graphic.lineTo(output_x + nodeW + 25, input_y + 30);
+					graphic.lineTo(output_x + nodeW + 25, output_y + nodeH / 2);
+					graphic.lineTo(output_x + nodeW, output_y + nodeH / 2);
+                    /*graphic.moveTo(output_x + nodeW, output_y + nodeH / 2);
                     graphic.lineTo(output_x + nodeW + 28, output_y + nodeH / 2);
                     graphic.moveTo(output_x + nodeW + 25, output_y + nodeH / 2);
                     graphic.lineTo(output_x + nodeW + 25, input_y + 30 + ((input_y + 30 > output_y + nodeH / 2) ? 3 : -3));
                     graphic.moveTo(output_x + nodeW + 25, input_y + 30);
                     graphic.lineTo(input_x, input_y + 30);
                     graphic.moveTo(input_x, input_y + 33);
-                    graphic.lineTo(input_x, input_y + 13 - 30);
+                    graphic.lineTo(input_x, input_y + 13 - 30);*/
                     //graphic.moveTo(input_x, input_y + 13);
                     //graphic.lineTo(input_x - 4, input_y + 18);
                     //graphic.lineTo(input_x + 4, input_y + 18);
                 }else{
                     graphic.moveTo(output_x, output_y + nodeH / 2);
                     graphic.lineTo(output_x - 28, output_y + nodeH / 2);
-                    graphic.moveTo(output_x - 25, output_y + nodeH / 2);
-                    graphic.lineTo(output_x - 25, input_y + 30 + (input_y + 30 > output_y + nodeH / 2 ? 3 : -3));
-                    graphic.moveTo(output_x - 25, input_y + 30);
+                    graphic.lineTo(output_x - 25, input_y + 30);
                     graphic.lineTo(input_x, input_y + 30);
-                    graphic.moveTo(input_x, input_y + 33);
                     graphic.lineTo(input_x, input_y + 13 - 30);
+					graphic.lineTo(input_x, input_y + 30);
+					graphic.lineTo(output_x - 25, input_y + 30);
+                    graphic.lineTo(output_x - 28, output_y + nodeH / 2);
+					graphic.lineTo(output_x, output_y + nodeH / 2);
                     //graphic.moveTo(input_x, input_y + 13);
                     //graphic.lineTo(input_x - 4, input_y + 18);
                     //graphic.lineTo(input_x + 4, input_y + 18);
@@ -807,13 +864,17 @@ BioBLESS.gene_network.create_dialog = function(){
     title_bg.beginFill(0xffffff, 1);
     title_bg.drawRect(50, 50, 195, 40);
     title_bg.endFill();
-    title_bg.beginFill(0x000000, 1);
+    title_bg.beginFill(0xffffff, 1);
     title_bg.moveTo(240, 62);
     title_bg.lineTo(217, 62);
     title_bg.lineTo(228.5, 82);
     title_bg.endFill();
     var items = ["ID", "Description", "Type"];
     title_bg.scroll_area = BioBLESS.gene_network.create_scroll_area(items, 195);
+	title_bg.scroll_area.on_click_outside = function(){
+	    title_bg.is_view = false;
+		stage.removeChild(title_bg.scroll_area);
+	};
     title_bg.scroll_area.x = 50;
     title_bg.scroll_area.y = 91;
     title_bg.scroll_area.alpha = 0.8;
@@ -893,7 +954,7 @@ BioBLESS.gene_network.create_scroll_area = function(items, w){
         buttons[i] = new PIXI.Container();
         var bg = new PIXI.Graphics();
         bg.beginFill(0xffffff, 1);
-        bg.drawRect(0, 0, 260, 40);
+        bg.drawRect(0, 0, w, 40);
         bg.endFill();
         bg.is_out = true;
         bg.interactive = true;
@@ -917,8 +978,11 @@ BioBLESS.gene_network.create_scroll_area = function(items, w){
     mask.beginFill(0, 0);
     mask.drawRect(0, -1000, w, 960);
     mask.drawRect(0, 160, w, 1000);
+	mask.drawRect(-3000, -2000, 3000, 5000);
+	mask.drawRect(w, -2000, 3000, 5000);
     mask.endFill();
     mask.interactive = true;
+	mask.on("click", function(){scroll_area.on_click_outside();});
     scroll_area.addChild(mask);
     return scroll_area;
 };
@@ -1040,6 +1104,10 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
         items[i] = "e" + (i + 1).toString();
     };
     var scroll_area = BioBLESS.gene_network.create_scroll_area(items, 80);
+	scroll_area.on_click_outside = function(){
+	    title_bg.is_view = false;
+		stage.removeChild(scroll_area);
+	};
     scroll_area.x = 20;
     scroll_area.y = 191;
     var buttons = scroll_area.buttons;
@@ -1100,10 +1168,10 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
     return stage;
 };
 /**
- * create the base page of input system
+ * create the base stage of input system
  * @function
  */
-BioBLESS.gene_network.create_ijkl = function(){
+BioBLESS.gene_network.create_base_stage_of_input = function(){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
     var title = new PIXI.Text("System");
@@ -1130,6 +1198,10 @@ BioBLESS.gene_network.create_ijkl = function(){
         items[i + 1] = "device " + i.toString();
     }
     title_bg.scroll_area = BioBLESS.gene_network.create_scroll_area(items, 260);
+	title_bg.scroll_area.on_click_outside = function(){
+	    title_bg.is_view = false;
+		stage.removeChild(title_bg.scroll_area);
+	};
     title_bg.scroll_area.x = 20;
     title_bg.scroll_area.y = 71;
     title_bg.scroll_area.alpha = 0.8;
@@ -1269,7 +1341,7 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
         for(var i = 0; i < this.input_num; i++){
             BioBLESS.gene_network.system_parameters.input[i] = 0;
         };
-		var ijkl = BioBLESS.gene_network.create_ijkl();
+		var ijkl = BioBLESS.gene_network.create_base_stage_of_input();
 		if(mark === undefined){
 		    var t1 = (BioBLESS.width - 400) / this.devs_width;
             var t2 = BioBLESS.height / this.devs_height;

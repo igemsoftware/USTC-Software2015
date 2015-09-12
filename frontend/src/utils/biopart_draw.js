@@ -12,9 +12,13 @@ BioBLESS.biopart_draw = function() {};
  * @return graphics {PIXI.Grphics}
  */
 BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
+    var stage = new PIXI.Container();	
     var graphics = new PIXI.Graphics();
+	stage.addChild(graphics);
     switch(id){
+	    case "Cds":
         case "cds":
+		case "Coding":
             /**
              * cds
              * <path fill="#3360A3" d="M 452.625 25.76
@@ -29,7 +33,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * l -48.281 -28.359
              * v 14.194"/>
              */
-            graphics.beginFill(0x3360A3, 1);
+            graphics.beginFill(0xa664a1, 1);
             graphics.moveTo(80, 25.76);
             graphics.lineTo(80 - 69.708, 25.76);//(10.292, 25.76)
             graphics.bezierCurveTo(10.292 - 2.667, 25.76 - 0.012, 10.292 - 3.2, 25.76 + 3.24, 10.292 - 3.2, 25.76 + 3.24);//(7.092, 29)
@@ -41,8 +45,11 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.lineTo(128.281 - 48.281, 39.889 - 28.359);//(80, 11.53)
             graphics.lineTo(80, 11.53 + 14.23);//(80, 25.76)
             graphics.endFill();
+			graphics.y = 60;
+			graphics.x = 40;
             break;
         case "promoter":
+		case "Promoter":
             /**
              * promoter
              * <path fill="#A6910F" d="M 218.667 220.376 
@@ -62,8 +69,8 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * c -2.963 0 -14.05 2.773 -14.05 10.352 
              * v 125.234"/>
              */
-            graphics.beginFill(0xA6AA0F, 1);
-            graphics.lineStyle(3, 0xA6910F, 1);
+            graphics.beginFill(0x4095be, 1);
+            graphics.lineStyle(3, 0x4095be, 1);
             graphics.moveTo(218.667, 220.376);
             graphics.bezierCurveTo(218.667, 220.376 + 3.945, 218.667 + 4.747, 220.376 + 3.945, 218.667 + 4.747, 220.376 + 3.945);//(223.414, 224.321)
             graphics.lineTo(223.414 + 22.078, 224.321 - 0.02);//(245.492, 224.301)
@@ -81,26 +88,33 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.bezierCurveTo(232.716 - 2.963, 85.748, 232.716 - 14.05, 85.748 + 2.773, 232.716 - 14.05, 85.748 + 10.352);//(218.666, 96.1)
             graphics.lineTo(218.666, 96.1 + 125.234);//(218.666, 221.334)
             graphics.endFill();
+			graphics.scale.x = 0.7;
+		    graphics.scale.y = 0.6;
+			graphics.y = -25;
+			graphics.x = -67;
             break;
         case "protein":
+		case "Protein":
             /**
              * protein
              * <ellipse fill="#716E5B" cx="264.807" cy="288.5" rx="94.693" ry="43"/>
              */
-            graphics.beginFill(0x716E5B, 1);
+            graphics.beginFill(0xd5bf95, 1);
             graphics.drawEllipse(100, 100, 95, 45);
             graphics.endFill();
             break;
         case "rbs":
+		case "RBS":
             /**
              * rbs
              * <ellipse fill="#C6C717" cx="488.472" cy="292" rx="67.528" ry="45"/>
              */
-            graphics.beginFill(0xC6C717, 1);
+            graphics.beginFill(0xdd963c, 1);
             graphics.drawEllipse(100, 100, 67, 45);
             graphics.endFill();
             break
         case "sRNA":
+		case "SRNA":
             /**
              * sRNA
              * <path fill="#6B6C28" d="M220.375 181.582
@@ -247,18 +261,19 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.endFill();
             break;
         case "terminator":
+		case "Terminator":
             /**
              * terminator
              * <circle fill="#FAC811" cx="411" cy="261" r="138"/>
              */
-            graphics.beginFill(0xFAC811, 1);
+            graphics.beginFill(0x99a769, 1);
             graphics.drawCircle(100, 100, 50);
             graphics.endFill();
             break;
         default:
             throw new Error("Not Found");
     }
-    return graphics;
+    return stage;
 };
 
 /**
