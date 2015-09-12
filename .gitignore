@@ -6,3 +6,4 @@ __pycache__/
 backend/db.sqlite3
 *.so
 *.o
+BioBLESS
