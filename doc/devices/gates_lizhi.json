@@ -41,10 +41,10 @@
                 "id2": "p3",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
-                    "decay1": 0.1,
-                    "decay2": 0.05
+                    "trans1": 0.1,
+                    "trans2": 0.1,
+                    "decay1": 0.02,
+                    "decay2": 0.02
                 }
             },
             {
@@ -53,7 +53,7 @@
                 "id2": "d1",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 2
                 }
             },
             {
@@ -62,7 +62,7 @@
                 "id2": "d1",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 2
                 }
             },
             {
@@ -71,7 +71,7 @@
                 "id2": "d5",
                 "type": "inh",
                 "params": {
-                    "reg": 20
+                    "reg": 2
                 }
             },
             {
@@ -80,10 +80,10 @@
                 "id2": "p7",
                 "type": "trans",
                 "params": {
-                    "trans1": 0.01,
-                    "trans2": 0.5,
-                    "decay1": 0.1,
-                    "decay2": 0.05
+                    "trans1": 0.1,
+                    "trans2": 0.1,
+                    "decay1": 0.02,
+                    "decay2": 0.02
                 }
             }
         ],
