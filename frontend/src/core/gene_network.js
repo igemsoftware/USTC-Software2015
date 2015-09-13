@@ -621,7 +621,7 @@ this.show_input = function(){
 * @return {obj} the object which has been cloned
 */ 
 BioBLESS.gene_network.clone = function(obj){
-    function Clone(){}
+    function Clone(){};
     Clone.prototype = obj;
     var o = new Clone();
     for(var a in o){
@@ -1295,24 +1295,24 @@ BioBLESS.gene_network.get_parameters = function(){
 	parameters.arcs = BioBLESS.gene_network.gates.arcs;
 	parameters.system_parameter = {};
 	parameters.system_parameter.time = BioBLESS.gene_network.system_parameters.time;
-	parameters.simulation_parameter = [];
+	parameters.simulation_parameters = [];
 	var i = 0;
 	var input_num = 0;
 	for(var k = 0; k < parameters.nodes.length; k++){
-	    parameters.simulation_parameter[k] = {};
+	    parameters.simulation_parameters[k] = {};
 	    if(parameters.nodes[k] === "INPUT"){
 		    
-			parameters.simulation_parameter[k].device_parameter =  {
+			parameters.simulation_parameters[k].device_parameter =  {
                 "initial": [
                 ]
             };
-			parameters.simulation_parameter[k].device_parameter.initial[0] = BioBLESS.gene_network.system_parameters.input[input_num++];
+			parameters.simulation_parameters[k].device_parameter.initial[0] = BioBLESS.gene_network.system_parameters.input[input_num++];
 			continue;
 		};
 		for(var j = 0; j < BioBLESS.gene_network.devices[i].map.length; j++){
-		    parameters.simulation_parameter[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params;
+		    parameters.simulation_parameters[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params.__proto__;
 		};
-		parameters.simulation_parameter[k].device_parameter = {
+		parameters.simulation_parameters[k].device_parameter = {
                 "initial": [
                     10, 10, 10
                 ]
@@ -1338,11 +1338,12 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
         
 		if(BioBLESS.gene_network.system_parameters === undefined){
             BioBLESS.gene_network.system_parameters = {};
-            BioBLESS.gene_network.system_parameters.time = 0;
+            BioBLESS.gene_network.system_parameters.time = 1000;
             BioBLESS.gene_network.system_parameters.input = [];
 		};
         for(var i = 0; i < this.input_num; i++){
-            BioBLESS.gene_network.system_parameters.input[i] = 0;
+		    if(BioBLESS.gene_network.system_parameters.input[i] === undefined)
+                BioBLESS.gene_network.system_parameters.input[i] = 10;
         };
 		var ijkl = BioBLESS.gene_network.create_base_stage_of_input();
 		if(mark === undefined){

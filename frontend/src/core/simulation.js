@@ -8,12 +8,15 @@ BioBLESS.simulation.onchange = function(){
         url: BioBLESS.host + '/simulate/',
         contentType: 'application/json',
         data: '{"simulation_parameters": [{"device_parameter": {"initial": [10, 10, 10]}, "e5": {"reg": 20}, "e4": {"reg": 20}, "e6": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e1": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e3": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e2": {"reg": 20}}, {"device_parameter": {"initial": [0]}}], "nodes": ["NOT3", "INPUT"], "system_parameter": {"time": 1000}, "arcs": [{"to": 0, "from": 1}]}',
-        data: JSON.stringify(BioBLESS.gene_network.get_parameters()),
+        
         success: function(data) {BioBLESS.simulation.draw(data);}
     });
 };
 BioBLESS.simulation.draw = function(_nodes){
-    this.stage.movable_stage._scale = 1;
+    this.stage.movable_stage.removeChildren();
+	this.stage.movable_stage.x = 0;
+	this.stage.movable_stage.y = 0;
+    
     var nodes = function(){};
     nodes.t = _nodes.t;
     nodes.c = [];
@@ -31,7 +34,7 @@ BioBLESS.simulation.draw = function(_nodes){
     
     ///////////////////////////////////一些数据的准备
     graphics = new PIXI.Graphics();
-    graphics.lineStyle(2, 0x000000, 1);
+    graphics.lineStyle(2, 0xffffff, 1);
     graphics.moveTo(ox, oy);
     graphics.lineTo(ox + xAxis, oy);
     graphics.moveTo(ox, oy + 1);
@@ -40,9 +43,11 @@ BioBLESS.simulation.draw = function(_nodes){
     
     var maxY = 0;
     for(var j = 0; j < nodes.c.length; j++){
-        if(maxY < nodes.c[j][nodes.c[j].length - 1]){
-            maxY = nodes.c[j][nodes.c[j].length - 1];
-        }
+	    for(i = 0; i < nodes.c[j].length; i++){
+            if(maxY < nodes.c[j][i]){
+                maxY = nodes.c[j][i];
+            }
+		}
     }
     
     var xDis = 0, yDis = 0;
@@ -79,7 +84,7 @@ BioBLESS.simulation.draw = function(_nodes){
     yDis = maxY / 35;
     if(yDis > 5){
         yDis = dis1(yDis) * 5;
-    }else if(xDis < 5){
+    }else if(yDis < 5){
         yDis = dis2(yDis) * 5;
     }
     
@@ -91,9 +96,11 @@ BioBLESS.simulation.draw = function(_nodes){
         graphics.moveTo(ox + i * d, oy + 20);
         graphics.lineTo(ox + i * d, oy + 13 - ((i % 5) ? 0 : 7));
         if(i % 5 === 0){
-            var Text = new PIXI.Text((i / 5 * xDis).toString());
-            Text.position.x = ox + i * d - (i / 5 * yDis).toString().length * 8;
+            var Text = new PIXI.Text((Math.floor(i / 5 * xDis * 100) / 100).toString());
+			Text.anchor.x = 0.5;
+            Text.position.x = ox + i * d;
             Text.position.y = oy + 20;
+			Text.style.fill = "white";
             this.stage.movable_stage.addChild(Text);
         }
         i++;
@@ -105,9 +112,12 @@ BioBLESS.simulation.draw = function(_nodes){
         graphics.moveTo(ox - 20, oy - i * d);
         graphics.lineTo(ox - 13 + ((i % 5) ? 0 : 7), oy - i * d);
         if(i % 5 === 0){
-            var text_node = new PIXI.Text((i / 5 * yDis).toString());
-            text_node.position.x = ox - 20 - (i / 5 * yDis).toString().length * 16;
-            text_node.position.y = oy - i * d - 14;
+            var text_node = new PIXI.Text((Math.floor((i / 5 * yDis) * 100) / 100).toString());
+			text_node.anchor.x = 1;
+			text_node.anchor.y = 0.5;
+            text_node.position.x = ox - 20;
+            text_node.position.y = oy - i * d;
+			text_node.style.fill = "white";
             this.stage.movable_stage.addChild(text_node);
         }
         i++;
@@ -115,9 +125,10 @@ BioBLESS.simulation.draw = function(_nodes){
     
     
     var _color, gray = 0, red, green, blue;
+	var ind = 0 - (nodes.c.length - 1) * 70 / 2;
     for(i = 0; i < nodes.c.length; i++){
         gray = 255;
-        while(gray > 155 || gray < 100){
+        while(gray > 200 || gray < 150){
             red = parseInt(Math.random() * 255);
             green = parseInt(Math.random() * 255);
             blue = parseInt(Math.random() * 255);
@@ -125,7 +136,7 @@ BioBLESS.simulation.draw = function(_nodes){
         }
         _color = red * 65536 + green * 256 + blue;//计算时变曲线的颜色
         
-        graphics.lineStyle(2, _color, 1);
+        graphics.lineStyle(1, _color, 1);
         graphics.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[0], 
         oy - (yAxis - 100) * nodes.c[i][0] / maxY);
         for(j = 1; j < nodes.t.length; j++){
@@ -134,15 +145,21 @@ BioBLESS.simulation.draw = function(_nodes){
             graphics.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[j], 
         oy - (yAxis - 100) * nodes.c[i][j] / maxY);
         }////////////////////////////画时变曲线
-        
-        graphics.moveTo(ox + xAxis + 80, oy - yAxis + 100 + i * 70);
-        graphics.lineTo(ox + xAxis + 220, oy - yAxis + 100 + i * 70);
+        graphics.lineStyle(2, _color, 1);
+        graphics.moveTo(ox + xAxis + 80, oy - yAxis / 2 + i * 70 + ind);
+        graphics.lineTo(ox + xAxis + 220, oy - yAxis / 2 + i * 70 + ind);
         var text_node2 = new PIXI.Text(nodes.names[i], {fill: "#" + _color.toString(16)});
+		text_node2.anchor.y = 0.5;
         text_node2.position.x = ox + xAxis + 240;
-        text_node2.position.y = oy - yAxis + 82 + i * 70;
+        text_node2.position.y = oy - yAxis / 2 + i * 70 + ind;
         this.stage.movable_stage.addChild(text_node2);////////////////////////画线的名字的指示标
     }
     
+	var t1 = BioBLESS.height / 900;
+	var t2 = (BioBLESS.width - 100) / 1900;
+	this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (t1 < t2 ? t1 : t2) * 0.8;
+	this.stage.movable_stage.x = (BioBLESS.width - 1900 * this.stage.movable_stage.scale.x - 100) / 2 + 100;
+	this.stage.movable_stage.y = (BioBLESS.height - 900 * this.stage.movable_stage.scale.x) / 2;
     this.stage.movable_stage.addChild(graphics);
     this.stage.addChild(this.stage.movable_stage);
     return this.stage;
