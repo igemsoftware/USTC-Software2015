@@ -1299,11 +1299,25 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
+		    OK.alpha = 0.5;
+		    OK.interactive = false;
+	        OK.buttonMode = false;
+		    setTimeout(function(){
+		        if(OK.interactive)
+			        return;
+		        OK.alpha = 1;
+		        OK.interactive = true;
+	            OK.buttonMode = true;
+			    alert("TIME OUT!");
+		    }, 24000);
 		    $.getJSON(BioBLESS.host + "/biocircuit/" + BioBLESS.logic.truth_table_parameter + "/", function(data) {
                     BioBLESS.logic.gates_sup = data;
                     var new_stage = BioBLESS.logic.create_output_stage_of_truth_table(stage, h);
                     stage.parent.addChild(new_stage);
                     stage.parent.removeChild(stage);
+					OK.alpha = 1;
+		            OK.interactive = true;
+	                OK.buttonMode = true;
             }.bind(this));
         };
         OK.on("click", OK_function);

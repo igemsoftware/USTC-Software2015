@@ -16,7 +16,7 @@ BioBLESS.analysis.calculate = function(){
 };
 BioBLESS.analysis.draw_oxy = function(x_l, y_l){
     var graphics = new PIXI.Graphics();
-	graphics.lineStyle(2, 0x000000, 1);
+	graphics.lineStyle(2, 0xffffff, 1);
     graphics.moveTo(0, 0);
     graphics.lineTo(x_l, 0);
 	graphics.lineTo(x_l - 20, - 10);
@@ -50,12 +50,13 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
         origin_y *= 0.8;	
 	origin_y *= yAxis;
 	var graphics = new PIXI.Graphics();
-	graphics.lineStyle(2, 0x000000, 1);
+	graphics.lineStyle(2, 0xffffff, 1);
 	graphics.moveTo(ox, oy - origin_y);
 	graphics.lineTo(ox + 15, oy - origin_y);
     graphics.lineStyle(0, 0, 0);
 	
 	var origin_name = new PIXI.Text(origin_value.toString());
+	origin_name.style.fill = "white";
 	origin_name.anchor.x = 1;
 	origin_name.anchor.y = 0.5;
 	origin_name.x = ox - 5;
@@ -64,6 +65,7 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
 	
 	for(var i = 0; i < items_num; i++){
 	    var name = new PIXI.Text(items[i].name);
+		name.style.fill = "white";
 		name.x = ox + (i + 1) * dis;
 		name.y = oy + 15;
 		name.anchor.x = name.anchor.y = 0.5;
@@ -109,6 +111,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 	
 	for(var i = 0; i < items_num; i++){
 	    var name = new PIXI.Text(items[i].name);
+		name.style.fill = "white";
 		name.x = ox + (i + 1) * dis;
 		name.y = oy + 15;
 		name.anchor.x = name.anchor.y = 0.5;
@@ -117,6 +120,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
 		
 		var num = new PIXI.Text((Math.round(Math.abs(items[i].max_value - items[i].min_value) * 100) / 100).toString());
+		num.style.fill = "white";
 		num.anchor.x = 0.5;
 		num.anchor.y = 1;
 		num.x = name.x;

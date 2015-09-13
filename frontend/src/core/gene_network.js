@@ -1287,6 +1287,23 @@ BioBLESS.gene_network.create_base_stage_of_input = function(){
     var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
     OK.x = 100;
     OK.y = BioBLESS.height - 60;
+	OK.interactive = true;
+	OK.buttonMode = true;
+	var OK_function = function(){
+	    OK.alpha = 0.5;
+		OK.interactive = false;
+	    OK.buttonMode = false;
+	    BioBLESS.simulation.refresh(OK);
+		setTimeout(function(){
+		    if(OK.interactive)
+			    return;
+		    OK.alpha = 1;
+		    OK.interactive = true;
+	        OK.buttonMode = true;
+			alert("TIME OUT!");
+		}, 24000);
+	};
+	OK.on("click", OK_function);
     stage.addChild(OK);
     return stage;
 }
