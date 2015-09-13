@@ -25,7 +25,7 @@ BioBLESS.logic.mark =[];
  * @param {type} element
  */
 BioBLESS.logic.circuit_add_gate = function(type, title) {
-    if(type === "not"){
+    if(type === "not" || type === "NOT"){
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title._text;
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.circuit.nodes.length - 2};
@@ -240,19 +240,20 @@ BioBLESS.logic.circuit_delete_gate = function(thing) {
             BioBLESS.logic.circuit_delete_line(thing.output.lines[k][0].mother, thing.output.lines[k][0].father);
         }
     }
-    var i;
+
+    var i,j;
     for(i = 0; i < BioBLESS.logic.elements.length; i++){
         if(BioBLESS.logic.elements[i] === thing){
             break;
         }
     }
     for(k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-        var j = BioBLESS.logic.circuit.arcs[k].from;
+        j = BioBLESS.logic.circuit.arcs[k].from;
         if(BioBLESS.logic.circuit.nodes[j] === "INPUT" && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
             BioBLESS.logic.circuit.nodes.splice(j, 1);
             BioBLESS.logic.circuit.arcs.splice(k, 1);
             var m;
-            for(m=0; m < BioBLESS.logic.circuit.arcs.length; m++){
+            for(m = 0; m < BioBLESS.logic.circuit.arcs.length; m++){
                 if(BioBLESS.logic.circuit.arcs[m].from > j){
                     BioBLESS.logic.circuit.arcs[m].from -= 1;
                 }
@@ -260,7 +261,7 @@ BioBLESS.logic.circuit_delete_gate = function(thing) {
                     BioBLESS.logic.circuit.arcs[m].to -= 1;
                 }
             }
-            for(m=0; m < BioBLESS.logic.circuit.arcs.length; m++){
+            for(m = 0; m < BioBLESS.logic.mark.length; m++){
                 if(BioBLESS.logic.mark[m] > j){
                     BioBLESS.logic.mark[m] -= 1;
                 }
