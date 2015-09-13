@@ -69,13 +69,12 @@ if __name__ == "__main__":
     initial = map(int, sys.argv[starter+1:starter+input_num+1])
     reaction = do_test(gate_name, time_to, initial)
     reaction.show_record(["S0"])
-    """
-    try:
-        while True:
-            print "What else do you want to show(S0,S1,S0d3,S0p5):"
+    while True:
+        try:
+            print "What else do you want to show("+str(reaction.species_name)+"):"
             string = raw_input()
             strings = string.split(",")
             reaction.show_record(strings)
-    except:
-        pass
-    """
+        except:
+            if string == "exit":
+                break
