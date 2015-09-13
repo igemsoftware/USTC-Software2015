@@ -324,7 +324,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
     element.title.position.y = 35;
-	element.title.style.fill = "white";
+    element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
     element.graphics.beginFill(0, 0);
