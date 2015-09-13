@@ -328,7 +328,7 @@ BioBLESS.analysis.create_scroll_area = function(){
 BioBLESS.analysis.create_right_stage = function(){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
-    bg.beginFill(0x333333, 1);
+    bg.beginFill(0x888888, 1);
     bg.drawRect(0, 0, 300, BioBLESS.height);
     bg.endFill();
     stage.addChild(bg);
@@ -340,19 +340,16 @@ BioBLESS.analysis.create_right_stage = function(){
     stage.addChild(scroll_area);
     
     var score = new PIXI.Text("Score:");
-    score.style.fill = "white";
     score.x = 20;
     score.y = 20;
     stage.addChild(score);
     
     var score_num = new PIXI.Text("6");
-    score_num.style.fill = "white";
     score_num.x = 50 + score.width;
     score_num.y = 20;
     stage.addChild(score_num);
     
     var change_rate = new PIXI.Text("Change rate:");
-    change_rate.style.fill = "white";
     change_rate.x = 20;
     change_rate.y = 70;
     stage.addChild(change_rate);
@@ -381,7 +378,6 @@ BioBLESS.analysis.create_right_stage = function(){
     stage.change_rate = 0.05;
     
     var parameter = new PIXI.Text("Parameter:");
-    parameter.style.fill = "white";
     parameter.x = 20;
     parameter.y = 170;
     stage.addChild(parameter);

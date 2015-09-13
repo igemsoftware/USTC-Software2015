@@ -16,7 +16,7 @@ BioBLESS.zoom_function = function(d){
         BioBLESS.stage.movable_stage._scale *= 1.1;
     
     }else{
-        if(BioBLESS.stage.movable_stage._scale < 0.1)
+        if(BioBLESS.stage.movable_stage._scale < 0.01)
             return;
         BioBLESS.stage.movable_stage._scale /= 1.1;
     }
@@ -34,8 +34,7 @@ BioBLESS.scroll_animation = function(){
             BioBLESS.stage.movable_stage.position.y += (BioBLESS.stage.movable_stage.scale.y - BioBLESS.stage.movable_stage._scale) * 0.25 * BioBLESS.stage.movable_stage.inPosition.y;
             BioBLESS.stage.movable_stage.scale.x -= (BioBLESS.stage.movable_stage.scale.x - BioBLESS.stage.movable_stage._scale) * 0.25;
             BioBLESS.stage.movable_stage.scale.y -= (BioBLESS.stage.movable_stage.scale.y - BioBLESS.stage.movable_stage._scale) * 0.25;
-        }else
-            BioBLESS.stage.movable_stage.scale.x = BioBLESS.stage.movable_stage.scale.y = BioBLESS.stage.movable_stage._scale;
+        }
     }
 };
 
@@ -45,7 +44,7 @@ BioBLESS.scroll_animation = function(){
 BioBLESS.prepare_navigation = function(){
     var navigation_button = ["Logic","Gene-network","Simulation","Analysis","DNASequance"];
 	var navigation_plugin = ["logic","gene_network","simulation","analysis","dna"];
-	var icon_urls = ["misc/logic.png","misc/gene-network.png","misc/simulation.png","misc/analyse.png","misc/DNA.png"];
+	var icon_urls = [BioBLESS.ustc_software.logic_logo_texture, BioBLESS.ustc_software.gene_network_logo_texture, BioBLESS.ustc_software.simulation_logo_texture, BioBLESS.ustc_software.analyse_logo_texture, BioBLESS.ustc_software.dna_logo_texture];
 	var text_scale = [0.65, 0.55, 0.6, 0.6, 0.55];
 	var text_y = [90, 102, 102, 100, 102];
 	var icon_y = [0, 10, 10, 10, 10];
@@ -90,7 +89,7 @@ BioBLESS.prepare_navigation = function(){
 		var bg = new PIXI.Graphics();
 		BioBLESS.navigation.button[i].addChild(bg);
 		BioBLESS.navigation.button[i].bg = bg;
-		var icon = PIXI.Sprite.fromImage(icon_urls[i]);
+		var icon = new PIXI.Sprite(icon_urls[i]);
 		icon.anchor.x = 0.5;
 		icon.scale.x = icon.scale.y = 0.07;
 		icon.x = 60;
