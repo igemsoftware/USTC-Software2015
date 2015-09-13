@@ -68,7 +68,7 @@ You can find it in the URI `/docs`
 ---
 # Frontend
 
-### Our frontend is coded with canvas-based HTML5. Please view it with IE10+, Microsoft Edge or newest Firebox, Chrome, etc., if it fails to render well.
+Browser Requirements: IE 9+, Safari 5.1+, Edge, current Chrome or Firefox.
 
 ### Dependency (already included in the project)
 
