@@ -1,4 +1,5 @@
 ﻿/** 
+* @author USTC-software frontend
 * @author needsay
 * @constructor BioBLESS.gene_network 
 * @description the class of devices 
@@ -6,10 +7,12 @@
 BioBLESS.gene_network.init = function() {
     this.stage = BioBLESS.utils.init_stage();
 };
+
 BioBLESS.gene_network.onchange = function() {
 	BioBLESS.gene_network.gates = BioBLESS.logic.circuit;
     BioBLESS.gene_network.draw(BioBLESS.gates, -1);
 };
+
 (function() {
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors
@@ -327,7 +330,7 @@ this.draw = function(devices, n){
         graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
         for(j = 0; j < devices[n].parts.id[i].length; j++){
             //parts[this.to_part[i][j]] = BioBLESS.sbol_draw.draw_sbol_svg(this.get_id());
-			parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
+            parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
             parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
             parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
             parts[this.to_part[i][j]].interactive = true;
@@ -384,10 +387,10 @@ this.draw = function(devices, n){
                         this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5 - ind - 15, "up");
                     };
                 };
-				
+
                 
             };
-			if(this.is_line[j][i]){
+            if(this.is_line[j][i]){
                 parts[j].protein = BioBLESS.biopart_draw.draw_biopart_svg("Protein");
                 parts[j].protein.position.x = parts[j].position.x;
                 parts[j].protein.position.y = parts[j].position.y - this.protein_height[j] * floorDis;
@@ -559,10 +562,10 @@ this.draw = function(devices, n){
             this.stage.addChild(parts[i].protein);
         };
     };
-	this.parts = parts;
+    this.parts = parts;
     }else if(n === -1){
         var output = BioBLESS.gene_network.create_textbutton("OUT", 100, 40, 0x2672bd);
-		output.scale.x = output.scale.y = 1.5;
+        output.scale.x = output.scale.y = 1.5;
         this.stage_h = 100;
         this.stage_w = 1000;
         output.x = 450;
@@ -579,7 +582,7 @@ this.draw = function(devices, n){
         this.output_num = 0;
     }else{
         var input = BioBLESS.gene_network.create_textbutton("INPUT " + (0 - n - 2).toString(), 150, 40, 0x37b899);
-		input.scale.x = input.scale.y = 1.5;
+        input.scale.x = input.scale.y = 1.5;
         this.stage_h = 100;
         this.stage_w = 1000;
         input.x = 425;
@@ -638,10 +641,10 @@ BioBLESS.gene_network.clone = function(obj){
 */ 
 BioBLESS.gene_network.devs_analysis = function(devices){
     var i, j, k, l, temp, out_index;
-	BioBLESS.logic.mark_back = [];
-	for(j = 0; j < BioBLESS.logic.mark.length; j++){
-	    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
-	};
+    BioBLESS.logic.mark_back = [];
+    for(j = 0; j < BioBLESS.logic.mark.length; j++){
+        BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
+    }
     this.devs = [];
     this.devices = [];
     var gates = this.gates;
@@ -657,7 +660,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
         if(j === devices.length){
             if(gates.nodes[i] === "OUT"){
                 g[i] = -1;
-				out_index = i;
+                out_index = i;
             }else if(gates.nodes[i] === "INPUT"){
                 g[i] = -2 - input_num++;
             }else alert("Error - 1002");
@@ -669,17 +672,17 @@ BioBLESS.gene_network.devs_analysis = function(devices){
         this.devs[i] = new dev();
         this.devs[i].draw(devices, g[i]);
         if(g[i] < 0) continue;
-		this.devs[i].devices_index = j;
-		
-		if(BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter === undefined)
-		    BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter = BioBLESS.gene_network.clone(devices[g[i]]);
+        this.devs[i].devices_index = j;
+        
+        if(BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter === undefined)
+            BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter = BioBLESS.gene_network.clone(devices[g[i]]);
         this.devices[j] = BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter;
         var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0xa97a46);
         index_button.x = 50;
         index_button.y = 100;
-		index_button.scale.x = index_button.scale.y = 1.5;
+        index_button.scale.x = index_button.scale.y = 1.5;
         this.devs[i].stage.addChild(index_button);
-    };
+    }
     for(i = 0; i < gates.arcs.length; i++){
         var from = gates.arcs[i].from;
         var to = gates.arcs[i].to;
@@ -692,7 +695,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
     for(i = 0; i < gates.nodes.length; i++){
         if(this.devs[i].output[0] !== undefined && this.devs[i].output[0].to_dev_index.length === 0){
             j = gates.nodes.length;
-			out_index = j;
+            out_index = j;
             this.devs[j] = new dev();
             this.devs[j].draw(devices, -1);
             this.devs[i].output[0].to_dev_index[0] = j;
@@ -709,9 +712,9 @@ BioBLESS.gene_network.devs_analysis = function(devices){
             this.poi[0][this.poi[0].length] = this.devs[i];
             this.devs[i].chosen = true;
         }
-    };
-	if(this.poi[0].length === 0)
-	    return;
+    }
+    if(this.poi[0].length === 0)
+        return;
     i = 0;
     while(this.poi[i].length > 0){
         if(this.poi[i + 1] === undefined)
@@ -724,14 +727,14 @@ BioBLESS.gene_network.devs_analysis = function(devices){
                         this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen = true;
                     }
                 }
-            };
+            }
             
-        };
+        }
         i++;
-    };
-	this.poi[this.poi.length - 1][0] = this.devs[out_index];
-	this.poi[this.poi.length] = [];
-	
+    }
+    this.poi[this.poi.length - 1][0] = this.devs[out_index];
+    this.poi[this.poi.length] = [];
+    
     this.row = [];
     this.devs_height = 0;
     this.devs_width = 0;
