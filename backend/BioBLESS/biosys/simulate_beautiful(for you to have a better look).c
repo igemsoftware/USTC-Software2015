@@ -25,6 +25,7 @@ struct record_data
   struct current_data *ans;
   int num;
 };
+//main
 struct record_data simulate(
   float stop_time,
   int species_number,
@@ -39,14 +40,14 @@ struct record_data simulate(
   float t = 0;
   struct current_data *ans = (struct current_data *)malloc(sizeof(struct current_data));
   ans->time = 0;
-  ans->numbers = (long long *)malloc(sizeof(long long)*species_number);
-  memcpy(ans->numbers, current, sizeof(long long)*species_number);
-  float *possibility = (float *)malloc(species_number*sizeof(float));
-  memcpy(possibility, constant, sizeof(float)*species_number);
+  ans->numbers = (long long *) malloc(sizeof(long long) * species_number);
+  memcpy(ans->numbers, current, sizeof(long long) * species_number);
+  float *possibility = (float *) malloc(species_number * sizeof(float));
+  memcpy(possibility, constant, sizeof(float) * species_number);
   float possibility_sum = 0;
-  for(int i = 0;i<reaction_number;i++)
+  for(int i = 0; i<reaction_number; i++)
   {
-    for(int j = 0;j<reactant_data[i].sub_num;j++)
+    for(int j = 0; j<reactant_data[i].sub_num; j++)
     {
       possibility[i] *= current[reactant_data[i].subs[j]];
     }
@@ -56,39 +57,38 @@ struct record_data simulate(
   int next_reaction;
   float sumer;
   srand(time(NULL));
-  int num=1;
-  while(t<stop_time)
+  int num;
+  for(num = 1; t < stop_time; num++)
   {
-    printf("%f\t",t);
-    for(int i =0;i<species_number;i++) printf("%lld ",current[i]);
+    printf("%f\t", t);
+    for(int i = 0; i < species_number; i++) printf("%lld ",current[i]);
     puts("");
 
     if(possibility_sum<=0) break;
-    t-=log(rand()/(RAND_MAX+1.0))/possibility_sum;
-    randomer = rand()/(RAND_MAX+1.0)*possibility_sum;
+    t -= log(rand() / (RAND_MAX+1.0)) / possibility_sum;
+    randomer = rand() / (RAND_MAX+1.0) * possibility_sum;
 
     for(next_reaction = sumer = 0; sumer < randomer; next_reaction++)
     {
        sumer += possibility[next_reaction];
     }
-    for(int i=0;i < reactant_data[next_reaction].sub_num;i++)
+    for(int i = 0; i < reactant_data[next_reaction].sub_num; i++)
     {
         current[reactant_data[next_reaction].subs[i]]++;
     }
-    for(int i=0;i< product_data[next_reaction].sub_num;i++)
+    for(int i = 0; i< product_data[next_reaction].sub_num; i++)
     {
         current[product_data[next_reaction].subs[i]]++;
     }
-    num++;
-    ans = (struct current_data *)realloc(ans,num*sizeof(struct current_data));
-    ans[num-1].time=t;
-    ans[num-1].numbers = (long long *)malloc(species_number*sizeof(long long));
-    memcpy(ans[num-1].numbers, current, sizeof(long long)*species_number);
-    for(int i=0;i < reaction_link[next_reaction].reaction_num;i++)
+    ans = (struct current_data *) realloc(ans, (num + 1) * sizeof(struct current_data));
+    ans[num].time = t;
+    ans[num].numbers = (long long *) malloc(species_number * sizeof(long long));
+    memcpy(ans[num].numbers, current, sizeof(long long) * species_number);
+    for(int i = 0; i < reaction_link[next_reaction].reaction_num; i++)
     {
       possibility_sum -= possibility[REACTION_I];
-      possibility[REACTION_I]=constant[REACTION_I];
-      for(int j=0; j < reactant_data[REACTION_I].sub_num; j++)
+      possibility[REACTION_I] = constant[REACTION_I];
+      for(int j = 0; j < reactant_data[REACTION_I].sub_num; j++)
       {
           possibility[REACTION_I] *= current[reactant_data[REACTION_I].subs[j]];
       }
