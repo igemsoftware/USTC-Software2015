@@ -1301,7 +1301,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
 		stage.scroll_area.addChild(scroll_area);
 		if(stage.has_OK)
 		    return;
-        var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
+        var OK = BioBLESS.logic.create_textbutton("Create", 100, 40, 0x000000);
         OK.x = 100;
         OK.y = h - 60;
         stage.addChild(OK);
