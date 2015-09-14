@@ -69,6 +69,7 @@ if __name__ == "__main__":
     initial = map(int, sys.argv[starter+1:starter+input_num+1])
     reaction = do_test(gate_name, time_to, initial)
     reaction.show_record(["S0"])
+    '''
     while True:
         try:
             print "What else do you want to show("+str(reaction.species_name)+"):"
@@ -78,3 +79,4 @@ if __name__ == "__main__":
         except:
             if string == "exit":
                 break
+    '''
