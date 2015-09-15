@@ -63,10 +63,10 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
 	origin_name.y = oy - origin_y;
 	stage.addChild(origin_name);
 	
-	for(var i = 0; i < items_num; i++){
-	    var name = new PIXI.Text(items[i].name);
+	for(var j = 0; j < items_num; j++){
+	    var name = new PIXI.Text(items[j].name);
 		name.style.fill = "white";
-		name.x = ox + (i + 1) * dis;
+		name.x = ox + (j + 1) * dis;
 		name.y = oy + 15;
 		name.anchor.x = name.anchor.y = 0.5;
 		stage.addChild(name);
@@ -75,11 +75,11 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
 		graphics.endFill();
 		
 		graphics.beginFill(0xff0000, 1);
-		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[i].max_value), 5);
+		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 5);
 		graphics.endFill();
 		
 		graphics.beginFill(0x00ff00, 1);
-		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[i].min_value), 5);
+		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 5);
 		graphics.endFill();
 	}
 	
@@ -109,17 +109,17 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 	
 	
 	
-	for(var i = 0; i < items_num; i++){
-	    var name = new PIXI.Text(items[i].name);
+	for(var j = 0; j < items_num; j++){
+	    var name = new PIXI.Text(items[j].name);
 		name.style.fill = "white";
-		name.x = ox + (i + 1) * dis;
+		name.x = ox + (j + 1) * dis;
 		name.y = oy + 15;
 		name.anchor.x = name.anchor.y = 0.5;
 		stage.addChild(name);
-		var h = Math.abs(items[i].max_value - items[i].min_value) / max_num * 0.9 * yAxis;
+		var h = Math.abs(items[j].max_value - items[j].min_value) / max_num * 0.9 * yAxis;
 		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
 		
-		var num = new PIXI.Text((Math.round(Math.abs(items[i].max_value - items[i].min_value) * 100) / 100).toString());
+		var num = new PIXI.Text((Math.round(Math.abs(items[j].max_value - items[j].min_value) * 100) / 100).toString());
 		num.style.fill = "white";
 		num.anchor.x = 0.5;
 		num.anchor.y = 1;
