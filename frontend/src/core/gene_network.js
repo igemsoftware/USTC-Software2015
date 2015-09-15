@@ -52,7 +52,7 @@ this.draw_line = function(graphic, start_x, start_y, end_x, end_y, mode){
         graphic.lineTo(end_x, end_y);
         graphic.lineTo(end_x, start_y);
     }
-};
+}
 /**
  * onDragMove makes element to move
  * @function
@@ -71,7 +71,7 @@ this.draw_arrow = function(graphic, scale, x, y, mode){
             break;
             
     }
-};
+}
 /** 
 * @description prepare something
 * @param {devices} the whole devices
@@ -104,10 +104,10 @@ this.prepare = function(devices, n){
     
     this.lines_num = devices[n].parts.id.length;//主线数
     this.parts_num = 0;//主线上总结点数
-    this.part_to_line = [];//part序号到其所在主线序号的映射
-    this.to_part = [];
+    this.part_to_line = new Array();//part序号到其所在主线序号的映射
+    this.to_part = new Array();
     for(i = 0; i < this.lines_num; i++){
-        this.to_part[i] = [];
+        this.to_part[i] = new Array();
         for(j = 0; j < devices[n].parts.id[i].length; j++){
             this.part_to_line[this.parts_num + j] = i;
             this.to_part[i][j] = this.parts_num + j;
@@ -123,11 +123,11 @@ this.prepare = function(devices, n){
 */ 
 this.line_analysis = function(devices, n){
     var i, j, k, l, Num, s;//备用变量
-    this.is_line = [];//用于指示是否有支线从第i个节点经蛋白质连接到到第j个节点
-    this.line_type = [];//用于指示从节点i到节点j的线末端的类型
+    this.is_line = new Array();//用于指示是否有支线从第i个节点经蛋白质连接到到第j个节点
+    this.line_type = new Array();//用于指示从节点i到节点j的线末端的类型
     for(i = 0; i < this.parts_num; i++){
-        this.is_line[i] = [];
-        this.line_type[i] = [];
+        this.is_line[i] = new Array();
+        this.line_type[i] = new Array();
         for(j = 0; j < this.parts_num; j++){
             this.is_line[i][j] = false;
             this.line_type[i][j] = null;
@@ -143,7 +143,7 @@ this.line_analysis = function(devices, n){
                     end = parseInt(devices[n].map[l].id2.substring(1)) - 1;
                     s = devices[n].map[l].type;
                     break;
-                }
+                };
             }
             if(end == -1){
                 this.is_line[start][start] = true;
@@ -176,19 +176,19 @@ this.height_analysis = function(devices, n){
                     for(k = i; k < j; k++){
                         if(++this.part[k].up_max_height > l)
                             l = this.part[k].up_max_height;
-                    }
+                    };
                     for(k = i; k <= j; k++){
                         this.part[k].up_max_height = l;
-                    }
+                    };
                 }else{
                     l = 0;
                     for(k = i; k < j; k++){
                         if(--this.part[k].down_max_height < l)
                             l = this.part[k].down_max_height;
-                    }
+                    };
                     for(k = i; k <= j; k++){
                         this.part[k].down_max_height = l;
-                    }
+                    };
                 }
                 this.protein_height[i] = l;
                 
@@ -200,10 +200,10 @@ this.height_analysis = function(devices, n){
                     for(k = i + 1; k <= j; k++){
                         if(++this.part[k].up_max_height > l)
                             l = this.part[k].up_max_height;
-                    }
+                    };
                     for(k = i; k <= j; k++){
                         this.part[k].up_max_height = l;
-                    }
+                    };
                 }else{
                     l = 0;
                     for(k = i + 1; k <= j; k++){
@@ -1410,16 +1410,17 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
 			BioBLESS.gene_network.move_to_device(mark);
 		}
 		this.stage.addChild(this.stage.movable_stage);
-		var plusobj = new PIXI.Graphics();
+		var plusobj = new PIXI.Container();
 		BioBLESS.gene_network.plusobj = plusobj;
-        plusobj.beginFill(0x888888, 1);
-        plusobj.drawCircle(0, 0, 30);
-        plusobj.endFill();
-        plusobj.lineStyle(3, 0x000000, 1);
-        plusobj.moveTo(-15, 0);
-        plusobj.lineTo(15, 0);
-        plusobj.moveTo(0, -15);
-        plusobj.lineTo(0, 15);
+		var bg = new PIXI.Graphics();
+        bg.beginFill(0x888888, 1);
+        bg.drawCircle(0, 0, 30);
+        bg.endFill();
+		var icon = new PIXI.Sprite(BioBLESS.ustc_software.gear_logo_texture);
+		icon.anchor.x = icon.anchor.y = 0.5;
+		icon.scale.x = icon.scale.y = 0.035;
+		plusobj.addChild(bg);
+		plusobj.addChild(icon);
         plusobj.interactive = true;
         plusobj.buttonMode = true;
         plusobj.condition = 0;
