@@ -25,7 +25,7 @@ BioBLESS.logic.mark =[];
  * @param {type} element
  */
 BioBLESS.logic.circuit_add_gate = function(type, title) {
-    if(type === "not" || type === "NOT"){
+    if(type === "not"){
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = title._text;
         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.circuit.nodes.length - 1, "to":BioBLESS.logic.circuit.nodes.length - 2};
@@ -240,20 +240,19 @@ BioBLESS.logic.circuit_delete_gate = function(thing) {
             BioBLESS.logic.circuit_delete_line(thing.output.lines[k][0].mother, thing.output.lines[k][0].father);
         }
     }
-
-    var i,j;
+    var i;
     for(i = 0; i < BioBLESS.logic.elements.length; i++){
         if(BioBLESS.logic.elements[i] === thing){
             break;
         }
     }
     for(k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
-        j = BioBLESS.logic.circuit.arcs[k].from;
+        var j = BioBLESS.logic.circuit.arcs[k].from;
         if(BioBLESS.logic.circuit.nodes[j] === "INPUT" && BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i]){
             BioBLESS.logic.circuit.nodes.splice(j, 1);
             BioBLESS.logic.circuit.arcs.splice(k, 1);
             var m;
-            for(m = 0; m < BioBLESS.logic.circuit.arcs.length; m++){
+            for(m=0; m < BioBLESS.logic.circuit.arcs.length; m++){
                 if(BioBLESS.logic.circuit.arcs[m].from > j){
                     BioBLESS.logic.circuit.arcs[m].from -= 1;
                 }
@@ -261,7 +260,7 @@ BioBLESS.logic.circuit_delete_gate = function(thing) {
                     BioBLESS.logic.circuit.arcs[m].to -= 1;
                 }
             }
-            for(m = 0; m < BioBLESS.logic.mark.length; m++){
+            for(m=0; m < BioBLESS.logic.circuit.arcs.length; m++){
                 if(BioBLESS.logic.mark[m] > j){
                     BioBLESS.logic.mark[m] -= 1;
                 }
@@ -324,7 +323,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
     element.title.position.y = 35;
-    element.title.style.fill = "white";
+	element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
     element.graphics.beginFill(0, 0);
@@ -1216,6 +1215,10 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
     bg.endFill();
     stage.addChild(bg);
 	bg.interactive = true;
+	
+	stage.scroll_area = new PIXI.Container();
+	stage.addChild(stage.scroll_area);
+	
 	var number = 1;
     var num_bg = new PIXI.Graphics();
 	num_bg.beginFill(0x000000, 1);
@@ -1285,11 +1288,17 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         var scroll_area = BioBLESS.logic.create_scrollarea(contain, (row + 1) * 40, 260, h - 150);
         scroll_area.x = 20;
         scroll_area.y = 70;
-        if(stage.scroll_area){
-            stage.removeChild(stage.scroll_area);
-        }
-        stage.addChild(scroll_area);
-        stage.scroll_area = scroll_area;
+		var mask = new PIXI.Graphics();
+		mask.lineStyle(0, 0, 0);
+		mask.beginFill(0, 0);
+		mask.drawRect(0, -1000, 260, 1000);
+		mask.drawRect(0, h - 150, 260, 1000);
+		mask.endFill();
+		mask.interactive = true;
+		scroll_area.addChild(mask);
+        
+        stage.scroll_area.removeChildren();
+		stage.scroll_area.addChild(scroll_area);
 		if(stage.has_OK)
 		    return;
         var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
@@ -1362,6 +1371,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
 		num_function();
 	});
 	stage.addChild(button2);
+	
 	
 	
 	

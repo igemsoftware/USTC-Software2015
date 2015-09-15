@@ -1,15 +1,19 @@
 ﻿BioBLESS.simulation.init = function() {
     this.stage = BioBLESS.utils.init_stage();
 };
-BioBLESS.simulation.onchange = function(){
-    BioBLESS.gene_network.onchange();
+BioBLESS.simulation.refresh = function(){
     $.ajax({
         type: 'POST',
         url: BioBLESS.host + '/simulate/',
         contentType: 'application/json',
-        data: '{"simulation_parameters": [{"device_parameter": {"initial": [10, 10, 10]}, "e5": {"reg": 20}, "e4": {"reg": 20}, "e6": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e1": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e3": {"decay1": 0.1, "decay2": 0.05, "trans1": 0.01, "trans2": 0.5}, "e2": {"reg": 20}}, {"device_parameter": {"initial": [0]}}], "nodes": ["NOT3", "INPUT"], "system_parameter": {"time": 1000}, "arcs": [{"to": 0, "from": 1}]}',
-        
-        success: function(data) {BioBLESS.simulation.draw(data);}
+        data: JSON.stringify(BioBLESS.gene_network.get_parameters()),
+        success: function(data) {
+		    BioBLESS.simulation.draw(data); 
+			BioBLESS.change_stage(BioBLESS.simulation);
+			BioBLESS.gene_network.OK_button.alpha = 1;
+		    BioBLESS.gene_network.OK_button.interactive = true;
+	        BioBLESS.gene_network.OK_button.buttonMode = true;
+		}
     });
 };
 BioBLESS.simulation.draw = function(_nodes){
@@ -123,7 +127,19 @@ BioBLESS.simulation.draw = function(_nodes){
         i++;
     }//////////////////////////////////绘制坐标轴的标度
     
-    
+    BioBLESS.simulation.color = [];
+	BioBLESS.simulation.lines = [];
+	var on_click_linetitle = function(){
+	    for(i = 0; i < BioBLESS.simulation.lines.length; i++){
+		    BioBLESS.simulation.lines[i].line.alpha = 0;
+			BioBLESS.simulation.lines[i].title_bg.alpha = 0.25;
+			BioBLESS.simulation.lines[i].title.alpha = 0.25;
+		};
+		BioBLESS.simulation.lines[this.i].line.alpha = 1;
+		BioBLESS.simulation.lines[this.i].title_bg.alpha = 1;
+		BioBLESS.simulation.lines[this.i].title.alpha = 1;
+		all_button.alpha = 0.5;
+	};
     var _color, gray = 0, red, green, blue;
 	var ind = 0 - (nodes.c.length - 1) * 70 / 2;
     for(i = 0; i < nodes.c.length; i++){
@@ -136,24 +152,70 @@ BioBLESS.simulation.draw = function(_nodes){
         }
         _color = red * 65536 + green * 256 + blue;//计算时变曲线的颜色
         
-        graphics.lineStyle(1, _color, 1);
-        graphics.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[0], 
+		BioBLESS.simulation.lines[i] = new PIXI.Container();
+		var line = new PIXI.Graphics();
+        line.lineStyle(1, _color, 1);
+        line.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[0], 
         oy - (yAxis - 100) * nodes.c[i][0] / maxY);
         for(j = 1; j < nodes.t.length; j++){
-            graphics.lineTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[j], 
+            line.lineTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[j], 
         oy - (yAxis - 100) * nodes.c[i][j] / maxY);
-            graphics.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[j], 
+            line.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[j], 
         oy - (yAxis - 100) * nodes.c[i][j] / maxY);
         }////////////////////////////画时变曲线
-        graphics.lineStyle(2, _color, 1);
-        graphics.moveTo(ox + xAxis + 80, oy - yAxis / 2 + i * 70 + ind);
-        graphics.lineTo(ox + xAxis + 220, oy - yAxis / 2 + i * 70 + ind);
-        var text_node2 = new PIXI.Text(nodes.names[i], {fill: "#" + _color.toString(16)});
+		var title_bg = new PIXI.Graphics();
+        title_bg.lineStyle(2, _color, 1);
+        title_bg.moveTo(ox + xAxis + 80, oy - yAxis / 2 + i * 70 + ind);
+        title_bg.lineTo(ox + xAxis + 220, oy - yAxis / 2 + i * 70 + ind);
+		title_bg.lineStyle(0, 0, 0);
+		title_bg.beginFill(0, 0);
+		title_bg.drawRect(ox + xAxis + 70, oy - yAxis / 2 + i * 70 + ind - 15, 200, 30);
+		BioBLESS.simulation.color[i] = _color.toString(16);
+		while(BioBLESS.simulation.color[i].length < 6){
+		    BioBLESS.simulation.color[i] = "0" + BioBLESS.simulation.color[i]
+		};
+		BioBLESS.simulation.color[i] = "#" + BioBLESS.simulation.color[i];
+        var text_node2 = new PIXI.Text(nodes.names[i], {fill: BioBLESS.simulation.color[i]});
 		text_node2.anchor.y = 0.5;
         text_node2.position.x = ox + xAxis + 240;
-        text_node2.position.y = oy - yAxis / 2 + i * 70 + ind;
-        this.stage.movable_stage.addChild(text_node2);////////////////////////画线的名字的指示标
+        text_node2.position.y = oy - yAxis / 2 + i * 70 + ind;////////////////////////画线的名字的指示标
+		BioBLESS.simulation.lines[i].addChild(line);
+		BioBLESS.simulation.lines[i].addChild(title_bg);
+		BioBLESS.simulation.lines[i].addChild(text_node2);
+		BioBLESS.simulation.lines[i].interactive = true;
+		BioBLESS.simulation.lines[i].buttonMode = true;
+		BioBLESS.simulation.lines[i].i = i;
+		BioBLESS.simulation.lines[i].line = line;
+		BioBLESS.simulation.lines[i].title_bg = title_bg;
+		BioBLESS.simulation.lines[i].title = text_node2;
+		BioBLESS.simulation.lines[i].on("click", on_click_linetitle);
+        this.stage.movable_stage.addChild(BioBLESS.simulation.lines[i]);
     }
+	var all_button = new PIXI.Container();
+	var all_bg = new PIXI.Graphics();
+	all_bg.beginFill(0xffffff, 1);
+	all_bg.drawRoundedRect(0, 0, 80, 40, 8);
+	all_bg.endFill();
+	all_button.addChild(all_bg);
+	var all = new PIXI.Text("ALL");
+	all.anchor.x = all.anchor.y = 0.5;
+	all.x = 40;
+	all.y = 20;
+	all_button.addChild(all);
+	all_button.x = ox + xAxis - 100;
+	all_button.y = oy - yAxis + 20;
+	all_button.scale.x = all_button.scale.y = 0.75;
+	all_button.interactive = true;
+	all_button.buttonMode = true;
+	all_button.on("click", function(){
+	    for(i = 0; i < BioBLESS.simulation.lines.length; i++){
+		    BioBLESS.simulation.lines[i].line.alpha = 1;
+			BioBLESS.simulation.lines[i].title_bg.alpha = 1;
+			BioBLESS.simulation.lines[i].title.alpha = 1;
+		};
+		all_button.alpha = 1;
+	});
+	this.stage.movable_stage.addChild(all_button);
     
 	var t1 = BioBLESS.height / 900;
 	var t2 = (BioBLESS.width - 100) / 1900;
