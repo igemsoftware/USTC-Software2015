@@ -134,7 +134,7 @@ BioBLESS.simulation.draw = function(_nodes){
 		    BioBLESS.simulation.lines[i].line.alpha = 0;
 			BioBLESS.simulation.lines[i].title_bg.alpha = 0.25;
 			BioBLESS.simulation.lines[i].title.alpha = 0.25;
-		};
+		}
 		BioBLESS.simulation.lines[this.i].line.alpha = 1;
 		BioBLESS.simulation.lines[this.i].title_bg.alpha = 1;
 		BioBLESS.simulation.lines[this.i].title.alpha = 1;
@@ -172,8 +172,8 @@ BioBLESS.simulation.draw = function(_nodes){
 		title_bg.drawRect(ox + xAxis + 70, oy - yAxis / 2 + i * 70 + ind - 15, 200, 30);
 		BioBLESS.simulation.color[i] = _color.toString(16);
 		while(BioBLESS.simulation.color[i].length < 6){
-		    BioBLESS.simulation.color[i] = "0" + BioBLESS.simulation.color[i]
-		};
+		    BioBLESS.simulation.color[i] = "0" + BioBLESS.simulation.color[i];
+		}
 		BioBLESS.simulation.color[i] = "#" + BioBLESS.simulation.color[i];
         var text_node2 = new PIXI.Text(nodes.names[i], {fill: BioBLESS.simulation.color[i]});
 		text_node2.anchor.y = 0.5;
@@ -212,7 +212,7 @@ BioBLESS.simulation.draw = function(_nodes){
 		    BioBLESS.simulation.lines[i].line.alpha = 1;
 			BioBLESS.simulation.lines[i].title_bg.alpha = 1;
 			BioBLESS.simulation.lines[i].title.alpha = 1;
-		};
+		}
 		all_button.alpha = 1;
 	});
 	this.stage.movable_stage.addChild(all_button);

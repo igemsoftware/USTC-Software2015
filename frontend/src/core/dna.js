@@ -167,8 +167,6 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
 
 BioBLESS.dna.moving = false;
 BioBLESS.dna.draw_enabled = false;
-BioBLESS.dna.starPosition;
-BioBLESS.dna.endPosition;
 
 /**
  * dna_select_start is the function to start select the dna which you want
@@ -327,8 +325,7 @@ BioBLESS.copy_to_clipboard = function(target) {
             return;
         }
         trans.addDataFlavor('text/unicode');
-        var str = new Object();
-        var len = new Object();
+        var len = {};
         var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
         var copytext = target;
         str.data = copytext;

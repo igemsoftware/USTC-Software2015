@@ -11,7 +11,7 @@ BioBLESS.analysis.calculate = function(){
 		 items[num].max_value = Math.random() * 2;
 		 items[num].min_value = Math.random() * 2;
 		 num++;
-	};
+	}
 	return items;
 };
 BioBLESS.analysis.draw_oxy = function(x_l, y_l){
@@ -43,7 +43,7 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
 	for(var i = 0; i < items_num; i++){
 	    if(origin_y > origin_value / items[i].max_value)
 		    origin_y = origin_value / items[i].max_value;
-	};
+	}
 	if(origin_y > 0.5)
 	    origin_y = 0.5;
     else
@@ -81,7 +81,7 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
 		graphics.beginFill(0x00ff00, 1);
 		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[i].min_value), 5);
 		graphics.endFill();
-	};
+	}
 	
 	stage.addChild(graphics);
     return stage;
@@ -101,8 +101,8 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 	var max_num = 0;
 	for(var i = 0; i < items_num; i++){
 	    if(max_num < Math.abs(items[i].max_value - items[i].min_value))
-		    max_num = Math.abs(items[i].max_value - items[i].min_value)
-	};
+		    max_num = Math.abs(items[i].max_value - items[i].min_value);
+	}
 	
 	var graphics = new PIXI.Graphics();
 	graphics.beginFill(0x00ff00, 1);
@@ -128,7 +128,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 		
 		stage.addChild(num);
 		
-	};
+	}
 	
 	stage.addChild(graphics);
 	stage.addChild(oxy);
@@ -202,7 +202,7 @@ BioBLESS.analysis.create_dialog = function(items, on_ok){
             for(var i = 0; i < buttons.length; i++){
                 buttons[i].bg.i = i;
                 buttons[i].bg.on("click", on_click);
-            };
+            }
         }
     });
     stage.addChild(title_bg);
@@ -226,7 +226,7 @@ BioBLESS.analysis.create_dialog = function(items, on_ok){
                 for(var i = 0; i < input.value.length; i++){
                     if(input.value[i] === '.')
                          num++;
-                };
+                }
                 if(num === 0){
                     if(input.value === "")
                         input.value = "0";
@@ -317,7 +317,7 @@ BioBLESS.analysis.create_scroll_area = function(){
                   .on('mouseout', mouse_out)
                   .on('click', on_click);
         contain.addChild(buttons[i]);
-    };
+    }
     
     var mask = new PIXI.Graphics();
     mask.beginFill(0, 0);
@@ -361,7 +361,7 @@ BioBLESS.analysis.create_right_stage = function(){
     var on_change = function(){
         for(var i = 0; i < change_buttons.length; i++){
             change_buttons[i].alpha = 0.5;
-        };
+        }
         this.alpha = 1;
         stage.change_rate =  (this.i + 1) * 0.05;
     };
@@ -376,7 +376,7 @@ BioBLESS.analysis.create_right_stage = function(){
         change_buttons[i].buttonMode = true;
         change_buttons[i].on('click', on_change);
         stage.addChild(change_buttons[i]);
-    };
+    }
     
     change_buttons[0].alpha = 1;
     stage.change_rate = 0.05;
