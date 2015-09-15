@@ -31,6 +31,7 @@ BioBLESS.init = function() {
     BioBLESS.base_stage.addChild(BioBLESS.base_stage.static_stage);
     BioBLESS.base_stage.addChild(BioBLESS.stage);
     BioBLESS.base_stage.static_stage.fps = new PIXI.Text("FPS: " + fps);
+	BioBLESS.base_stage.static_stage.fps.style.fill = "white";
     BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 400;
     BioBLESS.base_stage.static_stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {BioBLESS.base_stage.static_stage.fps.text = "FPS: " + fps;}, 1000);
@@ -52,7 +53,7 @@ BioBLESS.init = function() {
         document.addEventListener('DOMMouseScroll', scroll_func, false);
     window.onmousewheel = document.onmousewheel = scroll_func; //IE/Opera/Chrome/Safari
     BioBLESS.prepare_navigation();
-    BioBLESS.base_stage.static_stage.addChild(BioBLESS.navigation);
+    BioBLESS.base_stage.addChild(BioBLESS.navigation);
     BioBLESS.add_animate_hook(function() {
         if(BioBLESS.gates) {
             BioBLESS.logic.draw(BioBLESS.gates);
