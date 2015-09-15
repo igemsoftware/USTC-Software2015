@@ -17,7 +17,4 @@ describe('BioBLESS', function() {
     it('should have property init', function() {
         BioBLESS.should.have.property('init');
     });
-    it('should have proper IDdraw', function() {
-        BioBLESS.IDdraw.drawElement("10000000").should.be.instanceof(PIXI.Graphics);
-    });
 });
