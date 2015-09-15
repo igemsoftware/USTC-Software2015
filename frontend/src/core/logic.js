@@ -612,7 +612,7 @@ BioBLESS.logic.on_drag_end_e = function() {
     this.data = null;
 };
 
-var line_color_style = [0xffffff, 0x000066, 0x006600, 0x660000, 0x666600, 0x660066, 0x006666, 0x666666];
+var line_color_style = [0xffffff, 0x0000aa, 0x00aa00, 0xaa0000, 0xaaaa00, 0xaa00aa, 0x00aaaa];
 var line_color_select = 0;
 var waitFordrawBegin = false;
 var moving = false;
@@ -632,7 +632,7 @@ BioBLESS.logic.on_draw_line_up = function(event){
         moving = true;
         drawPart[0] = new PIXI.Graphics();
         drawPart[0].father = this;
-        drawPart[0].line_color = line_color_style[line_color_select++ % 8];
+        drawPart[0].line_color = line_color_style[line_color_select++ % line_color_style.length];
         drawPart[0].alpha = 0.6;
     }
     else{
