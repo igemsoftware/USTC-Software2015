@@ -1086,7 +1086,7 @@ BioBLESS.gene_network.create_inputitem = function(name, num, w){
  * create an inputarea of device
  * @function
  */
-BioBLESS.gene_network.create_inputarea = function(device, index){
+BioBLESS.gene_network.create_inputarea = function(device, index, h){
     var stage = new PIXI.Container();
     var title = new PIXI.Text("e1");
     title.x = 25;
@@ -1154,7 +1154,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
                 BioBLESS.gene_network.devices[this.index].map[this.i].params[this.o] = value;
             };
         }
-        stage.inputarea[i] = BioBLESS.logic.create_scrollarea(contain, j * 50, 260, BioBLESS.height - 310);
+        stage.inputarea[i] = BioBLESS.logic.create_scrollarea(contain, j * 50, 260, h - 310);
         stage.inputarea[i].x = 20;
         stage.inputarea[i].y = 220;
         stage.inputarea[i].scroll_fun = function(){
@@ -1175,12 +1175,12 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
  * create the base stage of input system
  * @function
  */
-BioBLESS.gene_network.create_base_stage_of_input = function(){
+BioBLESS.gene_network.create_base_stage_of_input = function(h){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
     var title = new PIXI.Text("System");
     bg.beginFill(0x888888, 1);
-    bg.drawRect(0, 0, 300, BioBLESS.height);
+    bg.drawRect(0, 0, 300, h);
     bg.endFill();
     stage.addChild(bg);
 	bg.interactive = true;
@@ -1231,7 +1231,7 @@ BioBLESS.gene_network.create_base_stage_of_input = function(){
                     that.parent.inputarea = that.parent.system_inputarea;
 					BioBLESS.gene_network.move_to_device(-1);
                 }else{
-                    that.parent.inputarea = BioBLESS.gene_network.create_inputarea(BioBLESS.gene_network.devices[this.i - 1], this.i - 1);
+                    that.parent.inputarea = BioBLESS.gene_network.create_inputarea(BioBLESS.gene_network.devices[this.i - 1], this.i - 1, h);
 					BioBLESS.gene_network.move_to_device(BioBLESS.gene_network.devices[this.i - 1].devs_index);
                 }
                 that.parent.addChild(that.parent.inputarea);
@@ -1249,7 +1249,7 @@ BioBLESS.gene_network.create_base_stage_of_input = function(){
 		title_bg.is_view = false;
 		stage.removeChild(title_bg.scroll_area);
 		stage.removeChild(stage.inputarea);
-		stage.inputarea = BioBLESS.gene_network.create_inputarea(BioBLESS.gene_network.devices[i], i);
+		stage.inputarea = BioBLESS.gene_network.create_inputarea(BioBLESS.gene_network.devices[i], i, h);
 		stage.addChild(stage.inputarea);
 	};
     
@@ -1281,14 +1281,14 @@ BioBLESS.gene_network.create_base_stage_of_input = function(){
         inputitem.i = i;
         inputitem.change_value = change_value;
     }
-    stage.system_inputarea = BioBLESS.logic.create_scrollarea(contain, 60 + i * 50, 260, BioBLESS.height - 230);
+    stage.system_inputarea = BioBLESS.logic.create_scrollarea(contain, 60 + i * 50, 260, h - 230);
     stage.system_inputarea.x = 20;
     stage.system_inputarea.y = 150;
     stage.inputarea = stage.system_inputarea;
     stage.addChild(stage.system_inputarea);
     var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
     OK.x = 100;
-    OK.y = BioBLESS.height - 60;
+    OK.y = h - 60;
 	OK.interactive = true;
 	OK.buttonMode = true;
 	var OK_function = function(){
@@ -1353,23 +1353,23 @@ BioBLESS.gene_network.move_to_device = function(mark){
     this.stage.movable_stage._scale = 1;
 	this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
 	this.stage.movable_stage.y = this.stage.movable_stage.x = 0;
-	
+	var w = BioBLESS.navigation.scale.x * 120;
 	if(mark === -1){
-	    var t1 = (BioBLESS.width - 400) / this.devs_width;
+	    var t1 = (BioBLESS.width - w) / this.devs_width;
         var t2 = BioBLESS.height / this.devs_height;
         this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (t1 < t2)? t1 : t2;
-        this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2) - 400) / 2 + 100; 
+        this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2) - w) / 2 + w; 
         this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * ((t1 < t2)? t1 : t2)) / 2; 
 		return;
 	}
-    var t1 = (BioBLESS.width - 400) / this.devs[mark].stage_w;
+    var t1 = (BioBLESS.width - w) / this.devs[mark].stage_w;
     var t2 = BioBLESS.height / this.devs[mark].stage_h;
     this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = ((t1 < t2)? t1 : t2) * 0.8;
-    this.stage.movable_stage.x -= this.devs[mark].stage.x * this.stage.movable_stage.scale.x - 100 - (BioBLESS.width - 400 - this.devs[mark].stage_w * this.stage.movable_stage.scale.x) / 2;
-	this.stage.movable_stage.y -= this.devs[mark].stage.y * this.stage.movable_stage.scale.x - (BioBLESS.height - this.devs[mark].stage_h * this.stage.movable_stage.scale.x) / 2 + 40;
-	var moveX = (BioBLESS.width - this.devs[mark].stage_w - 400) / 2;
+    this.stage.movable_stage.x -= this.devs[mark].stage.x * this.stage.movable_stage.scale.x - w - (BioBLESS.width - w - this.devs[mark].stage_w * this.stage.movable_stage.scale.x) / 2;
+	this.stage.movable_stage.y -= this.devs[mark].stage.y * this.stage.movable_stage.scale.x - (BioBLESS.height - this.devs[mark].stage_h * this.stage.movable_stage.scale.x) / 2;
+	var moveX = (BioBLESS.width - this.devs[mark].stage_w - w) / 2;
     if(moveX > 0)
-        this.stage.movable_stage.position.x += moveX + 100;
+        this.stage.movable_stage.position.x += moveX + w;
 	var moveY = (BioBLESS.height - this.devs[mark].stage_h) / 2;
     if(moveY > 0)
         this.stage.movable_stage.position.y += moveY;
@@ -1382,6 +1382,7 @@ BioBLESS.gene_network.move_to_device = function(mark){
 */ 
 BioBLESS.gene_network.draw = function(devices, n, mark){
     this.stage.movable_stage.removeChildren();
+	this.stage.removeChildren();
     if(n === -1){
 	    this.stage.movable_stage._scale = 1;
 		this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
@@ -1399,15 +1400,57 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
 		    if(BioBLESS.gene_network.system_parameters.input[i] === undefined)
                 BioBLESS.gene_network.system_parameters.input[i] = 10;
         }
-		var ijkl = BioBLESS.gene_network.create_base_stage_of_input();
+		var h = BioBLESS.height - 200;
+		if(h < 410)
+		    h = 410;
+		var right_stage = BioBLESS.gene_network.create_base_stage_of_input(h);
 		if(mark === undefined){
 		    BioBLESS.gene_network.move_to_device(-1);
         }else{
 			BioBLESS.gene_network.move_to_device(mark);
 		}
-		
 		this.stage.addChild(this.stage.movable_stage);
-		this.stage.addChild(ijkl);
+		var plusobj = new PIXI.Graphics();
+		BioBLESS.gene_network.plusobj = plusobj;
+        plusobj.beginFill(0x888888, 1);
+        plusobj.drawCircle(0, 0, 30);
+        plusobj.endFill();
+        plusobj.lineStyle(3, 0x000000, 1);
+        plusobj.moveTo(-15, 0);
+        plusobj.lineTo(15, 0);
+        plusobj.moveTo(0, -15);
+        plusobj.lineTo(0, 15);
+        plusobj.interactive = true;
+        plusobj.buttonMode = true;
+        plusobj.condition = 0;
+        plusobj.position.x = BioBLESS.width - 150;
+        plusobj.position.y = 50;
+		
+		right_stage.x = BioBLESS.width - 300;
+		right_stage.y = 100;
+		var added = false;
+		plusobj.on('mousedown', function() {
+			if(added){
+				BioBLESS.gene_network.stage.removeChild(right_stage);
+				plusobj.condition = 0;	
+			}
+			else{
+				BioBLESS.gene_network.stage.addChild(right_stage);
+				BioBLESS.gene_network.stage.addChild(plusobj);
+				plusobj.condition = 1;
+			}
+			added = !added;
+		});
+		BioBLESS.gene_network.plusobj_animation = function(){
+			if(Math.abs(BioBLESS.gene_network.plusobj.rotation - 0.7854 * BioBLESS.gene_network.plusobj.condition) > 0.01){
+				BioBLESS.gene_network.plusobj.rotation -= (BioBLESS.gene_network.plusobj.rotation - 0.7854 * BioBLESS.gene_network.plusobj.condition) * 0.15;
+			}
+			else{
+				BioBLESS.gene_network.plusobj.rotation = 0.7854 * BioBLESS.gene_network.plusobj.condition;
+			}
+		};        
+		BioBLESS.add_animate_hook(BioBLESS.gene_network.plusobj_animation);
+		this.stage.addChild(plusobj);
     }else if(n >= 0){
         this.stage.movable_stage._scale = 1;
 		this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
