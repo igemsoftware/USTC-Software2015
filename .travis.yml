@@ -10,7 +10,6 @@ install:
     - pip install --upgrade pip
     # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
     # - pip install -v scipy | grep ^.*building
-    # It will take 4 minutes
     - pip install -r requirements.txt
     - cd ../frontend
     - node -v && npm -v && npm install
