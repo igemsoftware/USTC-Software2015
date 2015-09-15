@@ -259,6 +259,8 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.lineTo(223.35, 226.66 - 24.243);//(223.35, 202.417)
             graphics.lineTo(223.35, 202.417 - 21.482);//(223.35, 180.935)
             graphics.endFill();
+			graphics.x = -187;
+			graphics.y = -90;
             break;
         case "terminator":
 		case "Terminator":
