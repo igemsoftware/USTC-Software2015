@@ -69,8 +69,8 @@ BioBLESS.logic.ieee_standard_gate = function(device){
             element.input_1.lineStyle(3, 0xffffff, 1);
             element.input_1.moveTo(0, 0);
             element.input_1.lineTo(26.4, 0);
-            element.input_1.lineStyle(0, 0, 0);
-            element.input_1.beginFill(0, 0);
+            element.input_1.lineStyle(0, 0xffffff, 0);
+            element.input_1.beginFill(0xffffff, 0);
             element.input_1.drawRect(0, -1, 26.4, 3);
             element.input_1.endFill();
 
@@ -79,8 +79,8 @@ BioBLESS.logic.ieee_standard_gate = function(device){
             element.input_2.lineStyle(3, 0xffffff, 1);
             element.input_2.moveTo(0, 0);
             element.input_2.lineTo(26.4, 0);
-            element.input_2.lineStyle(0, 0, 0);
-            element.input_2.beginFill(0, 0);
+            element.input_2.lineStyle(0, 0xffffff, 0);
+            element.input_2.beginFill(0xffffff, 0);
             element.input_2.drawRect(0, -1, 26.4, 3);
             element.input_2.endFill();
 
@@ -89,8 +89,8 @@ BioBLESS.logic.ieee_standard_gate = function(device){
             element.output.lineStyle(3, 0xffffff, 1);
             element.output.moveTo(0, 0);
             element.output.lineTo( -35, 0);
-            element.output.lineStyle(0, 0, 0);
-            element.output.beginFill(0, 0);
+            element.output.lineStyle(0, 0xffffff, 0);
+            element.output.beginFill(0xffffff, 0);
             element.output.drawRect(-35, -1, 35, 3);
             element.output.endFill();
             break;
@@ -103,41 +103,42 @@ BioBLESS.logic.ieee_standard_gate = function(device){
             element.graphics.beginFill(0xffffff, 0);
             element.graphics.moveTo(22.2, 38.7);
             element.graphics.bezierCurveTo(22.2, 38.7, 22.2 + 6.8, 38.7 - 9.7, 22.2 + 6.3, 38.7 - 18.6);//(28.5, 20.1)
-   			element.graphics.bezierCurveTo(28.5 + 0.6, 20.1 - 8.9, 28.5 - 6.3, 20.1 - 18.6, 28.5 - 6.3, 20.1 - 18.6);//(22.2, 1.5)
-   			element.graphics.lineTo(22.2 + 20.3, 1.5);//(42.5, 1.5)
-   			element.graphics.bezierCurveTo(42.5 + 14, 1.5, 42.5 + 23.5, 1.5 + 18.5, 42.5 + 23.5, 1.5 + 18.5);//()
+            element.graphics.bezierCurveTo(28.5 + 0.6, 20.1 - 8.9, 28.5 - 6.3, 20.1 - 18.6, 28.5 - 6.3, 20.1 - 18.6);//(22.2, 1.5)
+            element.graphics.lineTo(22.2 + 20.3, 1.5);//(42.5, 1.5)
+            element.graphics.bezierCurveTo(42.5 + 14, 1.5, 42.5 + 23.5, 1.5 + 18.5, 42.5 + 23.5, 1.5 + 18.5);//(66, 20)
+            element.graphics.quadraticCurveTo(66 - 9.5, 20 + 18.5, 66 - 23.5, 20 + 18.5);//(42.5, 38.5)
+            element.graphics.lineTo(22.2, 38.5);
             element.graphics.endFill();
 
             element.input_1.position.x = 0;
             element.input_1.position.y = 9.6;
             element.input_1.lineStyle(3, 0xffffff, 1);
             element.input_1.moveTo(0, 0);
-            element.input_1.lineTo(26.4, 0);
-            element.input_1.lineStyle(0, 0, 0);
-            element.input_1.beginFill(0, 0);
-            element.input_1.drawRect(0, -1, 26.4, 3);
+            element.input_1.lineTo(26.5, 0);
+            element.input_1.lineStyle(0, 0xffffff, 0);
+            element.input_1.beginFill(0xffffff, 0);
+            element.input_1.drawRect(0, -1, 26.5, 3);
             element.input_1.endFill();
 
             element.input_2.position.x = 0;
             element.input_2.position.y = 29.7;
             element.input_2.lineStyle(3, 0xffffff, 1);
             element.input_2.moveTo(0, 0);
-            element.input_2.lineTo(26.4, 0);
-            element.input_2.lineStyle(0, 0, 0);
-            element.input_2.beginFill(0, 0);
-            element.input_2.drawRect(0, -1, 26.4, 3);
+            element.input_2.lineTo(26.5, 0);
+            element.input_2.lineStyle(0, 0xffffff, 0);
+            element.input_2.beginFill(0xffffff, 0);
+            element.input_2.drawRect(0, -1, 26.5, 3);
             element.input_2.endFill();
             
-            element.output.position.x = 99.9;
+            element.output.position.x = 99.4;
             element.output.position.y = 19.9;
             element.output.lineStyle(3, 0xffffff, 1);
             element.output.moveTo(0, 0);
-            element.output.lineTo( -35, 0);
-            element.output.lineStyle(0, 0, 0);
-            element.output.beginFill(0, 0);
-            element.output.drawRect(-35, -1, 35, 3);
+            element.output.lineTo( -33.4, 0);
+            element.output.lineStyle(0, 0xffffff, 0);
+            element.output.beginFill(0xffffff, 0);
+            element.output.drawRect(-33.4, -1, 33.4, 3);
             element.output.endFill();
-            break;
             break;
         case "NOT":
         case "not":
@@ -151,6 +152,32 @@ BioBLESS.logic.ieee_standard_gate = function(device){
             // element.input_1.endFill();
             // element.graphics.moveTo(135, 35);
             // element.graphics.lineTo(120, 20);
+            element.graphics.lineStyle(3, 0xffffff, 1);
+            element.graphics.beginFill(0xffffff, 0);
+            element.graphics.drawPolygon(27.8, 2, 27.8, 39.5, 70.7, 20.8, 27.8, 2);
+            element.graphics.lineStyle(2.5, 0xffffff, 1);
+            element.graphics.drawCircle(76, 20.8, 3.6);
+            element.graphics.endFill();
+
+            element.input_1.position.x = 0;
+            element.input_1.position.y = 20.8;
+            element.input_1.lineStyle(3, 0xffffff, 1);
+            element.input_1.moveTo(0, 0);
+            element.input_1.lineTo(27.8, 0);
+            element.input_1.lineStyle(0, 0xffffff, 0);
+            element.input_1.beginFill(0xffffff, 0);
+            element.input_1.drawRect(0, -1, 27.8, 3);
+            element.input_1.endFill();
+            
+            element.output.position.x = 99.4;
+            element.output.position.y = 20.8;
+            element.output.lineStyle(3, 0xffffff, 1);
+            element.output.moveTo(0, 0);
+            element.output.lineTo( -18.4, 0);
+            element.output.lineStyle(0, 0xffffff, 0);
+            element.output.beginFill(0xffffff, 0);
+            element.output.drawRect(-18.4, -1, 18.4, 3);
+            element.output.endFill();
             break;
         case "NAND":
         case "nand":
