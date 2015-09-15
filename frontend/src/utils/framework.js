@@ -75,7 +75,7 @@ BioBLESS.prepare_navigation = function(){
     var onmousedown_obj = function() {
         if(BioBLESS[this.plugin] !== undefined){
              BioBLESS.change_stage(BioBLESS[this.plugin]);
-		};
+		}
     };
 	var mouse_over = function(){
 	    if(this.is_out){
@@ -119,7 +119,7 @@ BioBLESS.prepare_navigation = function(){
 									 .on('mouseout', mouse_out);
 		BioBLESS.navigation.addChild(BioBLESS.navigation.button[i]);
 		BioBLESS[navigation_plugin[i]].tag_index = i;
-    };
+    }
 	
 	tag.y = BioBLESS.navigation.button[0].y;
 	BioBLESS.navigation.tag = tag;
