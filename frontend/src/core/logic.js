@@ -1,4 +1,4 @@
-﻿﻿/**
+﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -1108,6 +1108,7 @@ BioBLESS.logic.on_drag_e = function(){
     this.dragging = false;
     this.data = null;
 };
+
 /**
  * create a scroll area for truth table stage
  * @function
@@ -1207,6 +1208,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     mask.on("mouseout", on_mouse_out);
     return stage;
 };
+
 /**
  * create the base stage of truth table
  * @function
@@ -1216,41 +1218,40 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
     var bg = new PIXI.Graphics();
     bg.beginFill(0x888888, 1);
     bg.drawRect(0, 0, 300, h);
-	//bg.drawRect(152, 0, 148, -10);
+    //bg.drawRect(152, 0, 148, -10);
     bg.endFill();
     stage.addChild(bg);
-	bg.interactive = true;
-	
-	stage.scroll_area = new PIXI.Container();
-	stage.addChild(stage.scroll_area);
-	
-	var number = 1;
+    bg.interactive = true;
+    
+    stage.scroll_area = new PIXI.Container();
+    stage.addChild(stage.scroll_area);
+    
+    var number = 1;
     var num_bg = new PIXI.Graphics();
-	num_bg.beginFill(0x000000, 1);
-	num_bg.drawRect(100, 15, 100, 40);
-	num_bg.endFill();
-	var num = new PIXI.Text("1");
-	num.style.fill = "white";
-	num.anchor.x = num.anchor.y = 0.5;
-	num.x = 150;
-	num.y = 35;
-	stage.addChild(num_bg);
-	stage.addChild(num);
-	
-	var on_click = function(){
-	    if(this.condition === 1){
-		    this.change();
-			BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "1" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
-		}else{
-		    this.redraw();
-			BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "0" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
-		};
-	};
-	
-	
+    num_bg.beginFill(0x000000, 1);
+    num_bg.drawRect(100, 15, 100, 40);
+    num_bg.endFill();
+    var num = new PIXI.Text("1");
+    num.style.fill = "white";
+    num.anchor.x = num.anchor.y = 0.5;
+    num.x = 150;
+    num.y = 35;
+    stage.addChild(num_bg);
+    stage.addChild(num);
+    
+    var on_click = function(){
+        if(this.condition === 1){
+            this.change();
+            BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "1" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
+        }else{
+            this.redraw();
+            BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "0" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
+        }
+    }
+
     var num_function = function(){
-	    
-	    BioBLESS.logic.truth_table_parameter = "";
+        
+        BioBLESS.logic.truth_table_parameter = "";
         var contain = new PIXI.Container();
         var num = [];
         var row = 1;
@@ -1272,10 +1273,10 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
                 button.scale.y = 27 / 40;
                 button.x = dis + i * dis - 5;
                 button.y = 20 + 40 * k;
-				if(number > 5){
-				    button.scale.x = button.scale.y = button.scale.x * 5 / number;
-					button.y +=  17 - 85 / number;
-				}
+                if(number > 5){
+                    button.scale.x = button.scale.y = button.scale.x * 5 / number;
+                    button.y +=  17 - 85 / number;
+                }
                 contain.addChild(button);
             }
             this.button[k] = BioBLESS.logic.create_picturebutton(40);
@@ -1283,29 +1284,29 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
             this.button[k].scale.y = 27 / 40;
             this.button[k].x = 28 + 6 * 28;
             this.button[k].y = 20 + 40 * k;
-			this.button[k].n = k;
-			this.button[k].interactive = true;
-			this.button[k].buttonMode = true;
-			this.button[k].on('click', on_click);
+            this.button[k].n = k;
+            this.button[k].interactive = true;
+            this.button[k].buttonMode = true;
+            this.button[k].on('click', on_click);
             contain.addChild(this.button[k]);
-			BioBLESS.logic.truth_table_parameter += "0";
+            BioBLESS.logic.truth_table_parameter += "0";
         }
         var scroll_area = BioBLESS.logic.create_scrollarea(contain, (row + 1) * 40, 260, h - 150);
         scroll_area.x = 20;
         scroll_area.y = 70;
-		var mask = new PIXI.Graphics();
-		mask.lineStyle(0, 0, 0);
-		mask.beginFill(0, 0);
-		mask.drawRect(0, -1000, 260, 1000);
-		mask.drawRect(0, h - 150, 260, 1000);
-		mask.endFill();
-		mask.interactive = true;
-		scroll_area.addChild(mask);
+        var mask = new PIXI.Graphics();
+        mask.lineStyle(0, 0, 0);
+        mask.beginFill(0, 0);
+        mask.drawRect(0, -1000, 260, 1000);
+        mask.drawRect(0, h - 150, 260, 1000);
+        mask.endFill();
+        mask.interactive = true;
+        scroll_area.addChild(mask);
         
         stage.scroll_area.removeChildren();
-		stage.scroll_area.addChild(scroll_area);
-		if(stage.has_OK)
-		    return;
+        stage.scroll_area.addChild(scroll_area);
+        if(stage.has_OK)
+            return;
         var OK = BioBLESS.logic.create_textbutton("Create", 100, 40, 0x000000);
         OK.x = 100;
         OK.y = h - 60;
@@ -1313,80 +1314,75 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         OK.interactive = true;
         OK.buttonMode = true;
         var OK_function = function(){
-		    OK.alpha = 0.5;
-		    OK.interactive = false;
-	        OK.buttonMode = false;
-		    setTimeout(function(){
-		        if(OK.interactive)
-			        return;
-		        OK.alpha = 1;
-		        OK.interactive = true;
-	            OK.buttonMode = true;
-			    alert("TIME OUT!");
-		    }, 24000);
-		    $.getJSON(BioBLESS.host + "/biocircuit/" + BioBLESS.logic.truth_table_parameter + "/", function(data) {
+            OK.alpha = 0.5;
+            OK.interactive = false;
+            OK.buttonMode = false;
+            setTimeout(function(){
+                if(OK.interactive)
+                    return;
+                OK.alpha = 1;
+                OK.interactive = true;
+                OK.buttonMode = true;
+                alert("TIME OUT!");
+            }, 24000);
+            $.getJSON(BioBLESS.host + "/biocircuit/" + BioBLESS.logic.truth_table_parameter + "/", function(data) {
                     BioBLESS.logic.gates_sup = data;
                     var new_stage = BioBLESS.logic.create_output_stage_of_truth_table(stage, h);
                     stage.parent.addChild(new_stage);
                     stage.parent.removeChild(stage);
-					OK.alpha = 1;
-		            OK.interactive = true;
-	                OK.buttonMode = true;
+                    OK.alpha = 1;
+                    OK.interactive = true;
+                    OK.buttonMode = true;
             }.bind(this));
         };
         OK.on("click", OK_function);
-		stage.has_OK = true;
+        stage.has_OK = true;
     }
-	
-	num_function();
-	
-	var button1 = new PIXI.Graphics();
-	button1.beginFill(0xffffff, 1);
-	button1.moveTo(0, 0);
-	button1.lineTo(0, 20);
-	button1.lineTo(17, 10);
-	button1.x = 210;
-	button1.y = 25;
-	button1.interactive = true;
-	button1.buttonMode = true;
-	button1.on("click", function(){
-	    number++;
-		if(number > 7)
-		    number = 7;
-		num.text = number.toString();
-		num_function();
-	});
-	stage.addChild(button1);
-	
-	
-	var button2 = new PIXI.Graphics();
-	button2.beginFill(0xffffff, 1);
-	button2.moveTo(0, 0);
-	button2.lineTo(0, 20);
-	button2.lineTo(-17, 10);
-	button2.x = 90;
-	button2.y = 25;
-	button2.interactive = true;
-	button2.buttonMode = true;
-	button2.on("click", function(){
-	    number--;
-		if(number < 1)
-		    number = 1;
-		num.text = number.toString();
-		num_function();
-	});
-	stage.addChild(button2);
-	
-	
-	
-	
-	
-	
-	
+
+    num_function();
+    
+    var button1 = new PIXI.Graphics();
+    button1.beginFill(0xffffff, 1);
+    button1.moveTo(0, 0);
+    button1.lineTo(0, 20);
+    button1.lineTo(17, 10);
+    button1.x = 210;
+    button1.y = 25;
+    button1.interactive = true;
+    button1.buttonMode = true;
+    button1.on("click", function(){
+        number++;
+        if(number > 7)
+            number = 7;
+        num.text = number.toString();
+        num_function();
+    });
+    stage.addChild(button1);
+    
+    
+    var button2 = new PIXI.Graphics();
+    button2.beginFill(0xffffff, 1);
+    button2.moveTo(0, 0);
+    button2.lineTo(0, 20);
+    button2.lineTo(-17, 10);
+    button2.x = 90;
+    button2.y = 25;
+    button2.interactive = true;
+    button2.buttonMode = true;
+    button2.on("click", function(){
+        number--;
+        if(number < 1)
+            number = 1;
+        num.text = number.toString();
+        num_function();
+    });
+    stage.addChild(button2);
+
     var _stage = new PIXI.Container();
-	_stage.addChild(stage);
+    _stage.addChild(stage);
     return _stage;
 };
+
 /**
  * a constructor can calculate circuits to picture
  * @constructor
@@ -1429,7 +1425,7 @@ BioBLESS.logic.circuits = function(){
             else{
                 this.devs[i] = BioBLESS.logic.draw_gate(device);
             }
-			var Regx = /^[0-9]*$/;
+            var Regx = /^[0-9]*$/;
             while(Regx.test(device.id[device.id.length - 1])){
                 device.id = device.id.substring(0, device.id.length - 1);
             }
@@ -1447,8 +1443,8 @@ BioBLESS.logic.circuits = function(){
                 this.devs[i].output[0].y = 35;
             }
             else if(device.id === "OUT"){
-			    this.devs[i].chosen = true;
-				out_index = i;
+                this.devs[i].chosen = true;
+                out_index = i;
                 this.devs[i].input[0] = {};
                 this.devs[i].input[0].x = 0;
                 this.devs[i].input[0].y = 35;
@@ -1499,7 +1495,7 @@ BioBLESS.logic.circuits = function(){
                 this.devs[j].input[0].x = 0;
                 this.devs[j].input[0].y = 35;
                 this.devs[j].chosen = true;
-				out_index = j;
+                out_index = j;
                 this.devs[j].id = "OUT";
                 this.devs[j].stage_h = 70;
                 this.devs[j].stage_w = 150;
@@ -1531,8 +1527,8 @@ BioBLESS.logic.circuits = function(){
             }
             i++;
         }
-		this.poi[this.poi.length - 1][0] = this.devs[out_index];
-		this.poi[this.poi.length] = [];
+        this.poi[this.poi.length - 1][0] = this.devs[out_index];
+        this.poi[this.poi.length] = [];
         this.row = [];
         this.devs_height = 0;
         this.devs_width = 0;
@@ -1575,11 +1571,11 @@ BioBLESS.logic.create_output_stage_of_truth_table = function(back_stage, h) {
     bg.drawRect(0, 0, 300, h);
     bg.endFill();
     stage.addChild(bg);
-	bg.interactive = true;
-	var title = new PIXI.Text("Gates supsifications");
-	title.anchor.x = 0.5;
-	title.x = 150;
-	title.y = 20;
+    bg.interactive = true;
+    var title = new PIXI.Text("Gates supsifications");
+    title.anchor.x = 0.5;
+    title.x = 150;
+    title.y = 20;
     stage.addChild(title);
     var BACK = BioBLESS.logic.create_textbutton("BACK", 100, 40, 0x000000);
     BACK.x = 100;
@@ -1601,7 +1597,7 @@ BioBLESS.logic.create_output_stage_of_truth_table = function(back_stage, h) {
         this.button_bg.beginFill(0x555555, 1);
         this.button_bg.drawRect(0, 0, 260, this.h);
         this.button_bg.endFill();
-		BioBLESS.scroll_function = this.parent.parent.scroll_function;
+        BioBLESS.scroll_function = this.parent.parent.scroll_function;
     };
     var mouse_out = function(){
         this.button_bg.clear();
@@ -1619,8 +1615,8 @@ BioBLESS.logic.create_output_stage_of_truth_table = function(back_stage, h) {
     };
     var on_mouse_end = function(e){
         BioBLESS.base_stage.removeChild(this);
-		var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
-		if(new_position.x < BioBLESS.width - 300)
+        var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
+        if(new_position.x < BioBLESS.width - 300)
             BioBLESS.logic.circuit_draw_of_data(gene_circuits[this.i], BioBLESS.logic.gates_sup[this.i]);
     };
     for(var i = 0; i < BioBLESS.logic.gates_sup.length; i++){
@@ -1670,15 +1666,15 @@ BioBLESS.logic.create_output_stage_of_truth_table = function(back_stage, h) {
 
 BioBLESS.logic.create_gates_list = function(h){
     var stage = new PIXI.Container();
-	var bg = new PIXI.Graphics();
+    var bg = new PIXI.Graphics();
     bg.beginFill(0x888888, 1);
     bg.drawRect(0, 0, 300, h);
-	//bg.drawRect(0, 0, 148, -10);
+    //bg.drawRect(0, 0, 148, -10);
     bg.endFill();
     stage.addChild(bg);
-	bg.interactive = true;
-	var contain = new PIXI.Container();
-	var _logicGates = [];
+    bg.interactive = true;
+    var contain = new PIXI.Container();
+    var _logicGates = [];
     var logicGates = [];
     var mouse_over = function(){
         this.button_bg.beginFill(0x555555, 1);
@@ -1701,10 +1697,10 @@ BioBLESS.logic.create_gates_list = function(h){
     };
     var on_mouse_end = function(e){
         BioBLESS.base_stage.removeChild(this);
-		var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
-		if(new_position.x < BioBLESS.width - 300 && new_position.x > 120){
-		    new_position = e.data.getLocalPosition(BioBLESS.logic.stage.movable_stage);
-		    BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate(BioBLESS.gates[this.Index]);
+        var new_position = e.data.getLocalPosition(BioBLESS.base_stage);
+        if(new_position.x < BioBLESS.width - 300 && new_position.x > 120){
+            new_position = e.data.getLocalPosition(BioBLESS.logic.stage.movable_stage);
+            BioBLESS.logic.elements[BioBLESS.logic.elements.length] = BioBLESS.logic.draw_gate(BioBLESS.gates[this.Index]);
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.x = new_position.x - 75;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].position.y = new_position.y - 35;
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].graphics.interactive = true;
@@ -1747,26 +1743,26 @@ BioBLESS.logic.create_gates_list = function(h){
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
             BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
             BioBLESS.logic.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
-		};
+        };
     };
     for(var i = 0; i < BioBLESS.gates.length; i++){
         _logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         _logicGates[i].position.x = 55;
         _logicGates[i].position.y = 20 + i * 100;
-		_logicGates[i].button_bg = new PIXI.Graphics();
-		_logicGates[i].button_bg.y = _logicGates[i].position.y - 15;
-		_logicGates[i].i = i;
-		_logicGates[i].h = 100;
-		contain.addChild(_logicGates[i].button_bg);
+        _logicGates[i].button_bg = new PIXI.Graphics();
+        _logicGates[i].button_bg.y = _logicGates[i].position.y - 15;
+        _logicGates[i].i = i;
+        _logicGates[i].h = 100;
+        contain.addChild(_logicGates[i].button_bg);
         contain.addChild(_logicGates[i]);
-		_logicGates[i].interactive = true;
+        _logicGates[i].interactive = true;
         _logicGates[i].buttonMode = true;
         logicGates[i].interactive = true;
         logicGates[i].buttonMode = true;
         logicGates[i].Index = i;
-		logicGates[i].alpha = 0.5;
-		_logicGates[i].on('mouseover', mouse_over)
+        logicGates[i].alpha = 0.5;
+        _logicGates[i].on('mouseover', mouse_over)
                       .on('mouseout', mouse_out)
                       .on('mousedown', on_mouse_start);
         logicGates[i].on('mousemove',  on_mouse_move)
@@ -1784,79 +1780,80 @@ BioBLESS.logic.create_gates_list = function(h){
     scroll_area.x = 20;
     scroll_area.y = 20;
     stage.addChild(scroll_area);
-	return stage;
+    return stage;
 };
 
 
 BioBLESS.logic.create_right_stage = function(){
     var stage = new PIXI.Container();
-	var truth_table = BioBLESS.logic.create_base_stage_of_truth_table(BioBLESS.height - 235);
-	var gates_list = BioBLESS.logic.create_gates_list(BioBLESS.height - 235);
-	gates_list.y = 34;
-	truth_table.y = 34;
-	var button1 = new PIXI.Graphics();
-	button1.lineStyle(0, 0, 0);
-	button1.beginFill(0xffffff, 1);
-	button1.drawRect(0, 0, 148, 30);
-	button1.endFill();
-	button1.interactive = true;
-	button1.on("click", function(){
-	    button1.clear();
-	    button1.beginFill(0xffffff, 1);
-	    button1.drawRect(0, 0, 148, 30);
-	    button1.endFill();
-		button2.clear();
-		button2.beginFill(0x888888, 1);
-	    button2.drawRect(152, 0, 148, 30);
-	    button2.endFill();
-	    stage.removeChild(gates_list);
-		stage.addChild(truth_table);
-		stage.addChild(button1);
-	    stage.addChild(button2);
-		stage.addChild(text1);
-	    stage.addChild(text2);
-	});
-	var text1 = new PIXI.Text("Gates list");
-	text1.anchor.x = text1.anchor.y = 0.5;
-	text1.scale.x = text1.scale.y = 100 / text1.width;
-	text1.x = 226;
-	text1.y = 15;
-	
-	var button2 = new PIXI.Graphics();
-	button2.lineStyle(0, 0, 0);
-	button2.beginFill(0x888888, 1);
-	button2.drawRect(152, 0, 148, 30);
-	button2.endFill();
-	button2.interactive = true;
-	button2.on("click", function(){
-	    button1.clear();
-	    button1.beginFill(0x888888, 1);
-	    button1.drawRect(0, 0, 148, 30);
-	    button1.endFill();
-		button2.clear();
-		button2.beginFill(0xffffff, 1);
-	    button2.drawRect(152, 0, 148, 30);
-	    button2.endFill();
-		stage.removeChild(truth_table);
-		stage.addChild(gates_list);
-		stage.addChild(button1);
-	    stage.addChild(button2);
-		stage.addChild(text1);
-	    stage.addChild(text2);
-	});
-	var text2 = new PIXI.Text("Truth table");
-	text2.anchor.x = text2.anchor.y = 0.5;
-	text2.scale.x = text2.scale.y = 100 / text2.width;
-	text2.x = 74;
-	text2.y = 15;
-	
-	stage.addChild(truth_table);
-	stage.addChild(button1);
-	stage.addChild(button2);
-	stage.addChild(text1);
-	stage.addChild(text2);
-	return stage;
+    var truth_table = BioBLESS.logic.create_base_stage_of_truth_table(BioBLESS.height - 235);
+    var gates_list = BioBLESS.logic.create_gates_list(BioBLESS.height - 235);
+    gates_list.y = 34;
+    truth_table.y = 34;
+    var button1 = new PIXI.Graphics();
+    button1.lineStyle(0, 0, 0);
+    button1.beginFill(0xffffff, 1);
+    button1.drawRect(0, 0, 148, 30);
+    button1.endFill();
+    button1.interactive = true;
+    button1.on("click", function(){
+        button1.clear();
+        button1.beginFill(0xffffff, 1);
+        button1.drawRect(0, 0, 148, 30);
+        button1.endFill();
+        button2.clear();
+        button2.beginFill(0x888888, 1);
+        button2.drawRect(152, 0, 148, 30);
+        button2.endFill();
+        stage.removeChild(gates_list);
+        stage.addChild(truth_table);
+        stage.addChild(button1);
+        stage.addChild(button2);
+        stage.addChild(text1);
+        stage.addChild(text2);
+    });
+    var text1 = new PIXI.Text("Gates list");
+    text1.anchor.x = text1.anchor.y = 0.5;
+    text1.scale.x = text1.scale.y = 100 / text1.width;
+    text1.x = 226;
+    text1.y = 15;
+    
+    var button2 = new PIXI.Graphics();
+    button2.lineStyle(0, 0, 0);
+    button2.beginFill(0x888888, 1);
+    button2.drawRect(152, 0, 148, 30);
+    button2.endFill();
+    button2.interactive = true;
+    button2.on("click", function(){
+        button1.clear();
+        button1.beginFill(0x888888, 1);
+        button1.drawRect(0, 0, 148, 30);
+        button1.endFill();
+        button2.clear();
+        button2.beginFill(0xffffff, 1);
+        button2.drawRect(152, 0, 148, 30);
+        button2.endFill();
+        stage.removeChild(truth_table);
+        stage.addChild(gates_list);
+        stage.addChild(button1);
+        stage.addChild(button2);
+        stage.addChild(text1);
+        stage.addChild(text2);
+    });
+    var text2 = new PIXI.Text("Truth table");
+    text2.anchor.x = text2.anchor.y = 0.5;
+    text2.scale.x = text2.scale.y = 100 / text2.width;
+    text2.x = 74;
+    text2.y = 15;
+    
+    stage.addChild(truth_table);
+    stage.addChild(button1);
+    stage.addChild(button2);
+    stage.addChild(text1);
+    stage.addChild(text2);
+    return stage;
 };
+
 /**
  * circuit_draw_of_data is the function to draw according to true table
  * @function
@@ -2183,8 +2180,8 @@ BioBLESS.logic.draw = function(devices){
     that.plusobj.position.x = BioBLESS.width - 150;
     that.plusobj.position.y = 50;
     var right_stage = BioBLESS.logic.create_right_stage();
-	right_stage.x = BioBLESS.width - 300;
-	right_stage.y = 100;
+    right_stage.x = BioBLESS.width - 300;
+    right_stage.y = 100;
     var added = false;
     that.plusobj.on('mousedown', function() {
         if(added){
@@ -2193,7 +2190,7 @@ BioBLESS.logic.draw = function(devices){
         }
         else{
             BioBLESS.logic.stage.addChild(right_stage);
-			BioBLESS.logic.stage.addChild(that.plusobj);
+            BioBLESS.logic.stage.addChild(that.plusobj);
             that.plusobj.condition = 1;
         }
         added = !added;
