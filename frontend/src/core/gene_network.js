@@ -6,10 +6,12 @@
 BioBLESS.gene_network.init = function() {
     this.stage = BioBLESS.utils.init_stage();
 };
+
 BioBLESS.gene_network.onchange = function() {
 	BioBLESS.gene_network.gates = BioBLESS.logic.circuit;
     BioBLESS.gene_network.draw(BioBLESS.gates, -1);
 };
+
 (function() {
 /** 
 * @description {Num} the height and the width of node, the distance between nodes, the distance between floors
@@ -89,14 +91,14 @@ this.prepare = function(devices, n){
         this.input[i].to_dev_output_index = [];
         this.input[i].x = [];
         this.input[i].y = [];
-    };
+    }
     this.output = [];
     this.output_num = 0;
     for(i = 0; i < devices[n].output.length; i++){
         this.output[i] = {};
         this.output[i].to_dev_index = [];
         this.output[i].to_dev_input_index = [];
-    };
+    }
     
     
     
@@ -109,9 +111,9 @@ this.prepare = function(devices, n){
         for(j = 0; j < devices[n].parts.id[i].length; j++){
             this.part_to_line[this.parts_num + j] = i;
             this.to_part[i][j] = this.parts_num + j;
-        };
+        }
         this.parts_num = this.parts_num + devices[n].parts.id[i].length;
-    };//计算总结点数
+    }//计算总结点数
 };
 
 /** 
@@ -129,8 +131,8 @@ this.line_analysis = function(devices, n){
         for(j = 0; j < this.parts_num; j++){
             this.is_line[i][j] = false;
             this.line_type[i][j] = null;
-        };
-    };
+        }
+    }
     var end, start;
     for(k = 0; k < devices[n].map.length; k++){
         if(devices[n].map[k].id1[0] === 'd'){
@@ -142,17 +144,17 @@ this.line_analysis = function(devices, n){
                     s = devices[n].map[l].type;
                     break;
                 };
-            };
+            }
             if(end == -1){
                 this.is_line[start][start] = true;
                 this.line_type[start][start] = s;
             }else{
                 this.is_line[start][end] = true;
                 this.line_type[start][end] = s;
-            };
+            }
             
-        };
-    };    
+        }
+    }  
     
 };
 /** 
@@ -187,11 +189,11 @@ this.height_analysis = function(devices, n){
                     for(k = i; k <= j; k++){
                         this.part[k].down_max_height = l;
                     };
-                };
+                }
                 this.protein_height[i] = l;
                 
                 
-            };
+            }
             if(this.is_line[j][i]){
                 if(this.part_to_line[i] == this.part_to_line[j]){
                     l = 0;
@@ -214,10 +216,10 @@ this.height_analysis = function(devices, n){
                 };
                 this.protein_height[j] = l;
                 
-            };
-        };
+            }
+        }
         
-    };//计算this.protein_height
+    }//计算this.protein_height
     for(i = 0; i < devices[n].output.length; i++){
         j = parseInt(devices[n].output[i].substring(1)) - 1;
         this.protein_height[j] = ++this.part[j].up_max_height;
@@ -226,7 +228,7 @@ this.height_analysis = function(devices, n){
     for(i = 0; i < this.parts_num; i++){
         if(this.protein_height[i] > this.protein_heightest) this.protein_heightest = this.protein_height[i];
         if(this.protein_height[i] < this.protein_lowest) this.protein_lowest = this.protein_height[i];
-    };
+    }
 };
 
 /** 
@@ -261,9 +263,9 @@ this.part_analysis = function(devices, n){
                     this.part[i].downOutdegree += 1;
                    if(this.is_line[j][i])
                     this.part[i].downIndegree += 1;
-            };
-        };
-    };
+            }
+        }
+    }
     for(i = 0; i < devices[n].map.length; i++){
         if(devices[n].map[i].id2[0] !== 'e'){
             for(j = 0; j < devices[n].input.length; j++){
@@ -297,7 +299,7 @@ this.draw = function(devices, n){
     if(!devices[n]){
         alert("Error!");
         return;
-    };
+    }
     this.prepare(devices, n);
     this.line_analysis(devices, n);
     this.part_analysis(devices, n);
@@ -326,20 +328,19 @@ this.draw = function(devices, n){
     for(i = 0; i < this.lines_num; i++){
         graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
         for(j = 0; j < devices[n].parts.id[i].length; j++){
-            //parts[this.to_part[i][j]] = BioBLESS.sbol_draw.draw_sbol_svg(this.get_id());
 			parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
             parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
             parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
             parts[this.to_part[i][j]].interactive = true;
             parts[this.to_part[i][j]].buttonMode = true;
             parts[this.to_part[i][j]].on('click', on_click);
-        };
+        }
         Num += devices[n].parts.id[i].length;
         graphics.lineTo((Num + i + 1) * nodeDis + 30, this.stage_h / 2.0);
         graphics.moveTo((Num + i + 1) * nodeDis + 30, this.stage_h / 2.0);
         graphics.lineTo((Num + i + 1) * nodeDis - 11 + 30, this.stage_h / 2.0 - 8);
         graphics.lineTo((Num + i + 1) * nodeDis - 11 + 30, this.stage_h / 2.0 + 8);
-    };//绘制主线上的part
+    }//绘制主线上的part
     
     var ind = 15;
     graphics.lineStyle(12, 0xc2752d, 1);
@@ -365,7 +366,7 @@ this.draw = function(devices, n){
                         graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 6, parts[j].position.y - 7 + ind + 5);
                     }else{
                         this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 5 + ind + 5, "down");
-                    };
+                    }
                 }else{
                     this.part[i].downLine++;
                     this.part[j].downLine++;
@@ -382,11 +383,9 @@ this.draw = function(devices, n){
                         graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 6, parts[j].position.y + nodeH + 7 - ind - 15);
                     }else{
                         this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5 - ind - 15, "up");
-                    };
-                };
-				
-                
-            };
+                    }
+                }
+            }
 			if(this.is_line[j][i]){
                 parts[j].protein = BioBLESS.biopart_draw.draw_biopart_svg("Protein");
                 parts[j].protein.position.x = parts[j].position.x;
@@ -406,7 +405,7 @@ this.draw = function(devices, n){
                         graphics.lineTo(parts[i].position.x + l * this.part[i].upLine + 6, parts[i].position.y - 7 + ind + 5);
                     }else{
                         this.draw_arrow(graphics, 6, parts[i].position.x + l * this.part[i].upLine, parts[i].position.y - 5 + ind + 5, "down");
-                    };
+                    }
                 }else{
                     this.part[i].downLine++;
                     this.part[j].downLine++;
@@ -423,11 +422,11 @@ this.draw = function(devices, n){
                         graphics.lineTo(parts[i].position.x + l * this.part[i].downLine + 6, parts[i].position.y + nodeH + 7 - ind - 15);
                     }else{
                         this.draw_arrow(graphics, 6, parts[i].position.x + l * this.part[i].downLine, parts[i].position.y + nodeH + 5 - ind - 15, "up");
-                    };
-                };
-            };
-        };
-    };
+                    }
+                }
+            }
+        }
+    }
     for(j = 0; j < devices[n].output.length; j++){
         i = parseInt(devices[n].output[j].substring(1)) - 1;
         this.part[i].upLine++;
@@ -443,7 +442,7 @@ this.draw = function(devices, n){
             graphics.lineTo(parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12);
         }
         this.draw_arrow(graphics, 6, parts[i].position.x + nodeW / 2, parts[i].protein.position.y + nodeH + 5 - ind - 12, "up");
-    };//绘制有关蛋白质节点的支路
+    }//绘制有关蛋白质节点的支路
     
     graphics.lineStyle(12, 0x7ec02a, 1);
     for(i = 0; i < devices[n].map.length; i++){
@@ -462,7 +461,7 @@ this.draw = function(devices, n){
             }else{
                 input_num = this.down_height_input_num;
                 height = 0 - height;
-            };
+            }
             if(input_num[height] === undefined)
                 input_num[height] = 0;
             var ind2 = input_num[height]++ * 10;
@@ -494,14 +493,14 @@ this.draw = function(devices, n){
                 
                 parts[k].protein.Text.position.x = parts[k].protein.position.x - 30;
                 parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
-            };
+            }
             
             for(var p = 0; p < devices[n].input.length; p++){
                 if(devices[n].input[p] === devices[n].map[i].id1){
                     this.input[p].x[this.input[p].x.length] = parts[k].protein.Text.position.x;
                     this.input[p].y[this.input[p].y.length] = parts[k].protein.Text.position.y;
                 }
-            };
+            }
         }else{
             for(j = 0; j < devices[n].input.length; j++){
                 if(devices[n].input[j] === devices[n].map[i].id1){
@@ -534,15 +533,15 @@ this.draw = function(devices, n){
                     this.input[j].x[this.input[j].x.length] = parts[k].Text[t].position.x;
                     this.input[j].y[this.input[j].y.length] = parts[k].Text[t].position.y;
                     break;
-                };
-            };
-        };
-    };//绘制Input的支路
+                }
+            }
+        }
+    }//绘制Input的支路
     
     for(i = 0; i < devices[n].output.length; i++){
         this.output[i].x = parts[(parseInt(devices[n].output[i].substring(1)) - 1)].protein.position.x;
         this.output[i].y = parts[(parseInt(devices[n].output[i].substring(1)) - 1)].protein.position.y;
-    };
+    }
     
     
     graphics.lineStyle(4, 0xffffff, 1);
@@ -557,8 +556,8 @@ this.draw = function(devices, n){
         this.stage.addChild(parts[i]);
         if(parts[i].protein){
             this.stage.addChild(parts[i].protein);
-        };
-    };
+        }
+    }
 	this.parts = parts;
     }else if(n === -1){
         var output = BioBLESS.gene_network.create_textbutton("OUT", 100, 40, 0x2672bd);
@@ -594,7 +593,7 @@ this.draw = function(devices, n){
         this.output[0].to_dev_input_index = [];
         this.output[0].x = 452;
         this.output[0].y = -65;
-    };
+    }
     
     
 };//绘制函数
@@ -605,13 +604,13 @@ this.show_input = function(){
         if(parts[i].protein){
             if(parts[i].protein.Text){
                 this.stage.addChild(parts[i].protein.Text);
-            };
-        };
+            }
+        }
         if(parts[i].Text){
             for(j = 0; j < parts[i].Text.length; j++)
                 this.stage.addChild(parts[i].Text[j]);
         }
-    };
+    }
 };
 
 };
@@ -641,7 +640,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
 	BioBLESS.logic.mark_back = [];
 	for(j = 0; j < BioBLESS.logic.mark.length; j++){
 	    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
-	};
+	}
     this.devs = [];
     this.devices = [];
     var gates = this.gates;
@@ -653,7 +652,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
                 g[i] = j;
                 break;
             }
-        };
+        }
         if(j === devices.length){
             if(gates.nodes[i] === "OUT"){
                 g[i] = -1;
@@ -662,7 +661,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
                 g[i] = -2 - input_num++;
             }else alert("Error - 1002");
         }
-    };
+    }
     this.input_num = input_num;
     var j = 0;
     for(i = 0; i < gates.nodes.length; i++){
@@ -680,7 +679,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
         index_button.y = 100;
 		index_button.scale.x = index_button.scale.y = 1.5;
         this.devs[i].stage.addChild(index_button);
-    };
+    }
     for(i = 0; i < gates.arcs.length; i++){
         var from = gates.arcs[i].from;
         var to = gates.arcs[i].to;
@@ -710,7 +709,7 @@ BioBLESS.gene_network.devs_analysis = function(devices){
             this.poi[0][this.poi[0].length] = this.devs[i];
             this.devs[i].chosen = true;
         }
-    };
+    }
 	if(this.poi[0].length === 0)
 	    return;
     i = 0;
@@ -725,11 +724,11 @@ BioBLESS.gene_network.devs_analysis = function(devices){
                         this.devs[this.poi[i][j].output[k].to_dev_index[l]].chosen = true;
                     }
                 }
-            };
+            }
             
-        };
+        }
         i++;
-    };
+    }
 	this.poi[this.poi.length - 1][0] = this.devs[out_index];
 	this.poi[this.poi.length] = [];
 	
@@ -745,21 +744,21 @@ BioBLESS.gene_network.devs_analysis = function(devices){
             this.row[i].node_height = this.poi[i][j].stage_h;
             if(this.row[i].width < this.poi[i][j].stage_w)
                 this.row[i].width = this.poi[i][j].stage_w;
-        };
+        }
 		this.row[i].node_height += 550;
         this.row[i].width += 200;
         if(this.devs_height < this.row[i].node_height * this.poi[i].length)
             this.devs_height = this.row[i].node_height * this.poi[i].length;
-    };
+    }
     var x = 0;
     for(i = 0; i < this.row.length; i++){
         for(j = 0; j < this.poi[i].length; j++){
             this.poi[i][j].stage.position.x = x + j % (Math.floor(this.poi[i].length / 2) + 1) * 20 + (this.row[i].width -this.poi[i][j].stage_w) / 2 ;
             this.poi[i][j].stage.position.y = (j + 1) / (this.poi[i].length + 1) * this.devs_height - this.poi[i][j].stage_h / 2;
             this.stage.movable_stage.addChild(this.poi[i][j].stage);
-        };
+        }
         x += this.row[i].width;
-    };
+    }
     this.devs_width = x - 200;
     
     
@@ -816,9 +815,9 @@ BioBLESS.gene_network.draw_lines_between_devices = function(){
                 }
                 }
                 this.stage.movable_stage.addChild(graphic);
-            };
-        };
-    };
+            }
+        }
+    }
 	if(this.poi[0].length > 0)
         this.stage.movable_stage.addChild(this.poi[this.poi.length - 2][0].stage);
 };
@@ -1107,7 +1106,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
     var items = [];
     for(var i = 0; i < device.map.length; i++){
         items[i] = "e" + (i + 1).toString();
-    };
+    }
     var scroll_area = BioBLESS.gene_network.create_scroll_area(items, 80);
 	scroll_area.on_click_outside = function(){
 	    title_bg.is_view = false;
@@ -1127,7 +1126,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
     for(var i = 0; i < buttons.length; i++){
         buttons[i].bg.i = i;
         buttons[i].bg.on("click", on_click);
-    };
+    }
     title_bg.on("click", function(){
         if(this.is_view){
             this.is_view = false;
@@ -1154,7 +1153,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
             inputitem.change_value = function(value){
                 BioBLESS.gene_network.devices[this.index].map[this.i].params[this.o] = value;
             };
-        };
+        }
         stage.inputarea[i] = BioBLESS.logic.create_scrollarea(contain, j * 50, 260, BioBLESS.height - 310);
         stage.inputarea[i].x = 20;
         stage.inputarea[i].y = 220;
@@ -1164,7 +1163,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index){
                 BioBLESS.gene_network.textarea = undefined;
             }
         };
-    };
+    }
     stage.now_inputarea = stage.inputarea[0];
     stage.addChild(title_bg);
     stage.addChild(title);
@@ -1240,7 +1239,7 @@ BioBLESS.gene_network.create_base_stage_of_input = function(){
             for(var i = 0; i < buttons.length; i++){
                 buttons[i].bg.i = i;
                 buttons[i].bg.on("click", on_click);
-            };
+            }
         }
     });
     stage.addChild(title_bg);
@@ -1335,17 +1334,17 @@ BioBLESS.gene_network.get_parameters = function(){
             };
 			parameters.simulation_parameters[k].device_parameter.initial[0] = BioBLESS.gene_network.system_parameters.input[input_num++];
 			continue;
-		};
+		}
 		for(var j = 0; j < BioBLESS.gene_network.devices[i].map.length; j++){
 		    parameters.simulation_parameters[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params.__proto__;
-		};
+		}
 		parameters.simulation_parameters[k].device_parameter = {
                 "initial": [
                     10, 10, 10
                 ]
             };
 		i++;
-	};
+	}
 	return parameters;
 };
 
@@ -1362,7 +1361,7 @@ BioBLESS.gene_network.move_to_device = function(mark){
         this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2) - 400) / 2 + 100; 
         this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * ((t1 < t2)? t1 : t2)) / 2; 
 		return;
-	};
+	}
     var t1 = (BioBLESS.width - 400) / this.devs[mark].stage_w;
     var t2 = BioBLESS.height / this.devs[mark].stage_h;
     this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = ((t1 < t2)? t1 : t2) * 0.8;
@@ -1395,11 +1394,11 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
             BioBLESS.gene_network.system_parameters = {};
             BioBLESS.gene_network.system_parameters.time = 1000;
             BioBLESS.gene_network.system_parameters.input = [];
-		};
+		}
         for(var i = 0; i < this.input_num; i++){
 		    if(BioBLESS.gene_network.system_parameters.input[i] === undefined)
                 BioBLESS.gene_network.system_parameters.input[i] = 10;
-        };
+        }
 		var ijkl = BioBLESS.gene_network.create_base_stage_of_input();
 		if(mark === undefined){
 		    BioBLESS.gene_network.move_to_device(-1);
