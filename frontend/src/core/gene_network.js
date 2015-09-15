@@ -619,16 +619,34 @@ this.show_input = function(){
 * @param {obj} the object you want to clone
 * @return {obj} the object which has been cloned
 */ 
-BioBLESS.gene_network.clone = function(obj){
-    function Clone(){};
-    Clone.prototype = obj;
-    var o = new Clone();
-    for(var a in o){
-        if(typeof o[a] == "object") {
-            o[a] = BioBLESS.gene_network.clone(o[a]);
-        }
-    }
-    return o;
+BioBLESS.gene_network.clone = function clone(obj){
+	var o;
+	switch(typeof obj){
+	case 'undefined': break;
+	case 'string'   : o = obj + '';break;
+	case 'number'   : o = obj - 0;break;
+	case 'boolean'  : o = obj;break;
+	case 'object'   :
+		if(obj === null){
+			o = null;
+		}else{
+			if(obj instanceof Array){
+				o = [];
+				for(var i = 0, len = obj.length; i < len; i++){
+					o.push(clone(obj[i]));
+				}
+			}else{
+				o = {};
+				for(var k in obj){
+					o[k] = clone(obj[k]);
+				}
+			}
+		}
+		break;
+	default:		
+		o = obj;break;
+	}
+	return o;	
 }
 
 /** 
@@ -1302,7 +1320,6 @@ BioBLESS.gene_network.create_base_stage_of_input = function(h){
 		    BioBLESS.gene_network.OK_button.alpha = 1;
 		    BioBLESS.gene_network.OK_button.interactive = true;
 	        BioBLESS.gene_network.OK_button.buttonMode = true;
-			alert("TIME OUT!");
 		}, 24000);
 	};
 	OK.on("click", OK_function);
@@ -1336,7 +1353,7 @@ BioBLESS.gene_network.get_parameters = function(){
 			continue;
 		}
 		for(var j = 0; j < BioBLESS.gene_network.devices[i].map.length; j++){
-		    parameters.simulation_parameters[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params.__proto__;
+		    parameters.simulation_parameters[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params;
 		}
 		parameters.simulation_parameters[k].device_parameter = {
                 "initial": [
