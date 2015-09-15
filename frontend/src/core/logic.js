@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -170,7 +170,8 @@ BioBLESS.logic.circuit_add_line = function(mama, papa) {
 BioBLESS.logic.circuit_delete_line = function(mama, papa) {
     var i,j;
     var m,d;
-    for(var k = 0; k < BioBLESS.logic.elements.length; k++){
+    var k;
+    for(k = 0; k < BioBLESS.logic.elements.length; k++){
         if(mama.parent === BioBLESS.logic.elements[k]){
             i = k;
         }
@@ -178,11 +179,10 @@ BioBLESS.logic.circuit_delete_line = function(mama, papa) {
             j = k;
         }
     }//确定线父母的家长是哪个节点
-    var k;
     if((mama === mama.parent.input_1 || mama === mama.parent.input_2) && (papa === papa.parent.input_1 || papa === papa.parent.input_2)){
         for(k = 0; k < BioBLESS.logic.circuit.arcs.length; k++){
             if(BioBLESS.logic.circuit.arcs[k].to === BioBLESS.logic.mark[i] && BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.arcs[k].from] === "INPUT"){
-                for(var l = 0;l < BioBLESS.logic.circuit.arcs.length; l++){
+                for(var l = 0; l < BioBLESS.logic.circuit.arcs.length; l++){
                     if(BioBLESS.logic.circuit.arcs[l].to === BioBLESS.logic.mark[j] && BioBLESS.logic.circuit.arcs[l].from === BioBLESS.logic.circuit.arcs[k].from){
                         BioBLESS.logic.circuit.arcs.splice(l, 1);
                         BioBLESS.logic.circuit.nodes[BioBLESS.logic.circuit.nodes.length] = "INPUT";
@@ -463,8 +463,9 @@ BioBLESS.logic.on_drag_move_e = function() {
         var yRect;
         var wRect;
         var hRect;
+        var i;
         if(this.parent.input_1.connection){
-            for(var i = 0; i < this.parent.input_1.counts; i++){
+            for(i = 0; i < this.parent.input_1.counts; i++){
                 if(this.parent.input_1.lines[i][0].father === this.parent.input_1){
                     xRect = this.parent.input_1.lines[i][0].mother.position.x + this.parent.input_1.lines[i][0].mother.parent.position.x;
                     yRect = this.parent.input_1.lines[i][0].mother.position.y + this.parent.input_1.lines[i][0].mother.parent.position.y;
@@ -509,7 +510,7 @@ BioBLESS.logic.on_drag_move_e = function() {
             }
         }
         if(this.parent.input_2.connection){
-            for(var i = 0; i < this.parent.input_2.counts; i++){
+            for(i = 0; i < this.parent.input_2.counts; i++){
                 if(this.parent.input_2.lines[i][0].father === this.parent.input_2){
                     xRect = this.parent.input_2.lines[i][0].mother.position.x + this.parent.input_2.lines[i][0].mother.parent.position.x;
                     yRect = this.parent.input_2.lines[i][0].mother.position.y + this.parent.input_2.lines[i][0].mother.parent.position.y;
@@ -555,7 +556,7 @@ BioBLESS.logic.on_drag_move_e = function() {
             }
         }
         if(this.parent.output.connection){
-            for(var i = 0; i < this.parent.output.counts; i++){
+            for(i = 0; i < this.parent.output.counts; i++){
                 if(this.parent.output.lines[i][0].father === this.parent.output){
                     xRect = this.parent.output.lines[i][0].mother.position.x + this.parent.output.lines[i][0].mother.parent.position.x;
                     yRect = this.parent.output.lines[i][0].mother.position.y + this.parent.output.lines[i][0].mother.parent.position.y;
@@ -788,8 +789,8 @@ BioBLESS.logic.line_delete_button_down = function() {
 BioBLESS.logic.line_wait_for_key = function(event) {
     var currkey;
     this.keypress = function(e) {
-        var e = e || event;
-        var currkey = e.keyCode || e.which || e.charCode;
+        e = e || event;
+        currkey = e.keyCode || e.which || e.charCode;
     };
     this.keypress();
     switch(currkey){
@@ -849,24 +850,25 @@ BioBLESS.logic.gate_delete_buttonDelete = function() {
  */
 BioBLESS.logic.gate_delete_button_right = function(event) {
     var ready;
+    var k;
     ready = BioBLESS.logic.circuit_delete_gate(this.parent);
     if(ready === "OK"){
         if(this.parent.input_1.connection === true){
-            for(var k = 0; k < this.parent.input_1.counts; k++){
+            for(k = 0; k < this.parent.input_1.counts; k++){
                 this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
             }
             this.parent.input_1.counts = 0;
             this.parent.input_1.connection = false;
         }
         if(this.parent.input_2.connection === true){
-            for(var k = 0; k < this.parent.input_2.counts; k++){
+            for(k = 0; k < this.parent.input_2.counts; k++){
                 this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
             }
             this.parent.input_2.counts = 0;
             this.parent.input_2.connection = false;
         }
         if(this.parent.output.connection === true){
-            for(var k = 0; k < this.parent.output.counts; k++){
+            for(k = 0; k < this.parent.output.counts; k++){
                 this.parent.parent.removeChild(this.parent.output.lines[k][0]);
             }
             this.parent.output.counts = 0;
@@ -917,23 +919,24 @@ BioBLESS.logic.gate_wait_for_key = function() {
     switch(currkey){
         case 46: //delete
             ready = BioBLESS.logic.circuit_delete_gate(this.parent);
+            var k;
             if(ready === "OK"){
                 if(this.parent.input_1.connection === true){
-                    for(var k = 0; k < this.parent.input_1.counts; k++){
+                    for(k = 0; k < this.parent.input_1.counts; k++){
                         this.parent.parent.removeChild(this.parent.input_1.lines[k][0]);
                     }
                     this.parent.input_1.counts = 0;
                     this.parent.input_1.connection = false;
                 }
                 if(this.parent.input_2.connection === true){
-                    for(var k = 0; k < this.parent.input_2.counts; k++){
+                    for(k = 0; k < this.parent.input_2.counts; k++){
                         this.parent.parent.removeChild(this.parent.input_2.lines[k][0]);
                     }
                     this.parent.input_2.counts = 0;
                     this.parent.input_2.connection = false;
                 }
                 if(this.parent.output.connection === true){
-                    for(var k = 0; k < this.parent.output.counts; k++){
+                    for(k = 0; k < this.parent.output.counts; k++){
                         this.parent.parent.removeChild(this.parent.output.lines[k][0]);
                     }
                     this.parent.output.counts = 0;
@@ -1078,6 +1081,7 @@ BioBLESS.logic.create_picturebutton = function(w){
 	button.addChild(icon1);
     return button;
 };
+
 BioBLESS.logic.on_drag_s = function(event){
     this.data = event.data;
     this.alpha = 0.5;
