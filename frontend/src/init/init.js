@@ -32,7 +32,7 @@ BioBLESS.init = function() {
     BioBLESS.base_stage.addChild(BioBLESS.stage);
     BioBLESS.base_stage.static_stage.fps = new PIXI.Text("FPS: " + fps);
 	BioBLESS.base_stage.static_stage.fps.style.fill = "white";
-    BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 400;
+    BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 110;
     BioBLESS.base_stage.static_stage.fps.y = BioBLESS.height - 30;
     setInterval(function() {BioBLESS.base_stage.static_stage.fps.text = "FPS: " + fps;}, 1000);
 

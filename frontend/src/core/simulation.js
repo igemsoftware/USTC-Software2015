@@ -2,11 +2,13 @@
     this.stage = BioBLESS.utils.init_stage();
 };
 BioBLESS.simulation.refresh = function(){
+    this.parameter = BioBLESS.gene_network.clone(BioBLESS.gene_network.get_parameters());
+    this.output_index = BioBLESS.gene_network.out_index;
     $.ajax({
         type: 'POST',
         url: BioBLESS.host + '/simulate/',
         contentType: 'application/json',
-        data: JSON.stringify(BioBLESS.gene_network.get_parameters()),
+        data: JSON.stringify(this.parameter),
         success: function(data) {
 		    BioBLESS.simulation.draw(data); 
 			BioBLESS.change_stage(BioBLESS.simulation);
