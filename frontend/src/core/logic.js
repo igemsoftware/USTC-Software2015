@@ -1,4 +1,4 @@
-﻿﻿﻿/**
+﻿﻿﻿﻿﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -322,7 +322,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.output.connection = false;
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
-    element.title.position.y = 35;
+    element.title.position.y = 82;
 	element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
@@ -344,11 +344,37 @@ BioBLESS.logic.draw_gate = function(device){
             alert("Error - 1001!");
             break;
         case "XOR":
-        case "AND":
-        case "OR":
         case "xor":
+            break;
+        case "AND":
         case "and":
+            element.ieee_type = new PIXI.Text("&");
+            element.ieee_type.position.x = 35;
+            element.ieee_type.position.y = 15;
+            element.ieee_type.style.fill = "white";
+            element.input_1.beginFill(0xffffff, 1);
+            element.input_1.drawRect(0, 0, 30, 3);
+            element.input_1.position.x = 0;
+            element.input_1.position.y = 17;
+            element.input_1.endFill();
+            element.input_1.beginFill(0, 0);
+            element.input_1.drawRect(0, -1, 30, 5);
+            element.input_1.endFill();
+            element.input_2.beginFill(0xffffff, 1);
+            element.input_2.drawRect(0, 0, 30, 3);
+            element.input_2.position.x = 0;
+            element.input_2.position.y = 51;
+            element.input_2.endFill();
+            element.input_2.beginFill(0, 0);
+            element.input_2.drawRect(0, -1, 30, 5);
+            element.input_2.endFill();
+            break;
+        case "OR":
         case "or":
+            element.ieee_type = new PIXI.Text(">=1");
+            element.ieee_type.position.x = 35;
+            element.ieee_type.position.y = 15;
+            element.ieee_type.style.fill = "white";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -368,6 +394,10 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "NOT":
         case "not":
+            element.ieee_type = new PIXI.Text("1");
+            element.ieee_type.position.x = 35;
+            element.ieee_type.position.y = 15;
+            element.ieee_type.style.fill = "white";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -385,6 +415,10 @@ BioBLESS.logic.draw_gate = function(device){
         case "nor":
         case "XNOR":
         case "xnor":
+            element.ieee_type = new PIXI.Text("=");
+            element.ieee_type.position.x = 35;
+            element.ieee_type.position.y = 15;
+            element.ieee_type.style.fill = "white";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -408,6 +442,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.addChild(element.input_2);
     element.addChild(element.output);
     element.addChild(element.title);
+    element.addChild(element.ieee_type);
     return element;
 };
 
