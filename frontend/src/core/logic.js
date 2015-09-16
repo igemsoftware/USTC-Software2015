@@ -2125,11 +2125,11 @@ BioBLESS.logic.output_check = function() {
         return true;
     }
     else if(output_count === 0){
-        alert("Error, no output in this circuits!");
+        throw new Error("Error, no output in this circuits!");
         return false;
     }
     else{
-        alert("Error, more than one output in this circuits!");
+        throw new Error("Error, more than one output in this circuits!");
         return false;
     }
 };

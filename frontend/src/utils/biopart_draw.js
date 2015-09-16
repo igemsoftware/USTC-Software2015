@@ -19,6 +19,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
 	    case "Cds":
         case "cds":
 		case "Coding":
+		case "coding":
             /**
              * cds
              * <path fill="#3360A3" d="M 452.625 25.76
@@ -115,6 +116,8 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             break;
         case "sRNA":
 		case "SRNA":
+		case "srna":
+		case "Srna":
             /**
              * sRNA
              * <path fill="#6B6C28" d="M220.375 181.582
@@ -268,12 +271,12 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * terminator
              * <circle fill="#FAC811" cx="411" cy="261" r="138"/>
              */
-            graphics.beginFill(0x99a769, 1);
+            graphics.beginFill(0xFF0505, 1);
             graphics.drawCircle(100, 100, 50);
             graphics.endFill();
             break;
         default:
-            throw new Error("Not Found");
+            throw new Error("Not found!");
     }
     return stage;
 };
