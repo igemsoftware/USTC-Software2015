@@ -50,7 +50,7 @@ BioBLESS.dna.make_dna_sequence = function(){
         lineHeight : 100
     };
     deoxyribonucleic_acid.device_style = {
-        font : 'bold 40px "Courier New"',
+        font : 'bold 30px "Courier New"',
         fill : 'grey',
         lineHeight : 100
     };
