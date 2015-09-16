@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿/**
+﻿﻿﻿﻿﻿﻿﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -2107,6 +2107,32 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
     }
 };
 
+/**
+ * output_check is the function to check the number of circuits' output.
+ * @function
+ * @return {statement} boolean
+ */
+BioBLESS.logic.output_check = function() {
+    var output_count = 0;
+    var i;
+    for(i = 0; i < BioBLESS.logic.elements.length; i++){
+        if(BioBLESS.logic.elements[i].output.connection === false){
+            output_count++;
+        }
+    }
+    if(output_count === 1){
+        alert("Circuits operating normally.");
+        return true;
+    }
+    else if(output_count === 0){
+        alert("Error, no output in this circuits!");
+        return false;
+    }
+    else{
+        alert("Error, more than one output in this circuits!");
+        return false;
+    }
+};
 
 /**
  * draw function works for renderng the whole homepage.<br>
@@ -2252,6 +2278,7 @@ BioBLESS.logic.draw = function(devices){
     var scroll_area = BioBLESS.logic.create_scrollarea(contain, 1000, 200, 200);*/
     
     //scroll_area.change_position(400, 400);
+
     BioBLESS.logic.stage.addChild(BioBLESS.logic.stage.movable_stage);
     BioBLESS.logic.stage.addChild(that.plusobj);
     //BioBLESS.logic.stage.addChild(abcd);
