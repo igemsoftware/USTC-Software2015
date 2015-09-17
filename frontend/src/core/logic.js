@@ -1813,7 +1813,7 @@ BioBLESS.logic.create_gates_list = function(h){
                      .on('mouseup',  on_mouse_end)
                      .on('mouseupoutside',  on_mouse_end); 					  
     }
-    var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 100 + 20, 260, h - 40);
+    var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 120 + 20, 260, h - 40);
     var mask = new PIXI.Graphics();
     mask.interactive = true;
     mask.beginFill(0, 0);
