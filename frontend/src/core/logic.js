@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿/**
+﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -302,12 +302,21 @@ BioBLESS.logic.draw_gate = function(device){
      */
     var icon = device.id;
     var Regx = /^[0-9]*$/;
+    var gate_style = {
+        font : 'bold 16px Arial',
+        fill : 'white',
+        align : 'left'
+    };
+    var site_style = {
+    	fill : 'white',
+        align : 'center'
+    };
     while(Regx.test(icon[icon.length - 1])){
         icon = icon.substring(0, icon.length - 1);
     }
     var element = new PIXI.Container();
     element.graphics = new PIXI.Graphics();
-    element.title = new PIXI.Text(device.id);
+    element.title = new PIXI.Text(device.id, gate_style);
     element.input_1 = new PIXI.Graphics();
     element.input_1.lines = [];
     element.input_1.counts = 0;
@@ -322,7 +331,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.output.connection = false;
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
-    element.title.position.y = 82;
+    element.title.position.y = 84;
 	element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
@@ -339,6 +348,11 @@ BioBLESS.logic.draw_gate = function(device){
     element.output.beginFill(0, 0);
     element.output.drawRect(-30, -1, 30, 5);
     element.output.endFill();
+            
+    element.ieee_type = new PIXI.Text("", site_style);
+    element.ieee_type.position.x = 75;
+    element.ieee_type.position.y = 35;
+
     switch(icon){
         default: 
             alert("Error - 1001!");
@@ -348,10 +362,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "AND":
         case "and":
-            element.ieee_type = new PIXI.Text("&");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "&";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -371,10 +382,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "OR":
         case "or":
-            element.ieee_type = new PIXI.Text(">=1");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "≥1";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -394,10 +402,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "NOT":
         case "not":
-            element.ieee_type = new PIXI.Text("1");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "1";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -415,10 +420,7 @@ BioBLESS.logic.draw_gate = function(device){
         case "nor":
         case "XNOR":
         case "xnor":
-            element.ieee_type = new PIXI.Text("=");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "=";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -459,14 +461,14 @@ BioBLESS.logic.on_drag_start_e = function(event) {
 	    for(i = 0; i < BioBLESS.logic.elements.length; i++){
 		     if(BioBLESS.logic.elements[i] === this.parent)
 			     break;
-		};
+		}
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
         if(BioBLESS.gene_network.gates){
 		    BioBLESS.logic.mark_back = [];
 		    for(var j = 0; j < BioBLESS.logic.mark.length; j++){
 			    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
-			};
+			}
             BioBLESS.gene_network.draw(BioBLESS.gates, -1, BioBLESS.logic.mark[i]);
             BioBLESS.base_stage.removeChild(BioBLESS.logic.stage);
             BioBLESS.base_stage.addChild(BioBLESS.gene_network.stage);
@@ -649,7 +651,7 @@ BioBLESS.logic.on_drag_end_e = function() {
     this.data = null;
 };
 
-var line_color_style = [0xffffff, 0x0000aa, 0x00aa00, 0xaa0000, 0xaaaa00, 0xaa00aa, 0x00aaaa];
+var line_color_style = [0xaaaaaa, 0x0000aa, 0x00aa00, 0xaa0000, 0xaaaa00, 0xaa00aa, 0x00aaaa];
 var line_color_select = 0;
 var waitFordrawBegin = false;
 var moving = false;
@@ -1133,7 +1135,7 @@ BioBLESS.logic.on_drag_m = function(){
             y = this.start_y;
         }
         this.position.y = y;
-        var t = (y - this.start_y) / (this.end_y - this.start_y)
+        var t = (y - this.start_y) / (this.end_y - this.start_y);
         this.contain.y = 0 - t * (this.contain_h - this.area_h);
     }
 };
@@ -1223,7 +1225,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
             var t = (0 - contain.y) / (contain.h - stage.h);
             button.y = button.start_y + t * (button.end_y - button.start_y);
             stage.scroll_fun(d);
-        }
+        };
     }else
         stage.scroll_function = function(){};
     
@@ -1282,7 +1284,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
             this.redraw();
             BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "0" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
         }
-    }
+    };
 
     var num_function = function(){
         
@@ -1292,7 +1294,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         var row = 1;
         var i, j = 2, k;
         var dis = 170 / (number + 1);
-        this.button = []
+        this.button = [];
         for(i = 0; i < number; i++)
             row *= 2;
         for(k = 0; k < row; k++){
@@ -1304,6 +1306,8 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
             }
             for(i = 0; i < number; i++){
                 var button = BioBLESS.logic.create_circlebutton(num[i].toString(), 40);
+                if(num[i] === 1)
+                    button.change();
                 button.scale.x = 27 / 40;
                 button.scale.y = 27 / 40;
                 button.x = dis + i * dis - 5;
@@ -1372,7 +1376,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         };
         OK.on("click", OK_function);
         stage.has_OK = true;
-    }
+    };
 
     num_function();
     
@@ -1387,8 +1391,10 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
     button1.buttonMode = true;
     button1.on("click", function(){
         number++;
-        if(number > 7)
-            number = 7;
+        if(number > 8){
+            number = 8;
+            return;
+        }
         num.text = number.toString();
         num_function();
     });
@@ -1406,8 +1412,10 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
     button2.buttonMode = true;
     button2.on("click", function(){
         number--;
-        if(number < 1)
+        if(number < 1){
             number = 1;
+            return;
+        }
         num.text = number.toString();
         num_function();
     });
@@ -1778,17 +1786,17 @@ BioBLESS.logic.create_gates_list = function(h){
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
             BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
             BioBLESS.logic.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
-        };
+        }
     };
     for(var i = 0; i < BioBLESS.gates.length; i++){
         _logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         _logicGates[i].position.x = 55;
-        _logicGates[i].position.y = 20 + i * 100;
+        _logicGates[i].position.y = 20 + i * 120;
         _logicGates[i].button_bg = new PIXI.Graphics();
         _logicGates[i].button_bg.y = _logicGates[i].position.y - 15;
         _logicGates[i].i = i;
-        _logicGates[i].h = 100;
+        _logicGates[i].h = 120;
         contain.addChild(_logicGates[i].button_bg);
         contain.addChild(_logicGates[i]);
         _logicGates[i].interactive = true;
@@ -1804,7 +1812,7 @@ BioBLESS.logic.create_gates_list = function(h){
                      .on('mouseup',  on_mouse_end)
                      .on('mouseupoutside',  on_mouse_end); 					  
     }
-    var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 100 + 20, 260, h - 40);
+    var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 120 + 20, 260, h - 40);
     var mask = new PIXI.Graphics();
     mask.interactive = true;
     mask.beginFill(0, 0);
@@ -1999,7 +2007,7 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
         mama.counts ++;
         mama.connection = true;
         drawPart[0].mother = mama;
-        drawPart[0].line_color = line_color_style[line_color_select++ % 8];
+        drawPart[0].line_color = line_color_style[line_color_select++ % line_color_style.length];
         drawPart[0].alpha = 0.6;
 
         var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
@@ -2121,15 +2129,15 @@ BioBLESS.logic.output_check = function() {
         }
     }
     if(output_count === 1){
-        alert("Circuits operating normally.");
+        /*Circuits operating normally.*/
         return true;
     }
     else if(output_count === 0){
-        throw new Error("Error, no output in this circuits!");
+        /*Error, no output in this circuits!*/
         return false;
     }
     else{
-        throw new Error("Error, more than one output in this circuits!");
+        /*Error, more than one output in this circuits!*/
         return false;
     }
 };

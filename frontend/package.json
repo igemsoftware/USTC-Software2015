@@ -1,6 +1,6 @@
 {
     "name": "BioBLESS",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0-beta.2",
     "description": "Biological Boolean Logic Evaluation & Systematization based on Simulation",
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
         "del-js": "rm -f biobless.min.js",
         "del-test": "rm -f biobless.test.js",
         "pretest": "npm run build-test; cat test/framework/header.html test/lib/mocha.css test/framework/middle.html biobless.test.js test/framework/footer.html >test.html; npm run del-test",
-        "test": "mocha-phantomjs test.html #jshint src --exclude src/lib && mocha-phantomjs test.html",
+        "test": "jshint src --exclude src/lib && mocha-phantomjs test.html",
         "posttest": "rm -f test.html"
     }
 }

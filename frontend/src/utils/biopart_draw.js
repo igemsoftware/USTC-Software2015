@@ -15,12 +15,15 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
     var stage = new PIXI.Container();	
     var graphics = new PIXI.Graphics();
     var word_style = {
-        font : 'bold 12px Arial',
+        font : 'bold 20px Arial',
         fill : 'white',
         align : 'left'
     };
     var title = new PIXI.Text("", word_style);
-
+    title.anchor.x = 0.5;
+    title.position.x = 100;
+    title.position.y = 135;
+    stage.title = title;
     stage.addChild(graphics);
     stage.addChild(title);
     switch(id){
@@ -56,9 +59,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.endFill();
             graphics.x = 40;
             graphics.y = 60;
-            title._text = "cds";
-            title.position.x = 95;
-            title.position.y = 130;
+            title._text = "Coding";
             break;
         case "promoter":
         case "Promoter":
@@ -104,9 +105,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.scale.y = 0.6;
             graphics.x = -67;
             graphics.y = -25;
-            title._text = "promoter";
-            title.position.x = 95;
-            title.position.y = 130;
+            title._text = "Promoter";
             break;
         case "protein":
         case "Protein":
@@ -125,11 +124,9 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
              * <ellipse fill="#C6C717" cx="488.472" cy="292" rx="67.528" ry="45"/>
              */
             graphics.beginFill(0xdd963c, 1);
-            graphics.drawEllipse(100, 100, 67, 45);
+            graphics.drawEllipse(100, 100, 58, 35);
             graphics.endFill();
-            title._text = "rbs";
-            title.position.x = 95;
-            title.position.y = 130;
+            title._text = "Rbs";
             break;
         case "sRNA":
         case "SRNA":
@@ -282,8 +279,6 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
 			graphics.x = -187;
 			graphics.y = -90;
             title._text = "sRNA";
-            title.position.x = 95;
-            title.position.y = 130;
             break;
         case "terminator":
         case "Terminator":
@@ -294,9 +289,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.beginFill(0xFF0505, 1);
             graphics.drawCircle(100, 100, 20);
             graphics.endFill();
-            title._text = "terminator";
-            title.position.x = 95;
-            title.position.y = 130;
+            title._text = "Terminator";
             break;
         default:
             throw new Error("No found!");

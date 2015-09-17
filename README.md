@@ -38,10 +38,10 @@ This project is backend/frontend separatable. This means that you can deploy bac
 ### Install
     cd BioBLESS/biocircuit
     make
+    cd ../..
     ./manage.py migrate
     ./manage.py loaddata parts
     ./manage.py runserver
-    cd BioBLESS/biocircuit
 ### Unit Test
 you could run
 ```
@@ -53,7 +53,7 @@ for unit test
 Please install sphinx package for python.
 For example:
 ```
-pip install sphinx
+pip install -U Sphinx
 ```
 you could run
 ```
