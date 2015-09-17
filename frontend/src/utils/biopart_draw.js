@@ -59,7 +59,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.endFill();
             graphics.x = 40;
             graphics.y = 60;
-            title._text = "cds";
+            title._text = "Coding";
             break;
         case "promoter":
         case "Promoter":
@@ -105,7 +105,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.scale.y = 0.6;
             graphics.x = -67;
             graphics.y = -25;
-            title._text = "promoter";
+            title._text = "Promoter";
             break;
         case "protein":
         case "Protein":
@@ -126,7 +126,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.beginFill(0xdd963c, 1);
             graphics.drawEllipse(100, 100, 58, 35);
             graphics.endFill();
-            title._text = "rbs";
+            title._text = "Rbs";
             break;
         case "sRNA":
         case "SRNA":
@@ -289,7 +289,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.beginFill(0xFF0505, 1);
             graphics.drawCircle(100, 100, 20);
             graphics.endFill();
-            title._text = "terminator";
+            title._text = "Terminator";
             break;
         default:
             throw new Error("No found!");
