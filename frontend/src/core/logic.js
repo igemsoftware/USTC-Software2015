@@ -312,7 +312,7 @@ BioBLESS.logic.draw_gate = function(device){
     }
     var element = new PIXI.Container();
     element.graphics = new PIXI.Graphics();
-    element.title = new PIXI.Text(device.id);
+    element.title = new PIXI.Text(device.id, gate_style);
     element.input_1 = new PIXI.Graphics();
     element.input_1.lines = [];
     element.input_1.counts = 0;

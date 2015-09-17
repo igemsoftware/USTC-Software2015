@@ -12,12 +12,17 @@ BioBLESS.logic.ieee_standard_gate = function(device){
      */
     var icon = device.id;
     var Regx = /^[0-9]*$/;
+    var gate_style = {
+        font : 'bold 16px Arial',
+        fill : 'white',
+        align : 'left'
+    };
     while(Regx.test(icon[icon.length - 1])){
         icon = icon.substring(0, icon.length - 1);
     }
     var element = new PIXI.Container();
     element.graphics = new PIXI.Graphics();
-    element.title = new PIXI.Text(device.id);
+    element.title = new PIXI.Text(device.id, gate_style);
     element.input_1 = new PIXI.Graphics();
     element.input_1.lines = [];
     element.input_1.counts = 0;
@@ -32,7 +37,7 @@ BioBLESS.logic.ieee_standard_gate = function(device){
     element.output.connection = false;
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
-    element.title.position.y = 35;
+    element.title.position.y = 84;
     element.title.style.fill = "white";
     element.type = icon;
     element.gate_delete_button = new PIXI.Graphics();
@@ -129,7 +134,7 @@ BioBLESS.logic.ieee_standard_gate = function(device){
             element.input_2.beginFill(0xffffff, 0);
             element.input_2.drawRect(0, -1, 26.5, 3);
             element.input_2.endFill();
-            
+
             element.output.position.x = 99.4;
             element.output.position.y = 19.9;
             element.output.lineStyle(3, 0xffffff, 1);
@@ -209,5 +214,6 @@ BioBLESS.logic.ieee_standard_gate = function(device){
     element.addChild(element.input_1);
     element.addChild(element.input_2);
     element.addChild(element.output);
+    element.addChild(element.title);
     return element;
 };
