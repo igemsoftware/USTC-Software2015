@@ -446,6 +446,10 @@ var dev = function(){
         
         graphics.lineStyle(12, 0x7ec02a, 1);
         for(i = 0; i < devices[n].map.length; i++){
+            var input_num;
+            var height;
+            var ind2;
+            var p;
             if(devices[n].map[i].id2[0] == 'e'){
                 Num = parseInt(devices[n].map[i].id2.substring(1)) - 1;
                 k = parseInt(devices[n].map[Num].id1.substring(1)) - 1;
@@ -454,8 +458,7 @@ var dev = function(){
                 parts[k].protein.Text = new PIXI.Text(devices[n].map[i].id1);
                 parts[k].protein.Text.anchor.x = 0.5;
                 parts[k].protein.Text.anchor.y = 0.5;
-                var height = this.protein_height[k];
-                var input_num;
+                height = this.protein_height[k];
                 if(height > 0){
                     input_num = this.up_height_input_num;
                 }else{
@@ -464,7 +467,7 @@ var dev = function(){
                 }
                 if(input_num[height] === undefined)
                     input_num[height] = 0;
-                var ind2 = input_num[height]++ * 10;
+                ind2 = input_num[height]++ * 10;
                 var ind3 = 10;
                 if(k < l){
                     graphics.moveTo(parts[k].protein.position.x + nodeW + 30, parts[k].protein.position.y + nodeH / 2.0 + 8 + ind3);
@@ -472,16 +475,17 @@ var dev = function(){
                     if(devices[n].map[i].type == 'inh'){
                         graphics.moveTo(parts[k].protein.position.x + nodeW + 42, parts[k].protein.position.y + nodeH / 2.0 + 7 + ind3);
                         graphics.lineTo(parts[k].protein.position.x + nodeW + 18, parts[k].protein.position.y + nodeH / 2.0 + 7 + ind3);
-                    }else{
+                    }
+                    else{
                         this.draw_arrow(graphics, 6, parts[k].protein.position.x + nodeW + 30, parts[k].protein.position.y + nodeH / 2.0 + 7 + ind3, "up");
                     }
-                    
                     
                     
                     parts[k].protein.Text.position.x = parts[k].protein.position.x + nodeW + 30;
                     parts[k].protein.Text.position.y =  parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
                     
-                }else{
+                }
+                else{
                     graphics.moveTo(parts[k].protein.position.x - 30, parts[k].protein.position.y + nodeH / 2.0 + 8 + ind3);
                     graphics.lineTo(parts[k].protein.position.x - 30, parts[k].protein.position.y + nodeH / 2.0 + 40 - ind + ind2);
                     if(devices[n].map[i].type == 'inh'){
@@ -495,7 +499,7 @@ var dev = function(){
                     parts[k].protein.Text.position.y = parts[k].protein.position.y + nodeH / 2.0 + 55 - ind + ind2;
                 }
                 
-                for(var p = 0; p < devices[n].input.length; p++){
+                for(p = 0; p < devices[n].input.length; p++){
                     if(devices[n].input[p] === devices[n].map[i].id1){
                         this.input[p].x[this.input[p].x.length] = parts[k].protein.Text.position.x;
                         this.input[p].y[this.input[p].y.length] = parts[k].protein.Text.position.y;
@@ -513,7 +517,7 @@ var dev = function(){
                         ind2 = input_num[height]++ * 30;
                         k = parseInt(devices[n].map[i].id2.substring(1)) - 1;
                         l = nodeW / (this.part[k].downIndegree + this.part[k].downOutdegree + 1);
-                        var p = 50;
+                        p = 50;
                         this.part[k].downLine++;
                         if(parts[k].Text === undefined){
                             parts[k].Text = [];
@@ -648,11 +652,12 @@ BioBLESS.gene_network.clone = function clone(obj){
             }
         }
         break;
-    default:		
-       o = obj;break;
+    default:
+       o = obj;
+       break;
     }
-    return o;	
-}
+    return o;
+};
 
 /** 
 * @description analyse the layout of the whole devices
@@ -996,11 +1001,12 @@ BioBLESS.gene_network.create_scroll_area = function(items, w){
         buttons[i].bg = bg;
         contain.addChild(buttons[i]);
     }
+    var scroll_area;
     if(i >= 4){
-        var scroll_area = BioBLESS.logic.create_scrollarea(contain, i * 40, w, 160);
+        scroll_area = BioBLESS.logic.create_scrollarea(contain, i * 40, w, 160);
     }
     else{
-        var scroll_area = BioBLESS.logic.create_scrollarea(contain, i * 40, w, i * 40);
+        scroll_area = BioBLESS.logic.create_scrollarea(contain, i * 40, w, i * 40);
     }
     scroll_area.buttons = buttons;
     var mask = new PIXI.Graphics();
@@ -1409,9 +1415,11 @@ BioBLESS.gene_network.move_to_device = function(mark){
     this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
     this.stage.movable_stage.y = this.stage.movable_stage.x = 0;
     var w = BioBLESS.navigation.scale.x * 120;
+    var t1;
+    var t2;
     if(mark === -1){
-        var t1 = (BioBLESS.width - w) / this.devs_width;
-        var t2 = BioBLESS.height / this.devs_height;
+        t1 = (BioBLESS.width - w) / this.devs_width;
+        t2 = BioBLESS.height / this.devs_height;
         this.stage.movable_stage._scale = this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = (t1 < t2)? t1 : t2;
         this.stage.movable_stage.position.x = (BioBLESS.width - this.devs_width * ((t1 < t2)? t1 : t2) - w) / 2 + w; 
         this.stage.movable_stage.position.y = (BioBLESS.height - this.devs_height * ((t1 < t2)? t1 : t2)) / 2; 
@@ -1423,8 +1431,9 @@ BioBLESS.gene_network.move_to_device = function(mark){
     this.stage.movable_stage.x -= this.devs[mark].stage.x * this.stage.movable_stage.scale.x - w - (BioBLESS.width - w - this.devs[mark].stage_w * this.stage.movable_stage.scale.x) / 2;
     this.stage.movable_stage.y -= this.devs[mark].stage.y * this.stage.movable_stage.scale.x - (BioBLESS.height - this.devs[mark].stage_h * this.stage.movable_stage.scale.x) / 2;
     var moveX = (BioBLESS.width - this.devs[mark].stage_w - w) / 2;
-    if(moveX > 0)
+    if(moveX > 0){
         this.stage.movable_stage.position.x += moveX + w;
+    }
     var moveY = (BioBLESS.height - this.devs[mark].stage_h) / 2;
     if(moveY > 0)
         this.stage.movable_stage.position.y += moveY;
