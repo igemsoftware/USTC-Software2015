@@ -188,7 +188,7 @@ var dev = function(){
                     }
                     for(k = i; k <= j; k++){
                         this.part[k].down_max_height = l;
-                    };
+                    }
                 }
                 this.protein_height[i] = l;
                 
@@ -200,20 +200,20 @@ var dev = function(){
                     for(k = i + 1; k <= j; k++){
                         if(++this.part[k].up_max_height > l)
                             l = this.part[k].up_max_height;
-                    };
+                    }
                     for(k = i; k <= j; k++){
                         this.part[k].up_max_height = l;
-                    };
+                    }
                 }else{
                     l = 0;
                     for(k = i + 1; k <= j; k++){
                         if(--this.part[k].down_max_height < l)
                             l = this.part[k].down_max_height;
-                    };
+                    }
                     for(k = i; k <= j; k++){
                         this.part[k].down_max_height = l;
-                    };
-                };
+                    }
+                }
                 this.protein_height[j] = l;
                 
             }
@@ -224,7 +224,8 @@ var dev = function(){
         j = parseInt(devices[n].output[i].substring(1)) - 1;
         this.protein_height[j] = ++this.part[j].up_max_height;
     }
-    this.protein_heightest = 0, this.protein_lowest = 0;//蛋白质节点的最大高度与最低高度
+    this.protein_heightest = 0;
+    this.protein_lowest = 0;//蛋白质节点的最大高度与最低高度
     for(i = 0; i < this.parts_num; i++){
         if(this.protein_height[i] > this.protein_heightest) this.protein_heightest = this.protein_height[i];
         if(this.protein_height[i] < this.protein_lowest) this.protein_lowest = this.protein_height[i];
@@ -238,7 +239,7 @@ var dev = function(){
     */ 
     this.part_analysis = function(devices, n){
     var i, j, k, l, Num, s;//备用变量
-    this.part = new Array();
+    this.part = [];
     for(i = 0; i < this.parts_num; i++){
         this.part[i] = function(){};
         this.part[i].upIndegree = 0;//上入度
@@ -286,7 +287,7 @@ var dev = function(){
     var id = ["00000167","00000057","00000316","00000139","00000141","00000627","10000001","00001957","00001956","00001955","00000296","00005850","00001687"];
     this.get_id = function(){
         return id[svg_index++ % 13];
-    }
+    };
     
     this.draw_protein = function(){
     var graphic = new PIXI.Graphics();
@@ -314,7 +315,7 @@ var dev = function(){
         
         
         
-        var parts = new Array();
+        var parts = [];
         var graphics = new PIXI.Graphics();
         
         graphics.lineStyle(20, 0xc0c0c0, 1);
@@ -324,7 +325,7 @@ var dev = function(){
             dialog.x = (BioBLESS.width - 500) / 2;
             dialog.y = 50;
             BioBLESS.base_stage.addChild(dialog);
-        }
+        };
         for(i = 0; i < this.lines_num; i++){
             graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
             for(j = 0; j < devices[n].parts.id[i].length; j++){
@@ -1135,7 +1136,7 @@ BioBLESS.gene_network.describe_part = function(device, id){
     else if(id.substring(0, 1) === "p"){
         if(parseInt(id.substring(1)) < 100)
             return "the protein from " + BioBLESS.gene_network.describe_part(device, 'd' + id.substring(1));
-        else return "the input"
+        else return "the input";
     }else return "the " + id;
 };
 
