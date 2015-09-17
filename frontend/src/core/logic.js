@@ -1793,11 +1793,11 @@ BioBLESS.logic.create_gates_list = function(h){
         _logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         _logicGates[i].position.x = 55;
-        _logicGates[i].position.y = 20 + i * 100;
+        _logicGates[i].position.y = 20 + i * 120;
         _logicGates[i].button_bg = new PIXI.Graphics();
         _logicGates[i].button_bg.y = _logicGates[i].position.y - 15;
         _logicGates[i].i = i;
-        _logicGates[i].h = 100;
+        _logicGates[i].h = 120;
         contain.addChild(_logicGates[i].button_bg);
         contain.addChild(_logicGates[i]);
         _logicGates[i].interactive = true;
