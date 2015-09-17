@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -411,16 +411,14 @@ BioBLESS.logic.draw_gate = function(device){
             element.input_1.beginFill(0, 0);
             element.input_1.drawRect(0, -1, 30, 5);
             element.input_1.endFill();
-            element.graphics.moveTo(135, 35);
+            element.graphics.moveTo(138, 35);
             element.graphics.lineTo(120, 20);
             break;
         case "NAND":
         case "nand":
         case "NOR":
         case "nor":
-        case "XNOR":
-        case "xnor":
-            element.ieee_type._text = "=";
+            element.ieee_type._text = "≥1";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -437,6 +435,30 @@ BioBLESS.logic.draw_gate = function(device){
             element.input_2.beginFill(0, 0);
             element.input_2.drawRect(0, -1, 30, 5);
             element.input_2.endFill();
+            element.graphics.moveTo(138, 35);
+            element.graphics.lineTo(120, 20);
+            break;
+        case "XNOR":
+        case "xnor":
+            element.ieee_type._text = "=1";
+            element.input_1.beginFill(0xffffff, 1);
+            element.input_1.drawRect(0, 0, 30, 3);
+            element.input_1.position.x = 0;
+            element.input_1.position.y = 17;
+            element.input_1.endFill();
+            element.input_1.beginFill(0, 0);
+            element.input_1.drawRect(0, -1, 30, 5);
+            element.input_1.endFill();
+            element.input_2.beginFill(0xffffff, 1);
+            element.input_2.drawRect(0, 0, 30, 3);
+            element.input_2.position.x = 0;
+            element.input_2.position.y = 51;
+            element.input_2.endFill();
+            element.input_2.beginFill(0, 0);
+            element.input_2.drawRect(0, -1, 30, 5);
+            element.input_2.endFill();
+            element.graphics.moveTo(138, 35);
+            element.graphics.lineTo(120, 20);
             break;
     }
     element.addChild(element.graphics);
