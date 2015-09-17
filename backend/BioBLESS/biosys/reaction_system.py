@@ -227,6 +227,7 @@ struct record_data simulate(
         """
 
         if C:
+            """
             class c_current_data(ctypes.Structure):
                 _fields_ = [
                     ("time", ctypes.c_float),
@@ -314,24 +315,25 @@ struct record_data simulate(
                 print self.record[-1]
                 #print ans.ans[i].time
             #print "set done!"
-            """#free
-            STDLIB.free(c_current)
-            STDLIB.free(c_constant)
+            #free
+            #STDLIB.free(c_current)
+            #STDLIB.free(c_constant)
 
-            for i in range(self.reaction_number):
-                STDLIB.free(c_reactant_data[i].subs)
-                STDLIB.free(c_product_data[i].subs)
+            #for i in range(self.reaction_number):
+            #    STDLIB.free(c_reactant_data[i].subs)
+            #    STDLIB.free(c_product_data[i].subs)
 
-            STDLIB.free(c_reactant_data)
-            STDLIB.free(c_product_data)
+            #STDLIB.free(c_reactant_data)
+            #STDLIB.free(c_product_data)
 
-            for i in range(self.reaction_number):
-                STDLIB.free(c_reaction_link[i].reacs)
-            STDLIB.free(c_reaction_link)
+            #for i in range(self.reaction_number):
+            #    STDLIB.free(c_reaction_link[i].reacs)
+            #STDLIB.free(c_reaction_link)
 
-            #free ans TODO"""
+            #free ans TODO
 
-            return self.record
+            return self.record"""
+            pass
 
         else:
             if DEBUG:
