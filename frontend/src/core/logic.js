@@ -1309,6 +1309,8 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
             }
             for(i = 0; i < number; i++){
                 var button = BioBLESS.logic.create_circlebutton(num[i].toString(), 40);
+                if(num[i] === 1)
+                    button.change();
                 button.scale.x = 27 / 40;
                 button.scale.y = 27 / 40;
                 button.x = dis + i * dis - 5;
