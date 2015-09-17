@@ -1,0 +1,237 @@
+{
+    "nodes": [
+        "INPUT",
+        "INPUT",
+        "INPUT",
+        "INPUT",
+        "NOT2",
+        "AND2",
+        "AND2",
+        "OR0"
+    ],
+    "system_parameter": {
+        "time": 10000
+    },
+    "arcs": [
+        {
+            "to": 5,
+            "from": 4
+        },
+        {
+            "to": 5,
+            "from": 1
+        },
+        {
+            "to": 6,
+            "from": 2
+        },
+        {
+            "to": 6,
+            "from": 3
+        },
+        {
+            "to": 4,
+            "from": 0
+        },
+        {
+            "to": 7,
+            "from": 5
+        },
+        {
+            "to": 7,
+            "from": 6
+        }
+    ],
+    "simulation_parameters": [
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10,
+                    10,
+                    10
+                ]
+            },
+            "e5": {
+                "reg": 0.5
+            },
+            "e4": {
+                "reg": 0.5
+            },
+            "e6": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.001,
+                "trans2": 0.05
+            },
+            "e1": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.01,
+                "trans2": 0.001
+            },
+            "e3": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.05,
+                "trans2": 0.05
+            },
+            "e2": {
+                "reg": 0.05
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10,
+                    10
+                ]
+            },
+            "e5": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.05,
+                "trans2": 0.1
+            },
+            "e4": {
+                "reg": 0.1
+            },
+            "e7": {
+                "reg": 0.5
+            },
+            "e6": {
+                "reg": 0.5
+            },
+            "e1": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.1,
+                "trans2": 0.05
+            },
+            "e3": {
+                "reg": 0.1
+            },
+            "e2": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.1,
+                "trans2": 0.05
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10,
+                    10
+                ]
+            },
+            "e5": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.05,
+                "trans2": 0.1
+            },
+            "e4": {
+                "reg": 0.1
+            },
+            "e7": {
+                "reg": 0.5
+            },
+            "e6": {
+                "reg": 0.5
+            },
+            "e1": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.1,
+                "trans2": 0.05
+            },
+            "e3": {
+                "reg": 0.1
+            },
+            "e2": {
+                "decay1": 0.01,
+                "decay2": 0.01,
+                "trans1": 0.1,
+                "trans2": 0.05
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10,
+                    10
+                ]
+            },
+            "e5": {
+                "decay1": 0.02,
+                "decay2": 0.02,
+                "trans1": 0.1,
+                "trans2": 0.1
+            },
+            "e4": {
+                "reg": 2
+            },
+            "e1": {
+                "decay1": 0.02,
+                "decay2": 0.02,
+                "trans1": 0.1,
+                "trans2": 0.1
+            },
+            "e3": {
+                "reg": 2
+            },
+            "e2": {
+                "reg": 2
+            }
+        },
+        {
+            "device_parameter": {
+                "initial": [
+                    10
+                ]
+            }
+        }
+    ]
+}
