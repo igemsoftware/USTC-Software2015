@@ -307,6 +307,10 @@ BioBLESS.logic.draw_gate = function(device){
         fill : 'white',
         align : 'left'
     };
+    var site_style = {
+    	fill : 'white',
+        align : 'center'
+    };
     while(Regx.test(icon[icon.length - 1])){
         icon = icon.substring(0, icon.length - 1);
     }
@@ -344,6 +348,11 @@ BioBLESS.logic.draw_gate = function(device){
     element.output.beginFill(0, 0);
     element.output.drawRect(-30, -1, 30, 5);
     element.output.endFill();
+            
+    element.ieee_type = new PIXI.Text("", site_style);
+    element.ieee_type.position.x = 75;
+    element.ieee_type.position.y = 35;
+
     switch(icon){
         default: 
             alert("Error - 1001!");
@@ -353,10 +362,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "AND":
         case "and":
-            element.ieee_type = new PIXI.Text("&");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "&";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -376,10 +382,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "OR":
         case "or":
-            element.ieee_type = new PIXI.Text(">=1");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "≥1";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -399,10 +402,7 @@ BioBLESS.logic.draw_gate = function(device){
             break;
         case "NOT":
         case "not":
-            element.ieee_type = new PIXI.Text("1");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "1";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
@@ -420,10 +420,7 @@ BioBLESS.logic.draw_gate = function(device){
         case "nor":
         case "XNOR":
         case "xnor":
-            element.ieee_type = new PIXI.Text("=");
-            element.ieee_type.position.x = 35;
-            element.ieee_type.position.y = 15;
-            element.ieee_type.style.fill = "white";
+            element.ieee_type._text = "=";
             element.input_1.beginFill(0xffffff, 1);
             element.input_1.drawRect(0, 0, 30, 3);
             element.input_1.position.x = 0;
