@@ -21,7 +21,7 @@
         "del-js": "rm -f biobless.min.js",
         "del-test": "rm -f biobless.test.js",
         "pretest": "npm run build-test; cat test/framework/header.html test/lib/mocha.css test/framework/middle.html biobless.test.js test/framework/footer.html >test.html; npm run del-test",
-        "test": "jshint src --exclude src/lib && mocha-phantomjs test.html",
+        "test": "mocha-phantomjs test.html #jshint src --exclude src/lib && mocha-phantomjs test.html",
         "posttest": "rm -f test.html"
     }
 }

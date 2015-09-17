@@ -10,6 +10,7 @@ BioBLESS.change_stage = function(plugin) {
     BioBLESS.base_stage.addChild(plugin.stage);
     BioBLESS.base_stage.addChild(BioBLESS.navigation);
     BioBLESS.stage = plugin.stage;
+	BioBLESS.navigation.tag.y = BioBLESS.navigation.button[plugin.tag_index].y;
     if(plugin.onchange)
         plugin.onchange();
 };
