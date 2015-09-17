@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿/**
+﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
