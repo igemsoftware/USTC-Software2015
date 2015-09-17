@@ -1,4 +1,4 @@
-﻿﻿/**
+﻿﻿﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -328,7 +328,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
     element.title.position.y = 84;
-	// element.title.style.fill = "white";
+	element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
     element.graphics.beginFill(0, 0);
@@ -654,7 +654,7 @@ BioBLESS.logic.on_drag_end_e = function() {
     this.data = null;
 };
 
-var line_color_style = [0xffffff, 0x0000aa, 0x00aa00, 0xaa0000, 0xaaaa00, 0xaa00aa, 0x00aaaa];
+var line_color_style = [0xaaaaaa, 0x0000aa, 0x00aa00, 0xaa0000, 0xaaaa00, 0xaa00aa, 0x00aaaa];
 var line_color_select = 0;
 var waitFordrawBegin = false;
 var moving = false;
@@ -2008,7 +2008,7 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
         mama.counts ++;
         mama.connection = true;
         drawPart[0].mother = mama;
-        drawPart[0].line_color = line_color_style[line_color_select++ % 8];
+        drawPart[0].line_color = line_color_style[line_color_select++ % line_color_style.length];
         drawPart[0].alpha = 0.6;
 
         var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
