@@ -1392,8 +1392,10 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
     button1.buttonMode = true;
     button1.on("click", function(){
         number++;
-        if(number > 7)
-            number = 7;
+        if(number > 8){
+            number = 8;
+            return;
+        }
         num.text = number.toString();
         num_function();
     });
@@ -1411,8 +1413,10 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
     button2.buttonMode = true;
     button2.on("click", function(){
         number--;
-        if(number < 1)
+        if(number < 1){
             number = 1;
+            return;
+        }
         num.text = number.toString();
         num_function();
     });
