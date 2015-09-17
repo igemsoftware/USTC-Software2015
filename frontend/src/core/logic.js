@@ -2121,15 +2121,15 @@ BioBLESS.logic.output_check = function() {
         }
     }
     if(output_count === 1){
-        alert("Circuits operating normally.");
+        /*Circuits operating normally.*/
         return true;
     }
     else if(output_count === 0){
-        throw new Error("Error, no output in this circuits!");
+        /*Error, no output in this circuits!*/
         return false;
     }
     else{
-        throw new Error("Error, more than one output in this circuits!");
+        /*Error, more than one output in this circuits!*/
         return false;
     }
 };
