@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -302,6 +302,11 @@ BioBLESS.logic.draw_gate = function(device){
      */
     var icon = device.id;
     var Regx = /^[0-9]*$/;
+    var gate_style = {
+        font : 'bold 16px Arial',
+        fill : 'white',
+        align : 'left'
+    };
     while(Regx.test(icon[icon.length - 1])){
         icon = icon.substring(0, icon.length - 1);
     }
@@ -322,8 +327,8 @@ BioBLESS.logic.draw_gate = function(device){
     element.output.connection = false;
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
-    element.title.position.y = 82;
-	element.title.style.fill = "white";
+    element.title.position.y = 84;
+	// element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
     element.graphics.beginFill(0, 0);
