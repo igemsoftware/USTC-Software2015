@@ -1525,3 +1525,4 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
     return this.stage;
 };
 
+})();
