@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿/**
+﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -459,14 +459,14 @@ BioBLESS.logic.on_drag_start_e = function(event) {
 	    for(i = 0; i < BioBLESS.logic.elements.length; i++){
 		     if(BioBLESS.logic.elements[i] === this.parent)
 			     break;
-		};
+		}
         BioBLESS.gene_network.get_gates_supsification();
         var that = this;
         if(BioBLESS.gene_network.gates){
 		    BioBLESS.logic.mark_back = [];
 		    for(var j = 0; j < BioBLESS.logic.mark.length; j++){
 			    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
-			};
+			}
             BioBLESS.gene_network.draw(BioBLESS.gates, -1, BioBLESS.logic.mark[i]);
             BioBLESS.base_stage.removeChild(BioBLESS.logic.stage);
             BioBLESS.base_stage.addChild(BioBLESS.gene_network.stage);
@@ -1133,7 +1133,7 @@ BioBLESS.logic.on_drag_m = function(){
             y = this.start_y;
         }
         this.position.y = y;
-        var t = (y - this.start_y) / (this.end_y - this.start_y)
+        var t = (y - this.start_y) / (this.end_y - this.start_y);
         this.contain.y = 0 - t * (this.contain_h - this.area_h);
     }
 };
@@ -1223,7 +1223,7 @@ BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
             var t = (0 - contain.y) / (contain.h - stage.h);
             button.y = button.start_y + t * (button.end_y - button.start_y);
             stage.scroll_fun(d);
-        }
+        };
     }else
         stage.scroll_function = function(){};
     
@@ -1282,7 +1282,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
             this.redraw();
             BioBLESS.logic.truth_table_parameter = BioBLESS.logic.truth_table_parameter.substring(0, this.n) + "0" + BioBLESS.logic.truth_table_parameter.substring(this.n + 1, BioBLESS.logic.truth_table_parameter.length);
         }
-    }
+    };
 
     var num_function = function(){
         
@@ -1292,7 +1292,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         var row = 1;
         var i, j = 2, k;
         var dis = 170 / (number + 1);
-        this.button = []
+        this.button = [];
         for(i = 0; i < number; i++)
             row *= 2;
         for(k = 0; k < row; k++){
@@ -1372,7 +1372,7 @@ BioBLESS.logic.create_base_stage_of_truth_table = function(h){
         };
         OK.on("click", OK_function);
         stage.has_OK = true;
-    }
+    };
 
     num_function();
     
@@ -1778,7 +1778,7 @@ BioBLESS.logic.create_gates_list = function(h){
             BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].gate_delete_button.buttonMode = true;
             BioBLESS.logic.circuit_add_gate(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].type, BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1].title);
             BioBLESS.logic.stage.movable_stage.addChild(BioBLESS.logic.elements[BioBLESS.logic.elements.length - 1]);
-        };
+        }
     };
     for(var i = 0; i < BioBLESS.gates.length; i++){
         _logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
