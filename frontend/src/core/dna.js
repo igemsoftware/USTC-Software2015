@@ -200,7 +200,7 @@ BioBLESS.dna.dna_select_move = function(event) {
         var end_control_y = BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y;
         var end_count_y = Math.floor(end_control_y/100);
         var end_control_x = BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width;
-        var check_count_y = BioBLESS.dna.deoxyribonucleic_acid.line_num - Math.ceil((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100)
+        var check_count_y = BioBLESS.dna.deoxyribonucleic_acid.line_num - Math.ceil((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
         
         if(end_count_y > check_count_y){
             end_count_y = check_count_y;
@@ -259,7 +259,7 @@ BioBLESS.dna.dna_select_end = function(event) {
         var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/24.2);
         var end_control_y = BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y;
         var end_count_y = Math.floor(end_control_y/100);
-        var check_count_y = BioBLESS.dna.deoxyribonucleic_acid.line_num - Math.ceil((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100)
+        var check_count_y = BioBLESS.dna.deoxyribonucleic_acid.line_num - Math.ceil((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
 
         BioBLESS.dna.endPosition.x = end_count_x * 24.2 + 0.1 * BioBLESS.width;
 

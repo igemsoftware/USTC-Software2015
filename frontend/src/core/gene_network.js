@@ -1063,7 +1063,7 @@ BioBLESS.gene_network.create_inputitem = function(name, num, w){
         input.del = function(){
             if(input.value === "")
                 input.value = "0";
-            stage.num.text = parseFloat(input.value).toString();;
+            stage.num.text = parseFloat(input.value).toString();
             stage.change_value(parseFloat(input.value));
             $("#" + input.id).remove();
             BioBLESS.base_stage.removeChild(bg);
@@ -1081,7 +1081,7 @@ BioBLESS.gene_network.create_inputitem = function(name, num, w){
                     for(var i = 0; i < input.value.length; i++){
                         if(input.value[i] === '.')
                              num++;
-                    };
+                    }
                     if(num === 0)
                         return;
                 }
