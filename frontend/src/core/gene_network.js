@@ -1132,7 +1132,11 @@ BioBLESS.gene_network.describe_part = function(device, id){
     }
     if(number !== -1)
         return "the " + type + " on DNA" + number.toString();
-    else return "the input on DNA";
+    else if(id.substring(0, 1) === "p"){
+        if(parseInt(id.substring(1)) < 100)
+            return "the protein from " + BioBLESS.gene_network.describe_part(device, 'd' + id.substring(1));
+        else return "the input"
+    }else return "the " + id;
 };
 
 BioBLESS.gene_network.describe_map_item = function(device, map_index){
@@ -1177,7 +1181,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index, h){
     };
     for(var i = 0; i < device.map.length; i++){
         var j = 0;
-        var describe = new PIXI.Text("    " + BioBLESS.gene_network.describe_map_item(BioBLESS.gene_network.devices[index], i) + ":");
+        var describe = new PIXI.Text("(" + BioBLESS.gene_network.devices[index].map[i].id + ")" + BioBLESS.gene_network.describe_map_item(BioBLESS.gene_network.devices[index], i) + ":");
         describe.style.wordWrap = true;
         describe.style.wordWrapWidth = 245;
         describe.style.font = 'bold 17px Arial';
