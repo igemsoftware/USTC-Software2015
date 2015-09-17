@@ -3,12 +3,14 @@
 This is a module to describe BioSystem.
 
 There is a function named bio_system in this module.
+The format to input is in doc/api-for-front/gates_specification.txt 
 
 Examples
 --------------
-Create some biosys and calculate their simulation
+Create some biosys to calculate their simulation
 
->>> A = bio_system(dict)
+>>> test = bio_system(data)
+>>> test.simulation()
 """
 __author__ = 'Trumpet'
 
@@ -41,9 +43,13 @@ gates_data.append({
 
 def dev_system(gates, data, nodes_id, input_sub, output_sub):
     """
-        find sub needed : input,coding,sRNA
-        trans(coding/sRNA)
-        act,inh,lock,key,rep
+        To build a reaction system from the data of a device.
+        
+        Input gates data(from doc/devices/gates_lizi.json),
+        and data(format is the same with the system data),
+        nodes_id,input_sub and output_sub(str)
+        Then return a reaction system.
+        This reaction system will be sumerize in bio_system
     """
     if gates["id"] == "INPUT":
         species = [[gates["parts"]["id"][0][0], data["device_parameter"]["initial"][0]]]
@@ -214,6 +220,9 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
 def bio_system(system_data):
     """
     Input a BioSystem, and output the reaction system with simulation.
+    
+    The format to input is in doc/api-for-front/gates_specification.txt 
+    Input it,and return a reaction system which you can use simulation() and record_list
     """
     time = system_data["system_parameter"]["time"]
     gates = {single_gate["id"]: single_gate for single_gate in gates_data}

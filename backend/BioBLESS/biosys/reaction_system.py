@@ -8,6 +8,14 @@ species:[species_name,initial]|species_name
 Reactions:[[[reactant,...],[product,...],constant,...]
 Simulation structure:[[[species,initial],...],stop_time]
 Show structure:[species_to_show]
+
+Example
+---------
+Build two reaction system,and add them, and simulation, and show the result
+
+>>> A = ReactionSystem([[["a"], ["b"], 1]], [["a", 100], "b"]) + ReactionSystem([[["b"], ["c"], 1]], [["b", 100], "c"])
+>>> A.simulate(10)
+>>> A.show_record(["a", "b", "c"])
 """
 
 __author__ = "Trumpet"
@@ -416,5 +424,9 @@ struct record_data simulate(
     def simulation(self):
         """
         Just do simulation
+        Parameters:
+            none
+        Returns:
+            none
         """
         self.simulate(self.time)
