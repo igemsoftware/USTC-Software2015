@@ -14,7 +14,7 @@ BioBLESS.dna.detail = {
 
 BioBLESS.dna.detail.device = [
     {
-        "d" : ["ATTTCCGATTTCCGATTTCCGATTTCCG", "CTTCACGCTTCACGCTTCACGCTTCACG", "CGGATAACGGATAACGGATAACGGATAA"],
+        "d" : ["tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg", "attaaagaggagaaa", "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa","gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta"],
         "d_oppsite" : []
     }
 ];
@@ -144,17 +144,17 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
             BioBLESS.dna.detail.device[i].d_oppsite[BioBLESS.dna.detail.device[i].d_oppsite.length] = "";
             for(k = 0; k < BioBLESS.dna.detail.device[i].d[j].length; k++){
                 switch(BioBLESS.dna.detail.device[i].d[j][k]){
-                    case 'A':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'T';
+                    case 'a':
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
                         break;
-                    case 'T':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'A';
+                    case 't':
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
                         break;
-                    case 'C':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'G';
+                    case 'c':
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'g';
                         break;
-                    case 'G':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'C';
+                    case 'g':
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'c';
                         break;
                     default:
                         alert("Error dna is wrong!");
