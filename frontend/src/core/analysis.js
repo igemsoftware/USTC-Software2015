@@ -25,29 +25,17 @@ BioBLESS.analysis.calculate_item = function(){
         item_p.name = item.title._text;
         var parameter = BioBLESS.gene_network.get_parameters();
         var _parameter = BioBLESS.gene_network.get_parameters();
-        if(item.input_i !== undefined){
-            var j = -1, i;
-            for(i = 0; i < parameter.nodes.length; i++){
-                if(parameter.nodes[i] === "INPUT")
-                    j++;
-                if(j === item.input_i){
-                    break;
-                }
-            }
-            parameter.simulation_parameters[i].device_parameter.initial[0] *= 1 + BioBLESS.analysis.change_rate;
-            _parameter.simulation_parameters[i].device_parameter.initial[0] *= 1 - BioBLESS.analysis.change_rate;
-        }else{
-            var count = -1;
-            var k;
-            for(k = 0; k < parameter.nodes.length; k++){
-                if(parameter.nodes[k] !== "INPUT")
-                    count++;
-                if(count === item.d_i)
-                    break;
-            }
-            parameter.simulation_parameters[k][item.map_id][item.params_o] *= 1 + BioBLESS.analysis.change_rate;
-            _parameter.simulation_parameters[k][item.map_id][item.params_o] *= 1 - BioBLESS.analysis.change_rate;
+        var count = -1;
+        var k;
+        for(k = 0; k < parameter.nodes.length; k++){
+            if(parameter.nodes[k] !== "INPUT")
+                count++;
+            if(count === item.d_i)
+                break;
         }
+        parameter.simulation_parameters[k][item.map_id][item.params_o] *= 1 + BioBLESS.analysis.change_rate;
+        _parameter.simulation_parameters[k][item.map_id][item.params_o] *= 1 - BioBLESS.analysis.change_rate;
+        
         $.ajax({
             type: 'POST',
             url: BioBLESS.host + '/simulate/',
@@ -341,7 +329,7 @@ BioBLESS.analysis.create_scroll_item = function(title, w, h){
 BioBLESS.analysis.create_dialog = function(h){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
-    var title = new PIXI.Text("System");
+    var title = new PIXI.Text("NULL");
     bg.beginFill(0x888888, 1);
     bg.drawRoundedRect(0, 0, 500, h, 10);
     bg.endFill();
@@ -371,9 +359,8 @@ BioBLESS.analysis.create_dialog = function(h){
     title_bg.buttonMode = true;
     title_bg.is_view = false;
     var items = [];
-    items[0] = "System";
     for(var i = 0; i < BioBLESS.analysis.devices.length; i++){
-        items[i + 1] = "device " + i.toString();
+        items[i] = "device " + i.toString();
     }
     title_bg.scroll_area = BioBLESS.gene_network.create_scroll_area(items, 460);
     title_bg.scroll_area.on_click_outside = function(){
@@ -400,13 +387,7 @@ BioBLESS.analysis.create_dialog = function(h){
                 that.is_view = false;
                 that.parent.removeChild(that.scroll_area);
                 that.parent.removeChild(that.parent.inputarea);
-                if(this.i === 0){
-                    that.parent.inputarea = that.parent.system_inputarea;
-                    BioBLESS.gene_network.move_to_device(-1);
-                }else{
-                    that.parent.inputarea = BioBLESS.analysis.create_inputarea(BioBLESS.analysis.devices[this.i - 1], this.i - 1, h);
-                    BioBLESS.gene_network.move_to_device(BioBLESS.analysis.devices[this.i - 1].devs_index);
-                }
+                that.parent.inputarea = BioBLESS.analysis.create_inputarea(BioBLESS.analysis.devices[this.i], this.i, h);
                 that.parent.addChild(that.parent.inputarea);
                 stage.addChild(title_bg);
                 stage.addChild(title);
@@ -431,39 +412,13 @@ BioBLESS.analysis.create_dialog = function(h){
     parameter.y = 100;
     stage.addChild(parameter);
     
-    var on_click = function(){
-        var item = BioBLESS.analysis.create_scroll_item("input " + this.i.toString(), 260, 50);
-        BioBLESS.analysis.scroll_area.items[BioBLESS.analysis.scroll_area.items.length] = item;
-        item.input_i = this.i;
-        BioBLESS.analysis.scroll_area.redraw();
-        BioBLESS.analysis.input_chosen[this.i] = true;
-        stage.parent.removeChild(stage);
-    };
     
-    var contain = new PIXI.Container();
-    var y = 0;
-    for(i = 0; i < BioBLESS.gene_network.input_num; i++){
-        if(BioBLESS.analysis.input_chosen[i] === true)
-            continue;
-        item = BioBLESS.analysis.create_scroll_item("input " + i.toString(), 460, 50);
-        item.y = y;
-        contain.addChild(item);
-        item.i = i;
-        item.on('click', on_click);
-        y += 50;
+    
+    if(BioBLESS.analysis.devices.length > 0){
+        title.text = "device 0";
+        stage.inputarea = BioBLESS.analysis.create_inputarea(BioBLESS.analysis.devices[0], 0, h);
+        stage.addChild(stage.inputarea);
     }
-    stage.system_inputarea = BioBLESS.logic.create_scrollarea(contain, 50 + i * 50, 460, Math.round((h - 180) / 50) * 50);
-    stage.system_inputarea.x = 20;
-    stage.system_inputarea.y = 140;
-    var mask = new PIXI.Graphics();
-    mask.beginFill(0, 0);
-    mask.drawRect(0, -1000, 460, 1000);
-    mask.drawRect(0, Math.round((h - 230) / 50) * 50, 460, 1000);
-    mask.endFill();
-    mask.interactive = true;
-    stage.system_inputarea.addChild(mask);
-    stage.inputarea = stage.system_inputarea;
-    stage.addChild(stage.system_inputarea);
     stage.addChild(title_bg);
     stage.addChild(title);
     stage.addChild(dialog_mask);
