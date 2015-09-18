@@ -1879,9 +1879,9 @@ BioBLESS.logic.create_right_stage = function(){
         stage.addChild(text1);
         stage.addChild(text2);
     });
-    var text1 = new PIXI.Text("Gates list");
+    var text1 = new PIXI.Text("Logic module");
     text1.anchor.x = text1.anchor.y = 0.5;
-    text1.scale.x = text1.scale.y = 100 / text1.width;
+    text1.scale.x = text1.scale.y = 120 / text1.width;
     text1.x = 226;
     text1.y = 15;
     

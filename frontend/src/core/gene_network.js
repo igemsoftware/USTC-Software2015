@@ -346,7 +346,7 @@ var dev = function(){
                 if(devices[n].parts.datas === undefined)
                     devices[n].parts.datas = {};
                 if(devices[n].parts.datas[parts[this.to_part[i][j]].id])
-                    parts[this.to_part[i][j]].title.text = devices[n].parts.datas[parts[this.to_part[i][j]].id] = name;
+                    parts[this.to_part[i][j]].title.text = devices[n].parts.datas[parts[this.to_part[i][j]].id].name;
             }
             Num += devices[n].parts.id[i].length;
             graphics.lineTo((Num + i + 1) * nodeDis + 30, this.stage_h / 2.0);
