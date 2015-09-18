@@ -1497,7 +1497,7 @@ BioBLESS.gene_network.get_DNA_sequance_by_type = function(type){
             return "ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc";
         default:
             return "";
-    };
+    }
 };
 
 BioBLESS.gene_network.get_DNA_sequance = function(){
