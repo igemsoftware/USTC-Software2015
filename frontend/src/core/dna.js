@@ -321,12 +321,18 @@ BioBLESS.dna.dna_copy_work = function() {
 
 };
 
+
+BioBLESS.copy_to_clipboard = function(target) {
+    
+};
+
+
 /**
  * copy_to_clipboard is the function to copy target to clipboard
  * this function should be browser compatibility
  * @param  {target}
  */
-BioBLESS.copy_to_clipboard = function(target) {    
+BioBLESS.copy_to_clipboard_compatible = function(target) {    
     if(window.clipboardData){
         window.clipboardData.clearData();
         window.clipboardData.setData("Text", target);
