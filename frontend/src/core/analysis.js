@@ -692,6 +692,7 @@ BioBLESS.analysis.draw = function(){
     BioBLESS.gene_network.onchange();
     BioBLESS.analysis.input_chosen = [];
     BioBLESS.analysis.devices = BioBLESS.gene_network.clone(BioBLESS.gene_network.devices);
+    this.stage.removeChildren();
     this.stage.movable_stage.removeChildren();
 	this.stage.movable_stage.x = 0;
 	this.stage.movable_stage.y = 0;
