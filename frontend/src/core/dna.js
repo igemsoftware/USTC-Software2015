@@ -44,21 +44,25 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.line_num = 0;
 
     deoxyribonucleic_acid.dna_style_1 = {
-        font : 'bold 40px "Courier New"',
+        font : 'bold 40px Inconsolata,monospace',
         fill : 'red',
         lineHeight : 100
     };
     deoxyribonucleic_acid.dna_style_2 = {
-        font : 'bold 40px "Courier New"',
+        font : 'bold 40px Inconsolata,monospace',
         fill : 'blue',
         lineHeight : 100
     };
     deoxyribonucleic_acid.device_style = {
-        font : 'bold 30px "Courier New"',
+        font : 'bold 30px Inconsolata,monospace',
         fill : 'grey',
         lineHeight : 100
     };
-
+    deoxyribonucleic_acid.test_sequence = "atcgatcgatcgatcgatcgatcgatcgatcg"
+    deoxyribonucleic_acid.test = new PIXI.Text(deoxyribonucleic_acid.test_sequence, deoxyribonucleic_acid.dna_style_1);
+    BioBLESS.dna.word_width = deoxyribonucleic_acid.test.width/deoxyribonucleic_acid.test_sequence.length;
+    // alert(BioBLESS.dna.word_width);
+    
     deoxyribonucleic_acid.device_name = {};
     deoxyribonucleic_acid.device_name.sequence = "";
     deoxyribonucleic_acid.dna_single_strand_1 = {};
@@ -114,7 +118,7 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.dna_single_strand_2.dna_text.y = 0.1 * BioBLESS.height + 40;
 
     deoxyribonucleic_acid.graphics.beginFill(0x000000, 0);
-    deoxyribonucleic_acid.graphics.drawRect(0.1 * BioBLESS.width, 0.1 * BioBLESS.height, deoxyribonucleic_acid.line_width * 24, (deoxyribonucleic_acid.line_num * 100 + 80));
+    deoxyribonucleic_acid.graphics.drawRect(0.1 * BioBLESS.width, 0.1 * BioBLESS.height, deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width, (deoxyribonucleic_acid.line_num * 100 + 80));
     deoxyribonucleic_acid.graphics.endFill();
 
     deoxyribonucleic_acid.workspace.beginFill(0x000000, 0);
@@ -147,8 +151,6 @@ BioBLESS.dna.make_dna_sequence = function(){
                                   .on('touchend', BioBLESS.dna.dna_select_end)
                                   .on('touchendoutside', BioBLESS.dna.dna_select_end);
 
-    // deoxyribonucleic_acid.test = new PIXI.Text('T', deoxyribonucleic_acid.dna_style_1);
-    // alert(deoxyribonucleic_acid.test.width);
     return deoxyribonucleic_acid;
 };
 
@@ -164,10 +166,10 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
             for(k = 0; k < BioBLESS.dna.detail.device[i].d[j].length; k++){
                 switch(BioBLESS.dna.detail.device[i].d[j][k]){
                     case 'a':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
                         break;
                     case 't':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
                         break;
                     case 'c':
                         BioBLESS.dna.detail.device[i].d_oppsite[j] += 'g';
@@ -204,9 +206,9 @@ BioBLESS.dna.dna_select_start = function(event) {
     var star_control_y = (BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)%100;
     var star_count_y = Math.floor((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
     var star_control_x = (BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width);
-    var star_count_x = Math.floor((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/24.2);
-    if(star_control_y >= 0 && star_control_y <= 40 && star_control_x >= 0 && star_control_x <= (BioBLESS.dna.deoxyribonucleic_acid.line_width * 24)){
-        BioBLESS.dna.starPosition.x = star_count_x * 24.2 + 0.1 * BioBLESS.width;
+    var star_count_x = Math.floor((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
+    if(star_control_y >= 0 && star_control_y <= 40 && star_control_x >= 0 && star_control_x <= (BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width)){
+        BioBLESS.dna.starPosition.x = star_count_x * BioBLESS.dna.word_width + 0.1 * BioBLESS.width;
         BioBLESS.dna.starPosition.y = star_count_y * 100 + 0.1 * BioBLESS.height; 
         BioBLESS.dna.moving = true;
         BioBLESS.dna.draw_enabled = true;
@@ -239,33 +241,33 @@ BioBLESS.dna.dna_select_move = function(event) {
         BioBLESS.dna.deoxyribonucleic_acid.select_line.beginFill(0xF7EDCA, 1);
         if((BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y) > 0){
             if(end_count_y === 0){
-                if(BioBLESS.dna.endPosition.x < (0.1 * BioBLESS.width + BioBLESS.dna.deoxyribonucleic_acid.line_width * 24)){
+                if(BioBLESS.dna.endPosition.x < (0.1 * BioBLESS.width + BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width)){
                     BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.endPosition.x - BioBLESS.dna.starPosition.x, 40);
                 }
                 else{
-                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * 24.2 + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
+                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
                 }
             }
             else{
-                BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * 24 + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
+                BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
                 if(end_count_y === check_count_y){
-                    if(end_control_x < (last_line_draw * 24.2)){
+                    if(end_control_x < (last_line_draw * BioBLESS.dna.word_width)){
                         BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width, 40);
                     }
                     else{
-                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, last_line_draw * 24.2, 40);
+                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, last_line_draw * BioBLESS.dna.word_width, 40);
                     }
                 }
                 else{
-                    if(end_control_x < (BioBLESS.dna.deoxyribonucleic_acid.line_width *24)){
+                    if(end_control_x < (BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width)){
                         BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width, 40);
                     }
                     else{
-                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width *24, 40);
+                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width, 40);
                     }
                 }
                 for(i = 1; i < end_count_y; i++){
-                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + i * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width * 24, 40);
+                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + i * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width, 40);
                 }
             }
             BioBLESS.dna.deoxyribonucleic_acid.select_line.endFill();
@@ -283,12 +285,12 @@ BioBLESS.dna.dna_select_end = function(event) {
 	if(BioBLESS.dna.draw_enabled){
         BioBLESS.dna.endPosition = event.data.getLocalPosition(this);
         var end_control_x = BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width;
-        var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/24.2);
+        var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
         var end_control_y = BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y;
         var end_count_y = Math.floor(end_control_y/100);
         var check_count_y = BioBLESS.dna.deoxyribonucleic_acid.line_num - Math.ceil((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
 
-        BioBLESS.dna.endPosition.x = end_count_x * 24.2 + 0.1 * BioBLESS.width;
+        BioBLESS.dna.endPosition.x = end_count_x * BioBLESS.dna.word_width + 0.1 * BioBLESS.width;
 
         if(end_count_y > check_count_y){
             end_count_y = check_count_y;
@@ -300,33 +302,33 @@ BioBLESS.dna.dna_select_end = function(event) {
         BioBLESS.dna.deoxyribonucleic_acid.select_line.beginFill(0xF7EDCA, 1);
         if((BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y) > 0){
             if(end_count_y === 0){
-                if(BioBLESS.dna.endPosition.x < (0.1 * BioBLESS.width + BioBLESS.dna.deoxyribonucleic_acid.line_width * 25)){
+                if(BioBLESS.dna.endPosition.x < (0.1 * BioBLESS.width + BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width)){
                     BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.endPosition.x - BioBLESS.dna.starPosition.x, 40);
                 }
                 else{
-                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * 24 + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
+                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
                 }
             }
             else{
-                BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * 24 + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
+                BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
                 if(end_count_y === check_count_y ){
-                    if(end_control_x < (last_line_draw * 24.2)){
+                    if(end_control_x < (last_line_draw * BioBLESS.dna.word_width)){
                         BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width, 40);
                     }
                     else{
-                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, last_line_draw * 24.2, 40);
+                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, last_line_draw * BioBLESS.dna.word_width, 40);
                     }
                 }
                 else{
-                    if(end_control_x < (BioBLESS.dna.deoxyribonucleic_acid.line_width *24)){
+                    if(end_control_x < (BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width)){
                         BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width, 40);
                     }
                     else{
-                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width *24, 40);
+                        BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + end_count_y * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width, 40);
                     }
                 }
                 for(i = 1; i < end_count_y; i++){
-                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + i * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width *24, 40);
+                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(0.1 * BioBLESS.width, BioBLESS.dna.starPosition.y + i * 100, BioBLESS.dna.deoxyribonucleic_acid.line_width * BioBLESS.dna.word_width, 40);
                 }
             }
             BioBLESS.dna.deoxyribonucleic_acid.select_line.endFill();
@@ -345,8 +347,8 @@ BioBLESS.dna.dna_select_end = function(event) {
  * @function
  */
 BioBLESS.dna.dna_copy_work = function() {
-    var starpoint = ((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/24.2);
-    var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/24.2);
+    var starpoint = ((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
+    var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
     var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint);
     alert(string + "\nCopy completed.");
     BioBLESS.copy_to_clipboard(string);
