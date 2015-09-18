@@ -20,10 +20,8 @@ BioBLESS.onload = function() {
         requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
-    BioBLESS.load_font();
-};
-BioBLESS.load_font = function() {
-     test = [];
+    // Now we load webfont.
+    var test = [];
     var i;
     for(i = 0; i < 3; i++) {
         var text = document.createTextNode('0.Naïve');
