@@ -246,7 +246,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 		name.y = oy + 15;
 		name.anchor.x = name.anchor.y = 0.5;
 		stage.addChild(name);
-		var h = Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100) / max_num * 0.9 * yAxis;
+		var h = Math.abs((items[j].max_value - items[j].min_value) / this.standard_c * 100) / max_num * 0.9 * yAxis;
 		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
 		
 		var num = new PIXI.Text((Math.round(Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100) * 10000) / 10000).toString() + "%");
