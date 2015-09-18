@@ -146,10 +146,10 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
             for(k = 0; k < BioBLESS.dna.detail.device[i].d[j].length; k++){
                 switch(BioBLESS.dna.detail.device[i].d[j][k]){
                     case 'a':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
                         break;
                     case 't':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
                         break;
                     case 'c':
                         BioBLESS.dna.detail.device[i].d_oppsite[j] += 'g';
