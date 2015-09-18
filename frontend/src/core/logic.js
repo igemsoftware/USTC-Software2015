@@ -2165,6 +2165,22 @@ BioBLESS.logic.output_check = function() {
     }
 };
 
+
+BioBLESS.logic.redraw = function(){
+    this.plusobj.position.x = BioBLESS.width - 150;
+    this.plusobj.position.y = 50;
+    this.stage.removeChild(this.right_stage);
+    var h = BioBLESS.height - 200;
+    if(h < 410)
+        h = 410;
+    this.right_stage = BioBLESS.logic.create_right_stage();;
+    this.right_stage.x = BioBLESS.width - 300;
+    this.right_stage.y = 100;
+    if(this.plusobj.added){
+        this.stage.addChild(this.right_stage);
+        this.stage.addChild(this.plusobj);
+    }
+};
 /**
  * draw function works for renderng the whole homepage.<br>
  * @function
@@ -2272,11 +2288,12 @@ BioBLESS.logic.draw = function(devices){
     that.plusobj.position.x = BioBLESS.width - 150;
     that.plusobj.position.y = 50;
     var right_stage = BioBLESS.logic.create_right_stage();
+    this.right_stage = right_stage;
     right_stage.x = BioBLESS.width - 300;
     right_stage.y = 100;
-    var added = false;
+    that.plusobj.added = false;
     that.plusobj.on('mousedown', function() {
-        if(added){
+        if(this.added){
             BioBLESS.logic.stage.removeChild(right_stage);
             that.plusobj.condition = 0;
         }
@@ -2285,7 +2302,7 @@ BioBLESS.logic.draw = function(devices){
             BioBLESS.logic.stage.addChild(that.plusobj);
             that.plusobj.condition = 1;
         }
-        added = !added;
+        this.added = !this.added;
     });
     BioBLESS.logic.plusobj_animation = function(){
         if(Math.abs(BioBLESS.logic.plusobj.rotation - 0.7854 * BioBLESS.logic.plusobj.condition) > 0.01){

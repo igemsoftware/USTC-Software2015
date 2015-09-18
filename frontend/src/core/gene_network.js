@@ -924,8 +924,8 @@ BioBLESS.gene_network.create_dialog = function(){
     title_bg.lineTo(217, 62);
     title_bg.lineTo(228.5, 82);
     title_bg.endFill();
-    var items = ["Description", "Type"];
-    var _items = ["description", "type"];
+    var items = ["Description", "Name"];
+    var _items = ["description", "name"];
     title_bg.scroll_area = BioBLESS.gene_network.create_scroll_area(items, 195);
     title_bg.scroll_area.on_click_outside = function(){
         title_bg.is_view = false;
@@ -1582,6 +1582,22 @@ BioBLESS.gene_network.move_to_device = function(mark){
     BioBLESS.gene_network.change_inputarea(this.devs[mark].devices_index);
 };
 
+BioBLESS.gene_network.redraw = function(){
+    BioBLESS.gene_network.plusobj.position.x = BioBLESS.width - 150;
+    BioBLESS.gene_network.plusobj.position.y = 50;
+    this.stage.removeChild(BioBLESS.gene_network.right_stage);
+    var h = BioBLESS.height - 200;
+    if(h < 410)
+        h = 410;
+    BioBLESS.gene_network.right_stage = BioBLESS.gene_network.create_base_stage_of_input(h);
+    BioBLESS.gene_network.right_stage.x = BioBLESS.width - 300;
+    BioBLESS.gene_network.right_stage.y = 100;
+    if(BioBLESS.gene_network.plusobj.added){
+        this.stage.addChild(this.right_stage);
+        this.stage.addChild(this.plusobj);
+    }
+};
+
 /** 
 * @description draw one device or the whole devices
 * @param {devices} the whole devices
@@ -1633,21 +1649,21 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
         plusobj.condition = 0;
         plusobj.position.x = BioBLESS.width - 150;
         plusobj.position.y = 50;
-        
+        BioBLESS.gene_network.right_stage = right_stage;
         right_stage.x = BioBLESS.width - 300;
         right_stage.y = 100;
-        var added = false;
+        plusobj.added = false;
         plusobj.on('mousedown', function() {
-            if(added){
-                BioBLESS.gene_network.stage.removeChild(right_stage);
+            if(this.added){
+                BioBLESS.gene_network.stage.removeChild(BioBLESS.gene_network.right_stage);
                 plusobj.condition = 0;	
             }
             else{
-                BioBLESS.gene_network.stage.addChild(right_stage);
+                BioBLESS.gene_network.stage.addChild(BioBLESS.gene_network.right_stage);
                 BioBLESS.gene_network.stage.addChild(plusobj);
                 plusobj.condition = 1;
             }
-            added = !added;
+            this.added = !this.added;
         });
         BioBLESS.gene_network.plusobj_animation = function(){
             if(Math.abs(BioBLESS.gene_network.plusobj.rotation - 0.7854 * BioBLESS.gene_network.plusobj.condition) > 0.01){

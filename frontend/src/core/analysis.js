@@ -596,10 +596,20 @@ BioBLESS.analysis.create_right_stage = function(h){
     score.y = 20;
     stage.addChild(score);
     
-    var score_num = new PIXI.Text("6");
+    var score_num = new PIXI.Text("unknow");
     score_num.x = 50 + score.width;
     score_num.y = 20;
     stage.addChild(score_num);
+    
+    $.ajax({
+        type: 'POST',
+        url: BioBLESS.host + '/score/',
+        contentType: 'application/json',
+        data: JSON.stringify(BioBLESS.logic.circuit),
+        success: function(data) {
+		    score_num.text = data.score.toString();
+		}
+    });
     
     var change_rate = new PIXI.Text("Change rate:");
     change_rate.x = 20;
@@ -672,6 +682,12 @@ BioBLESS.analysis.show = function(){
     BioBLESS.analysis.stage.movable_stage.addChild(output1);
     BioBLESS.analysis.stage.movable_stage.addChild(output2);
 };
+BioBLESS.analysis.redraw = function(){
+    this.stage.removeChild(this.right_stage);
+    var right_stage = this.create_right_stage(BioBLESS.height > 400 ? BioBLESS.height : 400);
+    this.right_stage = right_stage;
+	this.stage.addChild(right_stage);
+};
 BioBLESS.analysis.draw = function(){
     BioBLESS.gene_network.onchange();
     BioBLESS.analysis.input_chosen = [];
@@ -682,7 +698,8 @@ BioBLESS.analysis.draw = function(){
     this.stage.movable_stage._scale = 1;
 	this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
     this.parameters = {};
-    var right_stage = this.create_right_stage(BioBLESS.height);
+    var right_stage = this.create_right_stage(BioBLESS.height > 400 ? BioBLESS.height : 400);
+    this.right_stage = right_stage;
     this.stage.addChild(this.stage.movable_stage);
 	this.stage.addChild(right_stage);
 };

@@ -22,7 +22,7 @@ var drag_start_func = function(event) {
     };
     var dragArea = new PIXI.Graphics();
         dragArea.beginFill(0x000000, 1);
-        dragArea.drawRect(0, 0, BioBLESS.width, BioBLESS.height);
+        dragArea.drawRect(0, 0, 6000, 6000);
         dragArea.interactive = true;
         dragArea.on('mousedown', drag_start_func)
                 .on('touchstart', drag_start_func)
