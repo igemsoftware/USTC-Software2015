@@ -62,6 +62,8 @@ you could run
 ```
    Then you can open doc_build/doc/html/index.html to view the doc
 
+   A built doc exists in doc_build/backend_doc.zip, just use it for convenience.
+
 ### Rest API doc
 You can find it in the URI `/docs`
 
