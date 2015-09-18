@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -350,8 +350,11 @@ BioBLESS.logic.draw_gate = function(device){
     element.output.endFill();
             
     element.ieee_type = new PIXI.Text("", site_style);
-    element.ieee_type.position.x = 65;
-    element.ieee_type.position.y = 15;
+    element.ieee_type.position.x = 75;
+    element.ieee_type.position.y = 35;
+    element.ieee_type.anchor.x = 0.5;
+    element.ieee_type.anchor.y = 0.5;
+
 
     switch(icon){
         default: 
