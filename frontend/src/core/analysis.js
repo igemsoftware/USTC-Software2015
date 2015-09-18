@@ -23,8 +23,8 @@ BioBLESS.analysis.calculate_item = function(){
         var item_p = BioBLESS.analysis.items_parameters[new_i];
         item = BioBLESS.analysis.scroll_area.items[BioBLESS.analysis.now_index];
         item_p.name = item.title._text;
-        var parameter = BioBLESS.gene_network.get_parameters();
-        var _parameter = BioBLESS.gene_network.get_parameters();
+        var parameter = BioBLESS.gene_network.clone(BioBLESS.gene_network.get_parameters());
+        var _parameter = BioBLESS.gene_network.clone(BioBLESS.gene_network.get_parameters());
         var count = -1;
         var k;
         for(k = 0; k < parameter.nodes.length; k++){
@@ -129,25 +129,74 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
 	origin_name.y = oy - origin_y;
 	stage.addChild(origin_name);
 	
+    var y_name = new PIXI.Text("Molecule number");
+    y_name.style.fill = "white";
+    y_name.anchor.x = 1;
+    y_name.anchor.y = 0.5;
+    y_name.x = ox - 5;
+    y_name.y = oy - yAxis + 5;
+    stage.addChild(y_name);
+    
+    var x_name = new PIXI.Text("Parameter");
+    x_name.style.fill = "white";
+    x_name.anchor.x = 1;
+    x_name.x = ox + xAxis + 65;
+    x_name.y = oy + 5;
+    stage.addChild(x_name);
+    
 	for(var j = 0; j < items_num; j++){
-	    var name = new PIXI.Text(items[j].name);
-		name.style.fill = "white";
-		name.x = ox + (j + 1) * dis;
-		name.y = oy + 15;
-		name.anchor.x = name.anchor.y = 0.5;
-		stage.addChild(name);
-		graphics.beginFill(0x0000ff, 1);
-		graphics.drawCircle(name.x, oy - origin_y, 5);
-		graphics.endFill();
-		
-		graphics.beginFill(0xff0000, 1);
-		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 5);
-		graphics.endFill();
-		
-		graphics.beginFill(0x00ff00, 1);
-		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 5);
-		graphics.endFill();
+        var name = new PIXI.Text(items[j].name);
+        name.style.fill = "white";
+        name.x = ox + (j + 1) * dis;
+        name.y = oy + 15;
+        name.anchor.x = name.anchor.y = 0.5;
+        stage.addChild(name);
+        graphics.beginFill(0x0000ff, 1);
+        graphics.drawCircle(name.x, oy - origin_y, 5);
+        graphics.endFill();
+        
+        graphics.beginFill(0xff0000, 1);
+        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 5);
+        graphics.endFill();
+
+        graphics.beginFill(0x00ff00, 1);
+        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 5);
+        graphics.endFill();
 	}
+    
+    graphics.beginFill(0x0000ff, 1);
+    graphics.drawCircle(ox + xAxis / 4 - 20, oy - yAxis - 15, 5);
+    graphics.endFill();
+    
+    var text1 = new PIXI.Text(": 0%");
+    text1.anchor.y = 0.5;
+    text1.style.fill = "white";
+    text1.x = ox + xAxis / 4 + 10;
+    text1.y = oy - yAxis - 15;
+    stage.addChild(text1);
+    
+    graphics.beginFill(0xff0000, 1);
+    graphics.drawCircle(ox + xAxis / 4 * 2 - 20, oy - yAxis - 15, 5);
+    graphics.endFill();
+    
+    var text2 = new PIXI.Text(": +15%");
+    text2.anchor.y = 0.5;
+    text2.style.fill = "white";
+    text2.x = ox + xAxis / 4 * 2 + 10;
+    text2.y = oy - yAxis - 15;
+    stage.addChild(text2);
+    
+
+    graphics.beginFill(0x00ff00, 1);
+    graphics.drawCircle(ox + xAxis / 4 * 3 - 20, oy - yAxis - 15, 5);
+    graphics.endFill();
+    
+    var text3 = new PIXI.Text(": -15%");
+    text3.anchor.y = 0.5;
+    text3.style.fill = "white";
+    text3.x = ox + xAxis / 4 * 3 + 10;
+    text3.y = oy - yAxis - 15;
+    stage.addChild(text3);
 	
 	stage.addChild(graphics);
     return stage;
@@ -160,19 +209,33 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 	oxy.x = ox;
 	oxy.y = oy;
 	
-	
+	var y_name = new PIXI.Text("Molecule number");
+    y_name.style.fill = "white";
+    y_name.anchor.x = 1;
+    y_name.anchor.y = 0.5;
+    y_name.x = ox - 5;
+    y_name.y = oy - yAxis + 5;
+    stage.addChild(y_name);
+    
+    var x_name = new PIXI.Text("Parameter");
+    x_name.style.fill = "white";
+    x_name.anchor.x = 1;
+    x_name.x = ox + xAxis + 65;
+    x_name.y = oy + 5;
+    stage.addChild(x_name);
+    
 	var items_num = items.length;
 	var dis = xAxis / (items_num + 1);
 	
 	var max_num = 0;
 	for(var i = 0; i < items_num; i++){
-	    if(max_num < Math.abs(items[i].max_value - items[i].min_value))
-		    max_num = Math.abs(items[i].max_value - items[i].min_value);
+	    if(max_num < Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100))
+		    max_num = Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100);
 	}
 	if(max_num === 0)
         max_num = 0.0001;
 	var graphics = new PIXI.Graphics();
-	graphics.beginFill(0x00ff00, 1);
+	graphics.beginFill(0xffffff, 1);
 	
 	
 	
@@ -183,10 +246,10 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 		name.y = oy + 15;
 		name.anchor.x = name.anchor.y = 0.5;
 		stage.addChild(name);
-		var h = Math.abs(items[j].max_value - items[j].min_value) / max_num * 0.9 * yAxis;
+		var h = Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100) / max_num * 0.9 * yAxis;
 		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
 		
-		var num = new PIXI.Text((Math.round(Math.abs(items[j].max_value - items[j].min_value) * 10000) / 10000).toString());
+		var num = new PIXI.Text((Math.round(Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100) * 10000) / 10000).toString() + "%");
 		num.style.fill = "white";
 		num.anchor.x = 0.5;
 		num.anchor.y = 1;
@@ -216,7 +279,7 @@ BioBLESS.analysis.create_inputarea = function(device, index, h){
         var item = BioBLESS.analysis.create_scroll_item("d" + index.toString() + "-" + this.map_id + "-" + this.title, 260, 50);
         item.d_i = index;
         item.map_id = this.map_id;
-        item.params_o = o;
+        item.params_o = this.o;
         BioBLESS.analysis.scroll_area.items[BioBLESS.analysis.scroll_area.items.length] = item;
         BioBLESS.analysis.scroll_area.redraw();
         BioBLESS.analysis.dialog.parent.removeChild(BioBLESS.analysis.dialog);
@@ -569,8 +632,8 @@ BioBLESS.analysis.create_right_stage = function(h){
     
     
     
-    var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
-    OK.x = 100;
+    var OK = BioBLESS.logic.create_textbutton("Analyse", 140, 40, 0x000000);
+    OK.x = 80;
     OK.y = h - 60;
 	OK.interactive = true;
 	OK.buttonMode = true;

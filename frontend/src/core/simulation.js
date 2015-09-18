@@ -2,7 +2,7 @@
     this.stage = BioBLESS.utils.init_stage();
 };
 BioBLESS.simulation.refresh = function(){
-    this.parameter = BioBLESS.gene_network.get_parameters();
+    this.parameter = BioBLESS.gene_network.clone(BioBLESS.gene_network.get_parameters());
     this.output_index = BioBLESS.gene_network.out_index;
     $.ajax({
         type: 'POST',
@@ -23,6 +23,8 @@ BioBLESS.simulation.refresh = function(){
     });
 };
 BioBLESS.simulation.onchange = function(){
+    if(BioBLESS.logic.circuit.nodes.length === 0)
+        return;
     BioBLESS.gene_network.onchange();
     this.stage.movable_stage.removeChildren();
 	this.stage.movable_stage.x = 0;
@@ -185,7 +187,25 @@ BioBLESS.simulation.draw = function(_nodes){
             this.stage.movable_stage.addChild(text_node);
         }
         i++;
-    }//////////////////////////////////绘制坐标轴的标度
+    }
+    
+    var y_name = new PIXI.Text("Molecule number");
+    y_name.style.fill = "white";
+    y_name.anchor.x = 1;
+    y_name.anchor.y = 0.5;
+    y_name.x = ox - 25;
+    y_name.y = oy - yAxis + 25;
+    this.stage.movable_stage.addChild(y_name);
+    
+    var x_name = new PIXI.Text("Time");
+    x_name.style.fill = "white";
+    x_name.anchor.x = 1;
+    x_name.x = ox + xAxis + 60;
+    x_name.y = oy + 5;
+    this.stage.movable_stage.addChild(x_name);
+    
+    
+    //////////////////////////////////绘制坐标轴的标度
     
     BioBLESS.simulation.color = [];
 	BioBLESS.simulation.lines = [];
