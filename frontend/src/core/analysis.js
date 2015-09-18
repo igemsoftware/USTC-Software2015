@@ -4,134 +4,134 @@ BioBLESS.analysis.init = function() {
 };
 BioBLESS.analysis.calculate = function(){
     var items = [];
-	var num = 0;
-	for(var o in BioBLESS.analysis.parameters){
-	     items[num] = {};
-		 items[num].name = o;
-		 items[num].max_value = Math.random() * 2;
-		 items[num].min_value = Math.random() * 2;
-		 num++;
-	}
-	return items;
+    var num = 0;
+    for(var o in BioBLESS.analysis.parameters){
+         items[num] = {};
+         items[num].name = o;
+         items[num].max_value = Math.random() * 2;
+         items[num].min_value = Math.random() * 2;
+         num++;
+    }
+    return items;
 };
 BioBLESS.analysis.draw_oxy = function(x_l, y_l){
     var graphics = new PIXI.Graphics();
-	graphics.lineStyle(2, 0xffffff, 1);
+    graphics.lineStyle(2, 0xffffff, 1);
     graphics.moveTo(0, 0);
     graphics.lineTo(x_l, 0);
-	graphics.lineTo(x_l - 20, - 10);
-	graphics.lineTo(x_l, 0);
+    graphics.lineTo(x_l - 20, - 10);
+    graphics.lineTo(x_l, 0);
     graphics.lineTo(0, 0);
     graphics.lineTo(0, 0 - y_l);
-	graphics.lineTo(0 + 10, 20 - y_l);
-	graphics.lineTo(0, 0 - y_l);/////////绘制坐标主轴
-	return graphics;
+    graphics.lineTo(0 + 10, 20 - y_l);
+    graphics.lineTo(0, 0 - y_l);/////////绘制坐标主轴
+    return graphics;
 };
 BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
     var xAxis = 1100, yAxis = 600;//轴长
     var ox = 350, oy = 800;//原点坐标
     var stage = new PIXI.Container();
-	var oxy = BioBLESS.analysis.draw_oxy(xAxis, yAxis);
-	oxy.x = ox;
-	oxy.y = oy;
-	stage.addChild(oxy);
-	
-	var items_num = items.length;
-	var dis = xAxis / (items_num + 1);
-	
-	var origin_y = 1;
-	for(var i = 0; i < items_num; i++){
-	    if(origin_y > origin_value / items[i].max_value)
-		    origin_y = origin_value / items[i].max_value;
-	}
-	if(origin_y > 0.5)
-	    origin_y = 0.5;
+    var oxy = BioBLESS.analysis.draw_oxy(xAxis, yAxis);
+    oxy.x = ox;
+    oxy.y = oy;
+    stage.addChild(oxy);
+    
+    var items_num = items.length;
+    var dis = xAxis / (items_num + 1);
+    
+    var origin_y = 1;
+    for(var i = 0; i < items_num; i++){
+        if(origin_y > origin_value / items[i].max_value)
+            origin_y = origin_value / items[i].max_value;
+    }
+    if(origin_y > 0.5)
+        origin_y = 0.5;
     else
-        origin_y *= 0.8;	
-	origin_y *= yAxis;
-	var graphics = new PIXI.Graphics();
-	graphics.lineStyle(2, 0xffffff, 1);
-	graphics.moveTo(ox, oy - origin_y);
-	graphics.lineTo(ox + 15, oy - origin_y);
+        origin_y *= 0.8;    
+    origin_y *= yAxis;
+    var graphics = new PIXI.Graphics();
+    graphics.lineStyle(2, 0xffffff, 1);
+    graphics.moveTo(ox, oy - origin_y);
+    graphics.lineTo(ox + 15, oy - origin_y);
     graphics.lineStyle(0, 0, 0);
-	
-	var origin_name = new PIXI.Text(origin_value.toString());
-	origin_name.style.fill = "white";
-	origin_name.anchor.x = 1;
-	origin_name.anchor.y = 0.5;
-	origin_name.x = ox - 5;
-	origin_name.y = oy - origin_y;
-	stage.addChild(origin_name);
-	
-	for(var j = 0; j < items_num; j++){
-	    var name = new PIXI.Text(items[j].name);
-		name.style.fill = "white";
-		name.x = ox + (j + 1) * dis;
-		name.y = oy + 15;
-		name.anchor.x = name.anchor.y = 0.5;
-		stage.addChild(name);
-		graphics.beginFill(0x0000ff, 1);
-		graphics.drawCircle(name.x, oy - origin_y, 5);
-		graphics.endFill();
-		
-		graphics.beginFill(0xff0000, 1);
-		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 5);
-		graphics.endFill();
-		
-		graphics.beginFill(0x00ff00, 1);
-		graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 5);
-		graphics.endFill();
-	}
-	
-	stage.addChild(graphics);
+    
+    var origin_name = new PIXI.Text(origin_value.toString());
+    origin_name.style.fill = "white";
+    origin_name.anchor.x = 1;
+    origin_name.anchor.y = 0.5;
+    origin_name.x = ox - 5;
+    origin_name.y = oy - origin_y;
+    stage.addChild(origin_name);
+    
+    for(var j = 0; j < items_num; j++){
+        var name = new PIXI.Text(items[j].name);
+        name.style.fill = "white";
+        name.x = ox + (j + 1) * dis;
+        name.y = oy + 15;
+        name.anchor.x = name.anchor.y = 0.5;
+        stage.addChild(name);
+        graphics.beginFill(0x0000ff, 1);
+        graphics.drawCircle(name.x, oy - origin_y, 5);
+        graphics.endFill();
+        
+        graphics.beginFill(0xff0000, 1);
+        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 5);
+        graphics.endFill();
+        
+        graphics.beginFill(0x00ff00, 1);
+        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 5);
+        graphics.endFill();
+    }
+    
+    stage.addChild(graphics);
     return stage;
 };
 BioBLESS.analysis.create_output_stage2 = function(items){
     var xAxis = 1100, yAxis = 600;//轴长
     var ox = 350, oy = 800;//原点坐标
     var stage = new PIXI.Container();
-	var oxy = BioBLESS.analysis.draw_oxy(xAxis, yAxis);
-	oxy.x = ox;
-	oxy.y = oy;
-	
-	
-	var items_num = items.length;
-	var dis = xAxis / (items_num + 1);
-	
-	var max_num = 0;
-	for(var i = 0; i < items_num; i++){
-	    if(max_num < Math.abs(items[i].max_value - items[i].min_value))
-		    max_num = Math.abs(items[i].max_value - items[i].min_value);
-	}
-	
-	var graphics = new PIXI.Graphics();
-	graphics.beginFill(0x00ff00, 1);
-	
-	
-	
-	for(var j = 0; j < items_num; j++){
-	    var name = new PIXI.Text(items[j].name);
-		name.style.fill = "white";
-		name.x = ox + (j + 1) * dis;
-		name.y = oy + 15;
-		name.anchor.x = name.anchor.y = 0.5;
-		stage.addChild(name);
-		var h = Math.abs(items[j].max_value - items[j].min_value) / max_num * 0.9 * yAxis;
-		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
-		
-		var num = new PIXI.Text((Math.round(Math.abs(items[j].max_value - items[j].min_value) * 100) / 100).toString());
-		num.style.fill = "white";
-		num.anchor.x = 0.5;
-		num.anchor.y = 1;
-		num.x = name.x;
-		num.y = oy - h - 5;
-		
-		stage.addChild(num);
-		
-	}
-	
-	stage.addChild(graphics);
-	stage.addChild(oxy);
+    var oxy = BioBLESS.analysis.draw_oxy(xAxis, yAxis);
+    oxy.x = ox;
+    oxy.y = oy;
+    
+    
+    var items_num = items.length;
+    var dis = xAxis / (items_num + 1);
+    
+    var max_num = 0;
+    for(var i = 0; i < items_num; i++){
+        if(max_num < Math.abs(items[i].max_value - items[i].min_value))
+            max_num = Math.abs(items[i].max_value - items[i].min_value);
+    }
+    
+    var graphics = new PIXI.Graphics();
+    graphics.beginFill(0x00ff00, 1);
+    
+    
+    
+    for(var j = 0; j < items_num; j++){
+        var name = new PIXI.Text(items[j].name);
+        name.style.fill = "white";
+        name.x = ox + (j + 1) * dis;
+        name.y = oy + 15;
+        name.anchor.x = name.anchor.y = 0.5;
+        stage.addChild(name);
+        var h = Math.abs(items[j].max_value - items[j].min_value) / max_num * 0.9 * yAxis;
+        graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
+        
+        var num = new PIXI.Text((Math.round(Math.abs(items[j].max_value - items[j].min_value) * 100) / 100).toString());
+        num.style.fill = "white";
+        num.anchor.x = 0.5;
+        num.anchor.y = 1;
+        num.x = name.x;
+        num.y = oy - h - 5;
+        
+        stage.addChild(num);
+        
+    }
+    
+    stage.addChild(graphics);
+    stage.addChild(oxy);
     return stage;
 };
 BioBLESS.analysis.create_dialog = function(items, on_ok){
@@ -284,7 +284,7 @@ BioBLESS.analysis.create_scroll_area = function(){
             stage.y = 5;
             stage.change_value = function(v){BioBLESS.analysis.parameters[name] = v;};
             that.addChild(stage);
-			BioBLESS.analysis.parameters[name] = value;
+            BioBLESS.analysis.parameters[name] = value;
         };
         var dialog = BioBLESS.analysis.create_dialog(["123", "456", "789"], on_ok);
         dialog.x = (BioBLESS.width - 500) / 2;
@@ -392,23 +392,23 @@ BioBLESS.analysis.create_right_stage = function(){
     var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
     OK.x = 100;
     OK.y = BioBLESS.height - 60;
-	OK.interactive = true;
-	OK.buttonMode = true;
-	OK.on('click', function(){
-	    var items = BioBLESS.analysis.calculate();
-		if(items.length === 0)
-		    return;
-	    var output1 = BioBLESS.analysis.create_output_stage1(items, 1);
-		var output2 = BioBLESS.analysis.create_output_stage2(items);
-		output1.scale.x = output1.scale.y = output2.scale.x = output2.scale.y = (BioBLESS.width - 420) / 3200;
-		output1.y = output2.y = (BioBLESS.height - 900 * output1.scale.x) / 2;
-		output1.x = 100;
-		output2.x = 120 + output1.scale.x * 1450;
-		BioBLESS.analysis.stage.movable_stage.removeChildren();
-		BioBLESS.analysis.stage.movable_stage._scale = 1;
-		BioBLESS.analysis.stage.movable_stage.addChild(output1);
-		BioBLESS.analysis.stage.movable_stage.addChild(output2);
-	});
+    OK.interactive = true;
+    OK.buttonMode = true;
+    OK.on('click', function(){
+        var items = BioBLESS.analysis.calculate();
+        if(items.length === 0)
+            return;
+        var output1 = BioBLESS.analysis.create_output_stage1(items, 1);
+        var output2 = BioBLESS.analysis.create_output_stage2(items);
+        output1.scale.x = output1.scale.y = output2.scale.x = output2.scale.y = (BioBLESS.width - 420) / 3200;
+        output1.y = output2.y = (BioBLESS.height - 900 * output1.scale.x) / 2;
+        output1.x = 100;
+        output2.x = 120 + output1.scale.x * 1450;
+        BioBLESS.analysis.stage.movable_stage.removeChildren();
+        BioBLESS.analysis.stage.movable_stage._scale = 1;
+        BioBLESS.analysis.stage.movable_stage.addChild(output1);
+        BioBLESS.analysis.stage.movable_stage.addChild(output2);
+    });
     
     stage.addChild(OK);
     
@@ -418,5 +418,5 @@ BioBLESS.analysis.draw = function(){
     this.parameters = {};
     var right_stage = this.create_right_stage();
     this.stage.addChild(this.stage.movable_stage);
-	this.stage.addChild(right_stage);
+    this.stage.addChild(right_stage);
 };

@@ -1,2 +1,1 @@
-BioBLESS.onload();
-$(BioBLESS.init);
+BioBLESS.init();

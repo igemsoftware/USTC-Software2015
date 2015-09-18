@@ -2,13 +2,14 @@
  * @namespace BioBLESS
  */
 BioBLESS = {
-    animate_hook : [],
     logic : {},
     gene_network : {},
     simulation : {},
     analysis : {},
     dna : {},
-    utils : {}
+    utils : {},
+    animate_hook : [],
+    fps : 0
 };
 if(!Function.prototype.bind)
     Function.prototype.bind = function(oThis) {

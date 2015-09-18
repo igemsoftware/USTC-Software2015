@@ -303,12 +303,12 @@ BioBLESS.logic.draw_gate = function(device){
     var icon = device.id;
     var Regx = /^[0-9]*$/;
     var gate_style = {
-        font : 'bold 16px Arial',
+        font : 'bold 16px "Open Sans",sans-serif',
         fill : 'white',
         align : 'left'
     };
     var site_style = {
-    	fill : 'white',
+        fill : 'white',
         align : 'center'
     };
     while(Regx.test(icon[icon.length - 1])){
@@ -332,7 +332,7 @@ BioBLESS.logic.draw_gate = function(device){
     element.title.anchor.x = element.title.anchor.y = 0.5;
     element.title.position.x = 75;
     element.title.position.y = 84;
-	element.title.style.fill = "white";
+    element.title.style.fill = "white";
     element.type = icon;
     element.graphics.lineStyle(3, 0xffffff, 1);
     element.graphics.beginFill(0, 0);
@@ -479,24 +479,24 @@ var waitForDoubleClick = false;
  */
 BioBLESS.logic.on_drag_start_e = function(event) {
     if(waitForDoubleClick){
-	    var i; 
-	    for(i = 0; i < BioBLESS.logic.elements.length; i++){
-		     if(BioBLESS.logic.elements[i] === this.parent)
-			     break;
-		}
-        BioBLESS.gene_network.get_gates_supsification();
+        var i; 
+        for(i = 0; i < BioBLESS.logic.elements.length; i++){
+             if(BioBLESS.logic.elements[i] === this.parent)
+                 break;
+        }
+        BioBLESS.gene_network.gates = BioBLESS.logic.circuit;
         var that = this;
         if(BioBLESS.gene_network.gates){
-		    BioBLESS.logic.mark_back = [];
-		    for(var j = 0; j < BioBLESS.logic.mark.length; j++){
-			    BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
-			}
+            BioBLESS.logic.mark_back = [];
+            for(var j = 0; j < BioBLESS.logic.mark.length; j++){
+                BioBLESS.logic.mark_back[BioBLESS.logic.mark[j]] = j;
+            }
             BioBLESS.gene_network.draw(BioBLESS.gates, -1, BioBLESS.logic.mark[i]);
             BioBLESS.base_stage.removeChild(BioBLESS.logic.stage);
             BioBLESS.base_stage.addChild(BioBLESS.gene_network.stage);
             BioBLESS.base_stage.addChild(BioBLESS.navigation);
-			BioBLESS.navigation.tag.y = BioBLESS.navigation.button[BioBLESS.gene_network.tag_index].y;
-			BioBLESS.stage = BioBLESS.gene_network.stage;
+            BioBLESS.navigation.tag.y = BioBLESS.navigation.button[BioBLESS.gene_network.tag_index].y;
+            BioBLESS.stage = BioBLESS.gene_network.stage;
         }
         return;
     } else {
@@ -1069,7 +1069,7 @@ BioBLESS.logic.create_circlebutton = function(t, w){
     var button = new PIXI.Container();
     button.background = new PIXI.Graphics();
     button.text = new PIXI.Text(t);
-	button.text2 = new PIXI.Text(t);
+    button.text2 = new PIXI.Text(t);
     button.text2.style.fill = "white";
     button.background.beginFill(0xffffff, 1);
     button.background.drawCircle(w / 2, w / 2, w / 2);
@@ -1079,34 +1079,34 @@ BioBLESS.logic.create_circlebutton = function(t, w){
     button.text.anchor.y = 0.5;
     button.text.x = w / 2;
     button.text.y = w / 2;
-	
-	button.text2.anchor.x = 0.5;
+    
+    button.text2.anchor.x = 0.5;
     button.text2.anchor.y = 0.5;
     button.text2.x = w / 2;
     button.text2.y = w / 2;
     
-	button.redraw = function(){
-	    button.background.clear();
-	    button.background.beginFill(0xffffff, 1);
+    button.redraw = function(){
+        button.background.clear();
+        button.background.beginFill(0xffffff, 1);
         button.background.drawCircle(w / 2, w / 2, w / 2);
         button.background.endFill();
         button.addChild(button.text);
         button.removeChild(button.text2);
-		button.interactive = true;
-		button.buttonMode = true;
-	};
-	
-	button.change = function(){
-	    button.background.clear();
-	    button.background.beginFill(0x000000, 1);
+        button.interactive = true;
+        button.buttonMode = true;
+    };
+    
+    button.change = function(){
+        button.background.clear();
+        button.background.beginFill(0x000000, 1);
         button.background.drawCircle(w / 2, w / 2, w / 2);
         button.background.endFill();
         button.addChild(button.text2);
         button.removeChild(button.text);
-		button.interactive = false;
-		button.buttonMode = false;
-	};
-	
+        button.interactive = false;
+        button.buttonMode = false;
+    };
+    
     button.addChild(button.background);
     button.addChild(button.text);
     return button;
@@ -1118,26 +1118,26 @@ BioBLESS.logic.create_circlebutton = function(t, w){
  */
 BioBLESS.logic.create_picturebutton = function(w){
     var button = new PIXI.Container();
-	button.condition = 1;
-	var icon1 = new PIXI.Sprite(BioBLESS.ustc_software.button1_logo_texture);
-	var icon2 = new PIXI.Sprite(BioBLESS.ustc_software.button2_logo_texture);
-	icon1.anchor.x = icon1.anchor.y = 0.5;
-	icon2.anchor.x = icon2.anchor.y = 0.5;
-	icon1.scale.x = icon1.scale.y = w / 1000;
-	icon2.scale.x = icon2.scale.y = w / 1000;
-	icon1.x = icon1.y = w / 2;
-	icon2.x = icon2.y = w / 2;
-	button.redraw = function(){
-	    button.addChild(icon1);
-		button.removeChild(icon2);
-		button.condition = 1;
-	};
-	button.change = function(){
-	    button.addChild(icon2);
-		button.removeChild(icon1);
-		button.condition = 2;
-	};
-	button.addChild(icon1);
+    button.condition = 1;
+    var icon1 = new PIXI.Sprite(BioBLESS.ustc_software.button1_logo_texture);
+    var icon2 = new PIXI.Sprite(BioBLESS.ustc_software.button2_logo_texture);
+    icon1.anchor.x = icon1.anchor.y = 0.5;
+    icon2.anchor.x = icon2.anchor.y = 0.5;
+    icon1.scale.x = icon1.scale.y = w / 1000;
+    icon2.scale.x = icon2.scale.y = w / 1000;
+    icon1.x = icon1.y = w / 2;
+    icon2.x = icon2.y = w / 2;
+    button.redraw = function(){
+        button.addChild(icon1);
+        button.removeChild(icon2);
+        button.condition = 1;
+    };
+    button.change = function(){
+        button.addChild(icon2);
+        button.removeChild(icon1);
+        button.condition = 2;
+    };
+    button.addChild(icon1);
     return button;
 };
 
@@ -1174,15 +1174,15 @@ BioBLESS.logic.on_drag_e = function(){
  */
 BioBLESS.logic.create_scrollarea = function(contain, contain_h, w, h){
     var stage = new PIXI.Container();
-	stage.h = h;
-	contain.h = contain_h;
+    stage.h = h;
+    contain.h = contain_h;
     var bg = new PIXI.Graphics();
     bg.lineStyle(2, 0x000000, 1);
     bg.beginFill(0x888888, 1);
     bg.drawRect(0, 0, w, h);
     bg.endFill();
     stage.addChild(bg);
-	bg.interactive = true;
+    bg.interactive = true;
     var mask = new PIXI.Graphics();
     mask.beginFill(0, 0);
     mask.drawRect(1, 1, w - 2, h - 2);
@@ -1832,7 +1832,7 @@ BioBLESS.logic.create_gates_list = function(h){
                       .on('mousedown', on_mouse_start);
         logicGates[i].on('mousemove',  on_mouse_move)
                      .on('mouseup',  on_mouse_end)
-                     .on('mouseupoutside',  on_mouse_end); 					  
+                     .on('mouseupoutside',  on_mouse_end);                       
     }
     var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 120 + 20, 260, h - 40);
     var mask = new PIXI.Graphics();
@@ -2010,7 +2010,7 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
         }
     };
 
-	
+    
     /**
      * add_line is the function to draw line according to its two connections
      * @function
