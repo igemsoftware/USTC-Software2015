@@ -1244,10 +1244,12 @@ BioBLESS.gene_network.create_inputarea = function(device, index, h){
     var contain = new PIXI.Container();
     var num = 0;
     var y = 5;
+    var i;
+    var inputitem;
     var change_value = function(value){
         BioBLESS.gene_network.devices[this.index].map[this.i].params[this.o] = value;
     };
-    for(var i = 0; i < device.map.length; i++){
+    for(i = 0; i < device.map.length; i++){
         var j = 0;
         var describe = new PIXI.Text("(" + BioBLESS.gene_network.devices[index].map[i].id + ")" + BioBLESS.gene_network.describe_map_item(BioBLESS.gene_network.devices[index], i) + ":");
         describe.style.wordWrap = true;
@@ -1258,7 +1260,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index, h){
         y += describe.height + 25;
         contain.addChild(describe);
         for(var o in device.map[i].params){
-            var inputitem = BioBLESS.gene_network.create_inputitem(o, device.map[i].params[o], 250);
+            inputitem = BioBLESS.gene_network.create_inputitem(o, device.map[i].params[o], 250);
             inputitem.y = y;
             contain.addChild(inputitem);
             inputitem.i = i;
@@ -1288,17 +1290,17 @@ BioBLESS.gene_network.create_inputarea = function(device, index, h){
         BioBLESS.gene_network.devices[this.index].device_parameter.initial[this.i] = value;
     };
     
-    for(var i = 0; i < device.parts.id.length; i++){
+    for(i = 0; i < device.parts.id.length; i++){
         if(BioBLESS.gene_network.devices[index].device_parameter.initial[i] === undefined)
             BioBLESS.gene_network.devices[index].device_parameter.initial[i] = 10;
-        var inputitem = BioBLESS.gene_network.create_inputitem("DNA" + i.toString(), BioBLESS.gene_network.devices[index].device_parameter.initial[i], 250);
+        inputitem = BioBLESS.gene_network.create_inputitem("DNA" + i.toString(), BioBLESS.gene_network.devices[index].device_parameter.initial[i], 250);
         inputitem.y = y;
         inputitem.i = i;
         inputitem.index = index;
         contain.addChild(inputitem);
         inputitem.change_value = change_initial;
         y += 50;
-    };
+    }
     y = Math.round(y / 50) * 50;
 
     stage.inputarea = BioBLESS.logic.create_scrollarea(contain, y, 260, Math.round((h - 230) / 50) * 50);
