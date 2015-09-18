@@ -1544,7 +1544,7 @@ BioBLESS.gene_network.get_parameters = function(){
             parameters.simulation_parameters[k].device_parameter = {};
             parameters.simulation_parameters[k].device_parameter.initial = [];
             for(var p = 0; p < BioBLESS.gene_network.devices[i].parts.id.length; p++){
-                parameters.simulation_parameters[k].device_parameter.initial[i] = 10;
+                parameters.simulation_parameters[k].device_parameter.initial[p] = 10;
             }
         }
         i++;
