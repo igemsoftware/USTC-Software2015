@@ -1,4 +1,4 @@
-﻿﻿﻿﻿/**
+﻿﻿﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -158,7 +158,7 @@ BioBLESS.logic.circuit_add_line = function(mama, papa) {
         BioBLESS.logic.circuit.arcs[BioBLESS.logic.circuit.arcs.length] = {"from":BioBLESS.logic.mark[i], "to":BioBLESS.logic.mark[j]};
     }// mama's OUTPUT--->papa's INPUT
     else{
-        alert("CreateLine error");
+        alert("Createline error! Output connect output is undefined. Please delete it.");
     }// OUTPUT----OUTPUT error.
 };
 
