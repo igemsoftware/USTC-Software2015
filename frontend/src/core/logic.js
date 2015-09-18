@@ -1,4 +1,4 @@
-﻿﻿﻿/**
+﻿﻿﻿﻿/**
  * This js works as BioBLESS.logic's drawing function
  * @author USTC-software frontend
  * @author needsay
@@ -2173,7 +2173,7 @@ BioBLESS.logic.redraw = function(){
     var h = BioBLESS.height - 200;
     if(h < 410)
         h = 410;
-    this.right_stage = BioBLESS.logic.create_right_stage();;
+    this.right_stage = BioBLESS.logic.create_right_stage();
     this.right_stage.x = BioBLESS.width - 300;
     this.right_stage.y = 100;
     if(this.plusobj.added){
