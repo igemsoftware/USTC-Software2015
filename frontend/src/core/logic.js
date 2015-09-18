@@ -1463,7 +1463,7 @@ BioBLESS.logic.circuits = function(){
                 for(l = 0; l < this.devs[i].output[j].to_dev_index.length; l++){
                     if(this.devs[i].output[j].to_dev_index !== undefined){
                         var graphic = new PIXI.Graphics();
-                        graphic.lineStyle(6, 0xffff00, 1);
+                        graphic.lineStyle(6, 0x7ec02a, 1);
                         var input_dev =  this.devs[this.devs[i].output[j].to_dev_index[l]];
                         var input_x = input_dev.position.x + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].x;
                         var input_y = input_dev.position.y + input_dev.input[this.devs[i].output[j].to_dev_input_index[l]].y;
