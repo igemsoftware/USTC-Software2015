@@ -56,9 +56,14 @@ BioBLESS.analysis.calculate_item = function(){
                 });
             }
         });
+        BioBLESS.analysis.now_index++;
+    }else if(BioBLESS.analysis.OK){
+        BioBLESS.analysis.OK.alpha = 1;
+        BioBLESS.analysis.OK.interactive = true;
+        BioBLESS.analysis.OK.buttonMode = true;
     }
+        
     
-    BioBLESS.analysis.now_index++;
 };
 BioBLESS.analysis.calculate = function(){
 	this.stage.movable_stage.x = 0;
@@ -249,7 +254,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 		var h = Math.abs((items[j].max_value - items[j].min_value) / this.standard_c * 100) / max_num * 0.9 * yAxis;
 		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
 		
-		var num = new PIXI.Text((Math.round(Math.abs((items[i].max_value - items[i].min_value) / this.standard_c * 100) * 10000) / 10000).toString() + "%");
+		var num = new PIXI.Text((Math.round(Math.abs((items[j].max_value - items[j].min_value) / this.standard_c * 100) * 100) / 100).toString() + "%");
 		num.style.fill = "white";
 		num.anchor.x = 0.5;
 		num.anchor.y = 1;
@@ -639,6 +644,10 @@ BioBLESS.analysis.create_right_stage = function(h){
 	OK.buttonMode = true;
 	OK.on('click', function(){
 	    BioBLESS.analysis.calculate();
+        OK.alpha = 0.5;
+        OK.interactive = false;
+        OK.buttonMode = false;
+        BioBLESS.analysis.OK = OK;
 	});
     
     stage.addChild(OK);
