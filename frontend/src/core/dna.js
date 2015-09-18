@@ -37,21 +37,24 @@ BioBLESS.dna.init = function() {
 BioBLESS.dna.make_dna_sequence = function(){
     var i,j,k;
     deoxyribonucleic_acid = new PIXI.Container();
+    deoxyribonucleic_acid.graphics = new PIXI.Graphics();
+    deoxyribonucleic_acid.workspace = new PIXI.Graphics();
+
     deoxyribonucleic_acid.line_width = 50;
     deoxyribonucleic_acid.line_num = 0;
 
     deoxyribonucleic_acid.dna_style_1 = {
-        font : '40px Inconsolata,monospace',
+        font : 'bold 40px "Courier New"',
         fill : 'red',
         lineHeight : 100
     };
     deoxyribonucleic_acid.dna_style_2 = {
-        font : '40px Inconsolata,monospace',
+        font : 'bold 40px "Courier New"',
         fill : 'blue',
         lineHeight : 100
     };
     deoxyribonucleic_acid.device_style = {
-        font : '30px Inconsolata,monospace',
+        font : 'bold 30px "Courier New"',
         fill : 'grey',
         lineHeight : 100
     };
@@ -94,7 +97,7 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.dna_single_strand_2 = {};
     deoxyribonucleic_acid.dna_single_strand_2.sequence = "";
     for(i = 0; i < BioBLESS.dna.detail.device.length; i++){
-        count = 0;
+    	count = 0;
         for(j = 0; j < BioBLESS.dna.detail.device[i].d_oppsite.length; j++){
             for(k = 0; k < BioBLESS.dna.detail.device[i].d_oppsite[j].length; k++){    
                 deoxyribonucleic_acid.dna_single_strand_2.sequence += BioBLESS.dna.detail.device[i].d_oppsite[j][k];
@@ -110,24 +113,39 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.dna_single_strand_2.dna_text.x = 0.1 * BioBLESS.width;
     deoxyribonucleic_acid.dna_single_strand_2.dna_text.y = 0.1 * BioBLESS.height + 40;
 
+    deoxyribonucleic_acid.graphics.beginFill(0x000000, 0);
+    deoxyribonucleic_acid.graphics.drawRect(0.1 * BioBLESS.width, 0.1 * BioBLESS.height, deoxyribonucleic_acid.line_width * 24, (deoxyribonucleic_acid.line_num * 100 + 80));
+    deoxyribonucleic_acid.graphics.endFill();
+
+    deoxyribonucleic_acid.workspace.beginFill(0x000000, 0);
+    deoxyribonucleic_acid.workspace.drawRect(0, 0, BioBLESS.width, BioBLESS.height);
+    deoxyribonucleic_acid.workspace.endFill();
+
     deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.dna_single_strand_1.dna_text);
     deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.dna_single_strand_2.dna_text);
     deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.device_name.device_text);
+    deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.workspace);
+    deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.graphics);
 
-    deoxyribonucleic_acid.interactive = true;
-    deoxyribonucleic_acid.buttonMode = true;
+
+
     deoxyribonucleic_acid.select_line = new PIXI.Graphics();
-    deoxyribonucleic_acid.select_line.alpha = 0.5;    
+    deoxyribonucleic_acid.select_line.alpha = 0.5;
     deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.select_line);
 
-    deoxyribonucleic_acid.on('mousedown', BioBLESS.dna.dna_select_start)
-                         .on('touchstar', BioBLESS.dna.dna_select_start)
-                         .on('mousemove', BioBLESS.dna.dna_select_move)
-                         .on('touchmove', BioBLESS.dna.dna_select_move)
-                         .on('mouseup', BioBLESS.dna.dna_select_end)
-                         .on('mouseupoutside', BioBLESS.dna.dna_select_end)
-                         .on('touchend', BioBLESS.dna.dna_select_end)
-                         .on('touchendoutside', BioBLESS.dna.dna_select_end);
+    deoxyribonucleic_acid.workspace.interactive = true;
+    deoxyribonucleic_acid.workspace.on("click", BioBLESS.dna.reset_select_line);
+
+    deoxyribonucleic_acid.graphics.interactive = true;
+    // deoxyribonucleic_acid.graphics.buttonMode = true;
+    deoxyribonucleic_acid.graphics.on('mousedown', BioBLESS.dna.dna_select_start)
+    					          .on('touchstar', BioBLESS.dna.dna_select_start)
+                                  .on('mousemove', BioBLESS.dna.dna_select_move)
+                                  .on('touchmove', BioBLESS.dna.dna_select_move)
+                                  .on('mouseup', BioBLESS.dna.dna_select_end)
+                                  .on('mouseupoutside', BioBLESS.dna.dna_select_end)
+                                  .on('touchend', BioBLESS.dna.dna_select_end)
+                                  .on('touchendoutside', BioBLESS.dna.dna_select_end);
 
     // deoxyribonucleic_acid.test = new PIXI.Text('T', deoxyribonucleic_acid.dna_style_1);
     // alert(deoxyribonucleic_acid.test.width);
@@ -146,10 +164,10 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
             for(k = 0; k < BioBLESS.dna.detail.device[i].d[j].length; k++){
                 switch(BioBLESS.dna.detail.device[i].d[j][k]){
                     case 'a':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
                         break;
                     case 't':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
+                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
                         break;
                     case 'c':
                         BioBLESS.dna.detail.device[i].d_oppsite[j] += 'g';
@@ -166,6 +184,13 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
     }
 };
 
+
+BioBLESS.dna.reset_select_line = function() {
+    BioBLESS.dna.deoxyribonucleic_acid.select_line.clear();
+    BioBLESS.dna.deoxyribonucleic_acid.removeChild(BioBLESS.dna.deoxyribonucleic_acid.select_line);
+    BioBLESS.dna.draw_enabled = false;
+};
+
 BioBLESS.dna.moving = false;
 BioBLESS.dna.draw_enabled = false;
 
@@ -175,7 +200,7 @@ BioBLESS.dna.draw_enabled = false;
  * @param  {event} caused by users
  */
 BioBLESS.dna.dna_select_start = function(event) {
-    BioBLESS.dna.starPosition = event.data.getLocalPosition(this);
+    BioBLESS.dna.starPosition = event.data.getLocalPosition(this.parent);
     var star_control_y = (BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)%100;
     var star_count_y = Math.floor((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
     var star_control_x = (BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width);
@@ -187,6 +212,8 @@ BioBLESS.dna.dna_select_start = function(event) {
         BioBLESS.dna.draw_enabled = true;
     }
     BioBLESS.dna.deoxyribonucleic_acid.select_line.clear();
+    BioBLESS.dna.deoxyribonucleic_acid.select_line.buttonMode = false;
+    BioBLESS.dna.deoxyribonucleic_acid.select_line.interactive = false;
 };
 
 /**
@@ -252,8 +279,8 @@ BioBLESS.dna.dna_select_move = function(event) {
  * @param  {event} caused by user
  */
 BioBLESS.dna.dna_select_end = function(event) {
-    BioBLESS.dna.moving = false;
-    if(BioBLESS.dna.draw_enabled){
+	BioBLESS.dna.moving = false;
+	if(BioBLESS.dna.draw_enabled){
         BioBLESS.dna.endPosition = event.data.getLocalPosition(this);
         var end_control_x = BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width;
         var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/24.2);
@@ -277,7 +304,7 @@ BioBLESS.dna.dna_select_end = function(event) {
                     BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.endPosition.x - BioBLESS.dna.starPosition.x, 40);
                 }
                 else{
-                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * 25 + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
+                    BioBLESS.dna.deoxyribonucleic_acid.select_line.drawRect(BioBLESS.dna.starPosition.x, BioBLESS.dna.starPosition.y, BioBLESS.dna.deoxyribonucleic_acid.line_width * 24 + 0.1 * BioBLESS.width - BioBLESS.dna.starPosition.x, 40);
                 }
             }
             else{
@@ -305,36 +332,51 @@ BioBLESS.dna.dna_select_end = function(event) {
             BioBLESS.dna.deoxyribonucleic_acid.select_line.endFill();
         }
         BioBLESS.dna.draw_enabled = false;
-        BioBLESS.dna.dna_copy_work();
+        // BioBLESS.dna.dna_copy_work();
+        BioBLESS.dna.deoxyribonucleic_acid.select_line.buttonMode = true;
+        BioBLESS.dna.deoxyribonucleic_acid.select_line.interactive = true;
+        BioBLESS.dna.deoxyribonucleic_acid.select_line.on("click", BioBLESS.dna.dna_copy_work());
     }
 };
+
 
 /**
  * dna_copy_work is the function to complete the dna copy work 
  * @function
  */
 BioBLESS.dna.dna_copy_work = function() {
-    var starpoint = Math.floor((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * BioBLESS.dna.deoxyribonucleic_acid.line_width + Math.floor((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/25);
-    var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * BioBLESS.dna.deoxyribonucleic_acid.line_width + Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/25);
-    var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint - starpoint);
+    var starpoint = ((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/24.2);
+    var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/24.2);
+    var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint);
+    alert(string + "\nCopy completed.");
     BioBLESS.copy_to_clipboard(string);
 
 };
 
-
-BioBLESS.copy_to_clipboard = function(target) {
-    
-};
-
-
 /**
  * copy_to_clipboard is the function to copy target to clipboard
+ * this function only works on IE browser!
+ * @param  {target}
+ */
+BioBLESS.copy_to_clipboard = function(target) {
+    if (!window.clipboardData.setData('Text', target)) { 
+     alert("Copy error!"); 
+    }
+    // text = window.clipboardData.getData('Text'); // 获取 text 格式的数据 
+    // alert(text); 
+    // window.clipboardData.clearData('Text'); // 清除 text 格式的数据 
+    // text = window.clipboardData.getData('Text'); 
+    // alert(text); 
+};
+
+/**
+ * copy_to_clipboard_compatible is the function to copy target to clipboard
  * this function should be browser compatibility
  * @param  {target}
  */
 BioBLESS.copy_to_clipboard_compatible = function(target) {    
     if(window.clipboardData){
-        window.clipboardData.clearData();
+    	window.clipboardData.clearData();
         window.clipboardData.setData("Text", target);
         alert("Copy completed.");
     }
