@@ -37,16 +37,16 @@ BioBLESS.analysis.calculate_item = function(){
             parameter.simulation_parameters[i].device_parameter.initial[0] *= 1 + BioBLESS.analysis.change_rate;
             _parameter.simulation_parameters[i].device_parameter.initial[0] *= 1 - BioBLESS.analysis.change_rate;
         }else{
-            var j = -1, i;
-            for(i = 0; i < parameter.nodes.length; i++){
-                if(parameter.nodes[i] !== "INPUT")
-                    j++;
-                if(j === item.d_i){
+            var count = -1;
+            var k;
+            for(k = 0; k < parameter.nodes.length; k++){
+                if(parameter.nodes[k] !== "INPUT")
+                    count++;
+                if(count === item.d_i)
                     break;
-                }
             }
-            parameter.simulation_parameters[i][item.map_id][item.params_o] *= 1 + BioBLESS.analysis.change_rate;
-            _parameter.simulation_parameters[i][item.map_id][item.params_o] *= 1 - BioBLESS.analysis.change_rate;
+            parameter.simulation_parameters[k][item.map_id][item.params_o] *= 1 + BioBLESS.analysis.change_rate;
+            _parameter.simulation_parameters[k][item.map_id][item.params_o] *= 1 - BioBLESS.analysis.change_rate;
         }
         $.ajax({
             type: 'POST',
@@ -255,18 +255,18 @@ BioBLESS.analysis.create_inputarea = function(device, index, h){
         describe.x = 5;
         y += describe.height + 5;
         contain.addChild(describe);
-        for(var o in device.map[i].params){
-            if(device.map[i].params_chosen[o] === true)
+        for(var oi in device.map[i].params){
+            if(device.map[i].params_chosen[oi] === true)
                 continue;
-            device.map[i].params_chosen[o] = false;
-            var item = BioBLESS.analysis.create_scroll_item(o, 460, 50);
+            device.map[i].params_chosen[oi] = false;
+            var item = BioBLESS.analysis.create_scroll_item(oi, 460, 50);
             item.y = y;
             contain.addChild(item);
             item.i = i;
-            item.o = o;
+            item.o = oi;
             item.index = index;
             item.map_id = device.map[i].id;
-            item.title = o;
+            item.title = oi;
             item.on('click', on_click);
             y += 50;
         }
@@ -302,7 +302,7 @@ BioBLESS.analysis.create_scroll_item = function(title, w, h){
     bg.drawRect(0, 0, w, h);
     bg.endFill();
     stage.addChild(bg);
-    var title = new PIXI.Text(title);
+    title = new PIXI.Text(title);
     title.anchor.x = title.anchor.y = 0.5;
     title.x = w / 2;
     title.y = h / 2;

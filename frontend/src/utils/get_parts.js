@@ -9,4 +9,4 @@ BioBLESS.utils.get_parts = function(data, func) {
                 func(data.data);
         }
     });
-}
+};
