@@ -3,6 +3,11 @@
  * @param {plugin} the plugin you want to change to
  */ 
 BioBLESS.change_stage = function(plugin) {
+    if(plugin === BioBLESS.now_plugin)
+        return;
+    if(plugin !== BioBLESS.logic && !BioBLESS.logic.output_check()){
+        return;
+    }
     var child_stage = BioBLESS.stage;
     if(!child_stage)
         return;
