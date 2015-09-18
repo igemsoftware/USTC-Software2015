@@ -214,7 +214,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 	oxy.x = ox;
 	oxy.y = oy;
 	
-	var y_name = new PIXI.Text("Molecule number");
+	var y_name = new PIXI.Text("Robustness");
     y_name.style.fill = "white";
     y_name.anchor.x = 1;
     y_name.anchor.y = 0.5;
@@ -600,6 +600,7 @@ BioBLESS.analysis.create_right_stage = function(h){
     score_num.x = 50 + score.width;
     score_num.y = 20;
     stage.addChild(score_num);
+    this.score_num = score_num;
     
     $.ajax({
         type: 'POST',
@@ -683,10 +684,16 @@ BioBLESS.analysis.show = function(){
     BioBLESS.analysis.stage.movable_stage.addChild(output2);
 };
 BioBLESS.analysis.redraw = function(){
+    var backup1 = this.score_num.text;
+    var backup2 = this.scroll_area.items;
     this.stage.removeChild(this.right_stage);
     var right_stage = this.create_right_stage(BioBLESS.height > 400 ? BioBLESS.height : 400);
     this.right_stage = right_stage;
 	this.stage.addChild(right_stage);
+    this.score_num.text = backup1;
+    this.scroll_area.items = backup2;
+    this.scroll_area.redraw();
+    
 };
 BioBLESS.analysis.draw = function(){
     BioBLESS.gene_network.onchange();

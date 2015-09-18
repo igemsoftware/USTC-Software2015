@@ -56,7 +56,7 @@ BioBLESS.simulation.draw = function(_nodes){
     nodes.t = _nodes.t;
     nodes.c = [];
     nodes.names = [];
-    var i = 0;
+    var i = 0, j;
     var Regx = /^[0-9]*$/;
     for(var o in _nodes){
         if(o != "t"){
@@ -75,7 +75,6 @@ BioBLESS.simulation.draw = function(_nodes){
                 nodes.names[i] = "OUT";
             else{
                 nodes.names[i] = this.parameter.nodes[index];
-                var j;
                 if(this.parameter.nodes[index] === "INPUT"){
                     count = 0;
                     for(j = 0; j < index; j++){
@@ -108,7 +107,7 @@ BioBLESS.simulation.draw = function(_nodes){
     
     
     var maxY = 0;
-    for(var j = 0; j < nodes.c.length; j++){
+    for(j = 0; j < nodes.c.length; j++){
 	    for(i = 0; i < nodes.c[j].length; i++){
             if(maxY < nodes.c[j][i]){
                 maxY = nodes.c[j][i];
