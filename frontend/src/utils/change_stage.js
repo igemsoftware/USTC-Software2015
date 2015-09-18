@@ -6,6 +6,7 @@ BioBLESS.change_stage = function(plugin) {
     var child_stage = BioBLESS.stage;
     if(!child_stage)
         return;
+    BioBLESS.now_plugin = plugin;
     BioBLESS.base_stage.removeChild(child_stage);
     BioBLESS.base_stage.addChild(plugin.stage);
     BioBLESS.base_stage.addChild(BioBLESS.navigation);

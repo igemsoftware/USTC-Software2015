@@ -2294,11 +2294,11 @@ BioBLESS.logic.draw = function(devices){
     that.plusobj.added = false;
     that.plusobj.on('mousedown', function() {
         if(this.added){
-            BioBLESS.logic.stage.removeChild(right_stage);
+            BioBLESS.logic.stage.removeChild(BioBLESS.logic.right_stage);
             that.plusobj.condition = 0;
         }
         else{
-            BioBLESS.logic.stage.addChild(right_stage);
+            BioBLESS.logic.stage.addChild(BioBLESS.logic.right_stage);
             BioBLESS.logic.stage.addChild(that.plusobj);
             that.plusobj.condition = 1;
         }

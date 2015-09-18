@@ -41,4 +41,19 @@ BioBLESS.main = function() {
     });
     BioBLESS.scroll_function = BioBLESS.zoom_function;
     BioBLESS.add_animate_hook(BioBLESS.scroll_animation);
+    BioBLESS.now_plugin = BioBLESS.logic;
+    var window_size_change = function(){
+        BioBLESS.width = $('body').width();
+        BioBLESS.height = $('body').height();
+        BioBLESS.renderer.resize(BioBLESS.width, BioBLESS.height);
+        BioBLESS.base_stage.removeChild(BioBLESS.navigation);
+        BioBLESS.prepare_navigation();
+        BioBLESS.base_stage.addChild(BioBLESS.navigation);
+        BioBLESS.base_stage.static_stage.fps.x = BioBLESS.width - 110;
+        BioBLESS.base_stage.static_stage.fps.y = BioBLESS.height - 30;
+        BioBLESS.logic.redraw();
+        if(BioBLESS.now_plugin.redraw)
+            BioBLESS.now_plugin.redraw();
+    };
+    window.onresize = window_size_change;
 };

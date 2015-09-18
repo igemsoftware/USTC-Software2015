@@ -2,6 +2,7 @@ BioBLESS.onload = function() {
     BioBLESS.width = $('body').width();
     BioBLESS.height = $('body').height();
     var renderer = PIXI.autoDetectRenderer(BioBLESS.width, BioBLESS.height, {antialias : true});
+    BioBLESS.renderer = renderer;
     if(!renderer)
         return;
     document.body.appendChild(renderer.view);

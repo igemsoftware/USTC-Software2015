@@ -120,8 +120,10 @@ BioBLESS.prepare_navigation = function(){
 		BioBLESS.navigation.addChild(BioBLESS.navigation.button[i]);
 		BioBLESS[navigation_plugin[i]].tag_index = i;
     }
-	
-	tag.y = BioBLESS.navigation.button[0].y;
+	if(BioBLESS.now_plugin)
+	    tag.y = BioBLESS.navigation.button[BioBLESS.now_plugin.tag_index].y;
+    else
+        tag.y = BioBLESS.navigation.button[0].y;
 	BioBLESS.navigation.tag = tag;
     
 };
