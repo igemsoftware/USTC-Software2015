@@ -59,7 +59,9 @@ BioBLESS.dna.make_dna_sequence = function(){
         fill : 'grey',
         lineHeight : 100
     };
-    deoxyribonucleic_acid.test_sequence = "atcgatcgatcgatcgatcgatcgatcgatcg"
+    for(i = 0; i < deoxyribonucleic_acid.line_width; i++){
+        deoxyribonucleic_acid.test_sequence += 'a';
+    }
     deoxyribonucleic_acid.test = new PIXI.Text(deoxyribonucleic_acid.test_sequence, deoxyribonucleic_acid.dna_style_1);
     BioBLESS.dna.word_width = deoxyribonucleic_acid.test.width/deoxyribonucleic_acid.test_sequence.length;
     // alert(BioBLESS.dna.word_width);
@@ -203,6 +205,7 @@ BioBLESS.dna.draw_enabled = false;
  * @param  {event} caused by users
  */
 BioBLESS.dna.dna_select_start = function(event) {
+    BioBLESS.dna.deoxyribonucleic_acid.addChild(BioBLESS.dna.deoxyribonucleic_acid.select_line);
     BioBLESS.dna.starPosition = event.data.getLocalPosition(this.parent);
     var star_control_y = (BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)%100;
     var star_count_y = Math.floor((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
