@@ -42,7 +42,7 @@ BioBLESS.scroll_animation = function(){
 
 
 BioBLESS.prepare_navigation = function(){
-    var navigation_button = ["Logic","Gene-network","Simulation","Analysis","DNASequance"];
+    var navigation_button = ["Logic","\n  Gene\nNetwork","Simulation","Analysis","\n    DNA\nSequence"];
 	var navigation_plugin = ["logic","gene_network","simulation","analysis","dna"];
 	var icon_urls = [BioBLESS.ustc_software.logic_logo_texture, BioBLESS.ustc_software.gene_network_logo_texture, BioBLESS.ustc_software.simulation_logo_texture, BioBLESS.ustc_software.analyse_logo_texture, BioBLESS.ustc_software.dna_logo_texture];
 	var text_scale = [0.65, 0.55, 0.6, 0.6, 0.55];
