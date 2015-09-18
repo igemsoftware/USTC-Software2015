@@ -324,17 +324,29 @@ var dev = function(){
             var dialog = BioBLESS.gene_network.create_dialog();
             dialog.x = (BioBLESS.width - 500) / 2;
             dialog.y = 50;
+            var that = this;
+            dialog.change = function(data){
+                if(devices[n].parts.datas === undefined)
+                    devices[n].parts.datas = {};
+                devices[n].parts.datas[that.id] = data;
+                that.title.text = data.name;
+            };
             BioBLESS.base_stage.addChild(dialog);
         };
         for(i = 0; i < this.lines_num; i++){
             graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
             for(j = 0; j < devices[n].parts.id[i].length; j++){
 	    		parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
+                parts[this.to_part[i][j]].id = "d" + (this.to_part[i][j] + 1).toString();
                 parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
                 parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
                 parts[this.to_part[i][j]].interactive = true;
                 parts[this.to_part[i][j]].buttonMode = true;
                 parts[this.to_part[i][j]].on('click', on_click);
+                if(devices[n].parts.datas === undefined)
+                    devices[n].parts.datas = {};
+                if(devices[n].parts.datas[parts[this.to_part[i][j]].id])
+                    parts[this.to_part[i][j]].title.text = devices[n].parts.datas[parts[this.to_part[i][j]].id] = name;
             }
             Num += devices[n].parts.id[i].length;
             graphics.lineTo((Num + i + 1) * nodeDis + 30, this.stage_h / 2.0);
@@ -693,16 +705,22 @@ BioBLESS.gene_network.devs_analysis = function(devices){
     this.input_num = input_num;
     j = 0;
     for(i = 0; i < gates.nodes.length; i++){
-        this.devs[i] = new dev();
-        this.devs[i].draw(devices, g[i]);
-        if(g[i] < 0) continue;
-        this.devs[i].devices_index = j;
+        
+        if(g[i] < 0){
+            this.devs[i] = new dev();
+            this.devs[i].draw(devices, g[i]);
+            continue;
+        }
+        
         
         if(BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter === undefined){
             BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter = BioBLESS.gene_network.clone(devices[g[i]]);
         }
         this.devices[j] = BioBLESS.logic.elements[BioBLESS.logic.mark_back[i]].parameter;
         this.devices[j].devs_index = i;
+        this.devs[i] = new dev();
+        this.devs[i].draw(this.devices, j);
+        this.devs[i].devices_index = j;
         var index_button = BioBLESS.gene_network.create_textbutton((j++).toString(), 100, 30, 0xa97a46);
         index_button.x = 50;
         index_button.y = 100;
@@ -876,12 +894,16 @@ BioBLESS.gene_network.create_textbutton = function(t, w, h, color){
 };
 BioBLESS.gene_network.create_dialog = function(){
     var stage = new PIXI.Container();
+    var value = "";
     var mask = new PIXI.Graphics();
     mask.beginFill(0, 0);
-    mask.drawRect(-1000, -1000, 3000, 5000);
+    mask.drawRect(-1000, -1000, 3000, 1000);
+    mask.drawRect(-1000, 0, 1000, BioBLESS.height - 100);
+    mask.drawRect(-1000, BioBLESS.height - 100, 3000, 1000);
+    mask.drawRect(500, 0, 1000, BioBLESS.height - 100);
     mask.interactive = true;
     mask.on('click', function(){stage.del();});
-    stage.addChild(mask);
+    
     var bg = new PIXI.Graphics();
     bg.beginFill(0x333333, 1);
     bg.drawRoundedRect(0, 0, 500, BioBLESS.height - 100, 50);
@@ -889,9 +911,10 @@ BioBLESS.gene_network.create_dialog = function(){
     bg.interactive = true;
     stage.addChild(bg);
     
-    var title = new PIXI.Text("ID");
+    var title = new PIXI.Text("Description");
     title.x = 55;
     title.y = 55;
+    title.t = "description";
     var title_bg = new PIXI.Graphics();
     title_bg.beginFill(0xffffff, 1);
     title_bg.drawRect(50, 50, 195, 40);
@@ -901,7 +924,8 @@ BioBLESS.gene_network.create_dialog = function(){
     title_bg.lineTo(217, 62);
     title_bg.lineTo(228.5, 82);
     title_bg.endFill();
-    var items = ["ID", "Description", "Type"];
+    var items = ["Description", "Type"];
+    var _items = ["description", "type"];
     title_bg.scroll_area = BioBLESS.gene_network.create_scroll_area(items, 195);
     title_bg.scroll_area.on_click_outside = function(){
         title_bg.is_view = false;
@@ -924,7 +948,11 @@ BioBLESS.gene_network.create_dialog = function(){
             var that = this;
             var on_click = function(){
                 title.text = items[this.i];
+                title.t = _items[this.i];
                 that.is_view = false;
+                var obj = {};
+                obj[title.t] = value;
+                BioBLESS.utils.get_parts(obj, stage.change_scroll_area);
                 that.parent.removeChild(that.scroll_area);
             };
             for(var i = 0; i < buttons.length; i++){
@@ -933,25 +961,65 @@ BioBLESS.gene_network.create_dialog = function(){
             }
         }
     });
-    stage.addChild(title_bg);
-    stage.addChild(title);
+    
     
     var contain = new PIXI.Container();
-    var scroll_area = BioBLESS.logic.create_scrollarea(contain, 1000, 400, BioBLESS.height - 250);
-    scroll_area.x = 50;
-    scroll_area.y = 110;
-    stage.addChild(scroll_area);
+    var scroll_stage = new PIXI.Container();
+    var scroll_area = BioBLESS.logic.create_scrollarea(contain, 0, 400, BioBLESS.height - 250);
+    scroll_stage.addChild(scroll_area);
+    scroll_stage.x = 50;
+    scroll_stage.y = 110;
+    var s_mask = new PIXI.Graphics();
+    s_mask.beginFill(0, 0);
+    s_mask.drawRect(0, -1000, 400, 1000);
+    s_mask.drawRect(0, BioBLESS.height - 250, 400, 1000);
+    s_mask.endFill();
+    s_mask.interactive = true;
+    scroll_stage.addChild(s_mask);
     
     var input = BioBLESS.gene_network.create_textarea(211, 51);
     input.style.left = (BioBLESS.width / 2).toString() + "px";
     input.style.top = (99).toString() + "px";
     $("body").append(input);
-    
+    var on_click = function(){
+        if(stage.change)
+            stage.change(this.data);
+        stage.del();
+    };
+    stage.change_scroll_area = function(data){
+        contain.removeChildren();
+        var y = 0;
+        for(var i = 0; i < data.length; i++){
+            var item = BioBLESS.analysis.create_scroll_item(data[i].name, 400, 50);
+            item.y = y;
+            item.data = data[i];
+            item.on('click', on_click);
+            contain.addChild(item);
+            y += 50;
+        }
+        var scr = BioBLESS.logic.create_scrollarea(contain, y, 400, BioBLESS.height - 250);
+        scroll_stage.removeChildren();
+        scroll_stage.addChild(scr);
+    };
+    var on_change = function(event){
+        if(value !== input.value){
+            value = input.value;
+            var obj = {};
+            obj[title.t] = value;
+            BioBLESS.utils.get_parts(obj, stage.change_scroll_area);
+        }
+    };
+    $("#" + input.id).on("input", on_change);
+        
     stage.del = function(){
         $("#" + input.id).remove();
         stage.parent.removeChild(stage);
     };
     
+    stage.addChild(scroll_stage);
+    stage.addChild(title_bg);
+    stage.addChild(title);
+    stage.addChild(mask);
     return stage;
 };
 /**
