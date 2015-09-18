@@ -694,7 +694,6 @@ BioBLESS.logic.on_draw_line_up = function(event){
         drawPart[0] = new PIXI.Graphics();
         drawPart[0].father = this;
         drawPart[0].line_color = line_color_style[line_color_select++ % line_color_style.length];
-        drawPart[0].alpha = 0.6;
     }
     else{
         moving = false;
@@ -2030,7 +2029,6 @@ BioBLESS.logic.circuit_draw_of_data = function(thing, circuit_data) {
         mama.connection = true;
         drawPart[0].mother = mama;
         drawPart[0].line_color = line_color_style[line_color_select++ % line_color_style.length];
-        drawPart[0].alpha = 0.6;
 
         var xRect = drawPart[0].father.position.x + drawPart[0].father.parent.position.x;
         var yRect = drawPart[0].father.position.y + drawPart[0].father.parent.position.y;
