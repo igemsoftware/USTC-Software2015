@@ -520,7 +520,7 @@ BioBLESS.analysis.create_scroll_area = function(h){
         }
     };
     var on_click = function(){
-        var dialog = BioBLESS.analysis.create_dialog(BioBLESS.height - 300);
+        var dialog = BioBLESS.analysis.create_dialog((BioBLESS.height - 300) > 500 ? (BioBLESS.height - 300) : 500);
         BioBLESS.analysis.dialog = dialog;
         BioBLESS.base_stage.addChild(dialog);
     };
@@ -608,7 +608,7 @@ BioBLESS.analysis.create_right_stage = function(h){
         contentType: 'application/json',
         data: JSON.stringify(BioBLESS.logic.circuit),
         success: function(data) {
-		    score_num.text = data.score.toString();
+		    score_num.text = (Math.round(data.score * 100) / 100).toString();
 		}
     });
     
