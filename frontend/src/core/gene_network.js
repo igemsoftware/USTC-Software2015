@@ -1227,7 +1227,7 @@ BioBLESS.gene_network.create_base_stage_of_input = function(h){
     var stage = new PIXI.Container();
     var bg = new PIXI.Graphics();
     var title = new PIXI.Text("System");
-    var OK = BioBLESS.logic.create_textbutton("OK", 100, 40, 0x000000);
+    var OK = BioBLESS.logic.create_textbutton("Simulate!", 100, 40, 0x000000);
     bg.beginFill(0x888888, 1);
     bg.drawRect(0, 0, 300, h);
     bg.endFill();
