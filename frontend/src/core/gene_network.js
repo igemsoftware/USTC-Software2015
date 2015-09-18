@@ -1481,6 +1481,42 @@ BioBLESS.gene_network.create_base_stage_of_input = function(h){
     return stage;
 };
 
+BioBLESS.gene_network.get_DNA_sequance_by_type = function(type){
+    switch(type){
+        case "Promoter":
+            return "tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg";
+        case "RBS":
+            return "attaaagaggagaaa";
+        case "Coding":
+            return "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa";
+        case "sRNA":
+            return "gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta";
+        case "Terminator":
+            return "ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc";
+        default:
+            return "";
+    };
+};
+
+BioBLESS.gene_network.get_DNA_sequance = function(){
+    var parameter = [];
+    for(var i = 0; i < this.devices.length; i++){
+        parameter[i] = {};
+        parameter[i].d = [];
+        parameter[i].d_oppsite = [];
+        var j = 0;
+        for(var o in this.devices[i].parts.type){
+            if(this.devices[i].parts.datas[o])
+                parameter[i].d[j] = this.devices[i].parts.datas[o].sequance;
+            else
+                parameter[i].d[j] = BioBLESS.gene_network.get_DNA_sequance_by_type(this.devices[i].parts.type[o]);
+            j++;
+        }
+    }
+    return parameter;
+};
+
+
 BioBLESS.gene_network.get_parameters = function(){
     var parameters = {};
     parameters.nodes = BioBLESS.gene_network.gates.nodes;
@@ -1504,6 +1540,13 @@ BioBLESS.gene_network.get_parameters = function(){
             parameters.simulation_parameters[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params;
         }
         parameters.simulation_parameters[k].device_parameter = BioBLESS.gene_network.devices[i].device_parameter;
+        if(parameters.simulation_parameters[k].device_parameter === undefined){
+            parameters.simulation_parameters[k].device_parameter = {};
+            parameters.simulation_parameters[k].device_parameter.initial = [];
+            for(var p = 0; p < BioBLESS.gene_network.devices[i].parts.id.length; p++){
+                parameters.simulation_parameters[k].device_parameter.initial[i] = 10;
+            }
+        }
         i++;
     }
     return parameters;
