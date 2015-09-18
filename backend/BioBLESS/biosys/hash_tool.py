@@ -30,7 +30,7 @@ def hash_string_list(strlist):
         The possibility that it causes a collision problem can be safely ignored,
     for our data is relatively small.
 
-    :param strlist:
-    :return: List of hash
+    :param strlist The list of string:
+    :return List of hash:
     """
     return map(hash, strlist)

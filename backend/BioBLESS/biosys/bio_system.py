@@ -11,6 +11,7 @@ Create some biosys to calculate their simulation
 
 >>> test = bio_system(data)
 >>> test.simulation()
+
 """
 __author__ = 'Trumpet'
 

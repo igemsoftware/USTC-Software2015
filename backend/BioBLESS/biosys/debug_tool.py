@@ -4,6 +4,10 @@ import os
 
 
 def debug_info(addinfo=None):
+    """
+    Debug helper
+    :param addinfo Tags:
+    """
     prev_stack = sys._getframe(1)
     prev_file = prev_stack.f_globals['__file__']
     prev_filename = os.path.split(prev_file)[-1]

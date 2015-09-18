@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 rm *.pyc
 rm *.o
 rm *.so

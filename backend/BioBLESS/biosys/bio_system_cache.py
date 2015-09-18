@@ -12,6 +12,9 @@ import copy
 
 
 def hash_gates_and_simulation(biosystem):
+    """
+    Hash gates and simulation
+    """
     hash_lst = []
     for i in range(len(biosystem['nodes'])):
         hash_str = dump_ord(biosystem['simulation_parameters'][i])
@@ -39,8 +42,6 @@ class BioSystemNetwork(object):
     def reconstruct_arcs(biosystem):
         """
         Change the shape of the data of the connection of the net
-        :param biosystem:
-        :return:
         """
         hash_list = hash_gates_and_simulation(biosystem)
         vertex = []
@@ -62,42 +63,15 @@ class BioSystemNetwork(object):
     def resolve_biosystem_net(self, vertex):
         """
         This function will change the graph into reaction lines
-        :param vertex:
         """
         for item in vertex:
             if len(item['in']) == 0:
                 self._resolve_biosystem_net_recurrent(vertex, vertex.index(item), [])
 
 
-#
-# def compare_gates(biosystem1, biosystem2):
-#     return sorted(biosystem1['nodes']) == sorted(biosystem2['nodes'])
-#
-#
-# def compare_simulation(biosystem1, biosystem2):
-#     return dump_ord(biosystem1['simulation_parameters']) == dump_ord(biosystem2['simulation_parameters'])
-#
-#
-# def combine_gates_and_simulation(biosystem1):
-#     # Combine the information into a json string
-#     list1 = []
-#     for i in range(len(biosystem1['nodes'])):
-#         list1.append('"' + biosystem1['nodes'][i] + '":' + dump_ord(biosystem1['simulation_parameters'][i]))
-#     return list1
-#
-#
-# def compare_gates_and_simulation(biosystem1, biosystem2):
-#     list1, list2 = map(hash_gates_and_simulation, (biosystem1, biosystem2))
-#     if DEBUG:
-#         print debug_info(), list1, list2
-#     return sorted(list1) == sorted(list2)
-
-
 def biosystem_cache(biosystem):
     """
     Try to cache a biosystem. If not found, return None.
-    :param biosystem:
-    :return:
     """
     if not os.path.exists("../cache"):
         os.mkdir("../cache")
@@ -115,9 +89,7 @@ def biosystem_cache(biosystem):
 def biosystem_update_cache(biosystem, record):
     """
     This function will check and update the biosystem
-    :param biosystem:
-    :param record:
-    :return:
+    :param record - The record of simulation  :
     """
     # Auto cache size control.
     if not os.path.exists("../cache"):
@@ -148,9 +120,6 @@ def biosystem_update_cache(biosystem, record):
 def compare_biosystem(biosystem1, biosystem2):
     """
     Compare two biosystem. If same return True otherwise False
-    :param biosystem1:
-    :param biosystem2:
-    :return:
     """
     if biosystem1['system_parameter']['time'] != biosystem2['system_parameter']['time']:
         return False
