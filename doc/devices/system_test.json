@@ -148,13 +148,6 @@
         {
             "device_parameter": {
                 "initial": [
-                    10
-                ]
-            }
-        },
-        {
-            "device_parameter": {
-                "initial": [
                     10,
                     10
                 ]
@@ -193,13 +186,6 @@
         {
             "device_parameter": {
                 "initial": [
-                    10
-                ]
-            }
-        },
-        {
-            "device_parameter": {
-                "initial": [
                     10,
                     10
                 ]
@@ -224,13 +210,6 @@
             },
             "e2": {
                 "reg": 2
-            }
-        },
-        {
-            "device_parameter": {
-                "initial": [
-                    10
-                ]
             }
         }
     ]
