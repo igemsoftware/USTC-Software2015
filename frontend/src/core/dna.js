@@ -285,7 +285,7 @@ BioBLESS.dna.dna_select_end = function(event) {
 	if(BioBLESS.dna.draw_enabled){
         BioBLESS.dna.endPosition = event.data.getLocalPosition(this);
         var end_control_x = BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width;
-        var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
+        var end_count_x = Math.ceil((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
         var end_control_y = BioBLESS.dna.endPosition.y - BioBLESS.dna.starPosition.y;
         var end_count_y = Math.floor(end_control_y/100);
         var check_count_y = BioBLESS.dna.deoxyribonucleic_acid.line_num - Math.ceil((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100);
