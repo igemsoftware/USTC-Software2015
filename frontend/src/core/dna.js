@@ -18,6 +18,7 @@ BioBLESS.dna.detail.device = [
         "d_oppsite" : []
     }
 ];
+//promoter, rbs, coding, srna, terminator
 
 /**
  * init is the function to init the dna feature 
