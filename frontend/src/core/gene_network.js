@@ -322,8 +322,6 @@ var dev = function(){
         Num = 0;
         var on_click = function(){
             var dialog = BioBLESS.gene_network.create_dialog((BioBLESS.height - 300) > 500 ? (BioBLESS.height - 300) : 500);
-            dialog.x = (BioBLESS.width - 500) / 2;
-            dialog.y = 50;
             var that = this;
             dialog.change = function(data){
                 if(devices[n].parts.datas === undefined)
@@ -894,6 +892,8 @@ BioBLESS.gene_network.create_textbutton = function(t, w, h, color){
 };
 BioBLESS.gene_network.create_dialog = function(h){
     var stage = new PIXI.Container();
+    stage.x = (BioBLESS.width - 500) / 2;
+    stage.y = (BioBLESS.height - h + 100) / 2;
     var value = "";
     var mask = new PIXI.Graphics();
     mask.beginFill(0, 0);
@@ -905,8 +905,8 @@ BioBLESS.gene_network.create_dialog = function(h){
     mask.on('click', function(){stage.del();});
     
     var bg = new PIXI.Graphics();
-    bg.beginFill(0x333333, 1);
-    bg.drawRoundedRect(0, 0, 500, h - 100, 50);
+    bg.beginFill(0x888888, 1);
+    bg.drawRoundedRect(0, 0, 500, h - 100, 20);
     bg.endFill();
     bg.interactive = true;
     stage.addChild(bg);
@@ -979,7 +979,7 @@ BioBLESS.gene_network.create_dialog = function(h){
     
     var input = BioBLESS.gene_network.create_textarea(211, 51);
     input.style.left = (BioBLESS.width / 2).toString() + "px";
-    input.style.top = (99).toString() + "px";
+    input.style.top = (99 + (BioBLESS.height - h + 100) / 2 - 50).toString() + "px";
     $("body").append(input);
     var on_click = function(){
         if(stage.change)
@@ -1001,15 +1001,17 @@ BioBLESS.gene_network.create_dialog = function(h){
         scroll_stage.removeChildren();
         scroll_stage.addChild(scr);
     };
-    var on_change = function(event){
-        if(value !== input.value){
+    var on_key_down = function(event){
+        var code = event.keyCode||event.which;
+        if(code === 13|| code === 32){
             value = input.value;
             var obj = {};
             obj[title.t] = value;
             BioBLESS.utils.get_parts(obj, stage.change_scroll_area);
         }
     };
-    $("#" + input.id).on("input", on_change);
+    input.onkeydown = on_key_down;
+    input.onkeypress = on_key_down;
         
     stage.del = function(){
         $("#" + input.id).remove();
@@ -1509,7 +1511,7 @@ BioBLESS.gene_network.get_DNA_sequance = function(){
         var j = 0;
         for(var o in this.devices[i].parts.type){
             if(this.devices[i].parts.datas[o])
-                parameter[i].d[j] = this.devices[i].parts.datas[o].sequance;
+                parameter[i].d[j] = this.devices[i].parts.datas[o].sequence;
             else
                 parameter[i].d[j] = BioBLESS.gene_network.get_DNA_sequance_by_type(this.devices[i].parts.type[o]);
             j++;
