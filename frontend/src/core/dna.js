@@ -129,7 +129,7 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.graphics.endFill();
 
     deoxyribonucleic_acid.workspace.beginFill(0x000000, 0);
-    deoxyribonucleic_acid.workspace.drawRect(0, 0, BioBLESS.width, BioBLESS.height);
+    deoxyribonucleic_acid.workspace.drawRect(0, 0, BioBLESS.width * 0.8, BioBLESS.height);
     deoxyribonucleic_acid.workspace.endFill();
 
     deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.dna_single_strand_1.dna_text);
