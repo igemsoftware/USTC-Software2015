@@ -12,12 +12,12 @@ BioBLESS.dna.detail = {
     "device": []
 };
 
-BioBLESS.dna.detail.device = [
-    {
-        "d" : ["tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg", "attaaagaggagaaa", "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa","gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta","ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc"],
-        "d_oppsite" : []
-    }
-];
+// BioBLESS.dna.detail.device = [
+//     {
+//         "d" : ["tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg", "attaaagaggagaaa", "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa","gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta","ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc"],
+//         "d_oppsite" : []
+//     }
+// ];
 //promoter, rbs, coding, srna, terminator
 
 /**
@@ -358,7 +358,7 @@ BioBLESS.dna.dna_copy_work = function() {
     var starpoint = ((BioBLESS.dna.starPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.starPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
     var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
     var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint);
-    alert(string + "\nCopy completed.");
+    // alert(string + "\nCopy completed.");
     BioBLESS.copy_to_clipboard_compatible(string);
 
 };
