@@ -12,7 +12,7 @@ BioBLESS.analysis.calculate_c = function(data){
         if(data.t[i] > t){
             out = out / (n + 1) * n + data["S" + BioBLESS.gene_network.out_index.toString()][i] / (n + 1);
             n++;
-        }
+        }else break;
     }
     return out;
 };
@@ -65,6 +65,7 @@ BioBLESS.analysis.calculate = function(){
 	this.stage.movable_stage.y = 0;
     this.stage.movable_stage._scale = 1;
 	this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
+    this.stage.movable_stage.removeChildren();
     BioBLESS.analysis.items_parameters = [];
     BioBLESS.analysis.now_index = 0;
     var parameter = BioBLESS.gene_network.get_parameters();
@@ -74,7 +75,7 @@ BioBLESS.analysis.calculate = function(){
         contentType: 'application/json',
         data: JSON.stringify(parameter),
         success: function(data) {
-		    BioBLESS.analysis.standard_c = Math.round(BioBLESS.analysis.calculate_c(data) * 100) / 100;
+		    BioBLESS.analysis.standard_c = Math.round(BioBLESS.analysis.calculate_c(data) * 10000) / 10000;
             BioBLESS.analysis.calculate_item();
 		}
     });
@@ -168,7 +169,8 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 	    if(max_num < Math.abs(items[i].max_value - items[i].min_value))
 		    max_num = Math.abs(items[i].max_value - items[i].min_value);
 	}
-	
+	if(max_num === 0)
+        max_num = 0.0001;
 	var graphics = new PIXI.Graphics();
 	graphics.beginFill(0x00ff00, 1);
 	
@@ -184,7 +186,7 @@ BioBLESS.analysis.create_output_stage2 = function(items){
 		var h = Math.abs(items[j].max_value - items[j].min_value) / max_num * 0.9 * yAxis;
 		graphics.drawRect(name.x - dis / 4, oy - h, dis / 2, h);
 		
-		var num = new PIXI.Text((Math.round(Math.abs(items[j].max_value - items[j].min_value) * 100) / 100).toString());
+		var num = new PIXI.Text((Math.round(Math.abs(items[j].max_value - items[j].min_value) * 10000) / 10000).toString());
 		num.style.fill = "white";
 		num.anchor.x = 0.5;
 		num.anchor.y = 1;
