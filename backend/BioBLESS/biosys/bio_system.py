@@ -120,6 +120,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                 [["r" + part_id], [], single_data["decay1"]],
             ]
             for reg_sub in ["Promoter", "RBS"]:
+                #print reg_sub+","+str(single)#
                 if reg_sub == "Promoter":
                     pro = coding_find_last(single, reg_sub)
                     tmp = find_in_map(id2="d" + str(pro))
@@ -134,6 +135,7 @@ def dev_system(gates, data, nodes_id, input_sub, output_sub):
                     reg_data = data[maps[tmp]["id"]]
                     reg_pro = maps[tmp]["id1"]
 
+                    #print str(maps[tmp]["id"])+","+str(reg_data)#
                     """
                     d    ->    r    ->    p
                           m          l
