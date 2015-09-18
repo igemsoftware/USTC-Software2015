@@ -363,8 +363,8 @@ var dev = function(){
                         
                         this.draw_line(graphics, parts[i].protein.position.x + nodeW, parts[i].protein.position.y + nodeH / 2.0, parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 8 + ind + 5, false);
                         if(this.line_type[i][j] == 'inh'){
-                            graphics.moveTo(parts[j].position.x + l * this.part[j].upLine - 6, parts[j].position.y - 7 + ind + 5);
-                            graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 6, parts[j].position.y - 7 + ind + 5);
+                            graphics.moveTo(parts[j].position.x + l * this.part[j].upLine - 12, parts[j].position.y - 7 + ind + 5);
+                            graphics.lineTo(parts[j].position.x + l * this.part[j].upLine + 12, parts[j].position.y - 7 + ind + 5);
                         }else{
                             this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].upLine, parts[j].position.y - 5 + ind + 5, "down");
                         }
@@ -379,9 +379,9 @@ var dev = function(){
                         
                         this.draw_line(graphics, parts[i].protein.position.x + nodeW, parts[i].protein.position.y + nodeH / 2.0, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 8 - ind - 15, false);
                         
-                        if(this.line_type[i][j] !== 'inh'){
-                            graphics.moveTo(parts[j].position.x + l * this.part[j].downLine - 6, parts[j].position.y + nodeH + 7 - ind - 15);
-                            graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 6, parts[j].position.y + nodeH + 7 - ind - 15);
+                        if(this.line_type[i][j] == 'inh'){
+                            graphics.moveTo(parts[j].position.x + l * this.part[j].downLine - 12, parts[j].position.y + nodeH + 7 - ind - 15);
+                            graphics.lineTo(parts[j].position.x + l * this.part[j].downLine + 12, parts[j].position.y + nodeH + 7 - ind - 15);
                         }else{
                             this.draw_arrow(graphics, 6, parts[j].position.x + l * this.part[j].downLine, parts[j].position.y + nodeH + 5 - ind - 15, "up");
                         }
@@ -402,8 +402,8 @@ var dev = function(){
                         
                         this.draw_line(graphics, parts[j].protein.position.x, parts[j].protein.position.y + nodeH / 2.0, parts[i].position.x + l * this.part[i].upLine, parts[i].position.y - 8 + ind + 5, false);
                         if(this.line_type[j][i] == 'inh'){
-                            graphics.moveTo(parts[i].position.x + l * this.part[i].upLine - 6, parts[i].position.y - 7 + ind + 5);
-                            graphics.lineTo(parts[i].position.x + l * this.part[i].upLine + 6, parts[i].position.y - 7 + ind + 5);
+                            graphics.moveTo(parts[i].position.x + l * this.part[i].upLine - 12, parts[i].position.y - 7 + ind + 5);
+                            graphics.lineTo(parts[i].position.x + l * this.part[i].upLine + 12, parts[i].position.y - 7 + ind + 5);
                         }else{
                             this.draw_arrow(graphics, 6, parts[i].position.x + l * this.part[i].upLine, parts[i].position.y - 5 + ind + 5, "down");
                         }
@@ -418,9 +418,9 @@ var dev = function(){
                         
                         this.draw_line(graphics, parts[j].protein.position.x + nodeW, parts[j].protein.position.y + nodeH / 2.0, parts[i].position.x + l * this.part[i].downLine, parts[i].position.y + nodeH + 8 - ind - 15, false);
                         
-                        if(this.line_type[j][i] !== 'inh'){
-                            graphics.moveTo(parts[i].position.x + l * this.part[i].downLine - 6, parts[i].position.y + nodeH + 7 - ind - 15);
-                            graphics.lineTo(parts[i].position.x + l * this.part[i].downLine + 6, parts[i].position.y + nodeH + 7 - ind - 15);
+                        if(this.line_type[j][i] == 'inh'){
+                            graphics.moveTo(parts[i].position.x + l * this.part[i].downLine - 12, parts[i].position.y + nodeH + 7 - ind - 15);
+                            graphics.lineTo(parts[i].position.x + l * this.part[i].downLine + 12, parts[i].position.y + nodeH + 7 - ind - 15);
                         }else{
                             this.draw_arrow(graphics, 6, parts[i].position.x + l * this.part[i].downLine, parts[i].position.y + nodeH + 5 - ind - 15, "up");
                         }

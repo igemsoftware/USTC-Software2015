@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 virtualenv BioBLESS
 source BioBLESS/bin/activate
 cd backend

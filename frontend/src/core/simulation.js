@@ -2,7 +2,7 @@
     this.stage = BioBLESS.utils.init_stage();
 };
 BioBLESS.simulation.refresh = function(){
-    this.parameter = BioBLESS.gene_network.clone(BioBLESS.gene_network.get_parameters());
+    this.parameter = BioBLESS.gene_network.get_parameters();
     this.output_index = BioBLESS.gene_network.out_index;
     $.ajax({
         type: 'POST',
@@ -23,6 +23,7 @@ BioBLESS.simulation.refresh = function(){
     });
 };
 BioBLESS.simulation.onchange = function(){
+    BioBLESS.gene_network.onchange();
     this.stage.movable_stage.removeChildren();
 	this.stage.movable_stage.x = 0;
 	this.stage.movable_stage.y = 0;
@@ -54,10 +55,41 @@ BioBLESS.simulation.draw = function(_nodes){
     nodes.c = [];
     nodes.names = [];
     var i = 0;
+    var Regx = /^[0-9]*$/;
     for(var o in _nodes){
         if(o != "t"){
+            var count;
+            for(count = 1; count < o.length; count++){
+                if(!Regx.test(o.substring(count, 1))){
+                    count = -1;
+                    break;
+                }
+            }
+            if(count === -1)
+                continue;
             nodes.c[i] = _nodes[o];
-            nodes.names[i] = o;
+            var index = parseInt(o.substring(1));
+            if(index === this.output_index)
+                nodes.names[i] = "OUT";
+            else{
+                nodes.names[i] = this.parameter.nodes[index];
+                var j;
+                if(this.parameter.nodes[index] === "INPUT"){
+                    count = 0;
+                    for(j = 0; j < index; j++){
+                        if(this.parameter.nodes[j] === "INPUT")
+                            count++;
+                    }
+                    nodes.names[i] += " " + (count).toString();
+                }else{
+                    count = 0;
+                    for(j = 0; j < index; j++){
+                        if(this.parameter.nodes[j] !== "INPUT")
+                            count++;
+                    }
+                    nodes.names[i] += "(device " + (count).toString() + ")";
+                }
+            }
             i++;
         }
     }
