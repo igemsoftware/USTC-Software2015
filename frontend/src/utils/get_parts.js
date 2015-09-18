@@ -4,6 +4,9 @@ BioBLESS.utils.get_parts = function(data, func) {
         url: BioBLESS.host + '/parts/',
         contentType: 'application/json',
         data: JSON.stringify([data]),
-        success: func
+        success: function(data) {
+            if(data.status === 'SUCCESS')
+                func(data.data);
+        }
     });
 }
