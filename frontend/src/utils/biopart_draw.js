@@ -126,7 +126,7 @@ BioBLESS.biopart_draw.draw_biopart_svg = function(id) {
             graphics.beginFill(0xdd963c, 1);
             graphics.drawEllipse(100, 100, 58, 35);
             graphics.endFill();
-            title._text = "Rbs";
+            title._text = "RBS";
             break;
         case "sRNA":
         case "SRNA":
