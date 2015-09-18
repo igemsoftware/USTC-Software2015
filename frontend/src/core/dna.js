@@ -14,7 +14,7 @@ BioBLESS.dna.detail = {
 
 BioBLESS.dna.detail.device = [
     {
-        "d" : ["tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg", "attaaagaggagaaa", "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa","gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta"],
+        "d" : ["tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg", "attaaagaggagaaa", "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa","gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta","ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc"],
         "d_oppsite" : []
     }
 ];
@@ -351,7 +351,7 @@ BioBLESS.dna.dna_copy_work = function() {
     var endpoint = Math.floor((BioBLESS.dna.endPosition.y - 0.1 * BioBLESS.height)/100) * (BioBLESS.dna.deoxyribonucleic_acid.line_width + 1) + Math.round((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/BioBLESS.dna.word_width);
     var string = BioBLESS.dna.deoxyribonucleic_acid.dna_single_strand_1.sequence.substring(starpoint, endpoint);
     alert(string + "\nCopy completed.");
-    BioBLESS.copy_to_clipboard(string);
+    BioBLESS.copy_to_clipboard_compatible(string);
 
 };
 
@@ -374,13 +374,14 @@ BioBLESS.copy_to_clipboard = function(target) {
 /**
  * copy_to_clipboard_compatible is the function to copy target to clipboard
  * this function should be browser compatibility
+ * the function works on IE, Opera, Firefox(whose version is under 17).
  * @param  {target}
  */
 BioBLESS.copy_to_clipboard_compatible = function(target) {    
     if(window.clipboardData){
     	window.clipboardData.clearData();
         window.clipboardData.setData("Text", target);
-        alert("Copy completed.");
+        // alert("Copy completed.");
     }
     else if(navigator.userAgent.indexOf("Opera") != -1){
         window.location = target;
@@ -411,6 +412,6 @@ BioBLESS.copy_to_clipboard_compatible = function(target) {
             return false; 
         }
         clip.setData(trans, null, clipid.kGlobalClipboard);
-        alert("copy completed.");
+        // alert("Copy completed.");
     }
 };
