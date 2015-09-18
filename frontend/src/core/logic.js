@@ -1816,7 +1816,7 @@ BioBLESS.logic.create_gates_list = function(h){
         _logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         logicGates[i] = BioBLESS.logic.draw_gate(BioBLESS.gates[i]);
         _logicGates[i].position.x = 55;
-        _logicGates[i].position.y = 20 + i * 120;
+        _logicGates[i].position.y = 15 + i * 120;
         _logicGates[i].button_bg = new PIXI.Graphics();
         _logicGates[i].button_bg.y = _logicGates[i].position.y - 15;
         _logicGates[i].i = i;
@@ -1836,7 +1836,7 @@ BioBLESS.logic.create_gates_list = function(h){
                      .on('mouseup',  on_mouse_end)
                      .on('mouseupoutside',  on_mouse_end);                       
     }
-    var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 120 + 20, 260, h - 40);
+    var scroll_area = BioBLESS.logic.create_scrollarea(contain, BioBLESS.gates.length * 120 + 15, 260, h - 40);
     var mask = new PIXI.Graphics();
     mask.interactive = true;
     mask.beginFill(0, 0);
