@@ -27,7 +27,7 @@ BioBLESS.dna.detail = {
 BioBLESS.dna.init = function() {
     this.stage = BioBLESS.utils.init_stage();
     BioBLESS.dna.deoxyribonucleic_acid = BioBLESS.dna.make_dna_sequence();
-    BioBLESS.dna.stage.addChild(BioBLESS.dna.deoxyribonucleic_acid);
+    BioBLESS.dna.stage.movable_stage.addChild(BioBLESS.dna.deoxyribonucleic_acid);
 };
 
 BioBLESS.dna.onchange = function() {
