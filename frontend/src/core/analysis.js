@@ -648,6 +648,11 @@ BioBLESS.analysis.create_right_stage = function(h){
         OK.interactive = false;
         OK.buttonMode = false;
         BioBLESS.analysis.OK = OK;
+        setTimeout(function(){
+            OK.alpha = 0.5;
+            OK.interactive = false;
+            OK.buttonMode = false;
+        }, 30000);
 	});
     
     stage.addChild(OK);
