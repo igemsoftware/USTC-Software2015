@@ -30,6 +30,10 @@ BioBLESS.dna.init = function() {
     BioBLESS.dna.stage.addChild(BioBLESS.dna.deoxyribonucleic_acid);
 };
 
+BioBLESS.dna.onchange = function() {
+    BioBLESS.dna.detail.device = BioBLESS.gene_network.get_DNA_sequance();
+};
+
 /**
  * make_dna_sequence is the function to make dna sequence
  * @function
