@@ -919,7 +919,7 @@ BioBLESS.gene_network.create_dialog = function(){
     title_bg.beginFill(0xffffff, 1);
     title_bg.drawRect(50, 50, 195, 40);
     title_bg.endFill();
-    title_bg.beginFill(0xffffff, 1);
+    title_bg.beginFill(0x000000, 1);
     title_bg.moveTo(240, 62);
     title_bg.lineTo(217, 62);
     title_bg.lineTo(228.5, 82);
@@ -1268,7 +1268,38 @@ BioBLESS.gene_network.create_inputarea = function(device, index, h){
             y += 50;
         }
         y += 50;
+        y = Math.round(y / 50) * 50;
     }
+    
+    var device_parameter = new PIXI.Text("Device parameter:");
+    device_parameter.style.wordWrap = true;
+    device_parameter.style.wordWrapWidth = 245;
+    device_parameter.style.font = 'bold 18px Arial';
+    device_parameter.y = y;
+    device_parameter.x = 5;
+    y += device_parameter.height + 25;
+    contain.addChild(device_parameter);
+    if(BioBLESS.gene_network.devices[index].device_parameter === undefined){
+        BioBLESS.gene_network.devices[index].device_parameter = {};
+        BioBLESS.gene_network.devices[index].device_parameter.initial = [];
+    }
+    
+    var change_initial = function(value){
+        BioBLESS.gene_network.devices[this.index].device_parameter.initial[this.i] = value;
+    };
+    
+    for(var i = 0; i < device.parts.id.length; i++){
+        if(BioBLESS.gene_network.devices[index].device_parameter.initial[i] === undefined)
+            BioBLESS.gene_network.devices[index].device_parameter.initial[i] = 10;
+        var inputitem = BioBLESS.gene_network.create_inputitem("DNA" + i.toString(), BioBLESS.gene_network.devices[index].device_parameter.initial[i], 250);
+        inputitem.y = y;
+        inputitem.i = i;
+        inputitem.index = index;
+        contain.addChild(inputitem);
+        inputitem.change_value = change_initial;
+        y += 50;
+    };
+    y = Math.round(y / 50) * 50;
 
     stage.inputarea = BioBLESS.logic.create_scrollarea(contain, y, 260, Math.round((h - 230) / 50) * 50);
     stage.inputarea.x = 20;
@@ -1472,11 +1503,7 @@ BioBLESS.gene_network.get_parameters = function(){
         for(var j = 0; j < BioBLESS.gene_network.devices[i].map.length; j++){
             parameters.simulation_parameters[k][BioBLESS.gene_network.devices[i].map[j].id] = BioBLESS.gene_network.devices[i].map[j].params;
         }
-        parameters.simulation_parameters[k].device_parameter = {
-                "initial": []
-            };
-        for(var p = 0; p < BioBLESS.gene_network.devices[i].parts.id.length; p++)
-            parameters.simulation_parameters[k].device_parameter.initial[p] = 10;
+        parameters.simulation_parameters[k].device_parameter = BioBLESS.gene_network.devices[i].device_parameter;
         i++;
     }
     return parameters;
