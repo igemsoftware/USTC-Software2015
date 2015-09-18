@@ -15,7 +15,7 @@ BioBLESS.dna.detail = {
 // BioBLESS.dna.detail.device = [
 //     {
 //         "d" : ["tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg", "attaaagaggagaaa", "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa","gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta","ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc"],
-//         "d_oppsite" : []
+//         "d_opposite" : []
 //     }
 // ];
 //promoter, rbs, coding, srna, terminator
@@ -26,12 +26,18 @@ BioBLESS.dna.detail = {
  */
 BioBLESS.dna.init = function() {
     this.stage = BioBLESS.utils.init_stage();
-    BioBLESS.dna.deoxyribonucleic_acid = BioBLESS.dna.make_dna_sequence();
-    BioBLESS.dna.stage.movable_stage.addChild(BioBLESS.dna.deoxyribonucleic_acid);
+    BioBLESS.dna.stage.movable_stage._scale = 1;
 };
 
 BioBLESS.dna.onchange = function() {
+    BioBLESS.dna.stage.movable_stage.removeChildren();
+    BioBLESS.dna.stage.movable_stage._scale = BioBLESS.dna.stage.movable_stage.scale.x = BioBLESS.dna.stage.movable_stage.scale.y = 1;
+    BioBLESS.dna.stage.movable_stage.x = BioBLESS.dna.stage.movable_stage.y = 0;
+    BioBLESS.gene_network.onchange();
     BioBLESS.dna.detail.device = BioBLESS.gene_network.get_DNA_sequance();
+    BioBLESS.dna.deoxyribonucleic_acid = BioBLESS.dna.make_dna_sequence();
+    BioBLESS.dna.stage.movable_stage.addChild(BioBLESS.dna.deoxyribonucleic_acid);
+    BioBLESS.dna.stage.addChild(BioBLESS.dna.stage.movable_stage);
 };
 
 /**
@@ -109,9 +115,9 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.dna_single_strand_2.sequence = "";
     for(i = 0; i < BioBLESS.dna.detail.device.length; i++){
     	count = 0;
-        for(j = 0; j < BioBLESS.dna.detail.device[i].d_oppsite.length; j++){
-            for(k = 0; k < BioBLESS.dna.detail.device[i].d_oppsite[j].length; k++){    
-                deoxyribonucleic_acid.dna_single_strand_2.sequence += BioBLESS.dna.detail.device[i].d_oppsite[j][k];
+        for(j = 0; j < BioBLESS.dna.detail.device[i].d_opposite.length; j++){
+            for(k = 0; k < BioBLESS.dna.detail.device[i].d_opposite[j].length; k++){    
+                deoxyribonucleic_acid.dna_single_strand_2.sequence += BioBLESS.dna.detail.device[i].d_opposite[j][k];
                 count++;
                 if(count >= deoxyribonucleic_acid.line_width){
                     deoxyribonucleic_acid.dna_single_strand_2.sequence += '\n';
@@ -169,20 +175,20 @@ BioBLESS.dna.dispose_oppsite_dna = function(){
     var i,j,k;
     for(i = 0; i < BioBLESS.dna.detail.device.length; i++){
         for(j = 0; j < BioBLESS.dna.detail.device[i].d.length; j++){
-            BioBLESS.dna.detail.device[i].d_oppsite[BioBLESS.dna.detail.device[i].d_oppsite.length] = "";
+            BioBLESS.dna.detail.device[i].d_opposite[BioBLESS.dna.detail.device[i].d_opposite.length] = "";
             for(k = 0; k < BioBLESS.dna.detail.device[i].d[j].length; k++){
                 switch(BioBLESS.dna.detail.device[i].d[j][k]){
                     case 'a':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 't';
+                        BioBLESS.dna.detail.device[i].d_opposite[j] += 't';
                         break;
                     case 't':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'a';
+                        BioBLESS.dna.detail.device[i].d_opposite[j] += 'a';
                         break;
                     case 'c':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'g';
+                        BioBLESS.dna.detail.device[i].d_opposite[j] += 'g';
                         break;
                     case 'g':
-                        BioBLESS.dna.detail.device[i].d_oppsite[j] += 'c';
+                        BioBLESS.dna.detail.device[i].d_opposite[j] += 'c';
                         break;
                     default:
                         alert("Error dna is wrong!");

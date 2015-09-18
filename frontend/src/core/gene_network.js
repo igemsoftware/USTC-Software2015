@@ -1505,7 +1505,7 @@ BioBLESS.gene_network.get_DNA_sequance = function(){
     for(var i = 0; i < this.devices.length; i++){
         parameter[i] = {};
         parameter[i].d = [];
-        parameter[i].d_oppsite = [];
+        parameter[i].d_opposite = [];
         var j = 0;
         for(var o in this.devices[i].parts.type){
             if(this.devices[i].parts.datas[o])
