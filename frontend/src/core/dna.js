@@ -35,23 +35,23 @@ BioBLESS.dna.init = function() {
  * @return {deoxyribonucleic_acid} PIXI.Container
  */
 BioBLESS.dna.make_dna_sequence = function(){
-	var i,j,k;
+    var i,j,k;
     deoxyribonucleic_acid = new PIXI.Container();
     deoxyribonucleic_acid.line_width = 50;
     deoxyribonucleic_acid.line_num = 0;
 
     deoxyribonucleic_acid.dna_style_1 = {
-        font : 'bold 40px "Courier New"',
+        font : '40px Inconsolata,monospace',
         fill : 'red',
         lineHeight : 100
     };
     deoxyribonucleic_acid.dna_style_2 = {
-        font : 'bold 40px "Courier New"',
+        font : '40px Inconsolata,monospace',
         fill : 'blue',
         lineHeight : 100
     };
     deoxyribonucleic_acid.device_style = {
-        font : 'bold 30px "Courier New"',
+        font : '30px Inconsolata,monospace',
         fill : 'grey',
         lineHeight : 100
     };
@@ -94,7 +94,7 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.dna_single_strand_2 = {};
     deoxyribonucleic_acid.dna_single_strand_2.sequence = "";
     for(i = 0; i < BioBLESS.dna.detail.device.length; i++){
-    	count = 0;
+        count = 0;
         for(j = 0; j < BioBLESS.dna.detail.device[i].d_oppsite.length; j++){
             for(k = 0; k < BioBLESS.dna.detail.device[i].d_oppsite[j].length; k++){    
                 deoxyribonucleic_acid.dna_single_strand_2.sequence += BioBLESS.dna.detail.device[i].d_oppsite[j][k];
@@ -121,7 +121,7 @@ BioBLESS.dna.make_dna_sequence = function(){
     deoxyribonucleic_acid.addChild(deoxyribonucleic_acid.select_line);
 
     deoxyribonucleic_acid.on('mousedown', BioBLESS.dna.dna_select_start)
-    					 .on('touchstar', BioBLESS.dna.dna_select_start)
+                         .on('touchstar', BioBLESS.dna.dna_select_start)
                          .on('mousemove', BioBLESS.dna.dna_select_move)
                          .on('touchmove', BioBLESS.dna.dna_select_move)
                          .on('mouseup', BioBLESS.dna.dna_select_end)
@@ -252,8 +252,8 @@ BioBLESS.dna.dna_select_move = function(event) {
  * @param  {event} caused by user
  */
 BioBLESS.dna.dna_select_end = function(event) {
-	BioBLESS.dna.moving = false;
-	if(BioBLESS.dna.draw_enabled){
+    BioBLESS.dna.moving = false;
+    if(BioBLESS.dna.draw_enabled){
         BioBLESS.dna.endPosition = event.data.getLocalPosition(this);
         var end_control_x = BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width;
         var end_count_x = Math.floor((BioBLESS.dna.endPosition.x - 0.1 * BioBLESS.width)/24.2);
@@ -328,7 +328,7 @@ BioBLESS.dna.dna_copy_work = function() {
  */
 BioBLESS.copy_to_clipboard = function(target) {    
     if(window.clipboardData){
-    	window.clipboardData.clearData();
+        window.clipboardData.clearData();
         window.clipboardData.setData("Text", target);
         alert("Copy completed.");
     }

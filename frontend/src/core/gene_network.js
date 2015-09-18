@@ -18,11 +18,6 @@ BioBLESS.gene_network.onchange = function() {
 */ 
 var nodeH = 200, nodeW = 200, nodeDis = 200, floorDis = 280;
 var svg_index = 0;
-
-BioBLESS.gene_network.get_gates_supsification = function(){
-    //$.getJSON("misc/gates_supsification.json", function(data) {BioBLESS.gene_network.gates = data;});
-    BioBLESS.gene_network.gates = BioBLESS.logic.circuit;
-};
 /** 
 * @author needsay
 * @constructor dev
@@ -329,7 +324,7 @@ var dev = function(){
         for(i = 0; i < this.lines_num; i++){
             graphics.moveTo((this.to_part[i][0] + i + 1) * nodeDis - 40, this.stage_h / 2.0);
             for(j = 0; j < devices[n].parts.id[i].length; j++){
-	    		parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
+                parts[this.to_part[i][j]] = BioBLESS.biopart_draw.draw_biopart_svg(devices[n].parts.type["d" + (this.to_part[i][j] + 1).toString()]);
                 parts[this.to_part[i][j]].position.y = (this.stage_h - nodeH) / 2.0;
                 parts[this.to_part[i][j]].position.x = (this.to_part[i][j] + i + 1) * nodeDis;
                 parts[this.to_part[i][j]].interactive = true;
@@ -387,7 +382,7 @@ var dev = function(){
                         }
                     }
                 }
-	    		if(this.is_line[j][i]){
+                if(this.is_line[j][i]){
                     parts[j].protein = BioBLESS.biopart_draw.draw_biopart_svg("Protein");
                     parts[j].protein.position.x = parts[j].position.x;
                     parts[j].protein.position.y = parts[j].position.y - this.protein_height[j] * floorDis;
@@ -567,11 +562,11 @@ var dev = function(){
                 this.stage.addChild(parts[i].protein);
             }
         }
-	    this.parts = parts;
+        this.parts = parts;
     }
     else if(n === -1){
         var output = BioBLESS.gene_network.create_textbutton("OUT", 100, 40, 0x2672bd);
-		output.scale.x = output.scale.y = 1.5;
+        output.scale.x = output.scale.y = 1.5;
         this.stage_h = 100;
         this.stage_w = 1000;
         output.x = 450;
@@ -589,7 +584,7 @@ var dev = function(){
     }
     else{
         var input = BioBLESS.gene_network.create_textbutton("INPUT " + (0 - n - 2).toString(), 150, 40, 0x37b899);
-		input.scale.x = input.scale.y = 1.5;
+        input.scale.x = input.scale.y = 1.5;
         this.stage_h = 100;
         this.stage_w = 1000;
         input.x = 425;
@@ -1185,7 +1180,7 @@ BioBLESS.gene_network.create_inputarea = function(device, index, h){
         var describe = new PIXI.Text("(" + BioBLESS.gene_network.devices[index].map[i].id + ")" + BioBLESS.gene_network.describe_map_item(BioBLESS.gene_network.devices[index], i) + ":");
         describe.style.wordWrap = true;
         describe.style.wordWrapWidth = 245;
-        describe.style.font = 'bold 17px Arial';
+        describe.style.font = 'bold 17px "Open Sans",sans-serif';
         describe.y = y;
         describe.x = 5;
         y += describe.height + 25;
@@ -1454,9 +1449,9 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
     this.stage.movable_stage.removeChildren();
     this.stage.removeChildren();
     if(n === -1){
-	    this.stage.movable_stage._scale = 1;
-		this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
-		this.stage.movable_stage.y = this.stage.movable_stage.x = 0;
+        this.stage.movable_stage._scale = 1;
+        this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
+        this.stage.movable_stage.y = this.stage.movable_stage.x = 0;
         var i, j, k, l, temp;
         this.devs_analysis(devices);
         this.draw_lines_between_devices();
@@ -1503,7 +1498,7 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
         plusobj.on('mousedown', function() {
             if(added){
                 BioBLESS.gene_network.stage.removeChild(right_stage);
-                plusobj.condition = 0;	
+                plusobj.condition = 0;    
             }
             else{
                 BioBLESS.gene_network.stage.addChild(right_stage);
