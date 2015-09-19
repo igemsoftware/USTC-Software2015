@@ -1,17 +1,8 @@
 __author__ = 'E-Neo <e-neo@qq.com>'
 
 
-import simplejson,os
+import simplejson
 
-
-GATE_FILE = None
-real_path = os.path.split(os.path.realpath(__file__))[0]+"/"
-try:
-    GATE_FILE = open(real_path+"../../../doc/devices/gates_lizhi.json", "r")
-except IOError:
-    GATE_FILE = open(real_path+"../doc/devices/gates_lizhi.json", "r")
-
-gate_data_source = GATE_FILE.read()
 
 def get_d_gate(lizhi_json):
     """Get d_gate from gates_lizhi.json.
@@ -52,19 +43,12 @@ def get_d_gate(lizhi_json):
     return d_gate_d
 
 
-d_gate = {'and': {'AND0': (0, 2, 0, 0),
-                  'AND1': (0, 2, 0, 0),
-                  'AND2': (2, 0, 0, 0),
-                  'AND3': (0, 2, 0, 0),
-                  'AND4': (1, 2, 0, 0),
-                  'AND5': (0, 1, 0, 1)},
-          'not': {'NOT0': (0, 3, 1, 0),
-                  'NOT1': (1, 2, 0, 1),
-                  'NOT2': (1, 2, 0, 0),
-                  'NOT3': (1, 1, 0, 1),
-                  'NOT4': (3, 0, 0, 0),
-                  'NOT5': (2, 0, 1, 0),
-                  'NOT6': (2, 0, 0, 0),
-                  'NOT7': (1, 1, 1, 0)},
-          'or': {'OR0': (3, 0, 0, 0),
-                 'OR1': (4, 1, 0, 0)}}
+
+fp = open('../../../doc/devices/gates_lizhi.json', 'r')
+s_lizhi = fp.read()
+fp.close()
+d_gate = get_d_gate(s_lizhi)
+fp = open('biogate.py', 'w')
+fp.write('d_gate = ')
+fp.write(str(d_gate))
+fp.close()
