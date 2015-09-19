@@ -6,6 +6,7 @@ install:
     - cd backend
     - cd BioBLESS/biocircuit
     - make
+    - python biogate_gen.py
     - cd ../..
     - pip install --upgrade pip
     # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
