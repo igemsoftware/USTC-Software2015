@@ -4,14 +4,14 @@ python:
 install:
     # * NOTICE : Time limit for no-response-operation is 10 minutes, or an error will be caused.
     - cd backend
-    - cd BioBLESS/biocircuit
-    - make
-    - python biogate_gen.py
-    - cd ../..
     - pip install --upgrade pip
     # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
     # - pip install -v scipy | grep ^.*building
     - pip install -r requirements.txt
+    - cd BioBLESS/biocircuit
+    - make
+    - python biogate_gen.py
+    - cd ../..
     - cd ../frontend
     - node -v && npm -v && npm install
 script:
