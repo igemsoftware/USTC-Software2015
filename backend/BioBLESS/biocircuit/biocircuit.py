@@ -242,7 +242,7 @@ def circuit_score(circuit, d_gate):
     else:
         result.append(['NOT0' if i[0] == 'n' else 'OR1' if i[0] == 'o' else 'AND2' for i in n_gate])
         result.append(['NOT3' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND4' for i in n_gate])
-        result.append(['NOT6' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND0' for i in n_gate])
+        result.append(['NOT6' if i[0] == 'n' else 'OR0' if i[0] == 'o' else 'AND5' for i in n_gate])
     gate = []
     for i in range(len(result)):
         score = calc_score(result[i], d_gate)
