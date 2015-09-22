@@ -74,11 +74,27 @@ You can find it in the URI `/docs`
 
 Browser Requirements: IE 9+, Safari 5.1+, Edge, current Chrome or Firefox.
 
-### Dependency (already included in the project)
+If you just want to use our software, you do not need to build the source. If you want to make some improvement, or build the frontend documentations, you can see the instructions below.
+
+### Dependency
+
+First of all, you need to install nodejs and npm.
+
+For example, ubuntu 14.04 please run below:
+```
+# apt-get install nodejs-legacy npm
+```
+#### Libraries (already included in the project)
 
 [jQuery-2.1.4](https://jquery.com/download/) License: MIT
 
 [Pixi.js-3.0.7](https://github.com/GoodBoyDigital/pixi.js) License: MIT
+
+##### Unit Test
+
+[mocha-2.2.5](https://www.npmjs.com/package/mocha) License: MIT
+
+[chai-3.2.0](https://github.com/chaijs/chai) License: MIT
 
 ### Build
 You should just execute the following command:
@@ -92,10 +108,6 @@ Run it to view the documents:
 $ npm run build-doc
 ```
 ### Unit Test
-
-[mocha-2.2.5](https://www.npmjs.com/package/mocha) License: MIT
-
-[chai-3.2.0](https://github.com/chaijs/chai) License: MIT
 
 ```
 $ npm test
