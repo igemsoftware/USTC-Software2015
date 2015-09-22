@@ -39,13 +39,14 @@ This project is backend/frontend separatable. This means that you can deploy bac
     cd BioBLESS/biocircuit
     make
     cd ../..
-    ./manage.py migrate
-    ./manage.py loaddata parts
-    ./manage.py runserver
+    python manage.py migrate
+    python manage.py loaddata parts
+    python manage.py runserver 0.0.0.0:80
+    if you would like serve the static file by a nginx/apache server, you could change setting `STATIC_ROOT` in `backend\BioBLESS\settings.py` to your nginx document root directory. 
 ### Unit Test
 you could run
 ```
-    ./manage.py test BioBLESS
+    python manage.py test BioBLESS
 ```
 for unit test
 
