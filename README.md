@@ -43,7 +43,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
     python manage.py loaddata parts
     python manage.py runserver 0.0.0.0:80
     
-if you would like serve the static file by a nginx/apache server, you could change setting `STATIC_ROOT` in `backend\BioBLESS\settings.py` to your nginx document root directory. 
+if you would like serve the static file by a nginx/apache server, you could change setting `STATIC_ROOT` in `backend\BioBLESS\settings.py` to your nginx document root directory, and run `python manage.py collectstatic` to copy the static file to your web server directory.
 ### Unit Test
 you could run
 ```
