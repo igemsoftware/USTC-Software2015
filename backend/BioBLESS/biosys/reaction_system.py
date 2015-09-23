@@ -22,22 +22,24 @@ Build two reaction system,and add them, and simulation, and show the result
 __author__ = "Trumpet"
 
 DEBUG = False
-import random, math, ctypes
+import random, math
 
 C = False
 
-try:
+if C:
     try:
-        SIMULATE = ctypes.CDLL('./simulate.so')
-    except:
-        pass
-    try:
-        SIMULATE = ctypes.CDLL('./BioBLESS/biosys/simulate.so')
-    except:
-        pass
-    STDLIB = ctypes.CDLL('libc.so.6')
-except:
-    C = False
+        import ctypes
+        try:
+            SIMULATE = ctypes.CDLL('./simulate.so')
+        except:
+            pass
+        try:
+            SIMULATE = ctypes.CDLL('./BioBLESS/biosys/simulate.so')
+        except:
+            pass
+        STDLIB = ctypes.CDLL('libc.so.6')
+    except ImportError:
+        C = False
 
 try:
     from BioBLESS.settings import DEBUG
