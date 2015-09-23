@@ -38,6 +38,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
 ### Install
     cd BioBLESS/biocircuit
     make
+    python biogate_gen.py
     cd ../..
     python manage.py migrate
     python manage.py loaddata parts
