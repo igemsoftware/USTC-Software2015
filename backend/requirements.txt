@@ -3,7 +3,6 @@ simplejson
 pylint-django
 coverage
 networkx
-numpy
 markdown
 djangorestframework
 django-rest-swagger
