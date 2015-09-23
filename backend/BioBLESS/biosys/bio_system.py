@@ -235,7 +235,7 @@ def bio_system(system_data):
         system_data["simulation_parameters"][i],
         str(i),
         [str(j["from"]) for j in system_data["arcs"] if j["to"] == i],
-        str(i)
+        [str(i)]
     ) for i in range(len(nodes))]
     reaction = devices[0]
     for single_nodes in range(1, len(nodes)):
