@@ -187,7 +187,7 @@ def calc_score(l_gate, d_gate):
     score : float
         The score of the biocircuit.
     """
-    para = np.array([0, 0, 0, 0])
+    para = (0, 0, 0, 0)
     tmp = (0, 0, 0, 0)
     for i in l_gate:
         if i[0] == 'N':
@@ -196,7 +196,7 @@ def calc_score(l_gate, d_gate):
             tmp = d_gate['and'][i]
         elif i[0] == 'O':
             tmp = d_gate['or'][i]
-        para += np.array(tmp)
+        para = tuple(map(sum, zip(para, tmp)))
     score = 2**(para[0]-1) + 2**(para[1]-1) + para[2] + para[3]
     return score
 
