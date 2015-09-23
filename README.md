@@ -30,7 +30,6 @@ This project is backend/frontend separatable. This means that you can deploy bac
 
 ### Dependency
 + **django** for website
-+ **numpy & scipy** for calculation
 + **matplotlib** for plotting
 + **networkx** for graph
 + you could just use `pip install -r requirements.txt` to install all the dependency.
