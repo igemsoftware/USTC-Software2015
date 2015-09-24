@@ -245,7 +245,7 @@ def circuit_score(circuit, d_gate):
         n_gate.remove(i)
     result = []
     if 0 == len(n_gate):
-        result = []
+        result = [[]]
     elif 1 == len(n_gate):
         if n_gate[0][0] == 'n':
             result = [[i] for i in d_gate['not'].keys()]
