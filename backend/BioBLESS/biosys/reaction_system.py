@@ -23,12 +23,14 @@ __author__ = "Trumpet"
 
 DEBUG = False
 import random, math
+import re
 
 C = False
 
 if C:
     try:
         import ctypes
+
         try:
             SIMULATE = ctypes.CDLL('./simulate.so')
         except:
@@ -51,6 +53,7 @@ try:
     import matplotlib.pyplot as plt
 except ImportError:
     pass
+
 
 ################################################################
 
@@ -89,7 +92,6 @@ class ReactionSystem(object):
         self.species_number = len(self.species_name)
         self.species_name_inverse = {self.species_name[i]: i for i in range(self.species_number)}
 
-
     def set_reactions(self, reactions):
         """
         Set all the reactions in this system
@@ -112,7 +114,8 @@ class ReactionSystem(object):
         self.reaction_number = len(self.constant)
 
     def __add__(self, other):
-        reaction = [[self.reactant[i], self.product[i], self.constant[i]] for i in range(self.reaction_number)] + [[other.reactant[i], other.product[i], other.constant[i]] for i in range(other.reaction_number)]
+        reaction = [[self.reactant[i], self.product[i], self.constant[i]] for i in range(self.reaction_number)] + [
+            [other.reactant[i], other.product[i], other.constant[i]] for i in range(other.reaction_number)]
         species = list(set(self.species_name + other.species_name))
         species_name_inverse = {species[i]: i for i in range(len(species))}
         current = [0 for i in range(len(species))]
@@ -356,7 +359,7 @@ struct record_data simulate(
                 if DEBUG:
                     sw_accmu("1")
                     sw_start("2")
-                randomer = random.random()*possibility_sum
+                randomer = random.random() * possibility_sum
                 sumer = 0
                 next_reaction = 0
                 while True:
@@ -372,7 +375,7 @@ struct record_data simulate(
                 for species_temp in self.product_data[next_reaction]:
                     current[species_temp] += 1
                 time += delta_time
-                self.record.append([time+0, current])
+                self.record.append([time + 0, current])
                 if DEBUG:
                     sw_accmu("3")
                     sw_start("4")
@@ -393,7 +396,6 @@ struct record_data simulate(
                 sw_print("Sum")
             return self.record
 
-
     ################################################################
 
     def show_record(self, plot_list=None):
@@ -404,15 +406,17 @@ struct record_data simulate(
         Returns:
             none
         """
-        plot_list = [self.species_name_inverse[single_species] for single_species in plot_list] if plot_list else self.species_name_inverse.values()
+        plot_list = [self.species_name_inverse[single_species] for single_species in
+                     plot_list] if plot_list else self.species_name_inverse.values()
         for species in plot_list:
             plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
         plt.show()
+        print self.record_list
 
     #######################################################################3
 
     @property
-    def record_list(self):
+    def record_list_detail(self):
         """
         Return the list of the record simulated
         Parameters:
@@ -421,10 +425,20 @@ struct record_data simulate(
             none
         """
         num = len(self.record)
-        specieser = [[i, [self.record[j][1][self.species_name_inverse[i]] for j in range(num)]] for i in self.species_name]
-        timer = [["t", [self.record[i][0] for i in range(num)]]]
-        return dict(specieser+timer)
-        #return [self.species_name_inverse,self.record]
+        specieser = [[i, [self.record[j][1][self.species_name_inverse[i]] for j in range(num)]] for i in
+                     self.species_name]
+        timer = [["t", [round(self.record[i][0], 4) for i in range(num)]]]
+        return dict(specieser + timer)
+        # return [self.species_name_inverse,self.record]
+
+    @property
+    def record_list(self):
+        rst = self.record_list_detail
+        for key in rst.keys():
+            if not re.match(r'^S[0-9]$|^t$', key):
+                del rst[key]
+        return rst
+
 
     def simulation(self):
         """
