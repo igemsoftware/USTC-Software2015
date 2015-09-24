@@ -1639,7 +1639,7 @@ BioBLESS.logic.create_output_stage_of_truth_table = function(back_stage, h) {
     bg.endFill();
     stage.addChild(bg);
     bg.interactive = true;
-    var title = new PIXI.Text("Gates supsifications");
+    var title = new PIXI.Text("Gates specifications");
     title.anchor.x = 0.5;
     title.x = 150;
     title.y = 20;

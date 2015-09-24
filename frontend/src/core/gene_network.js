@@ -1620,7 +1620,7 @@ BioBLESS.gene_network.draw = function(devices, n, mark){
         
         if(BioBLESS.gene_network.system_parameters === undefined){
             BioBLESS.gene_network.system_parameters = {};
-            BioBLESS.gene_network.system_parameters.time = 1000;
+            BioBLESS.gene_network.system_parameters.time = 100;
             BioBLESS.gene_network.system_parameters.input = [];
         }
         for(i = 0; i < this.input_num; i++){
