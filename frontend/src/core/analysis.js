@@ -184,7 +184,7 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
     graphics.drawCircle(ox + xAxis / 4 * 2 - 20, oy - yAxis - 15, 15);
     graphics.endFill();
     
-    var text2 = new PIXI.Text(": +" + BioBLESS.analysis.change_rate * 100 + "%");
+    var text2 = new PIXI.Text(": +" + Math.floor(BioBLESS.analysis.change_rate * 100 + 0.5) + "%");
     text2.anchor.y = 0.5;
     text2.style.fill = "white";
     text2.x = ox + xAxis / 4 * 2 + 10;
@@ -196,7 +196,7 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
     graphics.drawCircle(ox + xAxis / 4 * 3 - 20, oy - yAxis - 15, 15);
     graphics.endFill();
     
-    var text3 = new PIXI.Text(": -" + BioBLESS.analysis.change_rate * 100 + "%");
+    var text3 = new PIXI.Text(": -" + Math.floor(BioBLESS.analysis.change_rate * 100 + 0.5) + "%");
     text3.anchor.y = 0.5;
     text3.style.fill = "white";
     text3.x = ox + xAxis / 4 * 3 + 10;
