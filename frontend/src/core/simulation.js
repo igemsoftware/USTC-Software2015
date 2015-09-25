@@ -233,7 +233,7 @@ BioBLESS.simulation.draw = function(_nodes){
         
 		BioBLESS.simulation.lines[i] = new PIXI.Container();
 		var line = new PIXI.Graphics();
-        line.lineStyle(1, _color, 1);
+        line.lineStyle(4, _color, 1);
         line.moveTo(ox + (xAxis - 50) / nodes.t[nodes.t.length - 1] * nodes.t[0], 
         oy - (yAxis - 100) * nodes.c[i][0] / maxY);
         for(j = 1; j < nodes.t.length; j++){
