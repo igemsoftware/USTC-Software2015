@@ -1488,17 +1488,17 @@ BioBLESS.gene_network.create_base_stage_of_input = function(h){
 BioBLESS.gene_network.get_DNA_sequance_by_type = function(type){
     switch(type){
         case "Promoter":
-            return "tacccacaacccaattcgagaccggaactcgattgtatctgtagtgctttagtagtggagtttacactttatgcttccggctcgtataatgtgtggaattttgagcgctcaaaattggatccgg";
+            return "taatacgactcactatagg"; //BBa_J64997
         case "RBS":
-            return "attaaagaggagaaa";
+            return "ctcaaggagg"; //BBa_J15001
         case "Coding":
-            return "atgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataa";
+            return "tgtattatttgt"; //BBa_K1051117
         case "sRNA":
-            return "gaaatattattactgagtaaaggattgttaccgcactaagcgggcaaaacctgaaaaaaattgcttgattcacgtcaggccgtttttttcaggtttttttttggagttttgccgcaaagcggta";
+            return "acataataaaca"; //BBa_K1051117
         case "Terminator":
-            return "ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctc";
+            return "ttagttagctaa"; //BBa_J133421
         default:
-            return "";
+            return "gctcttcaatc"; //BBa_K318051
     }
 };
 

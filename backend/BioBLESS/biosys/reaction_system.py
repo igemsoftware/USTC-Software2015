@@ -23,7 +23,6 @@ __author__ = "Trumpet"
 
 DEBUG = False
 import random, math
-import re
 
 C = False
 
@@ -190,7 +189,20 @@ class ReactionSystem(object):
 
         current = [i[1] for i in self.species]
         time = 0
-        self.record = [[time, current]]
+        temp = []
+        flag = []
+        for i in range(self.species_number):
+            try:
+                int(self.species_name[i][1::])
+                temp.append([self.species_name[i],[current[i]]])
+                flag.append(True)
+            except ValueError:
+                flag.append(False)
+        if temp == []:
+            temp = [[self.species_name[i],[current[i]]] for i in range(self.species_number)]
+            flag = [True for i in range(self.species_number)]
+        temp.append(["t",[0]])
+        self.record = dict(temp)
         possibility = [i for i in self.constant]
         for i in range(self.reaction_number):
             for j in self.reactant_data[i]:
@@ -375,7 +387,13 @@ struct record_data simulate(
                 for species_temp in self.product_data[next_reaction]:
                     current[species_temp] += 1
                 time += delta_time
-                self.record.append([time + 0, current])
+                #self.record.append([time + 0, current])
+
+                self.record["t"].append(time)
+                for i in range(self.species_number):
+                    if flag[i]:
+                        self.record[self.species_name[i]].append(current[i])
+
                 if DEBUG:
                     sw_accmu("3")
                     sw_start("4")
@@ -394,6 +412,7 @@ struct record_data simulate(
                 sw_print("3")
                 sw_print("4")
                 sw_print("Sum")
+            #print self.record
             return self.record
 
     ################################################################
@@ -406,17 +425,19 @@ struct record_data simulate(
         Returns:
             none
         """
-        plot_list = [self.species_name_inverse[single_species] for single_species in
-                     plot_list] if plot_list else self.species_name_inverse.values()
+        plot_list = plot_list if plot_list else self.species_name
         for species in plot_list:
-            plt.plot([x[0] for x in self.record], [x[1][species] for x in self.record])
+            try:
+                plt.plot(self.record["t"], self.record[species])
+            except KeyError:
+                pass
         plt.show()
-        print self.record_list
+        #print self.record_list
 
     #######################################################################3
 
     @property
-    def record_list_detail(self):
+    def record_list(self):
         """
         Return the list of the record simulated
         Parameters:
@@ -424,21 +445,8 @@ struct record_data simulate(
         Returns:
             none
         """
-        num = len(self.record)
-        specieser = [[i, [self.record[j][1][self.species_name_inverse[i]] for j in range(num)]] for i in
-                     self.species_name]
-        timer = [["t", [round(self.record[i][0], 4) for i in range(num)]]]
-        return dict(specieser + timer)
+        return self.record
         # return [self.species_name_inverse,self.record]
-
-    @property
-    def record_list(self):
-        rst = self.record_list_detail
-        for key in rst.keys():
-            if not re.match(r'^S[0-9]$|^t$', key):
-                del rst[key]
-        return rst
-
 
     def simulation(self):
         """
