@@ -365,7 +365,7 @@ struct record_data simulate(
             while time < stop_time:
                 if DEBUG:
                     sw_start("1")
-                current = [x for x in current]
+                #current = [x for x in current]######################
                 if possibility_sum == 0:
                     break
                 delta_time = -math.log(random.random()) / possibility_sum
