@@ -15,7 +15,11 @@ Create some biosys to calculate their simulation
 """
 __author__ = 'Trumpet'
 
-import simplejson,os
+import os
+try:
+    import simplejson
+except:
+    import json as simplejson
 
 from reaction_system import ReactionSystem
 

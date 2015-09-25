@@ -355,23 +355,23 @@ struct record_data simulate(
             pass
 
         else:
-            if DEBUG:
+            '''if DEBUG:
                 sw_alloc("Sum")
                 sw_start("Sum")
                 sw_alloc("1")
                 sw_alloc("2")
                 sw_alloc("3")
-                sw_alloc("4")
+                sw_alloc("4")'''
             while time < stop_time:
-                if DEBUG:
-                    sw_start("1")
+                '''if DEBUG:
+                    sw_start("1")'''
                 #current = [x for x in current]######################
                 if possibility_sum == 0:
                     break
                 delta_time = -math.log(random.random()) / possibility_sum
-                if DEBUG:
+                '''if DEBUG:
                     sw_accmu("1")
-                    sw_start("2")
+                    sw_start("2")'''
                 randomer = random.random() * possibility_sum
                 sumer = 0
                 next_reaction = 0
@@ -380,9 +380,9 @@ struct record_data simulate(
                     if sumer >= randomer:
                         break
                     next_reaction += 1
-                if DEBUG:
+                '''if DEBUG:
                     sw_accmu("2")
-                    sw_start("3")
+                    sw_start("3")'''
                 for species_temp in self.reactant_data[next_reaction]:
                     current[species_temp] -= 1
                 for species_temp in self.product_data[next_reaction]:
@@ -396,16 +396,16 @@ struct record_data simulate(
                         if flag[i]:
                             self.record[self.species_name[i]].append(current[i])
 
-                if DEBUG:
+                '''if DEBUG:
                     sw_accmu("3")
-                    sw_start("4")
+                    sw_start("4")'''
                 for i in reaction_to_change[next_reaction]:
                     possibility_sum -= possibility[i]
                     possibility[i] = self.constant[i]
                     for j in self.reactant_data[i]:
                         possibility[i] *= current[j]
                     possibility_sum += possibility[i]
-                if DEBUG:
+                '''if DEBUG:
                     sw_accmu("4")
             if DEBUG:
                 sw_accmu("Sum")
@@ -413,7 +413,7 @@ struct record_data simulate(
                 sw_print("2")
                 sw_print("3")
                 sw_print("4")
-                sw_print("Sum")
+                sw_print("Sum")'''
             #print self.record
             return self.record
 

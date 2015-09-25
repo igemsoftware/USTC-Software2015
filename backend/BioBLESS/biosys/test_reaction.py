@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-from django.test import TestCase
+try:
+    from django.test import TestCase
+except:
+    pass
 from reaction_system import ReactionSystem
 
 if __name__ == "__main__":

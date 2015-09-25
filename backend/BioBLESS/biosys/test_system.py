@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-from django.test import TestCase
+try:
+    from django.test import TestCase
+except:
+    pass
 
 from data_test import system_data
 from bio_system import bio_system
