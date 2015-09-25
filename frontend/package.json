@@ -1,6 +1,6 @@
 {
     "name": "BioBLESS",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Biological Boolean Logic Evaluation & Systematization based on Simulation",
     "repository": {
         "type": "git",
