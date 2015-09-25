@@ -157,20 +157,20 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
         name.anchor.x = name.anchor.y = 0.5;
         stage.addChild(name);
         graphics.beginFill(0x0000ff, 1);
-        graphics.drawCircle(name.x, oy - origin_y, 5);
+        graphics.drawCircle(name.x, oy - origin_y, 15);
         graphics.endFill();
         
         graphics.beginFill(0xff0000, 1);
-        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 5);
+        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].max_value), 15);
         graphics.endFill();
 
         graphics.beginFill(0x00ff00, 1);
-        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 5);
+        graphics.drawCircle(name.x, oy - (origin_y / origin_value * items[j].min_value), 15);
         graphics.endFill();
 	}
     
     graphics.beginFill(0x0000ff, 1);
-    graphics.drawCircle(ox + xAxis / 4 - 20, oy - yAxis - 15, 5);
+    graphics.drawCircle(ox + xAxis / 4 - 20, oy - yAxis - 15, 15);
     graphics.endFill();
     
     var text1 = new PIXI.Text(": 0%");
@@ -181,10 +181,10 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
     stage.addChild(text1);
     
     graphics.beginFill(0xff0000, 1);
-    graphics.drawCircle(ox + xAxis / 4 * 2 - 20, oy - yAxis - 15, 5);
+    graphics.drawCircle(ox + xAxis / 4 * 2 - 20, oy - yAxis - 15, 15);
     graphics.endFill();
     
-    var text2 = new PIXI.Text(": +15%");
+    var text2 = new PIXI.Text(": +" + BioBLESS.analysis.change_rate * 100 + "%");
     text2.anchor.y = 0.5;
     text2.style.fill = "white";
     text2.x = ox + xAxis / 4 * 2 + 10;
@@ -193,10 +193,10 @@ BioBLESS.analysis.create_output_stage1 = function(items, origin_value){
     
 
     graphics.beginFill(0x00ff00, 1);
-    graphics.drawCircle(ox + xAxis / 4 * 3 - 20, oy - yAxis - 15, 5);
+    graphics.drawCircle(ox + xAxis / 4 * 3 - 20, oy - yAxis - 15, 15);
     graphics.endFill();
     
-    var text3 = new PIXI.Text(": -15%");
+    var text3 = new PIXI.Text(": -" + BioBLESS.analysis.change_rate * 100 + "%");
     text3.anchor.y = 0.5;
     text3.style.fill = "white";
     text3.x = ox + xAxis / 4 * 3 + 10;

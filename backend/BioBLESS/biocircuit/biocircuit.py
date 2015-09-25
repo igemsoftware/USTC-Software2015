@@ -79,6 +79,8 @@ def get_gate_not(expr):
     not_list : list
         Index of the not gates in the Boolean expression.
     """
+    if 0 == len(expr):
+        return []
     not_list = []
     for i in range(len(expr[0])):
         for j in expr:
@@ -110,6 +112,8 @@ def get_node_num(expr):
     or_num : int
         Number of or gates.
     """
+    if 0 == len(expr):
+        return 0, 0, 0, 0
     var_num = len(expr[0])
     not_num = len(get_gate_not(expr))
     and_num = 0
@@ -137,8 +141,17 @@ def create_circuit(expr):
         output: out
     """
     circuit = nx.DiGraph()
-    not_list = get_gate_not(expr)
     edges = []
+    if 0 == len(expr):
+        edges.append(('v0', 'and0'))
+        edges.append(('v0', 'not0'))
+        edges.append(('not0', 'and0'))
+        edges.append(('and0', 'out'))
+        circuit.add_edges_from(edges)
+        return circuit
+    if len(expr[0]) == expr[0].count('X'):
+        expr = ['1', '0']
+    not_list = get_gate_not(expr)
     node_num = get_node_num(expr)
     for i in not_list:
         edges.append(('v%d' % i, 'not%d' %i))
@@ -231,7 +244,9 @@ def circuit_score(circuit, d_gate):
     for i in tmp:
         n_gate.remove(i)
     result = []
-    if len(n_gate) == 1:
+    if 0 == len(n_gate):
+        result = [[]]
+    elif 1 == len(n_gate):
         if n_gate[0][0] == 'n':
             result = [[i] for i in d_gate['not'].keys()]
         elif n_gate[0][0] == 'a':
