@@ -21,7 +21,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
 ### Quick Guide
 + run `./install.sh` to install the application
 + run `./run.sh` to run the application
-+ open **http://localhost/BioBLESS/index.html** to enjoy it.
++ open **http://localhost:8000/BioBLESS/index.html** to enjoy it.
 
 ### code structure
 + `backend` Root of django
@@ -41,7 +41,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
     cd ../..
     python manage.py migrate
     python manage.py loaddata parts
-    python manage.py runserver 0.0.0.0:80
+    python manage.py runserver 0.0.0.0:8000
     
 if you would like serve the static file by a nginx/apache server, you could change setting `STATIC_ROOT` in `backend\BioBLESS\settings.py` to your nginx document root directory, and run `python manage.py collectstatic` to copy the static file to your web server directory.
 ### Unit Test
