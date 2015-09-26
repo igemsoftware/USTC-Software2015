@@ -29,6 +29,7 @@ class SimulateView(APIView):
         """
         try:
             # request.data is the graph of the bio-system
+            '''
             system_data = biosystem.bio_system(request.data)
             cache_data = cache.biosystem_cache(request.data)
             if cache_data:  # != None, better not compare with None.
@@ -36,6 +37,13 @@ class SimulateView(APIView):
             else:
                 system_data.simulation()
                 response_from_back = system_data.record_list
+                cache.biosystem_update_cache(request.data, response_from_back)
+            '''
+            cache_data = cache.biosystem_cache(request.data)
+            if cache_data:  # != None, better not compare with None.
+                response_from_back = cache_data
+            else:
+                response_from_back = biosystem.simulate(request.data)
                 cache.biosystem_update_cache(request.data, response_from_back)
         except BaseException as error:
             raise

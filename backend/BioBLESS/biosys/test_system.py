@@ -5,7 +5,7 @@ except:
     pass
 
 from data_test import system_data
-from bio_system import bio_system
+from bio_system_old import bio_system
 from stopwatch import sw_alloc, sw_start, sw_accmu, sw_print
 
 
