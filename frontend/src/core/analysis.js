@@ -38,14 +38,14 @@ BioBLESS.analysis.calculate_item = function(){
         
         $.ajax({
             type: 'POST',
-            url: BioBLESS.host + '/simulate/',
+            url: '/simulate/',
             contentType: 'application/json',
             data: JSON.stringify(parameter),
             success: function(data) {
                 item_p.max_value = BioBLESS.analysis.calculate_c(data);
                 $.ajax({
                     type: 'POST',
-                    url: BioBLESS.host + '/simulate/',
+                    url: '/simulate/',
                     contentType: 'application/json',
                     data: JSON.stringify(_parameter),
                     success: function(_data) {
@@ -76,7 +76,7 @@ BioBLESS.analysis.calculate = function(){
     var parameter = BioBLESS.gene_network.get_parameters();
 	$.ajax({
         type: 'POST',
-        url: BioBLESS.host + '/simulate/',
+        url: '/simulate/',
         contentType: 'application/json',
         data: JSON.stringify(parameter),
         success: function(data) {
@@ -604,7 +604,7 @@ BioBLESS.analysis.create_right_stage = function(h){
     
     $.ajax({
         type: 'POST',
-        url: BioBLESS.host + '/score/',
+        url: '/score/',
         contentType: 'application/json',
         data: JSON.stringify(BioBLESS.logic.circuit),
         success: function(data) {

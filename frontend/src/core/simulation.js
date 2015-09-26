@@ -6,7 +6,7 @@ BioBLESS.simulation.refresh = function(){
     this.output_index = BioBLESS.gene_network.out_index;
     $.ajax({
         type: 'POST',
-        url: BioBLESS.host + '/simulate/',
+        url: '/simulate/',
         contentType: 'application/json',
         data: JSON.stringify(this.parameter),
         success: function(data) {
@@ -35,7 +35,7 @@ BioBLESS.simulation.onchange = function(){
     this.output_index = BioBLESS.gene_network.out_index;
     $.ajax({
         type: 'POST',
-        url: BioBLESS.host + '/simulate/',
+        url: '/simulate/',
         contentType: 'application/json',
         data: JSON.stringify(this.parameter),
         success: function(data) {
