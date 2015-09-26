@@ -2,6 +2,7 @@ import os, json, random
 
 def simulate(dict_data):
     os.system("mkdir temp 1>/dev/null 2>/dev/null")
+    os.system("pwd")
     temp1 = "./temp/"+str(random.random())
     temp2 = "./temp/"+str(random.random())
     to_write = json.dumps(dict_data)
