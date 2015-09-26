@@ -8,7 +8,7 @@ install:
     # !!! It will take 14 minutes, so response is needed. But the full output is too long !!!
     # - pip install -v scipy | grep ^.*building
     - pip install -r requirements.txt
-    - apt-get install pypy
+    - sudo apt-get install pypy
     - cd BioBLESS/biocircuit
     - make
     - python biogate_gen.py
