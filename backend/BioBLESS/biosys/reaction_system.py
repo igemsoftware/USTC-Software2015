@@ -187,6 +187,7 @@ class ReactionSystem(object):
                 reaction_to_change[i] += species_to_reaction[j]
         reaction_to_change = [list(set(i)) for i in reaction_to_change]
 
+        delta = stop_time/1000
         current = [i[1] for i in self.species]
         time = 0
         temp = []
@@ -364,7 +365,7 @@ struct record_data simulate(
             while time < stop_time:
                 if DEBUG:
                     sw_start("1")
-                current = [x for x in current]
+                #current = [x for x in current]######################
                 if possibility_sum == 0:
                     break
                 delta_time = -math.log(random.random()) / possibility_sum
@@ -389,10 +390,11 @@ struct record_data simulate(
                 time += delta_time
                 #self.record.append([time + 0, current])
 
-                self.record["t"].append(time)
-                for i in range(self.species_number):
-                    if flag[i]:
-                        self.record[self.species_name[i]].append(current[i])
+                if time - self.record["t"][-1]>delta:
+                    self.record["t"].append(time)
+                    for i in range(self.species_number):
+                        if flag[i]:
+                            self.record[self.species_name[i]].append(current[i])
 
                 if DEBUG:
                     sw_accmu("3")
