@@ -7,6 +7,7 @@ from django.test import TestCase
 
 
 if __name__ == "__main__":
+    pass
     # This can be used as unittest, for if it failed on a certain python version, you cannot use the module safely.
     # --------------------------------------------------------
     # This shows True, for python will check the dict recurrently and ignore the order.
