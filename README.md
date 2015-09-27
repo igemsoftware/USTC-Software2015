@@ -2,6 +2,13 @@
 [![Coverage Status](https://coveralls.io/repos/igemsoftware/USTC-Software2015/badge.svg?branch=master&service=github)](https://coveralls.io/github/igemsoftware/USTC-Software2015?branch=master)
 # BioBLESS - iGEM USTC Software 2015
 
+## Quick Guide
++ run `./install.sh` to install the application
++ run `./run.sh` to run the application
++ open **http://localhost:8000/BioBLESS/index.html** to enjoy it.
+
+---
+
 ## Structure of the project
 + `frontend` Frontend logic lies here
 + `backend`  Backend code locates here
@@ -11,12 +18,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
 
 ---
 
-# Quick Guide
-+ run `./install.sh` to install the application
-+ run `./run.sh` to run the application
-+ open **http://localhost:8000/BioBLESS/index.html** to enjoy it.
-
-# Backend
+## Backend
 
 ### Requirements
 + python 2.7
@@ -72,7 +74,7 @@ you could run
 You can find it in the URI `/docs`
 
 ---
-# Frontend
+## Frontend
 
 Browser Requirements: IE 9+, Safari 5.1+, Edge, current Chrome or Firefox.
 
