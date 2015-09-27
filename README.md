@@ -10,6 +10,12 @@
 This project is backend/frontend separatable. This means that you can deploy backend and frontend in different places given frontend is capable of connecting to the backend(e.g. You can run backend in a webserver/your pc, and frontend in wherever a html5-friendly webbrowser is supported. Then you can configure the frontend to connect to the backend, this will be easy).
 
 ---
+
+# Quick Guide
++ run `./install.sh` to install the application
++ run `./run.sh` to run the application
++ open **http://localhost:8000/BioBLESS/index.html** to enjoy it.
+
 # Backend
 
 ### Requirements
@@ -18,10 +24,6 @@ This project is backend/frontend separatable. This means that you can deploy bac
 + pip
 + virtualenv
 
-### Quick Guide
-+ run `./install.sh` to install the application
-+ run `./run.sh` to run the application
-+ open **http://localhost:8000/BioBLESS/index.html** to enjoy it.
 
 ### code structure
 + `backend` Root of django
