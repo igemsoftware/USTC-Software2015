@@ -392,7 +392,7 @@ BioBLESS.copy_to_clipboard_compatible = function(target) {
     if(window.clipboardData){
     	window.clipboardData.clearData();
         window.clipboardData.setData("Text", target);
-        // alert("Copy completed.");
+        alert("Copy completed.");
     }
     else if(navigator.userAgent.indexOf("Opera") != -1){
         window.location = target;
@@ -423,6 +423,6 @@ BioBLESS.copy_to_clipboard_compatible = function(target) {
             return false; 
         }
         clip.setData(trans, null, clipid.kGlobalClipboard);
-        // alert("Copy completed.");
+        alert("Copy completed.");
     }
 };
