@@ -3,7 +3,7 @@ BioBLESS.utils.get_parts = function(data, func) {
     var counts = ++BioBLESS.utils.counts;
     $.ajax({
         type: 'POST',
-        url: BioBLESS.host + '/parts/',
+        url: '/parts/',
         contentType: 'application/json',
         data: JSON.stringify([data]),
         success: function(data) {

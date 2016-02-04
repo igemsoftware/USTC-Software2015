@@ -30,6 +30,9 @@ BioBLESS.dna.onchange = function() {
     BioBLESS.dna.deoxyribonucleic_acid = BioBLESS.dna.make_dna_sequence();
     BioBLESS.dna.stage.movable_stage.addChild(BioBLESS.dna.deoxyribonucleic_acid);
     BioBLESS.dna.stage.addChild(BioBLESS.dna.stage.movable_stage);
+    BioBLESS.dna.stage.movable_stage.position.x = 100 + BioBLESS.navigation.scale.x * 120;
+    var saveobj = BioBLESS.utils.new_export_button("biobless-dna.txt", BioBLESS.dna.sequence);
+    this.stage.addChild(saveobj);
 };
 
 /**
@@ -165,10 +168,12 @@ BioBLESS.dna.make_dna_sequence = function(){
  */
 BioBLESS.dna.dispose_oppsite_dna = function(){
     var i,j,k;
+    BioBLESS.dna.sequence = "";
     for(i = 0; i < BioBLESS.dna.detail.device.length; i++){
         for(j = 0; j < BioBLESS.dna.detail.device[i].d.length; j++){
             BioBLESS.dna.detail.device[i].d_opposite[BioBLESS.dna.detail.device[i].d_opposite.length] = "";
             for(k = 0; k < BioBLESS.dna.detail.device[i].d[j].length; k++){
+                BioBLESS.dna.sequence += BioBLESS.dna.detail.device[i].d[j][k];
                 switch(BioBLESS.dna.detail.device[i].d[j][k]){
                     case 'a':
                         BioBLESS.dna.detail.device[i].d_opposite[j] += 't';
@@ -387,7 +392,7 @@ BioBLESS.copy_to_clipboard_compatible = function(target) {
     if(window.clipboardData){
     	window.clipboardData.clearData();
         window.clipboardData.setData("Text", target);
-        // alert("Copy completed.");
+        alert("Copy completed.");
     }
     else if(navigator.userAgent.indexOf("Opera") != -1){
         window.location = target;
@@ -418,6 +423,6 @@ BioBLESS.copy_to_clipboard_compatible = function(target) {
             return false; 
         }
         clip.setData(trans, null, clipid.kGlobalClipboard);
-        // alert("Copy completed.");
+        alert("Copy completed.");
     }
 };

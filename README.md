@@ -2,6 +2,13 @@
 [![Coverage Status](https://coveralls.io/repos/igemsoftware/USTC-Software2015/badge.svg?branch=master&service=github)](https://coveralls.io/github/igemsoftware/USTC-Software2015?branch=master)
 # BioBLESS - iGEM USTC Software 2015
 
+## Quick Guide
++ run `./install.sh` to install the application
++ run `./run.sh` to run the application
++ open **http://localhost:8000/BioBLESS/index.html** to enjoy it.
+
+---
+
 ## Structure of the project
 + `frontend` Frontend logic lies here
 + `backend`  Backend code locates here
@@ -10,7 +17,8 @@
 This project is backend/frontend separatable. This means that you can deploy backend and frontend in different places given frontend is capable of connecting to the backend(e.g. You can run backend in a webserver/your pc, and frontend in wherever a html5-friendly webbrowser is supported. Then you can configure the frontend to connect to the backend, this will be easy).
 
 ---
-# Backend
+
+## Backend
 
 ### Requirements
 + python 2.7
@@ -18,10 +26,6 @@ This project is backend/frontend separatable. This means that you can deploy bac
 + pip
 + virtualenv
 
-### Quick Guide
-+ run `./install.sh` to install the application
-+ run `./run.sh` to run the application
-+ open **http://localhost/BioBLESS/index.html** to enjoy it.
 
 ### code structure
 + `backend` Root of django
@@ -41,7 +45,7 @@ This project is backend/frontend separatable. This means that you can deploy bac
     cd ../..
     python manage.py migrate
     python manage.py loaddata parts
-    python manage.py runserver 0.0.0.0:80
+    python manage.py runserver 0.0.0.0:8000
     
 if you would like serve the static file by a nginx/apache server, you could change setting `STATIC_ROOT` in `backend\BioBLESS\settings.py` to your nginx document root directory, and run `python manage.py collectstatic` to copy the static file to your web server directory.
 ### Unit Test
@@ -70,7 +74,7 @@ you could run
 You can find it in the URI `/docs`
 
 ---
-# Frontend
+## Frontend
 
 Browser Requirements: IE 9+, Safari 5.1+, Edge, current Chrome or Firefox.
 

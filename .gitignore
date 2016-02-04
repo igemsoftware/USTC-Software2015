@@ -6,5 +6,6 @@ __pycache__/
 backend/db.sqlite3
 /BioBLESS/
 /backend/BioBLESS/biocircuit/biogate.py
+/cache/
 *.so
 *.o

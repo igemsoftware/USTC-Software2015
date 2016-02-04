@@ -1610,6 +1610,8 @@ BioBLESS.gene_network.redraw = function(){
 BioBLESS.gene_network.draw = function(devices, n, mark){
     this.stage.movable_stage.removeChildren();
     this.stage.removeChildren();
+    var saveobj = BioBLESS.utils.new_export_button("biobless-network.json", JSON.stringify(BioBLESS.logic.circuit));
+    this.stage.addChild(saveobj);
     if(n === -1){
 	    this.stage.movable_stage._scale = 1;
 		this.stage.movable_stage.scale.x = this.stage.movable_stage.scale.y = 1;
