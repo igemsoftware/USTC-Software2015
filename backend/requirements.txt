@@ -1,4 +1,4 @@
-django-1.9.7
+django=1.9.7
 simplejson
 pylint-django
 coverage
