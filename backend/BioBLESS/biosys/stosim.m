@@ -4,7 +4,7 @@ maptono[name_] := Thread[name -> Range[Length[name]]];
 intensity[sour_, cur_] := Times @@ ((Binomial[cur[[#[[1]]]], #[[2]]]) & /@ sour);
 intensitylist[reactant_, cur_] := intensity[#, cur] & /@ reactant;
 
-Simulate[system_, initial_, stoptime_, plotspec_] := Module[
+Simulate[system_, initial_, stoptime_, plotspec_,filename_] := Module[
         {reactnum, c, reaction, reactant, product, current, time, record, h, a, sum, tao, mu, asum, nosys, noini, toname, tono, name, plt},
 
         reactnum = Length[system];
@@ -53,6 +53,7 @@ Simulate[system_, initial_, stoptime_, plotspec_] := Module[
 	      ];
         (* Export[$Playground<>"/temp.txt", ToString[{((#[[1]])& /@ record)}~Join~{Transpose[(#[[2,All]])&/@record]}]]; *)
         Export[$Playground<>"/temp.bmp", plt];
+        Export[$Desktop<>"/"<>filename<>".txt", record]
                                                      ];
 
 (*DNA-mRNA-Protein construction*)
@@ -138,7 +139,7 @@ AndGate[name_, {i1_, i2_}, o_]:=
 		        Join[
 			        NotGate[i1,temp1<>"::Protein"],
 			        NotGate[i2,temp2<>"::Protein"],
-			        NorGate[{temp1<>"::Protein",temp2<>"::Protein"},o]	
+			        NorGate[{temp1<>"::Protein",temp2<>"::Protein"},o]
 		        ]
 	        ]
         ];
@@ -223,12 +224,22 @@ positiveRegulate[dna_,regulon_,{{trans1_, trans2_},{decay1_, decay2_},reg_}]:=
         {{{dna,regulon},{dna,regulon,dna<>"::mRNA"}},trans1*reg}
         }
 
-trans1=0.001;
-trans2=0.005;
-decay1=trans1*10;
-decay2=trans2*10;
-bind=0.005
-reg=2;
+alpha=0.0003
+trans1=2.000*alpha;
+trans2=0.100*2*alpha;
+decay1=0.139*20*alpha;
+decay2=0.012*30*alpha;
+bind=0.100*alpha;
+reg=1.75;
+
+dnaToRnaToProtein = positiveRegulate["dna","regulon",{{trans1,trans2},{decay1,decay2},reg}]
+
+dnaToRnaToProteinInitial = {
+        {"dna",30},
+        {"regulon",30},
+        {"dna::mRNA",0},
+        {"dna::Protein",0}
+}
 
 testCircuit = Join[
         positiveRegulate["ipgC","Ara",{{trans1,trans2},{decay1,decay2},reg}],
@@ -245,26 +256,28 @@ testCircuit = Join[
               ];
 
 testCircuitInitial = {
-        {"ipgC",30},
+        {"Ara",30},
         {"IPTG",30},
         {"aTc",30},
-        {"ipgC",100},
+        {"ipgC",10},
         {"ipgC::mRNA",0},
         {"ipgC::Protein",0},
-        {"mxiE",100},
+        {"mxiE",10},
         {"mxiE::mRNA",0},
         {"mxiE::Protein",0},
-        {"invF",100},
+        {"invF",10},
         {"invF::mRNA",0},
         {"invF::Protein",0},
-        {"sicA",100},
+        {"sicA",10},
         {"sicA::mRNA",0},
         {"sicA::Protein",0},
-        {"rfp",100},
+        {"rfp",10},
         {"rfp::mRNA",0},
         {"rfp::Protein",0},
         {"ipgC+mxiE",0},
         {"sicA+invF",0}
 }
 
-Simulate[testCircuit, testCircuitInitial, 1000, (#[[1]])& /@ testCircuitInitial]
+Print/@ testCircuit
+
+Simulate[testCircuit, testCircuitInitial, 35000, {(*"ipgC::Protein","mxiE::Protein","ipgC+mxiE","invF::Protein","sicA::Protein","sicA+invF",*)"rfp::Protein"},"111"]
