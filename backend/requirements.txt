@@ -4,7 +4,7 @@ pylint-django==0.7.1
 coverage==4.1
 networkx==1.11
 markdown==2.6.6
-djangorestframework==3.3.3
+djangorestframework==3.11.2
 django-rest-swagger==0.3.7
 django-filter==0.13.0
 coveralls==1.1
