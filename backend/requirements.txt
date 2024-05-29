@@ -1,4 +1,4 @@
-django==1.9.7
+django==3.2.25
 simplejson==3.8.2
 pylint-django==0.7.1
 coverage==4.1
